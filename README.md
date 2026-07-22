@@ -12,8 +12,9 @@ npm install @caraer/client
 
 ## Docs
 
+- API reference: https://developer.caraer.com
 - OpenAPI: https://v2.api.caraer.com/api-docs.yaml
-- Source org: https://github.com/Caraer-HQ
+- Source: https://github.com/Caraer-HQ/caraer-js-client
 
 ## Auth
 
