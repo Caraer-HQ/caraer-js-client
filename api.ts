@@ -3546,8 +3546,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -4030,9 +4030,9 @@ export interface StyleSetDTO {
     'hyperlinkLetterSpacing'?: any;
     'hyperlinkColorLight'?: string;
     'hyperlinkColorDark'?: string;
-    'zindex'?: number;
     'xlargeFontSize'?: any;
     'xsmallFontSize'?: any;
+    'zindex'?: number;
 }
 /**
  * Data Transfer Object for subscribing to a webhook. This DTO represents the details required to configure a webhook subscription.
