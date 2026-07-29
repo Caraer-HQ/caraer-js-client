@@ -4030,9 +4030,9 @@ export interface StyleSetDTO {
     'hyperlinkLetterSpacing'?: any;
     'hyperlinkColorLight'?: string;
     'hyperlinkColorDark'?: string;
+    'zindex'?: number;
     'xlargeFontSize'?: any;
     'xsmallFontSize'?: any;
-    'zindex'?: number;
 }
 /**
  * Data Transfer Object for subscribing to a webhook. This DTO represents the details required to configure a webhook subscription.
@@ -14703,10 +14703,11 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
          * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        show1: async (uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        show1: async (uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, fields?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uuid' is not null or undefined
             assertParamExists('show1', 'uuid', uuid)
             const localVarPath = `/api/v2/records/{uuid}`
@@ -14736,6 +14737,10 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
 
             if (parse !== undefined) {
                 localVarQueryParameter['parse'] = parse;
+            }
+
+            if (fields !== undefined) {
+                localVarQueryParameter['fields'] = fields;
             }
 
             localVarHeaderParameter['Accept'] = 'application/json';
@@ -15031,11 +15036,12 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
          * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async show1(uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.show1(uuid, object, recordReturnFormat, parse, options);
+        async show1(uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, fields?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.show1(uuid, object, recordReturnFormat, parse, fields, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.show1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -15239,11 +15245,12 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
          * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        show1(uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
-            return localVarFp.show1(uuid, object, recordReturnFormat, parse, options).then((request) => request(axios, basePath));
+        show1(uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, fields?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.show1(uuid, object, recordReturnFormat, parse, fields, options).then((request) => request(axios, basePath));
         },
         /**
          * Updates a record\'s details identified by its UUID. The record data is provided as a RecordDTO. Returns an UpdateResponse with the updated record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
@@ -15452,11 +15459,12 @@ export class RecordsApi extends BaseAPI {
      * @param {string} [object] Optional object name to resolve the record in a specific object context.
      * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
      * @param {boolean} [parse] Whether to parse the record before returning it.
+     * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public show1(uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, options?: RawAxiosRequestConfig) {
-        return RecordsApiFp(this.configuration).show1(uuid, object, recordReturnFormat, parse, options).then((request) => request(this.axios, this.basePath));
+    public show1(uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, fields?: string, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).show1(uuid, object, recordReturnFormat, parse, fields, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -835,12 +835,14 @@ let uuid: string; // (default to undefined)
 let object: string; //Optional object name to resolve the record in a specific object context. (optional) (default to undefined)
 let recordReturnFormat: string; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
 let parse: boolean; //Whether to parse the record before returning it. (optional) (default to undefined)
+let fields: string; //Comma-separated property names to include (for example: name,status). When omitted, all properties are returned. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.show1(
     uuid,
     object,
     recordReturnFormat,
-    parse
+    parse,
+    fields
 );
 ```
 
@@ -852,6 +854,7 @@ const { status, data } = await apiInstance.show1(
 | **object** | [**string**] | Optional object name to resolve the record in a specific object context. | (optional) defaults to undefined|
 | **recordReturnFormat** | [**string**] | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. | (optional) defaults to 'LEGACY'|
 | **parse** | [**boolean**] | Whether to parse the record before returning it. | (optional) defaults to undefined|
+| **fields** | [**string**] | Comma-separated property names to include (for example: name,status). When omitted, all properties are returned. | (optional) defaults to undefined|
 
 
 ### Return type
