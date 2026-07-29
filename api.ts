@@ -1502,10 +1502,10 @@ export interface FeedDTO {
     'active'?: boolean;
 }
 export interface FilledProperty {
+    'icon'?: string;
     'name'?: string;
     'value'?: any;
     'type'?: string;
-    'icon'?: string;
     'label'?: string;
 }
 /**
