@@ -1,6 +1,6 @@
 {
   "name": "@caraer/client",
-  "version": "2.0.367",
+  "version": "2.0.368",
   "description": "Generated TypeScript client for the Caraer API",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
@@ -24,7 +24,7 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "axios": "^1.16.0"
+    "axios": "1.18.1"
   },
   "devDependencies": {
     "@types/node": "12.11.5 - 12.20.42",
