@@ -3546,8 +3546,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
