@@ -25,6 +25,7 @@ Name | Type | Description | Notes
 **immutable** | **boolean** | Indicates if the property value cannot be modified after initial creation | [optional] [default to undefined]
 **hidden** | **boolean** | Indicates if the property should be hidden from view | [optional] [default to undefined]
 **lifecycleActive** | **boolean** | When true, property value changes are tracked as lifecycle records | [optional] [default to undefined]
+**requiredFilter** | [**Filter**](Filter.md) | When this filter matches the record being saved, the property becomes required | [optional] [default to undefined]
 **nonPublic** | **boolean** | Indicates if the property should be excluded from public APIs | [optional] [default to undefined]
 **indexed** | **boolean** | Indicates if the property should be indexed for searching | [optional] [default to undefined]
 **editable** | **boolean** | Indicates if the property value can be modified | [optional] [default to undefined]
@@ -33,6 +34,7 @@ Name | Type | Description | Notes
 **icon** | **string** | Icon identifier for visual representation of the property | [optional] [default to undefined]
 **webpagePublic** | **boolean** | Indicates if the property can be used in webpages | [optional] [default to undefined]
 **embeddable** | **boolean** | Indicates if the property can be embedded in other properties | [optional] [default to undefined]
+**sensitive** | **boolean** | When true, exclude from advanced query evidence | [optional] [default to undefined]
 **minAndMaxValue** | [**Tuple2LongLong**](Tuple2LongLong.md) | The minimum and maximum value of the property | [optional] [default to undefined]
 **pinned** | **boolean** | Indicates if the property is pinned by the logged-in user | [optional] [default to undefined]
 
@@ -61,6 +63,7 @@ const instance: PropertyDTO = {
     immutable,
     hidden,
     lifecycleActive,
+    requiredFilter,
     nonPublic,
     indexed,
     editable,
@@ -69,6 +72,7 @@ const instance: PropertyDTO = {
     icon,
     webpagePublic,
     embeddable,
+    sensitive,
     minAndMaxValue,
     pinned,
 };

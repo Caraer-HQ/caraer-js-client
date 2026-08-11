@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **string** |  | [optional] [default to undefined]
 **serverlessFunctionUuid** | **string** |  | [optional] [default to undefined]
+**serverlessFunctionName** | **string** |  | [optional] [default to undefined]
 **dependsOn** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **searchable** | **boolean** |  | [optional] [default to undefined]
 **minQueryLength** | **number** |  | [optional] [default to undefined]
@@ -19,6 +20,7 @@ import { AppSettingOptionsSource } from '@caraer/client';
 const instance: AppSettingOptionsSource = {
     type,
     serverlessFunctionUuid,
+    serverlessFunctionName,
     dependsOn,
     searchable,
     minQueryLength,

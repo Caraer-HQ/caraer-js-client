@@ -30,8 +30,14 @@ Name | Type | Description | Notes
 **icon** | **string** |  | [optional] [default to undefined]
 **flowProperty** | **string** |  | [optional] [default to undefined]
 **flowPreview** | **string** |  | [optional] [default to undefined]
+**taskProgressProperty** | **string** |  | [optional] [default to undefined]
+**taskGroupProperty** | **string** |  | [optional] [default to undefined]
+**taskExpandSubtasks** | **boolean** |  | [optional] [default to undefined]
+**taskCollapsedGroupKeys** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**taskExpandedTaskUuids** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **defaultView** | **boolean** |  | [optional] [default to undefined]
 **isInternallyPublic** | **boolean** |  | [optional] [default to undefined]
+**analytics** | [**AnalyticsDashboardConfig**](AnalyticsDashboardConfig.md) |  | [optional] [default to undefined]
 
 ## Example
 
@@ -64,8 +70,14 @@ const instance: ViewDTO = {
     icon,
     flowProperty,
     flowPreview,
+    taskProgressProperty,
+    taskGroupProperty,
+    taskExpandSubtasks,
+    taskCollapsedGroupKeys,
+    taskExpandedTaskUuids,
     defaultView,
     isInternallyPublic,
+    analytics,
 };
 ```
 

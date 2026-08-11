@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **object** | [**CaraerObjectDTO**](CaraerObjectDTO.md) | The Caraer object associated with this preview | [optional] [default to undefined]
 **recordUuid** | **string** | UUID of the associated record | [optional] [default to undefined]
 **primary** | **boolean** | Indicates whether this preview is the primary one | [optional] [default to undefined]
+**edgeProperties** | **{ [key: string]: any | null; }** | Values stored on the relation edge for properties declared on the relation schema. Only present when the preview was loaded through such a relation. | [optional] [default to undefined]
 **grid** | **Array&lt;Array&lt;PreviewItemDTO&gt;&gt;** | Rows of the preview grid | [optional] [default to undefined]
 **previewType** | **string** | Preview type | [optional] [default to undefined]
 **profileImage** | [**PropertyDTO**](PropertyDTO.md) | Profile image property | [optional] [default to undefined]
@@ -46,6 +47,7 @@ const instance: PreviewDTO = {
     object,
     recordUuid,
     primary,
+    edgeProperties,
     grid,
     previewType,
     profileImage,

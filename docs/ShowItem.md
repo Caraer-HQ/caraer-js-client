@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **object** | **string** | The name of the object to which this pagination item belongs. | [optional] [default to undefined]
 **relation** | **string** | The relationship between objects. | [optional] [default to undefined]
+**relationDirection** | **string** | Optional relation direction: outgoing (related→main), incoming (main→related), or omit for undirected. | [optional] [default to undefined]
 **property** | **string** | The name of the property within the object. | [optional] [default to undefined]
 **separator** | **string** | Separator string used to visually separate this item. | [optional] [default to undefined]
 **sticky** | **boolean** | Flag indicating whether this item is sticky and will stay fixed in the list. | [optional] [default to false]
@@ -23,6 +24,7 @@ import { ShowItem } from '@caraer/client';
 const instance: ShowItem = {
     object,
     relation,
+    relationDirection,
     property,
     separator,
     sticky,

@@ -4,14 +4,17 @@ All URIs are relative to *https://v2.api.caraer.com*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**create1**](#create1) | **POST** /api/v2/apps/{appUuid}/serverless-functions | Create a serverless function|
+|[**create3**](#create3) | **POST** /api/v2/apps/{appUuid}/serverless-functions | Create a serverless function|
+|[**delete1**](#delete1) | **DELETE** /api/v2/apps/{appUuid}/serverless-functions/{uuid} | Delete a serverless function|
 |[**index2**](#index2) | **POST** /api/v2/apps/{appUuid}/serverless-functions/index | List serverless functions for an app|
-|[**show**](#show) | **GET** /api/v2/apps/{appUuid}/serverless-functions/{uuid} | Get a serverless function|
+|[**logs**](#logs) | **GET** /api/v2/apps/{appUuid}/serverless-functions/{uuid}/logs | Get serverless function logs|
+|[**samplePayload**](#samplepayload) | **POST** /api/v2/apps/{appUuid}/serverless-functions/sample-payload | Generate a sample webhook payload|
+|[**show1**](#show1) | **GET** /api/v2/apps/{appUuid}/serverless-functions/{uuid} | Get a serverless function|
 |[**testServerlessFunction**](#testserverlessfunction) | **POST** /api/v2/apps/{appUuid}/serverless-functions/{uuid}/test | Test a serverless function|
 |[**update1**](#update1) | **PUT** /api/v2/apps/{appUuid}/serverless-functions/{uuid} | Update a serverless function|
 
-# **create1**
-> CreateResponse create1(serverlessFunctionDTO)
+# **create3**
+> CreateResponse create3(serverlessFunctionDTO)
 
 Creates a new serverless function attached to the specified app.
 
@@ -30,7 +33,7 @@ const apiInstance = new ServerlessFunctionsApi(configuration);
 let appUuid: string; //UUID of the app to attach the serverless function to (default to undefined)
 let serverlessFunctionDTO: ServerlessFunctionDTO; //Serverless function payload (runtime and code)
 
-const { status, data } = await apiInstance.create1(
+const { status, data } = await apiInstance.create3(
     appUuid,
     serverlessFunctionDTO
 );
@@ -63,6 +66,61 @@ const { status, data } = await apiInstance.create1(
 |-------------|-------------|------------------|
 |**200** | Successfully created serverless function |  -  |
 |**400** | Invalid request or app not installed for company |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete1**
+> DeleteResponse delete1()
+
+Tears down the GCP Cloud Function (if provisioned) and deletes the serverless function entity.
+
+### Example
+
+```typescript
+import {
+    ServerlessFunctionsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new ServerlessFunctionsApi(configuration);
+
+let appUuid: string; //UUID of the app (default to undefined)
+let uuid: string; //UUID of the serverless function to delete (default to undefined)
+
+const { status, data } = await apiInstance.delete1(
+    appUuid,
+    uuid
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **appUuid** | [**string**] | UUID of the app | defaults to undefined|
+| **uuid** | [**string**] | UUID of the serverless function to delete | defaults to undefined|
+
+
+### Return type
+
+**DeleteResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successfully deleted serverless function |  -  |
+|**404** | Serverless function not found for this app |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -122,8 +180,126 @@ const { status, data } = await apiInstance.index2(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **show**
-> ShowResponse show()
+# **logs**
+> SuccessResponse logs()
+
+Queries Cloud Logging for recent log entries emitted by the Cloud Function backing this serverless function.
+
+### Example
+
+```typescript
+import {
+    ServerlessFunctionsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new ServerlessFunctionsApi(configuration);
+
+let appUuid: string; //UUID of the app (default to undefined)
+let uuid: string; //UUID of the serverless function (default to undefined)
+let since: string; //Lookback window, e.g. 15m, 1h, 24h (optional) (default to '1h')
+let limit: number; //Maximum number of log entries to return (optional) (default to 100)
+
+const { status, data } = await apiInstance.logs(
+    appUuid,
+    uuid,
+    since,
+    limit
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **appUuid** | [**string**] | UUID of the app | defaults to undefined|
+| **uuid** | [**string**] | UUID of the serverless function | defaults to undefined|
+| **since** | [**string**] | Lookback window, e.g. 15m, 1h, 24h | (optional) defaults to '1h'|
+| **limit** | [**number**] | Maximum number of log entries to return | (optional) defaults to 100|
+
+
+### Return type
+
+**SuccessResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successfully retrieved logs (may be empty if logging is unavailable) |  -  |
+|**404** | Serverless function not found for this app |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **samplePayload**
+> SuccessResponse samplePayload(samplePayloadRequest)
+
+Builds the same payload shape used for serverless invocations and webhook delivery from a record and event type, without invoking anything.
+
+### Example
+
+```typescript
+import {
+    ServerlessFunctionsApi,
+    Configuration,
+    SamplePayloadRequest
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new ServerlessFunctionsApi(configuration);
+
+let appUuid: string; //UUID of the app (default to undefined)
+let samplePayloadRequest: SamplePayloadRequest; //Sample payload request (recordUuid and eventType)
+
+const { status, data } = await apiInstance.samplePayload(
+    appUuid,
+    samplePayloadRequest
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **samplePayloadRequest** | **SamplePayloadRequest**| Sample payload request (recordUuid and eventType) | |
+| **appUuid** | [**string**] | UUID of the app | defaults to undefined|
+
+
+### Return type
+
+**SuccessResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Sample payload generated |  -  |
+|**400** | Invalid input provided |  -  |
+|**404** | App or record not found |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **show1**
+> ShowResponse show1()
 
 Retrieves a serverless function by its UUID, ensuring it belongs to the specified app.
 
@@ -141,7 +317,7 @@ const apiInstance = new ServerlessFunctionsApi(configuration);
 let appUuid: string; //UUID of the app (default to undefined)
 let uuid: string; //UUID of the serverless function (default to undefined)
 
-const { status, data } = await apiInstance.show(
+const { status, data } = await apiInstance.show1(
     appUuid,
     uuid
 );

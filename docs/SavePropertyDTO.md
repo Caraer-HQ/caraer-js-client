@@ -24,6 +24,7 @@ Name | Type | Description | Notes
 **rules** | **Array&lt;string&gt;** | Collection of rules applied to the property | [optional] [default to undefined]
 **hidden** | **boolean** | Indicates if the property is hidden by default | [optional] [default to undefined]
 **lifecycleActive** | **boolean** | When true, property value changes are tracked as lifecycle records | [optional] [default to undefined]
+**requiredFilter** | [**Filter**](Filter.md) | When this filter matches the record being saved, the property becomes required | [optional] [default to undefined]
 **nonPublic** | **boolean** | Indicates if the property is not accessible publicly | [optional] [default to undefined]
 **indexed** | **boolean** | Indicates if the property is indexed | [optional] [default to undefined]
 **formatSettings** | **{ [key: string]: any | null; }** | Settings to configure the format of the property | [optional] [default to undefined]
@@ -31,7 +32,8 @@ Name | Type | Description | Notes
 **editable** | **boolean** | Indicates if the property can be edited | [optional] [default to undefined]
 **icon** | **string** | The icon associated with the property | [optional] [default to undefined]
 **webpagePublic** | **boolean** | Indicates if the property is webpage public | [optional] [default to undefined]
-**embeddable** | **boolean** | Indicates if the property is embeddable | [optional] [default to undefined]
+**embeddable** | **boolean** | Deprecated. Use sensitive instead. | [optional] [default to undefined]
+**sensitive** | **boolean** | When true, exclude from advanced query evidence | [optional] [default to undefined]
 
 ## Example
 
@@ -57,6 +59,7 @@ const instance: SavePropertyDTO = {
     rules,
     hidden,
     lifecycleActive,
+    requiredFilter,
     nonPublic,
     indexed,
     formatSettings,
@@ -65,6 +68,7 @@ const instance: SavePropertyDTO = {
     icon,
     webpagePublic,
     embeddable,
+    sensitive,
 };
 ```
 

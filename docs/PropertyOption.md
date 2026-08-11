@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **icon** | **string** |  | [optional] [default to undefined]
 **color** | **string** |  | [optional] [default to undefined]
 **disabled** | **boolean** |  | [optional] [default to undefined]
+**completed** | **boolean** |  | [optional] [default to undefined]
 **usedIn** | [**UsedInResult**](UsedInResult.md) |  | [optional] [default to undefined]
 
 ## Example
@@ -23,6 +24,7 @@ const instance: PropertyOption = {
     icon,
     color,
     disabled,
+    completed,
     usedIn,
 };
 ```

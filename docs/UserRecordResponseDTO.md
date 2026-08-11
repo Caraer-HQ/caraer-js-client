@@ -18,7 +18,7 @@ Name | Type | Description | Notes
 **index** | **number** | Index number for ordering entities | [optional] [default to undefined]
 **deleted** | **boolean** | Whether the record is soft-deleted. | [optional] [default to undefined]
 **properties** | [**Array&lt;FilledProperty&gt;**](FilledProperty.md) | Record properties for display. | [optional] [default to undefined]
-**objects** | **{ [key: string]: any | null; }** | Primary and morph object metadata for this record. | [optional] [default to undefined]
+**objects** | **{ [key: string]: any | null; }** | Primary and extended object metadata for this record. | [optional] [default to undefined]
 **user** | [**PublicUserDTO**](PublicUserDTO.md) | The user linked to this record when the user trait is enabled. | [optional] [default to undefined]
 
 ## Example

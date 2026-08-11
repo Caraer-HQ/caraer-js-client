@@ -40,6 +40,203 @@ export interface AccessGrantTargetDTO {
      */
     'subtitle'?: string;
 }
+export interface AdvancedRecordQueryPlan {
+    'version'?: number;
+    'mainObject'?: string;
+    'mainObjects'?: Array<string>;
+    'query'?: string;
+    'filter'?: Filter;
+    'sort'?: Set<SortItem>;
+    'show'?: Set<ShowItem>;
+    'strategy'?: AdvancedRecordQueryPlanStrategyEnum;
+    'anchorRecordUuid'?: string;
+    'criteria'?: Array<string>;
+    'graphTraversals'?: Array<GraphTraversalSpec>;
+    'scoreWeights'?: { [key: string]: number; };
+    'includeEvidence'?: boolean;
+    'maxTraversalDepth'?: number;
+    'page'?: number;
+    'limit'?: number;
+}
+
+export const AdvancedRecordQueryPlanStrategyEnum = {
+    Auto: 'AUTO',
+    Structured: 'STRUCTURED',
+    Lexical: 'LEXICAL',
+    Semantic: 'SEMANTIC',
+    Hybrid: 'HYBRID',
+    Graph: 'GRAPH',
+} as const;
+
+export type AdvancedRecordQueryPlanStrategyEnum = typeof AdvancedRecordQueryPlanStrategyEnum[keyof typeof AdvancedRecordQueryPlanStrategyEnum];
+
+/**
+ * Advanced record query. Provide either question or plan, not both.
+ */
+export interface AdvancedRecordQueryRequest {
+    /**
+     * Natural-language question to plan and execute.
+     */
+    'question'?: string;
+    /**
+     * Validated declarative query plan.
+     */
+    'plan'?: AdvancedRecordQueryPlan;
+    /**
+     * Optional main object hint. Use mainObjects for multi-type queries.
+     */
+    'mainObject'?: string;
+    /**
+     * Optional object list for multi-type queries (e.g. candidate and vacancy together).
+     */
+    'mainObjects'?: Array<string>;
+    'strategy'?: AdvancedRecordQueryRequestStrategyEnum;
+    'page'?: number;
+    'limit'?: number;
+    'preview'?: string;
+    'parse'?: any;
+    'archived'?: boolean;
+    /**
+     * When true, include normalized plan, scores, and evidence.
+     */
+    'explain'?: boolean;
+    'recordReturnFormat'?: string;
+}
+
+export const AdvancedRecordQueryRequestStrategyEnum = {
+    Auto: 'AUTO',
+    Structured: 'STRUCTURED',
+    Lexical: 'LEXICAL',
+    Semantic: 'SEMANTIC',
+    Hybrid: 'HYBRID',
+    Graph: 'GRAPH',
+} as const;
+
+export type AdvancedRecordQueryRequestStrategyEnum = typeof AdvancedRecordQueryRequestStrategyEnum[keyof typeof AdvancedRecordQueryRequestStrategyEnum];
+
+/**
+ * Advanced record query response with scores and evidence.
+ */
+export interface AdvancedRecordQueryResponse {
+    'data'?: Array<any>;
+    'results'?: Array<AdvancedRecordQueryResultItem>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+    'plan'?: AdvancedRecordQueryPlan;
+    'confidence'?: number;
+    'warnings'?: Array<string>;
+    'diagnostics'?: { [key: string]: any | null; };
+}
+export interface AdvancedRecordQueryResultItem {
+    'record'?: any;
+    'recordUuid'?: string;
+    'objectName'?: string;
+    'scores'?: ScoreBreakdown;
+    'criteria'?: Array<CriterionScore>;
+    'supportingEvidence'?: Array<QueryEvidence>;
+    'contradictingEvidence'?: Array<QueryEvidence>;
+}
+/**
+ * Batch aggregation request for loading a dashboard.
+ */
+export interface AggregateBatchRequest {
+    'requests'?: Array<AggregateRequest>;
+}
+/**
+ * Aggregation request for analytics charts over Neo4j records.
+ */
+export interface AggregateRequest {
+    'xaxis'?: AnalyticsAxisConfig;
+    'yaxis'?: AnalyticsAxisConfig;
+    /**
+     * Optional client widget id, echoed in batch responses.
+     */
+    'id'?: string;
+    'mainObject'?: string;
+    'filter'?: Filter;
+    'query'?: string;
+    'xAxis'?: AnalyticsAxisConfig;
+    'yAxis'?: AnalyticsAxisConfig;
+    'series'?: AnalyticsSeriesConfig;
+    /**
+     * Optional top-N series limit. For additive metrics (count, countDistinct, sum), keeps the N series with the highest total Y. Null or <= 0 means no truncation.
+     */
+    'limit'?: number;
+    'sort'?: string;
+    /**
+     * When true, omit null/blank/(empty) category buckets from the response. Useful for bar and pie charts grouped by optional properties.
+     */
+    'excludeEmptyValues'?: boolean;
+}
+export interface AnalyticsAxisConfig {
+    'property'?: AnalyticsPropertyRef;
+    'timeBucket'?: string;
+    'timeZone'?: string;
+    'windowDays'?: number;
+    'binCount'?: number;
+    'metric'?: string;
+    'label'?: string;
+}
+export interface AnalyticsComparisonMetric {
+    'key'?: string;
+    'label'?: string;
+    'mainObject'?: string;
+    'filter'?: Filter;
+    'yAxis'?: AnalyticsAxisConfig;
+}
+export interface AnalyticsDashboardConfig {
+    'version'?: number;
+    'columns'?: number;
+    'widgets'?: Array<AnalyticsWidgetConfig>;
+}
+export interface AnalyticsPropertyRef {
+    'object'?: string;
+    'relation'?: string;
+    'propertyName'?: string;
+}
+export interface AnalyticsReferenceLine {
+    'value'?: number;
+    'label'?: string;
+    'color'?: string;
+}
+export interface AnalyticsSeriesConfig {
+    'groupBy'?: AnalyticsPropertyRef;
+}
+export interface AnalyticsTrendConfig {
+    'property'?: AnalyticsPropertyRef;
+    'windowDays'?: number;
+}
+export interface AnalyticsWidgetConfig {
+    'id'?: string;
+    'title'?: string;
+    'chartType'?: string;
+    'mainObject'?: string;
+    'x'?: number;
+    'y'?: number;
+    'w'?: number;
+    'h'?: number;
+    'filter'?: Filter;
+    'xAxis'?: AnalyticsAxisConfig;
+    'yAxis'?: AnalyticsAxisConfig;
+    'series'?: AnalyticsSeriesConfig;
+    'comparisonMetrics'?: Array<AnalyticsComparisonMetric>;
+    'trend'?: AnalyticsTrendConfig;
+    'limit'?: number;
+    'sort'?: string;
+    'excludeEmptyValues'?: boolean;
+    'style'?: AnalyticsWidgetStyle;
+}
+export interface AnalyticsWidgetStyle {
+    'showLegend'?: boolean;
+    'showGrid'?: boolean;
+    'showValueLabels'?: boolean;
+    'barOrientation'?: string;
+    'barGrouping'?: string;
+    'colors'?: { [key: string]: string; };
+    'referenceLines'?: Array<AnalyticsReferenceLine>;
+}
 /**
  * Data transfer object for an app bar (location-specific settings and action config)
  */
@@ -195,6 +392,18 @@ export interface AppBarVisibilityEntry {
     'objects'?: Array<string>;
     'suites'?: Array<string>;
 }
+export interface AppConnectionStatusDTO {
+    'id'?: string;
+    'name'?: string;
+    'label'?: string;
+    'preset'?: string;
+    'logo'?: string;
+    'connected'?: boolean;
+    'ownerType'?: string;
+    'ownerUserUuid'?: string;
+    'accountLabel'?: string;
+    'connectedAt'?: number;
+}
 /**
  * Full app payload (AppCreatorDTO) to apply
  */
@@ -244,7 +453,7 @@ export interface AppDTO {
      */
     'privateApp'?: boolean;
     /**
-     * Whether to hide the API token field in app settings UI
+     * Whether to hide the API token field in app settings UI. Defaults to true when omitted.
      */
     'hideApiKeyField'?: boolean;
     /**
@@ -284,9 +493,17 @@ export interface AppDTO {
      */
     'settingsSchema'?: Array<AppSettingFieldSchema>;
     /**
+     * External OAuth providers installers can Connect (name/logo only; no secrets)
+     */
+    'externalOAuthProviders'?: Array<AppExternalOAuthProviderSummaryDTO>;
+    /**
      * Webhook rate limit per minute
      */
     'webhookRateLimitPerMinute'?: number;
+    /**
+     * App job enqueue rate limit per minute per installation
+     */
+    'jobRateLimitPerMinute'?: number;
     /**
      * Whether failed webhook requests are considered billable for this app
      */
@@ -363,6 +580,34 @@ export interface AppDTO {
      * Internal app description used in Caraer admin views
      */
     'description'?: string;
+    /**
+     * App platform version: 1 = legacy per-function Cloud Functions; 2 = one container per app
+     */
+    'platformVersion'?: number;
+    /**
+     * Serverless runtime for platform V2 apps (nodejs22 or python312)
+     */
+    'runtime'?: string;
+    /**
+     * Base HTTPS URL of the V2 app container runtime
+     */
+    'runtimeBaseUrl'?: string;
+    /**
+     * Last deployed runtime revision id
+     */
+    'runtimeRevision'?: string;
+    /**
+     * V2 runtime status: PENDING, PROVISIONING, READY, FAILED
+     */
+    'runtimeStatus'?: string;
+    /**
+     * Last V2 runtime error message when FAILED
+     */
+    'runtimeError'?: string;
+    /**
+     * Monotonic generation for async runtime jobs
+     */
+    'runtimeGeneration'?: number;
 }
 
 export const AppDTOAuthMethodEnum = {
@@ -443,6 +688,130 @@ export interface AppDetailsDTO {
      * Index number for ordering entities
      */
     'index'?: number;
+}
+/**
+ * Third-party OAuth provider declared on an app
+ */
+export interface AppExternalOAuthProviderDTO {
+    /**
+     * Unique identifier for the entity
+     */
+    'uuid': string;
+    /**
+     * The name of the entity
+     */
+    'name': string;
+    /**
+     * Display label for the entity, can be different from name
+     */
+    'label'?: string;
+    /**
+     * Unix timestamp when the entity was created
+     */
+    'createdAt'?: number;
+    /**
+     * Identifier of the user who created the entity
+     */
+    'createdBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was last updated
+     */
+    'updatedAt'?: number;
+    /**
+     * Identifier of the user who last updated the entity
+     */
+    'updatedBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was deleted (null if not deleted)
+     */
+    'deletedAt'?: number;
+    /**
+     * Identifier of the user who deleted the entity
+     */
+    'deletedBy'?: ModelRecord;
+    /**
+     * Index number for ordering entities
+     */
+    'index'?: number;
+    /**
+     * Ignored. Set authorizeUrl and tokenUrl explicitly.
+     * @deprecated
+     */
+    'preset'?: string;
+    /**
+     * Optional logo URL shown on the Connect button
+     */
+    'logo'?: string;
+    'authorizeUrl'?: string;
+    'tokenUrl'?: string;
+    'clientId'?: string;
+    'clientSecret'?: string;
+    'hasClientSecret'?: boolean;
+    'scopes'?: Array<string>;
+    'pkce'?: boolean;
+    'connectionOwner'?: string;
+}
+/**
+ * Lightweight external OAuth provider summary (no secrets)
+ */
+export interface AppExternalOAuthProviderSummaryDTO {
+    'name'?: string;
+    'label'?: string;
+    'logo'?: string;
+    'connectionOwner'?: string;
+}
+/**
+ * Public inbound route into an app function
+ */
+export interface AppInboundRouteDTO {
+    /**
+     * Unique identifier for the entity
+     */
+    'uuid': string;
+    /**
+     * The name of the entity
+     */
+    'name': string;
+    /**
+     * Display label for the entity, can be different from name
+     */
+    'label'?: string;
+    /**
+     * Unix timestamp when the entity was created
+     */
+    'createdAt'?: number;
+    /**
+     * Identifier of the user who created the entity
+     */
+    'createdBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was last updated
+     */
+    'updatedAt'?: number;
+    /**
+     * Identifier of the user who last updated the entity
+     */
+    'updatedBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was deleted (null if not deleted)
+     */
+    'deletedAt'?: number;
+    /**
+     * Identifier of the user who deleted the entity
+     */
+    'deletedBy'?: ModelRecord;
+    /**
+     * Index number for ordering entities
+     */
+    'index'?: number;
+    'authMode'?: string;
+    'enqueue'?: boolean;
+    'hasSharedSecret'?: boolean;
+    'sharedSecret'?: string;
+    'serverlessFunction'?: ServerlessFunctionRefDTO;
+}
+export interface AppOAuthStartResponseDTO {
+    'authorizeUrl'?: string;
 }
 /**
  * Data transfer object for app pricing (flat or tiered)
@@ -586,7 +955,7 @@ export interface AppPublishDTO {
      */
     'feedback'?: string;
     /**
-     * Internal reviewer notes (admin only, not exposed to developer)
+     * Internal reviewer notes. Only returned for SUPER_ADMIN callers; never exposed to app creators.
      */
     'reviewerNotes'?: string;
 }
@@ -598,6 +967,55 @@ export interface AppRequest {
      * A map of configuration settings. The keys are strings representing the setting names, and the values represent the setting values, which can be different types.
      */
     'settings'?: Array<AppSettingFieldSchema>;
+}
+/**
+ * App schedule definition (cron → function)
+ */
+export interface AppScheduleDTO {
+    /**
+     * Unique identifier for the entity
+     */
+    'uuid': string;
+    /**
+     * The name of the entity
+     */
+    'name': string;
+    /**
+     * Display label for the entity, can be different from name
+     */
+    'label'?: string;
+    /**
+     * Unix timestamp when the entity was created
+     */
+    'createdAt'?: number;
+    /**
+     * Identifier of the user who created the entity
+     */
+    'createdBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was last updated
+     */
+    'updatedAt'?: number;
+    /**
+     * Identifier of the user who last updated the entity
+     */
+    'updatedBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was deleted (null if not deleted)
+     */
+    'deletedAt'?: number;
+    /**
+     * Identifier of the user who deleted the entity
+     */
+    'deletedBy'?: ModelRecord;
+    /**
+     * Index number for ordering entities
+     */
+    'index'?: number;
+    'schedule'?: string;
+    'enabled'?: boolean;
+    'payloadTemplate'?: string;
+    'serverlessFunction'?: ServerlessFunctionRefDTO;
 }
 export interface AppSettingFieldMappingStructure {
     'objectName'?: string;
@@ -623,11 +1041,14 @@ export interface AppSettingFieldSchema {
     'defaultValue'?: any;
     'hidden'?: boolean;
     'value'?: any;
+    'hasValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
+    'valueScope'?: string;
 }
 export interface AppSettingOptionsSource {
     'type'?: string;
     'serverlessFunctionUuid'?: string;
+    'serverlessFunctionName'?: string;
     'dependsOn'?: Array<string>;
     'searchable'?: boolean;
     'minQueryLength'?: number;
@@ -765,6 +1186,135 @@ export interface BillingSettingsDTO {
      * The country of the billing contact.
      */
     'country'?: string;
+}
+/**
+ * Payload of a bulk delete records response.
+ */
+export interface BulkDeleteRecordsData {
+    /**
+     * UUIDs that were successfully deleted.
+     */
+    'uuids'?: Array<string>;
+}
+/**
+ * Request to archive, anonymize, or permanently delete multiple records.
+ */
+export interface BulkDeleteRecordsRequest {
+    /**
+     * Record UUIDs to delete.
+     */
+    'uuids': Array<string>;
+    /**
+     * Deletion mode: \'archive\', \'anonymize\', or \'delete\'.
+     */
+    'mode': string;
+}
+/**
+ * Response for a bulk delete records operation.
+ */
+export interface BulkDeleteRecordsResponse {
+    /**
+     * Result message.
+     */
+    'message'?: string;
+    /**
+     * Successfully deleted record UUIDs.
+     */
+    'data'?: BulkDeleteRecordsData;
+    /**
+     * Per-record errors when one or more items failed.
+     */
+    'errors'?: Array<BulkEditRecordErrorItem>;
+}
+/**
+ * Validation or processing errors for a single record in a bulk edit operation.
+ */
+export interface BulkEditRecordErrorItem {
+    /**
+     * UUID of the record that failed, if known.
+     */
+    'uuid'?: string;
+    /**
+     * Client reference echoed from the request, if provided.
+     */
+    'clientRef'?: string;
+    /**
+     * Summary message for this record\'s failure.
+     */
+    'message'?: string;
+    /**
+     * Field-level validation errors.
+     */
+    'errors'?: Array<CaraerErrorType>;
+}
+/**
+ * A single record to create or update in a bulk edit request.
+ */
+export interface BulkEditRecordItem {
+    /**
+     * UUID of an existing record to update. Omit to create a new record.
+     */
+    'uuid'?: string;
+    /**
+     * Client-side reference for matching the item back after create (e.g. row-3).
+     */
+    'clientRef'?: string;
+    /**
+     * Property values to set on the record.
+     */
+    'properties'?: { [key: string]: any | null; };
+}
+/**
+ * A successfully saved record from a bulk edit operation.
+ */
+export interface BulkEditRecordResultItem {
+    /**
+     * UUID of the saved record.
+     */
+    'uuid'?: string;
+    /**
+     * Client reference echoed from the request, if provided.
+     */
+    'clientRef'?: string;
+    /**
+     * True when the record was created; false when updated.
+     */
+    'created'?: boolean;
+}
+/**
+ * Payload of a bulk edit records response.
+ */
+export interface BulkEditRecordsData {
+    /**
+     * Successfully saved records.
+     */
+    'records'?: Array<BulkEditRecordResultItem>;
+}
+/**
+ * Request to create or update multiple records in one operation.
+ */
+export interface BulkEditRecordsRequest {
+    /**
+     * Records to create or update.
+     */
+    'records'?: Array<BulkEditRecordItem>;
+}
+/**
+ * Response for a bulk create/update records operation.
+ */
+export interface BulkEditRecordsResponse {
+    /**
+     * Result message.
+     */
+    'message'?: string;
+    /**
+     * Successfully saved records.
+     */
+    'data'?: BulkEditRecordsData;
+    /**
+     * Per-record errors when one or more items failed validation.
+     */
+    'errors'?: Array<BulkEditRecordErrorItem>;
 }
 export interface CaraerErrorType {
     /**
@@ -1110,6 +1660,36 @@ export interface CreateCompanyRequest {
      */
     'includeRecords'?: boolean;
 }
+/**
+ * Request body for creating (or fetching an existing) developer project for an app.
+ */
+export interface CreateDeveloperProjectRequest {
+    /**
+     * UUID of the app to link this project to.
+     */
+    'appUuid'?: string;
+    /**
+     * Project name.
+     */
+    'name'?: string;
+    /**
+     * Optional human-readable label for the project.
+     */
+    'label'?: string;
+}
+/**
+ * Request body for creating a developer sandbox.
+ */
+export interface CreateDeveloperSandboxRequest {
+    /**
+     * Sandbox name.
+     */
+    'name'?: string;
+    /**
+     * Optional human-readable label for the sandbox.
+     */
+    'label'?: string;
+}
 export interface CreateOrUpdateEnvironmentRequest {
     'environment'?: string;
     'webpageObjects'?: Array<CaraerObjectDTO>;
@@ -1134,6 +1714,14 @@ export interface CreatePrivateAppRequest {
      * Registered OAuth redirect URIs (required when authMethod is OAUTH2)
      */
     'oauthRedirectUris'?: Array<string>;
+    /**
+     * Ignored; new private apps are always platform version 2 (async container runtime).
+     */
+    'platformVersion'?: number;
+    /**
+     * Serverless runtime for the app: nodejs22 or python312. Defaults to nodejs22.
+     */
+    'runtime'?: string;
 }
 
 export const CreatePrivateAppRequestAuthMethodEnum = {
@@ -1144,6 +1732,31 @@ export const CreatePrivateAppRequestAuthMethodEnum = {
 export type CreatePrivateAppRequestAuthMethodEnum = typeof CreatePrivateAppRequestAuthMethodEnum[keyof typeof CreatePrivateAppRequestAuthMethodEnum];
 
 /**
+ * Request body for uploading a developer project build archive.
+ */
+export interface CreateProjectBuildRequest {
+    /**
+     * Base64-encoded zip archive containing caraer.project.json and src/app.
+     */
+    'archiveBase64'?: string;
+    /**
+     * Original archive filename, for traceability.
+     */
+    'filename'?: string;
+    /**
+     * Deploy target: production or sandbox.
+     */
+    'target'?: string;
+    /**
+     * Semantic version for this build (MAJOR.MINOR.PATCH). Auto-bumped when omitted.
+     */
+    'version'?: string;
+    /**
+     * Release notes for this build.
+     */
+    'releaseNotes'?: string;
+}
+/**
  * Response for a successful resource creation operation.
  */
 export interface CreateResponse {
@@ -1152,6 +1765,45 @@ export interface CreateResponse {
      */
     'message'?: string;
     'data'?: any;
+}
+/**
+ * Response for a successful resource creation operation.
+ */
+export interface CreateResponseAppExternalOAuthProviderDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: AppExternalOAuthProviderDTO;
+}
+/**
+ * Response for a successful resource creation operation.
+ */
+export interface CreateResponseAppInboundRouteDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: AppInboundRouteDTO;
+}
+/**
+ * Response for a successful resource creation operation.
+ */
+export interface CreateResponseAppScheduleDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: AppScheduleDTO;
 }
 /**
  * Response for a successful resource creation operation.
@@ -1168,6 +1820,55 @@ export interface CreateResponseSignedUrlResultDTO {
 }
 export interface CreateSignedUrlRequest {
     'ttlSeconds'?: number;
+}
+export interface CriterionScore {
+    'criterion'?: string;
+    'score'?: number;
+    'weight'?: number;
+    'rationale'?: string;
+    'supportingEvidence'?: Array<QueryEvidence>;
+    'contradictingEvidence'?: Array<QueryEvidence>;
+}
+/**
+ * Request DTO for searching records across multiple objects.
+ */
+export interface CrossObjectRecordSearchRequest {
+    /**
+     * Free-text search query.
+     */
+    'query'?: string;
+    /**
+     * Event (or source) object UUID used with relationName to resolve target objects.
+     */
+    'fromObjectUuid'?: string;
+    /**
+     * Relation name whose connected target objects are searched (e.g. attendees).
+     */
+    'relationName'?: string;
+    /**
+     * Object UUIDs to search. Used on their own when relationName is omitted; combined with relationName they narrow the relation\'s target objects.
+     */
+    'objectUuids'?: Array<string>;
+    /**
+     * Object internal names to search. Behaves like objectUuids and may be combined with it.
+     */
+    'objectNames'?: Array<string>;
+    /**
+     * Preview template name.
+     */
+    'preview'?: string;
+    /**
+     * Page number (1-based).
+     */
+    'page'?: number;
+    /**
+     * Maximum records returned.
+     */
+    'limit'?: number;
+    /**
+     * Optional record UUID to exclude from results.
+     */
+    'excludeRecordUuid'?: string;
 }
 export interface Currency extends PropertyFormat {
 }
@@ -1207,6 +1908,47 @@ export interface DeleteResponseString {
      * The data payload of the response, if any.
      */
     'data'?: string;
+}
+/**
+ * Response class representing the result of a delete operation.
+ */
+export interface DeleteResponseVoid {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    'data'?: any;
+}
+/**
+ * Request body for deploying a developer project build.
+ */
+export interface DeployBuildRequest {
+    /**
+     * Deploy target: production or sandbox. Defaults to the build\'s target.
+     */
+    'target'?: string;
+    /**
+     * When true, soft-delete remote functions/webhooks/schedules/inbound routes/OAuth providers that are absent from the build archive. Defaults to false.
+     */
+    'prune'?: boolean;
+}
+/**
+ * Approve a pending device-code login (authenticated browser session)
+ */
+export interface DeviceApproveRequest {
+    /**
+     * User-facing code shown by the CLI
+     */
+    'userCode': string;
+}
+/**
+ * Poll a device-code login session
+ */
+export interface DevicePollRequest {
+    /**
+     * Device code returned by /auth/device/start
+     */
+    'deviceCode': string;
 }
 /**
  * A DTO representing the digital identity of a company.
@@ -1433,6 +2175,10 @@ export interface ErrorResponse {
     'stackTrace'?: string;
     'roles'?: Array<ErrorResponseRolesEnum>;
     'scopes'?: Array<string>;
+    /**
+     * Request correlation ID for support and log tracing.
+     */
+    'requestId'?: string;
 }
 
 export const ErrorResponseRolesEnum = {
@@ -1445,6 +2191,52 @@ export const ErrorResponseRolesEnum = {
 
 export type ErrorResponseRolesEnum = typeof ErrorResponseRolesEnum[keyof typeof ErrorResponseRolesEnum];
 
+export interface EventRsvpRequest {
+    /**
+     * Participation status on the attendees edge
+     */
+    'partstat': EventRsvpRequestPartstatEnum;
+    /**
+     * Series scope for recurring events. Defaults to this.
+     */
+    'scope'?: EventRsvpRequestScopeEnum;
+}
+
+export const EventRsvpRequestPartstatEnum = {
+    NeedsAction: 'needs_action',
+    Accepted: 'accepted',
+    Declined: 'declined',
+    Tentative: 'tentative',
+} as const;
+
+export type EventRsvpRequestPartstatEnum = typeof EventRsvpRequestPartstatEnum[keyof typeof EventRsvpRequestPartstatEnum];
+export const EventRsvpRequestScopeEnum = {
+    This: 'this',
+    ThisAndFuture: 'this_and_future',
+    All: 'all',
+} as const;
+
+export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
+
+export interface ExistingWidgetSummary {
+    'xproperty'?: string;
+    'ymetric'?: string;
+    'yproperty'?: string;
+    'title'?: string;
+    'chartType'?: string;
+    'xProperty'?: string;
+    'yMetric'?: string;
+    'yProperty'?: string;
+}
+/**
+ * Request to extend a record
+ */
+export interface ExtendRecordRequest {
+    /**
+     * The objects to extend the record into
+     */
+    'objects'?: Set<CaraerObjectDTO>;
+}
 export interface FeedDTO {
     /**
      * Unique identifier for the entity
@@ -1539,6 +2331,10 @@ export interface FilterItem {
      */
     'relation'?: string;
     /**
+     * Optional relation direction: outgoing (related→main), incoming (main→related), or omit for undirected.
+     */
+    'relationDirection'?: string;
+    /**
      * The name of the property within the object.
      */
     'property'?: string;
@@ -1555,6 +2351,10 @@ export interface FilterItem {
      * When true, filter fields contain smart content placeholders resolved at runtime.
      */
     'smartContent'?: boolean;
+    /**
+     * When true, propertyName refers to a property stored on the relation edge itself (declared on the relation schema, e.g. partstat on attendees) instead of a property of the related record. Requires relation and propertyName.
+     */
+    'edgeProperty'?: boolean;
 }
 export interface FontVariantDTO {
     'weight'?: number;
@@ -1790,6 +2590,22 @@ export interface FormWithAiPromptDTO {
      */
     'aiPrompt'?: string;
 }
+export interface GraphPathEvidence {
+    'path'?: Array<{ [key: string]: any | null; }>;
+    'summary'?: string;
+    'relation'?: string;
+    'targetObject'?: string;
+    'recordUuid'?: string;
+}
+export interface GraphTraversalSpec {
+    'relation'?: string;
+    'targetObject'?: string;
+    'direction'?: string;
+    'maxDepth'?: number;
+    'includeLifecycle'?: boolean;
+    'includeActivities'?: boolean;
+    'perRelationLimit'?: number;
+}
 /**
  * Represents a single cell within a form grid, which can contain a property, text, nested form, or other form elements
  */
@@ -1960,6 +2776,10 @@ export interface Leadscore {
      */
     'relation'?: string;
     /**
+     * Optional relation direction: outgoing (related→main), incoming (main→related), or omit for undirected.
+     */
+    'relationDirection'?: string;
+    /**
      * The name of the property within the object.
      */
     'property'?: string;
@@ -1976,6 +2796,10 @@ export interface Leadscore {
      * When true, filter fields contain smart content placeholders resolved at runtime.
      */
     'smartContent'?: boolean;
+    /**
+     * When true, propertyName refers to a property stored on the relation edge itself (declared on the relation schema, e.g. partstat on attendees) instead of a property of the related record. Requires relation and propertyName.
+     */
+    'edgeProperty'?: boolean;
     /**
      * Whether the value is a smart value
      */
@@ -2107,6 +2931,15 @@ export interface MappingItemDTO {
     'targetProperty'?: PropertyDTO;
     'conversionFunction'?: string;
 }
+/**
+ * Request to migrate an existing V1 app to platform V2 (shared container runtime)
+ */
+export interface MigrateAppToV2Request {
+    /**
+     * Required when functions disagree or none set: nodejs22 or python312
+     */
+    'runtime'?: string;
+}
 export interface ModelDate extends PropertyFormat {
 }
 export interface ModelFile extends PropertyFormat {
@@ -2121,21 +2954,12 @@ export interface ModelRecord {
     'updatedByUuid'?: string;
     'deletedByUuid'?: string;
     'index'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
     'user'?: PublicUserDTO;
-}
-/**
- * Request to morph a record
- */
-export interface MorphRecordRequest {
-    /**
-     * The objects to morph the record into
-     */
-    'objects'?: Set<CaraerObjectDTO>;
 }
 export interface MultiLine extends PropertyFormat {
 }
@@ -2673,6 +3497,10 @@ export interface PreviewDTO {
      */
     'primary'?: boolean;
     /**
+     * Values stored on the relation edge for properties declared on the relation schema. Only present when the preview was loaded through such a relation.
+     */
+    'edgeProperties'?: { [key: string]: any | null; };
+    /**
      * Rows of the preview grid
      */
     'grid'?: Array<Array<PreviewItemDTO>>;
@@ -2877,6 +3705,9 @@ export interface PreviewRelatedObjectDTO {
      */
     'relation'?: RelationDTO;
 }
+export interface Progress extends PropertyFormat {
+    'checkboxProperty'?: PropertyDTO;
+}
 /**
  * Data transfer object representing a property with its configuration and metadata
  */
@@ -2955,6 +3786,10 @@ export interface PropertyDTO {
      */
     'lifecycleActive'?: boolean;
     /**
+     * When this filter matches the record being saved, the property becomes required
+     */
+    'requiredFilter'?: Filter;
+    /**
      * Indicates if the property should be excluded from public APIs
      */
     'nonPublic'?: boolean;
@@ -2984,8 +3819,13 @@ export interface PropertyDTO {
     'webpagePublic'?: boolean;
     /**
      * Indicates if the property can be embedded in other properties
+     * @deprecated
      */
     'embeddable'?: boolean;
+    /**
+     * When true, exclude from advanced query evidence
+     */
+    'sensitive'?: boolean;
     /**
      * The minimum and maximum value of the property
      */
@@ -2999,7 +3839,7 @@ export interface PropertyDTO {
  * @type PropertyDTOFormat
  * Format configuration for the property\'s display and validation
  */
-export type PropertyDTOFormat = Currency | CurrencyRange | Duration | Email | LinkedProperty | ModelDate | ModelFile | MultiLine | MultiSelect | Number | NumberRange | Phone | SingleCheckbox | SingleLine | SingleSelect | Structure | Tag | Url;
+export type PropertyDTOFormat = Currency | CurrencyRange | Duration | Email | LinkedProperty | ModelDate | ModelFile | MultiLine | MultiSelect | Number | NumberRange | Phone | Progress | Recurrence | SingleCheckbox | SingleLine | SingleSelect | Structure | Tag | Url;
 
 export interface PropertyFormat {
     'label'?: string;
@@ -3016,6 +3856,7 @@ export interface PropertyOption {
     'icon'?: string;
     'color'?: string;
     'disabled'?: boolean;
+    'completed'?: boolean;
     'usedIn'?: UsedInResult;
 }
 export interface PublicUserDTO {
@@ -3028,6 +3869,19 @@ export interface PublicUserDTO {
     'filters'?: { [key: string]: Filter; };
     'role'?: string;
     'record'?: ModelRecord;
+}
+export interface QueryEvidence {
+    'type'?: string;
+    'polarity'?: string;
+    'summary'?: string;
+    'sourceObject'?: string;
+    'sourceRecordUuid'?: string;
+    'relation'?: string;
+    'timestamp'?: number;
+    'recencyWeight'?: number;
+    'confidence'?: number;
+    'properties'?: { [key: string]: any | null; };
+    'paths'?: Array<GraphPathEvidence>;
 }
 /**
  * Data Transfer Object for representing a record with dynamic properties.
@@ -3074,7 +3928,7 @@ export interface RecordDTO {
      */
     'index'?: number;
     /**
-     * A map of property names to their corresponding values for this record.
+     * Property values as a name→value map, or a LEGACY array of {name,type,value} objects (same shape as LEGACY GET responses).
      */
     'properties'?: { [key: string]: any | null; };
     /**
@@ -3103,6 +3957,10 @@ export interface RecordRelationRequestDTO {
      */
     'properties'?: { [key: string]: any | null; };
     /**
+     * Values for properties declared on the relation schema, stored on the relation edge itself (not on either record). Omit to leave existing edge values untouched; a null value clears a key.
+     */
+    'edgeProperties'?: { [key: string]: any | null; };
+    /**
      * Nested record to create before linking, or update first when record.uuid is provided
      */
     'record'?: RecordDTO;
@@ -3119,11 +3977,22 @@ export interface RecordRelationRequestDTO {
      */
     'merge'?: boolean;
 }
+export interface Recurrence extends PropertyFormat {
+}
 export interface Reference {
     'kind'?: string;
     'identifier'?: string;
     'label'?: string;
     'field'?: string;
+}
+/**
+ * Exchange a refresh token for a new access token
+ */
+export interface RefreshTokenRequest {
+    /**
+     * Refresh token issued by device poll / refresh
+     */
+    'refreshToken': string;
 }
 export interface RegisterRequest {
     'email': string;
@@ -3191,6 +4060,19 @@ export interface RelationDTO {
      * Whether the relation is editable
      */
     'editable'?: boolean;
+}
+/**
+ * Optional relation edge payload
+ */
+export interface RelationEdgeRequestDTO {
+    /**
+     * Values for properties declared on the relation schema, stored on the edge itself. A null value clears that key.
+     */
+    'edgeProperties'?: { [key: string]: any | null; };
+    /**
+     * When true, marks this relation edge as primary. Overrides the primary query parameter.
+     */
+    'primary'?: boolean;
 }
 export interface ResetPasswordRequest {
     'email'?: string;
@@ -3277,6 +4159,19 @@ export interface ReviewRequest {
     'publishState'?: string;
 }
 /**
+ * Request body for generating a sample webhook payload from a record and event type.
+ */
+export interface SamplePayloadRequest {
+    /**
+     * UUID of the record to base the sample payload on.
+     */
+    'recordUuid'?: string;
+    /**
+     * Event type to simulate (created, updated, deleted, etc.).
+     */
+    'eventType'?: string;
+}
+/**
  * DTO representing a property to be saved
  */
 export interface SavePropertyDTO {
@@ -3353,6 +4248,10 @@ export interface SavePropertyDTO {
      */
     'lifecycleActive'?: boolean;
     /**
+     * When this filter matches the record being saved, the property becomes required
+     */
+    'requiredFilter'?: Filter;
+    /**
      * Indicates if the property is not accessible publicly
      */
     'nonPublic'?: boolean;
@@ -3381,9 +4280,14 @@ export interface SavePropertyDTO {
      */
     'webpagePublic'?: boolean;
     /**
-     * Indicates if the property is embeddable
+     * Deprecated. Use sensitive instead.
+     * @deprecated
      */
     'embeddable'?: boolean;
+    /**
+     * When true, exclude from advanced query evidence
+     */
+    'sensitive'?: boolean;
 }
 /**
  * Data transfer object representing a saved filter configuration
@@ -3441,6 +4345,16 @@ export interface SavedFilterDTO {
      * The filter definition used when querying records
      */
     'filter'?: Filter;
+}
+export interface ScoreBreakdown {
+    'overall'?: number;
+    'structured'?: number;
+    'lexical'?: number;
+    'semantic'?: number;
+    'graph'?: number;
+    'evidenceAdjustment'?: number;
+    'confidence'?: number;
+    'components'?: { [key: string]: number; };
 }
 /**
  * Request body for sending an in-app notification to a user
@@ -3532,9 +4446,21 @@ export interface ServerlessFunctionDTO {
      */
     'code'?: string;
     /**
+     * Additional source files relative to the function folder (e.g. shared.js)
+     */
+    'sourceFiles'?: { [key: string]: string; };
+    /**
      * Optional description of the serverless function
      */
     'description'?: string;
+}
+/**
+ * Reference to a serverless function by uuid and/or name
+ */
+export interface ServerlessFunctionRefDTO {
+    'uuid'?: string;
+    'name'?: string;
+    'label'?: string;
 }
 export interface SettingField {
     'name'?: string;
@@ -3579,6 +4505,10 @@ export interface ShowItem {
      */
     'relation'?: string;
     /**
+     * Optional relation direction: outgoing (related→main), incoming (main→related), or omit for undirected.
+     */
+    'relationDirection'?: string;
+    /**
      * The name of the property within the object.
      */
     'property'?: string;
@@ -3604,6 +4534,107 @@ export interface ShowItem {
  * Represents the response for viewing or showing a specific resource.
  */
 export interface ShowResponse {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    'data'?: any;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseAppExternalOAuthProviderDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: AppExternalOAuthProviderDTO;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseAppInboundRouteDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: AppInboundRouteDTO;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseAppOAuthStartResponseDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: AppOAuthStartResponseDTO;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseAppScheduleDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: AppScheduleDTO;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseListAppConnectionStatusDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<AppConnectionStatusDTO>;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseListString {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<string>;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseMapStringObject {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: { [key: string]: any | null; };
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseObject {
     /**
      * A message detailing the result of the operation.
      */
@@ -3768,6 +4799,10 @@ export interface SortItem {
      * The relationship between objects.
      */
     'relation'?: string;
+    /**
+     * Optional relation direction: outgoing (related→main), incoming (main→related), or omit for undirected.
+     */
+    'relationDirection'?: string;
     /**
      * The name of the property within the object.
      */
@@ -4172,6 +5207,45 @@ export interface SuccessResponse {
 /**
  * Represents a standard successful response with a message and optional data.
  */
+export interface SuccessResponseListAppExternalOAuthProviderDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<AppExternalOAuthProviderDTO>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseListAppInboundRouteDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<AppInboundRouteDTO>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseListAppScheduleDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<AppScheduleDTO>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
 export interface SuccessResponseString {
     /**
      * A message detailing the result of the operation.
@@ -4191,6 +5265,11 @@ export interface SuccessResponseVoid {
      */
     'message'?: string;
     'data'?: any;
+}
+export interface SuggestAnalyticsWidgetsRequest {
+    'objectName'?: string;
+    'goal'?: string;
+    'existingWidgets'?: Array<ExistingWidgetSummary>;
 }
 export interface SyncDTO {
     /**
@@ -4249,8 +5328,8 @@ export interface Team {
     'filtersString'?: string;
     'filters'?: { [key: string]: Filter; };
     'memberCount'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
 }
 export interface TeamDTO {
@@ -4558,7 +5637,7 @@ export interface UserRecordResponseDTO {
      */
     'properties'?: Array<FilledProperty>;
     /**
-     * Primary and morph object metadata for this record.
+     * Primary and extended object metadata for this record.
      */
     'objects'?: { [key: string]: any | null; };
     /**
@@ -4668,8 +5747,14 @@ export interface ViewDTO {
     'icon'?: string;
     'flowProperty'?: string;
     'flowPreview'?: string;
+    'taskProgressProperty'?: string;
+    'taskGroupProperty'?: string;
+    'taskExpandSubtasks'?: boolean;
+    'taskCollapsedGroupKeys'?: Array<string>;
+    'taskExpandedTaskUuids'?: Array<string>;
     'defaultView'?: boolean;
     'isInternallyPublic'?: boolean;
+    'analytics'?: AnalyticsDashboardConfig;
 }
 export interface ViewShareRequest {
     'users'?: Array<ModelRecord>;
@@ -5598,6 +6683,1151 @@ export type ListAppBarsLocationEnum = typeof ListAppBarsLocationEnum[keyof typeo
 
 
 /**
+ * AppInstallationRuntimeApi - axios parameter creator
+ */
+export const AppInstallationRuntimeApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Delete an encrypted secret
+         * @param {string} appUuid 
+         * @param {string} name 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSecret: async (appUuid: string, name: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('deleteSecret', 'appUuid', appUuid)
+            // verify required parameter 'name' is not null or undefined
+            assertParamExists('deleteSecret', 'name', name)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/secrets/{name}`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{name}', encodeURIComponent(String(name)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete a state key
+         * @param {string} appUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteStateKey: async (appUuid: string, key: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('deleteStateKey', 'appUuid', appUuid)
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('deleteStateKey', 'key', key)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/state/{key}`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{key}', encodeURIComponent(String(key)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Enqueue an async serverless function job
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        enqueueJob: async (appUuid: string, requestBody: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('enqueueJob', 'appUuid', appUuid)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('enqueueJob', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/jobs`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get async job status
+         * @param {string} appUuid 
+         * @param {string} jobId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getJob: async (appUuid: string, jobId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('getJob', 'appUuid', appUuid)
+            // verify required parameter 'jobId' is not null or undefined
+            assertParamExists('getJob', 'jobId', jobId)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/jobs/{jobId}`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{jobId}', encodeURIComponent(String(jobId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get installation state map
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getState: async (appUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('getState', 'appUuid', appUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/state`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a single state key
+         * @param {string} appUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStateKey: async (appUuid: string, key: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('getStateKey', 'appUuid', appUuid)
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('getStateKey', 'key', key)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/state/{key}`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{key}', encodeURIComponent(String(key)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List external OAuth connection status
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listConnections: async (appUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('listConnections', 'appUuid', appUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/connections`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List secret names (no values)
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSecrets: async (appUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('listSecrets', 'appUuid', appUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/secrets`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Set an encrypted secret
+         * @param {string} appUuid 
+         * @param {string} name 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putSecret: async (appUuid: string, name: string, requestBody: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('putSecret', 'appUuid', appUuid)
+            // verify required parameter 'name' is not null or undefined
+            assertParamExists('putSecret', 'name', name)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('putSecret', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/secrets/{name}`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{name}', encodeURIComponent(String(name)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Replace/merge installation state (shallow merge)
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putState: async (appUuid: string, requestBody: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('putState', 'appUuid', appUuid)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('putState', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/state`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Put a single state key
+         * @param {string} appUuid 
+         * @param {string} key 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putStateKey: async (appUuid: string, key: string, body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('putStateKey', 'appUuid', appUuid)
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('putStateKey', 'key', key)
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('putStateKey', 'body', body)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/state/{key}`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{key}', encodeURIComponent(String(key)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Revoke external OAuth connection tokens by connection id or provider name
+         * @param {string} appUuid 
+         * @param {string} providerOrConnectionId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revokeConnection: async (appUuid: string, providerOrConnectionId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('revokeConnection', 'appUuid', appUuid)
+            // verify required parameter 'providerOrConnectionId' is not null or undefined
+            assertParamExists('revokeConnection', 'providerOrConnectionId', providerOrConnectionId)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/connections/{providerOrConnectionId}`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{providerOrConnectionId}', encodeURIComponent(String(providerOrConnectionId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Save USER-scoped installation settings for the current user
+         * @param {string} appUuid 
+         * @param {Array<AppSettingFieldSchema>} appSettingFieldSchema 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveUserSettings: async (appUuid: string, appSettingFieldSchema: Array<AppSettingFieldSchema>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('saveUserSettings', 'appUuid', appUuid)
+            // verify required parameter 'appSettingFieldSchema' is not null or undefined
+            assertParamExists('saveUserSettings', 'appSettingFieldSchema', appSettingFieldSchema)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/settings/user`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(appSettingFieldSchema, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Start external OAuth authorize (returns provider authorize URL)
+         * @param {string} appUuid 
+         * @param {string} provider 
+         * @param {string} [redirectUri] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startOAuth: async (appUuid: string, provider: string, redirectUri?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('startOAuth', 'appUuid', appUuid)
+            // verify required parameter 'provider' is not null or undefined
+            assertParamExists('startOAuth', 'provider', provider)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/oauth/{provider}/start`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{provider}', encodeURIComponent(String(provider)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (redirectUri !== undefined) {
+                localVarQueryParameter['redirectUri'] = redirectUri;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AppInstallationRuntimeApi - functional programming interface
+ */
+export const AppInstallationRuntimeApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AppInstallationRuntimeApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Delete an encrypted secret
+         * @param {string} appUuid 
+         * @param {string} name 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteSecret(appUuid: string, name: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteResponseVoid>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSecret(appUuid, name, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.deleteSecret']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Delete a state key
+         * @param {string} appUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteStateKey(appUuid: string, key: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteStateKey(appUuid, key, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.deleteStateKey']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Enqueue an async serverless function job
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async enqueueJob(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.enqueueJob(appUuid, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.enqueueJob']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get async job status
+         * @param {string} appUuid 
+         * @param {string} jobId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getJob(appUuid: string, jobId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getJob(appUuid, jobId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.getJob']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get installation state map
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getState(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getState(appUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.getState']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get a single state key
+         * @param {string} appUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getStateKey(appUuid: string, key: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStateKey(appUuid, key, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.getStateKey']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary List external OAuth connection status
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listConnections(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListAppConnectionStatusDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listConnections(appUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.listConnections']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary List secret names (no values)
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listSecrets(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listSecrets(appUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.listSecrets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Set an encrypted secret
+         * @param {string} appUuid 
+         * @param {string} name 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putSecret(appUuid: string, name: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseVoid>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putSecret(appUuid, name, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.putSecret']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Replace/merge installation state (shallow merge)
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putState(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putState(appUuid, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.putState']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Put a single state key
+         * @param {string} appUuid 
+         * @param {string} key 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putStateKey(appUuid: string, key: string, body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putStateKey(appUuid, key, body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.putStateKey']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Revoke external OAuth connection tokens by connection id or provider name
+         * @param {string} appUuid 
+         * @param {string} providerOrConnectionId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async revokeConnection(appUuid: string, providerOrConnectionId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteResponseVoid>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.revokeConnection(appUuid, providerOrConnectionId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.revokeConnection']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Save USER-scoped installation settings for the current user
+         * @param {string} appUuid 
+         * @param {Array<AppSettingFieldSchema>} appSettingFieldSchema 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async saveUserSettings(appUuid: string, appSettingFieldSchema: Array<AppSettingFieldSchema>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseVoid>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.saveUserSettings(appUuid, appSettingFieldSchema, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.saveUserSettings']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Start external OAuth authorize (returns provider authorize URL)
+         * @param {string} appUuid 
+         * @param {string} provider 
+         * @param {string} [redirectUri] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async startOAuth(appUuid: string, provider: string, redirectUri?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppOAuthStartResponseDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startOAuth(appUuid, provider, redirectUri, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.startOAuth']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AppInstallationRuntimeApi - factory interface
+ */
+export const AppInstallationRuntimeApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AppInstallationRuntimeApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Delete an encrypted secret
+         * @param {string} appUuid 
+         * @param {string} name 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSecret(appUuid: string, name: string, options?: RawAxiosRequestConfig): AxiosPromise<DeleteResponseVoid> {
+            return localVarFp.deleteSecret(appUuid, name, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete a state key
+         * @param {string} appUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteStateKey(appUuid: string, key: string, options?: RawAxiosRequestConfig): AxiosPromise<DeleteResponse> {
+            return localVarFp.deleteStateKey(appUuid, key, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Enqueue an async serverless function job
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        enqueueJob(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.enqueueJob(appUuid, requestBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get async job status
+         * @param {string} appUuid 
+         * @param {string} jobId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getJob(appUuid: string, jobId: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.getJob(appUuid, jobId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get installation state map
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getState(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.getState(appUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a single state key
+         * @param {string} appUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStateKey(appUuid: string, key: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseObject> {
+            return localVarFp.getStateKey(appUuid, key, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List external OAuth connection status
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listConnections(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListAppConnectionStatusDTO> {
+            return localVarFp.listConnections(appUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List secret names (no values)
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSecrets(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListString> {
+            return localVarFp.listSecrets(appUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Set an encrypted secret
+         * @param {string} appUuid 
+         * @param {string} name 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putSecret(appUuid: string, name: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseVoid> {
+            return localVarFp.putSecret(appUuid, name, requestBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Replace/merge installation state (shallow merge)
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putState(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.putState(appUuid, requestBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Put a single state key
+         * @param {string} appUuid 
+         * @param {string} key 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putStateKey(appUuid: string, key: string, body: object, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseObject> {
+            return localVarFp.putStateKey(appUuid, key, body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Revoke external OAuth connection tokens by connection id or provider name
+         * @param {string} appUuid 
+         * @param {string} providerOrConnectionId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revokeConnection(appUuid: string, providerOrConnectionId: string, options?: RawAxiosRequestConfig): AxiosPromise<DeleteResponseVoid> {
+            return localVarFp.revokeConnection(appUuid, providerOrConnectionId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Save USER-scoped installation settings for the current user
+         * @param {string} appUuid 
+         * @param {Array<AppSettingFieldSchema>} appSettingFieldSchema 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveUserSettings(appUuid: string, appSettingFieldSchema: Array<AppSettingFieldSchema>, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseVoid> {
+            return localVarFp.saveUserSettings(appUuid, appSettingFieldSchema, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Start external OAuth authorize (returns provider authorize URL)
+         * @param {string} appUuid 
+         * @param {string} provider 
+         * @param {string} [redirectUri] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startOAuth(appUuid: string, provider: string, redirectUri?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppOAuthStartResponseDTO> {
+            return localVarFp.startOAuth(appUuid, provider, redirectUri, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AppInstallationRuntimeApi - object-oriented interface
+ */
+export class AppInstallationRuntimeApi extends BaseAPI {
+    /**
+     * 
+     * @summary Delete an encrypted secret
+     * @param {string} appUuid 
+     * @param {string} name 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public deleteSecret(appUuid: string, name: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).deleteSecret(appUuid, name, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete a state key
+     * @param {string} appUuid 
+     * @param {string} key 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public deleteStateKey(appUuid: string, key: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).deleteStateKey(appUuid, key, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Enqueue an async serverless function job
+     * @param {string} appUuid 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public enqueueJob(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).enqueueJob(appUuid, requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get async job status
+     * @param {string} appUuid 
+     * @param {string} jobId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getJob(appUuid: string, jobId: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).getJob(appUuid, jobId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get installation state map
+     * @param {string} appUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getState(appUuid: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).getState(appUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a single state key
+     * @param {string} appUuid 
+     * @param {string} key 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getStateKey(appUuid: string, key: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).getStateKey(appUuid, key, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List external OAuth connection status
+     * @param {string} appUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listConnections(appUuid: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).listConnections(appUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List secret names (no values)
+     * @param {string} appUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listSecrets(appUuid: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).listSecrets(appUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Set an encrypted secret
+     * @param {string} appUuid 
+     * @param {string} name 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public putSecret(appUuid: string, name: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).putSecret(appUuid, name, requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Replace/merge installation state (shallow merge)
+     * @param {string} appUuid 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public putState(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).putState(appUuid, requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Put a single state key
+     * @param {string} appUuid 
+     * @param {string} key 
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public putStateKey(appUuid: string, key: string, body: object, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).putStateKey(appUuid, key, body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Revoke external OAuth connection tokens by connection id or provider name
+     * @param {string} appUuid 
+     * @param {string} providerOrConnectionId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public revokeConnection(appUuid: string, providerOrConnectionId: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).revokeConnection(appUuid, providerOrConnectionId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Save USER-scoped installation settings for the current user
+     * @param {string} appUuid 
+     * @param {Array<AppSettingFieldSchema>} appSettingFieldSchema 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public saveUserSettings(appUuid: string, appSettingFieldSchema: Array<AppSettingFieldSchema>, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).saveUserSettings(appUuid, appSettingFieldSchema, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Start external OAuth authorize (returns provider authorize URL)
+     * @param {string} appUuid 
+     * @param {string} provider 
+     * @param {string} [redirectUri] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public startOAuth(appUuid: string, provider: string, redirectUri?: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).startOAuth(appUuid, provider, redirectUri, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * ApplicationsApi - axios parameter creator
  */
 export const ApplicationsApiAxiosParamCreator = function (configuration?: Configuration) {
@@ -5777,6 +8007,48 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             assertParamExists('getApp', 'uuid', uuid)
             const localVarPath = `/api/v2/apps/{uuid}`
                 .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Fetches a single webhook that belongs to the specified app.
+         * @summary Get a webhook for an app
+         * @param {string} appUuid UUID of the app that owns the webhook
+         * @param {string} webhookUuid UUID of the webhook to fetch
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAppWebhook: async (appUuid: string, webhookUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('getAppWebhook', 'appUuid', appUuid)
+            // verify required parameter 'webhookUuid' is not null or undefined
+            assertParamExists('getAppWebhook', 'webhookUuid', webhookUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/webhooks/{webhookUuid}`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{webhookUuid}', encodeURIComponent(String(webhookUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5998,6 +8270,54 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Queries Cloud Logging for the shared V2 app container (app-{uuid}) without filtering to a single function.
+         * @summary Get app runtime logs
+         * @param {string} appUuid UUID of the app
+         * @param {string} [since] Lookback window, e.g. 15m, 1h, 24h
+         * @param {number} [limit] Maximum number of log entries to return
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRuntimeLogs: async (appUuid: string, since?: string, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('getRuntimeLogs', 'appUuid', appUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/runtime/logs`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (since !== undefined) {
+                localVarQueryParameter['since'] = since;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
 
             localVarHeaderParameter['Accept'] = 'application/json';
 
@@ -6250,6 +8570,47 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
+         * Opt-in in-place migration to the shared container runtime. Validates a single runtime, sets platformVersion=2, schedules an async rebuild, and keeps invoking via legacy gcpReference until runtimeStatus is READY.
+         * @summary Migrate an app from platform V1 to V2
+         * @param {string} uuid UUID of the app to migrate
+         * @param {MigrateAppToV2Request} [migrateAppToV2Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        migrateToV2: async (uuid: string, migrateAppToV2Request?: MigrateAppToV2Request, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('migrateToV2', 'uuid', uuid)
+            const localVarPath = `/api/v2/apps/{uuid}/migrate-v2`
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(migrateAppToV2Request, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Sets review outcome (approve/reject/changes requested), feedback, and optional reviewer notes. Returns the updated app details as a ShowResponse wrapping an AppDTO.
          * @summary Review a public app
          * @param {string} uuid UUID of the public app to review
@@ -6320,6 +8681,44 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Server-Sent Events stream of Cloud Logging entries for the shared V2 app container. Polls every ~2.5s and stops after 5 minutes or client disconnect.
+         * @summary Stream app runtime logs (SSE)
+         * @param {string} appUuid UUID of the app
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        streamRuntimeLogs: async (appUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('streamRuntimeLogs', 'appUuid', appUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/runtime/logs/stream`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'text/event-stream';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -6718,6 +9117,20 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Fetches a single webhook that belongs to the specified app.
+         * @summary Get a webhook for an app
+         * @param {string} appUuid UUID of the app that owns the webhook
+         * @param {string} webhookUuid UUID of the webhook to fetch
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAppWebhook(appUuid, webhookUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getAppWebhook']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Fetches a paginated and optionally filtered list of webhooks associated with the specified app and the authenticated user\'s selected company.
          * @summary Retrieve a paginated list of webhooks for an app
          * @param {string} appUuid UUID of the application for which to retrieve webhooks
@@ -6783,6 +9196,21 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPublicApp(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getPublicApp']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Queries Cloud Logging for the shared V2 app container (app-{uuid}) without filtering to a single function.
+         * @summary Get app runtime logs
+         * @param {string} appUuid UUID of the app
+         * @param {string} [since] Lookback window, e.g. 15m, 1h, 24h
+         * @param {number} [limit] Maximum number of log entries to return
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getRuntimeLogs(appUuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRuntimeLogs(appUuid, since, limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getRuntimeLogs']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -6866,6 +9294,20 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Opt-in in-place migration to the shared container runtime. Validates a single runtime, sets platformVersion=2, schedules an async rebuild, and keeps invoking via legacy gcpReference until runtimeStatus is READY.
+         * @summary Migrate an app from platform V1 to V2
+         * @param {string} uuid UUID of the app to migrate
+         * @param {MigrateAppToV2Request} [migrateAppToV2Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async migrateToV2(uuid: string, migrateAppToV2Request?: MigrateAppToV2Request, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.migrateToV2(uuid, migrateAppToV2Request, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.migrateToV2']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Sets review outcome (approve/reject/changes requested), feedback, and optional reviewer notes. Returns the updated app details as a ShowResponse wrapping an AppDTO.
          * @summary Review a public app
          * @param {string} uuid UUID of the public app to review
@@ -6890,6 +9332,19 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.rotateApp(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.rotateApp']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Server-Sent Events stream of Cloud Logging entries for the shared V2 app container. Polls every ~2.5s and stops after 5 minutes or client disconnect.
+         * @summary Stream app runtime logs (SSE)
+         * @param {string} appUuid UUID of the app
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async streamRuntimeLogs(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SseEmitter>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.streamRuntimeLogs(appUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.streamRuntimeLogs']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -7055,6 +9510,17 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
             return localVarFp.getApp(uuid, options).then((request) => request(axios, basePath));
         },
         /**
+         * Fetches a single webhook that belongs to the specified app.
+         * @summary Get a webhook for an app
+         * @param {string} appUuid UUID of the app that owns the webhook
+         * @param {string} webhookUuid UUID of the webhook to fetch
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.getAppWebhook(appUuid, webhookUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Fetches a paginated and optionally filtered list of webhooks associated with the specified app and the authenticated user\'s selected company.
          * @summary Retrieve a paginated list of webhooks for an app
          * @param {string} appUuid UUID of the application for which to retrieve webhooks
@@ -7106,6 +9572,18 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          */
         getPublicApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
             return localVarFp.getPublicApp(uuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Queries Cloud Logging for the shared V2 app container (app-{uuid}) without filtering to a single function.
+         * @summary Get app runtime logs
+         * @param {string} appUuid UUID of the app
+         * @param {string} [since] Lookback window, e.g. 15m, 1h, 24h
+         * @param {number} [limit] Maximum number of log entries to return
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRuntimeLogs(appUuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+            return localVarFp.getRuntimeLogs(appUuid, since, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns all supported record webhook events with their details.
@@ -7170,6 +9648,17 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
             return localVarFp.loadSettingOptions(uuid, loadAppSettingOptionsRequest, options).then((request) => request(axios, basePath));
         },
         /**
+         * Opt-in in-place migration to the shared container runtime. Validates a single runtime, sets platformVersion=2, schedules an async rebuild, and keeps invoking via legacy gcpReference until runtimeStatus is READY.
+         * @summary Migrate an app from platform V1 to V2
+         * @param {string} uuid UUID of the app to migrate
+         * @param {MigrateAppToV2Request} [migrateAppToV2Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        migrateToV2(uuid: string, migrateAppToV2Request?: MigrateAppToV2Request, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+            return localVarFp.migrateToV2(uuid, migrateAppToV2Request, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Sets review outcome (approve/reject/changes requested), feedback, and optional reviewer notes. Returns the updated app details as a ShowResponse wrapping an AppDTO.
          * @summary Review a public app
          * @param {string} uuid UUID of the public app to review
@@ -7189,6 +9678,16 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          */
         rotateApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
             return localVarFp.rotateApp(uuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Server-Sent Events stream of Cloud Logging entries for the shared V2 app container. Polls every ~2.5s and stops after 5 minutes or client disconnect.
+         * @summary Stream app runtime logs (SSE)
+         * @param {string} appUuid UUID of the app
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        streamRuntimeLogs(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SseEmitter> {
+            return localVarFp.streamRuntimeLogs(appUuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Submits a public app specified by its UUID for review. Returns the submitted app details as a ShowResponse wrapping an AppDTO.
@@ -7335,6 +9834,18 @@ export class ApplicationsApi extends BaseAPI {
     }
 
     /**
+     * Fetches a single webhook that belongs to the specified app.
+     * @summary Get a webhook for an app
+     * @param {string} appUuid UUID of the app that owns the webhook
+     * @param {string} webhookUuid UUID of the webhook to fetch
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).getAppWebhook(appUuid, webhookUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Fetches a paginated and optionally filtered list of webhooks associated with the specified app and the authenticated user\'s selected company.
      * @summary Retrieve a paginated list of webhooks for an app
      * @param {string} appUuid UUID of the application for which to retrieve webhooks
@@ -7390,6 +9901,19 @@ export class ApplicationsApi extends BaseAPI {
      */
     public getPublicApp(uuid: string, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).getPublicApp(uuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Queries Cloud Logging for the shared V2 app container (app-{uuid}) without filtering to a single function.
+     * @summary Get app runtime logs
+     * @param {string} appUuid UUID of the app
+     * @param {string} [since] Lookback window, e.g. 15m, 1h, 24h
+     * @param {number} [limit] Maximum number of log entries to return
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getRuntimeLogs(appUuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).getRuntimeLogs(appUuid, since, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -7461,6 +9985,18 @@ export class ApplicationsApi extends BaseAPI {
     }
 
     /**
+     * Opt-in in-place migration to the shared container runtime. Validates a single runtime, sets platformVersion=2, schedules an async rebuild, and keeps invoking via legacy gcpReference until runtimeStatus is READY.
+     * @summary Migrate an app from platform V1 to V2
+     * @param {string} uuid UUID of the app to migrate
+     * @param {MigrateAppToV2Request} [migrateAppToV2Request] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public migrateToV2(uuid: string, migrateAppToV2Request?: MigrateAppToV2Request, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).migrateToV2(uuid, migrateAppToV2Request, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Sets review outcome (approve/reject/changes requested), feedback, and optional reviewer notes. Returns the updated app details as a ShowResponse wrapping an AppDTO.
      * @summary Review a public app
      * @param {string} uuid UUID of the public app to review
@@ -7481,6 +10017,17 @@ export class ApplicationsApi extends BaseAPI {
      */
     public rotateApp(uuid: string, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).rotateApp(uuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Server-Sent Events stream of Cloud Logging entries for the shared V2 app container. Polls every ~2.5s and stops after 5 minutes or client disconnect.
+     * @summary Stream app runtime logs (SSE)
+     * @param {string} appUuid UUID of the app
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public streamRuntimeLogs(appUuid: string, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).streamRuntimeLogs(appUuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -7672,6 +10219,169 @@ export class AutomationsApi extends BaseAPI {
 
 
 /**
+ * BillingApi - axios parameter creator
+ */
+export const BillingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Returns whether the selected company should see no UI, a billing banner, or a non-dismissible lockout, based on Caraer BV CRM billing fields.
+         * @summary Get billing enforcement status
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStatus: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/billing/status`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Triggers Jortt to email the linked customer a direct-debit authorization payment link.
+         * @summary Send billing setup email
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendSetupEmail: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/billing/setup-email`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BillingApi - functional programming interface
+ */
+export const BillingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BillingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Returns whether the selected company should see no UI, a billing banner, or a non-dismissible lockout, based on Caraer BV CRM billing fields.
+         * @summary Get billing enforcement status
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getStatus(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStatus(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BillingApi.getStatus']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Triggers Jortt to email the linked customer a direct-debit authorization payment link.
+         * @summary Send billing setup email
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sendSetupEmail(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sendSetupEmail(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BillingApi.sendSetupEmail']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * BillingApi - factory interface
+ */
+export const BillingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BillingApiFp(configuration)
+    return {
+        /**
+         * Returns whether the selected company should see no UI, a billing banner, or a non-dismissible lockout, based on Caraer BV CRM billing fields.
+         * @summary Get billing enforcement status
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStatus(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.getStatus(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Triggers Jortt to email the linked customer a direct-debit authorization payment link.
+         * @summary Send billing setup email
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendSetupEmail(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.sendSetupEmail(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * BillingApi - object-oriented interface
+ */
+export class BillingApi extends BaseAPI {
+    /**
+     * Returns whether the selected company should see no UI, a billing banner, or a non-dismissible lockout, based on Caraer BV CRM billing fields.
+     * @summary Get billing enforcement status
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getStatus(options?: RawAxiosRequestConfig) {
+        return BillingApiFp(this.configuration).getStatus(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Triggers Jortt to email the linked customer a direct-debit authorization payment link.
+     * @summary Send billing setup email
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sendSetupEmail(options?: RawAxiosRequestConfig) {
+        return BillingApiFp(this.configuration).sendSetupEmail(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * CompanyApi - axios parameter creator
  */
 export const CompanyApiAxiosParamCreator = function (configuration?: Configuration) {
@@ -7795,6 +10505,78 @@ export const CompanyApiAxiosParamCreator = function (configuration?: Configurati
          */
         getDigitalIdentity: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v2/company/digital-identity`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns the home analytics dashboard for a suite. Empty dashboard when none is saved.
+         * @summary Get suite dashboard
+         * @param {string} suiteName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSuiteDashboard: async (suiteName: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'suiteName' is not null or undefined
+            assertParamExists('getSuiteDashboard', 'suiteName', suiteName)
+            const localVarPath = `/api/v2/company/suite-dashboards/{suiteName}`
+                .replace('{suiteName}', encodeURIComponent(String(suiteName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns all home analytics dashboards keyed by suite name for the selected company.
+         * @summary List suite dashboards
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSuiteDashboards: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/company/suite-dashboards`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -7976,6 +10758,49 @@ export const CompanyApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Creates or replaces the home analytics dashboard for a suite.
+         * @summary Update suite dashboard
+         * @param {string} suiteName 
+         * @param {AnalyticsDashboardConfig} analyticsDashboardConfig 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSuiteDashboard: async (suiteName: string, analyticsDashboardConfig: AnalyticsDashboardConfig, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'suiteName' is not null or undefined
+            assertParamExists('updateSuiteDashboard', 'suiteName', suiteName)
+            // verify required parameter 'analyticsDashboardConfig' is not null or undefined
+            assertParamExists('updateSuiteDashboard', 'analyticsDashboardConfig', analyticsDashboardConfig)
+            const localVarPath = `/api/v2/company/suite-dashboards/{suiteName}`
+                .replace('{suiteName}', encodeURIComponent(String(suiteName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(analyticsDashboardConfig, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Updates the website settings for the company currently selected by the logged-in user.
          * @summary Update website settings
          * @param {WebsiteSettingsDTO} websiteSettingsDTO 
@@ -8118,6 +10943,31 @@ export const CompanyApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Returns the home analytics dashboard for a suite. Empty dashboard when none is saved.
+         * @summary Get suite dashboard
+         * @param {string} suiteName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSuiteDashboard(suiteName: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSuiteDashboard(suiteName, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CompanyApi.getSuiteDashboard']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Returns all home analytics dashboards keyed by suite name for the selected company.
+         * @summary List suite dashboards
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSuiteDashboards(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSuiteDashboards(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CompanyApi.getSuiteDashboards']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns the website settings for the company currently selected by the logged-in user.
          * @summary Get website settings
          * @param {*} [options] Override http request option.
@@ -8167,6 +11017,20 @@ export const CompanyApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateDigitalIdentity(digitalIdentityDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CompanyApi.updateDigitalIdentity']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Creates or replaces the home analytics dashboard for a suite.
+         * @summary Update suite dashboard
+         * @param {string} suiteName 
+         * @param {AnalyticsDashboardConfig} analyticsDashboardConfig 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateSuiteDashboard(suiteName: string, analyticsDashboardConfig: AnalyticsDashboardConfig, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateSuiteDashboard(suiteName, analyticsDashboardConfig, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CompanyApi.updateSuiteDashboard']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -8243,6 +11107,25 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getDigitalIdentity(options).then((request) => request(axios, basePath));
         },
         /**
+         * Returns the home analytics dashboard for a suite. Empty dashboard when none is saved.
+         * @summary Get suite dashboard
+         * @param {string} suiteName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSuiteDashboard(suiteName: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.getSuiteDashboard(suiteName, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Returns all home analytics dashboards keyed by suite name for the selected company.
+         * @summary List suite dashboards
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSuiteDashboards(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.getSuiteDashboards(options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns the website settings for the company currently selected by the logged-in user.
          * @summary Get website settings
          * @param {*} [options] Override http request option.
@@ -8281,6 +11164,17 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
          */
         updateDigitalIdentity(digitalIdentityDTO: DigitalIdentityDTO, options?: RawAxiosRequestConfig): AxiosPromise<UpdateResponse> {
             return localVarFp.updateDigitalIdentity(digitalIdentityDTO, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Creates or replaces the home analytics dashboard for a suite.
+         * @summary Update suite dashboard
+         * @param {string} suiteName 
+         * @param {AnalyticsDashboardConfig} analyticsDashboardConfig 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSuiteDashboard(suiteName: string, analyticsDashboardConfig: AnalyticsDashboardConfig, options?: RawAxiosRequestConfig): AxiosPromise<UpdateResponse> {
+            return localVarFp.updateSuiteDashboard(suiteName, analyticsDashboardConfig, options).then((request) => request(axios, basePath));
         },
         /**
          * Updates the website settings for the company currently selected by the logged-in user.
@@ -8352,6 +11246,27 @@ export class CompanyApi extends BaseAPI {
     }
 
     /**
+     * Returns the home analytics dashboard for a suite. Empty dashboard when none is saved.
+     * @summary Get suite dashboard
+     * @param {string} suiteName 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getSuiteDashboard(suiteName: string, options?: RawAxiosRequestConfig) {
+        return CompanyApiFp(this.configuration).getSuiteDashboard(suiteName, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns all home analytics dashboards keyed by suite name for the selected company.
+     * @summary List suite dashboards
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getSuiteDashboards(options?: RawAxiosRequestConfig) {
+        return CompanyApiFp(this.configuration).getSuiteDashboards(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Returns the website settings for the company currently selected by the logged-in user.
      * @summary Get website settings
      * @param {*} [options] Override http request option.
@@ -8396,6 +11311,18 @@ export class CompanyApi extends BaseAPI {
     }
 
     /**
+     * Creates or replaces the home analytics dashboard for a suite.
+     * @summary Update suite dashboard
+     * @param {string} suiteName 
+     * @param {AnalyticsDashboardConfig} analyticsDashboardConfig 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public updateSuiteDashboard(suiteName: string, analyticsDashboardConfig: AnalyticsDashboardConfig, options?: RawAxiosRequestConfig) {
+        return CompanyApiFp(this.configuration).updateSuiteDashboard(suiteName, analyticsDashboardConfig, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Updates the website settings for the company currently selected by the logged-in user.
      * @summary Update website settings
      * @param {WebsiteSettingsDTO} websiteSettingsDTO 
@@ -8415,6 +11342,815 @@ export class CompanyApi extends BaseAPI {
      */
     public uploadFont(file: File, options?: RawAxiosRequestConfig) {
         return CompanyApiFp(this.configuration).uploadFont(file, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * DeveloperProjectsApi - axios parameter creator
+ */
+export const DeveloperProjectsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Creates a developer project linked to the given app, or returns the existing one if already linked. Creator company only.
+         * @summary Create or fetch a developer project
+         * @param {CreateDeveloperProjectRequest} createDeveloperProjectRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create2: async (createDeveloperProjectRequest: CreateDeveloperProjectRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createDeveloperProjectRequest' is not null or undefined
+            assertParamExists('create2', 'createDeveloperProjectRequest', createDeveloperProjectRequest)
+            const localVarPath = `/api/v2/developer-projects`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createDeveloperProjectRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Decodes a base64-encoded project archive, parses its manifest, uploads it to Cloud Storage, and records an immutable build.
+         * @summary Upload a project build
+         * @param {string} projectUuid UUID of the developer project
+         * @param {CreateProjectBuildRequest} createProjectBuildRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createBuild: async (projectUuid: string, createProjectBuildRequest: CreateProjectBuildRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'projectUuid' is not null or undefined
+            assertParamExists('createBuild', 'projectUuid', projectUuid)
+            // verify required parameter 'createProjectBuildRequest' is not null or undefined
+            assertParamExists('createBuild', 'createProjectBuildRequest', createProjectBuildRequest)
+            const localVarPath = `/api/v2/developer-projects/{projectUuid}/builds`
+                .replace('{projectUuid}', encodeURIComponent(String(projectUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createProjectBuildRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Reconciles the build\'s manifest (app details, serverless functions, webhooks, schedules, inbound routes, external OAuth providers) against the linked app. Set prune=true to soft-delete remote resources absent from the archive.
+         * @summary Deploy a project build
+         * @param {string} projectUuid UUID of the developer project
+         * @param {string} buildUuid UUID of the build to deploy
+         * @param {DeployBuildRequest} [deployBuildRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deploy: async (projectUuid: string, buildUuid: string, deployBuildRequest?: DeployBuildRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'projectUuid' is not null or undefined
+            assertParamExists('deploy', 'projectUuid', projectUuid)
+            // verify required parameter 'buildUuid' is not null or undefined
+            assertParamExists('deploy', 'buildUuid', buildUuid)
+            const localVarPath = `/api/v2/developer-projects/{projectUuid}/builds/{buildUuid}/deploy`
+                .replace('{projectUuid}', encodeURIComponent(String(projectUuid)))
+                .replace('{buildUuid}', encodeURIComponent(String(buildUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(deployBuildRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a project build
+         * @param {string} projectUuid UUID of the developer project
+         * @param {string} buildUuid UUID of the build
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBuild: async (projectUuid: string, buildUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'projectUuid' is not null or undefined
+            assertParamExists('getBuild', 'projectUuid', projectUuid)
+            // verify required parameter 'buildUuid' is not null or undefined
+            assertParamExists('getBuild', 'buildUuid', buildUuid)
+            const localVarPath = `/api/v2/developer-projects/{projectUuid}/builds/{buildUuid}`
+                .replace('{projectUuid}', encodeURIComponent(String(projectUuid)))
+                .replace('{buildUuid}', encodeURIComponent(String(buildUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List project builds
+         * @param {string} projectUuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listBuilds: async (projectUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'projectUuid' is not null or undefined
+            assertParamExists('listBuilds', 'projectUuid', projectUuid)
+            const localVarPath = `/api/v2/developer-projects/{projectUuid}/builds`
+                .replace('{projectUuid}', encodeURIComponent(String(projectUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List project deploys
+         * @param {string} projectUuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listDeploys: async (projectUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'projectUuid' is not null or undefined
+            assertParamExists('listDeploys', 'projectUuid', projectUuid)
+            const localVarPath = `/api/v2/developer-projects/{projectUuid}/deploys`
+                .replace('{projectUuid}', encodeURIComponent(String(projectUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a developer project
+         * @param {string} uuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        show3: async (uuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('show3', 'uuid', uuid)
+            const localVarPath = `/api/v2/developer-projects/{uuid}`
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DeveloperProjectsApi - functional programming interface
+ */
+export const DeveloperProjectsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DeveloperProjectsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Creates a developer project linked to the given app, or returns the existing one if already linked. Creator company only.
+         * @summary Create or fetch a developer project
+         * @param {CreateDeveloperProjectRequest} createDeveloperProjectRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async create2(createDeveloperProjectRequest: CreateDeveloperProjectRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create2(createDeveloperProjectRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperProjectsApi.create2']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Decodes a base64-encoded project archive, parses its manifest, uploads it to Cloud Storage, and records an immutable build.
+         * @summary Upload a project build
+         * @param {string} projectUuid UUID of the developer project
+         * @param {CreateProjectBuildRequest} createProjectBuildRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createBuild(projectUuid: string, createProjectBuildRequest: CreateProjectBuildRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createBuild(projectUuid, createProjectBuildRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperProjectsApi.createBuild']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Reconciles the build\'s manifest (app details, serverless functions, webhooks, schedules, inbound routes, external OAuth providers) against the linked app. Set prune=true to soft-delete remote resources absent from the archive.
+         * @summary Deploy a project build
+         * @param {string} projectUuid UUID of the developer project
+         * @param {string} buildUuid UUID of the build to deploy
+         * @param {DeployBuildRequest} [deployBuildRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deploy(projectUuid: string, buildUuid: string, deployBuildRequest?: DeployBuildRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deploy(projectUuid, buildUuid, deployBuildRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperProjectsApi.deploy']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get a project build
+         * @param {string} projectUuid UUID of the developer project
+         * @param {string} buildUuid UUID of the build
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBuild(projectUuid: string, buildUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBuild(projectUuid, buildUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperProjectsApi.getBuild']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary List project builds
+         * @param {string} projectUuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listBuilds(projectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listBuilds(projectUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperProjectsApi.listBuilds']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary List project deploys
+         * @param {string} projectUuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listDeploys(projectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listDeploys(projectUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperProjectsApi.listDeploys']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get a developer project
+         * @param {string} uuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async show3(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.show3(uuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperProjectsApi.show3']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * DeveloperProjectsApi - factory interface
+ */
+export const DeveloperProjectsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DeveloperProjectsApiFp(configuration)
+    return {
+        /**
+         * Creates a developer project linked to the given app, or returns the existing one if already linked. Creator company only.
+         * @summary Create or fetch a developer project
+         * @param {CreateDeveloperProjectRequest} createDeveloperProjectRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create2(createDeveloperProjectRequest: CreateDeveloperProjectRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
+            return localVarFp.create2(createDeveloperProjectRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Decodes a base64-encoded project archive, parses its manifest, uploads it to Cloud Storage, and records an immutable build.
+         * @summary Upload a project build
+         * @param {string} projectUuid UUID of the developer project
+         * @param {CreateProjectBuildRequest} createProjectBuildRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createBuild(projectUuid: string, createProjectBuildRequest: CreateProjectBuildRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
+            return localVarFp.createBuild(projectUuid, createProjectBuildRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Reconciles the build\'s manifest (app details, serverless functions, webhooks, schedules, inbound routes, external OAuth providers) against the linked app. Set prune=true to soft-delete remote resources absent from the archive.
+         * @summary Deploy a project build
+         * @param {string} projectUuid UUID of the developer project
+         * @param {string} buildUuid UUID of the build to deploy
+         * @param {DeployBuildRequest} [deployBuildRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deploy(projectUuid: string, buildUuid: string, deployBuildRequest?: DeployBuildRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
+            return localVarFp.deploy(projectUuid, buildUuid, deployBuildRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a project build
+         * @param {string} projectUuid UUID of the developer project
+         * @param {string} buildUuid UUID of the build
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBuild(projectUuid: string, buildUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.getBuild(projectUuid, buildUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List project builds
+         * @param {string} projectUuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listBuilds(projectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<any> {
+            return localVarFp.listBuilds(projectUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List project deploys
+         * @param {string} projectUuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listDeploys(projectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<any> {
+            return localVarFp.listDeploys(projectUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a developer project
+         * @param {string} uuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        show3(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.show3(uuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DeveloperProjectsApi - object-oriented interface
+ */
+export class DeveloperProjectsApi extends BaseAPI {
+    /**
+     * Creates a developer project linked to the given app, or returns the existing one if already linked. Creator company only.
+     * @summary Create or fetch a developer project
+     * @param {CreateDeveloperProjectRequest} createDeveloperProjectRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public create2(createDeveloperProjectRequest: CreateDeveloperProjectRequest, options?: RawAxiosRequestConfig) {
+        return DeveloperProjectsApiFp(this.configuration).create2(createDeveloperProjectRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Decodes a base64-encoded project archive, parses its manifest, uploads it to Cloud Storage, and records an immutable build.
+     * @summary Upload a project build
+     * @param {string} projectUuid UUID of the developer project
+     * @param {CreateProjectBuildRequest} createProjectBuildRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public createBuild(projectUuid: string, createProjectBuildRequest: CreateProjectBuildRequest, options?: RawAxiosRequestConfig) {
+        return DeveloperProjectsApiFp(this.configuration).createBuild(projectUuid, createProjectBuildRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Reconciles the build\'s manifest (app details, serverless functions, webhooks, schedules, inbound routes, external OAuth providers) against the linked app. Set prune=true to soft-delete remote resources absent from the archive.
+     * @summary Deploy a project build
+     * @param {string} projectUuid UUID of the developer project
+     * @param {string} buildUuid UUID of the build to deploy
+     * @param {DeployBuildRequest} [deployBuildRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public deploy(projectUuid: string, buildUuid: string, deployBuildRequest?: DeployBuildRequest, options?: RawAxiosRequestConfig) {
+        return DeveloperProjectsApiFp(this.configuration).deploy(projectUuid, buildUuid, deployBuildRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a project build
+     * @param {string} projectUuid UUID of the developer project
+     * @param {string} buildUuid UUID of the build
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getBuild(projectUuid: string, buildUuid: string, options?: RawAxiosRequestConfig) {
+        return DeveloperProjectsApiFp(this.configuration).getBuild(projectUuid, buildUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List project builds
+     * @param {string} projectUuid UUID of the developer project
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listBuilds(projectUuid: string, options?: RawAxiosRequestConfig) {
+        return DeveloperProjectsApiFp(this.configuration).listBuilds(projectUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List project deploys
+     * @param {string} projectUuid UUID of the developer project
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listDeploys(projectUuid: string, options?: RawAxiosRequestConfig) {
+        return DeveloperProjectsApiFp(this.configuration).listDeploys(projectUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a developer project
+     * @param {string} uuid UUID of the developer project
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public show3(uuid: string, options?: RawAxiosRequestConfig) {
+        return DeveloperProjectsApiFp(this.configuration).show3(uuid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * DeveloperSandboxesApi - axios parameter creator
+ */
+export const DeveloperSandboxesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Clones the selected company\'s Neo4j database (no new Company node). Activate with X-Caraer-Sandbox-Uuid; company identity stays the owner.
+         * @summary Create a developer sandbox
+         * @param {CreateDeveloperSandboxRequest} createDeveloperSandboxRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create1: async (createDeveloperSandboxRequest: CreateDeveloperSandboxRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createDeveloperSandboxRequest' is not null or undefined
+            assertParamExists('create1', 'createDeveloperSandboxRequest', createDeveloperSandboxRequest)
+            const localVarPath = `/api/v2/developer-sandboxes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createDeveloperSandboxRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Lists sandboxes owned by the caller\'s selected company.
+         * @summary List developer sandboxes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/developer-sandboxes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a developer sandbox
+         * @param {string} uuid UUID of the sandbox
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        show2: async (uuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('show2', 'uuid', uuid)
+            const localVarPath = `/api/v2/developer-sandboxes/{uuid}`
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DeveloperSandboxesApi - functional programming interface
+ */
+export const DeveloperSandboxesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DeveloperSandboxesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Clones the selected company\'s Neo4j database (no new Company node). Activate with X-Caraer-Sandbox-Uuid; company identity stays the owner.
+         * @summary Create a developer sandbox
+         * @param {CreateDeveloperSandboxRequest} createDeveloperSandboxRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async create1(createDeveloperSandboxRequest: CreateDeveloperSandboxRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create1(createDeveloperSandboxRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperSandboxesApi.create1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Lists sandboxes owned by the caller\'s selected company.
+         * @summary List developer sandboxes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async list(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperSandboxesApi.list']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get a developer sandbox
+         * @param {string} uuid UUID of the sandbox
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async show2(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.show2(uuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperSandboxesApi.show2']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * DeveloperSandboxesApi - factory interface
+ */
+export const DeveloperSandboxesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DeveloperSandboxesApiFp(configuration)
+    return {
+        /**
+         * Clones the selected company\'s Neo4j database (no new Company node). Activate with X-Caraer-Sandbox-Uuid; company identity stays the owner.
+         * @summary Create a developer sandbox
+         * @param {CreateDeveloperSandboxRequest} createDeveloperSandboxRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create1(createDeveloperSandboxRequest: CreateDeveloperSandboxRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
+            return localVarFp.create1(createDeveloperSandboxRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Lists sandboxes owned by the caller\'s selected company.
+         * @summary List developer sandboxes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list(options?: RawAxiosRequestConfig): AxiosPromise<any> {
+            return localVarFp.list(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a developer sandbox
+         * @param {string} uuid UUID of the sandbox
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        show2(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.show2(uuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DeveloperSandboxesApi - object-oriented interface
+ */
+export class DeveloperSandboxesApi extends BaseAPI {
+    /**
+     * Clones the selected company\'s Neo4j database (no new Company node). Activate with X-Caraer-Sandbox-Uuid; company identity stays the owner.
+     * @summary Create a developer sandbox
+     * @param {CreateDeveloperSandboxRequest} createDeveloperSandboxRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public create1(createDeveloperSandboxRequest: CreateDeveloperSandboxRequest, options?: RawAxiosRequestConfig) {
+        return DeveloperSandboxesApiFp(this.configuration).create1(createDeveloperSandboxRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Lists sandboxes owned by the caller\'s selected company.
+     * @summary List developer sandboxes
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public list(options?: RawAxiosRequestConfig) {
+        return DeveloperSandboxesApiFp(this.configuration).list(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a developer sandbox
+     * @param {string} uuid UUID of the sandbox
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public show2(uuid: string, options?: RawAxiosRequestConfig) {
+        return DeveloperSandboxesApiFp(this.configuration).show2(uuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -12090,16 +15826,16 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Synchronizes existing records for an object after morph configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, morph object, or label are re-morphed.
-         * @summary Sync morph objects for existing records
+         * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, extended object, or label are re-extended.
+         * @summary Sync extended objects for existing records
          * @param {string} uuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        syncMorphObjects: async (uuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        syncExtendedObjects: async (uuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uuid' is not null or undefined
-            assertParamExists('syncMorphObjects', 'uuid', uuid)
-            const localVarPath = `/api/v2/objects/{uuid}/syncMorphObjects`
+            assertParamExists('syncExtendedObjects', 'uuid', uuid)
+            const localVarPath = `/api/v2/objects/{uuid}/syncExtendedObjects`
                 .replace('{uuid}', encodeURIComponent(String(uuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -12448,16 +16184,16 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Synchronizes existing records for an object after morph configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, morph object, or label are re-morphed.
-         * @summary Sync morph objects for existing records
+         * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, extended object, or label are re-extended.
+         * @summary Sync extended objects for existing records
          * @param {string} uuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async syncMorphObjects(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.syncMorphObjects(uuid, options);
+        async syncExtendedObjects(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.syncExtendedObjects(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ObjectsApi.syncMorphObjects']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ObjectsApi.syncExtendedObjects']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -12640,14 +16376,14 @@ export const ObjectsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.savePreview(uuid, name, previewDTO, options).then((request) => request(axios, basePath));
         },
         /**
-         * Synchronizes existing records for an object after morph configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, morph object, or label are re-morphed.
-         * @summary Sync morph objects for existing records
+         * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, extended object, or label are re-extended.
+         * @summary Sync extended objects for existing records
          * @param {string} uuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        syncMorphObjects(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
-            return localVarFp.syncMorphObjects(uuid, options).then((request) => request(axios, basePath));
+        syncExtendedObjects(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+            return localVarFp.syncExtendedObjects(uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Updates indices of objects based on the provided mapping. The request body should contain a mapping of object UUIDs to index values. Optional request parameters determine if views, properties, and relations should be included in the response.
@@ -12829,14 +16565,14 @@ export class ObjectsApi extends BaseAPI {
     }
 
     /**
-     * Synchronizes existing records for an object after morph configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, morph object, or label are re-morphed.
-     * @summary Sync morph objects for existing records
+     * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, extended object, or label are re-extended.
+     * @summary Sync extended objects for existing records
      * @param {string} uuid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public syncMorphObjects(uuid: string, options?: RawAxiosRequestConfig) {
-        return ObjectsApiFp(this.configuration).syncMorphObjects(uuid, options).then((request) => request(this.axios, this.basePath));
+    public syncExtendedObjects(uuid: string, options?: RawAxiosRequestConfig) {
+        return ObjectsApiFp(this.configuration).syncExtendedObjects(uuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14069,17 +17805,186 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Groups Neo4j records by property or time bucket and returns series points with optional drilldown filters.
+         * @summary Aggregate records for analytics charts
+         * @param {AggregateRequest} aggregateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        aggregate: async (aggregateRequest: AggregateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'aggregateRequest' is not null or undefined
+            assertParamExists('aggregate', 'aggregateRequest', aggregateRequest)
+            const localVarPath = `/api/v2/records/aggregate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(aggregateRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Runs multiple aggregation requests for dashboard widgets.
+         * @summary Batch aggregate records for analytics dashboards
+         * @param {AggregateBatchRequest} aggregateBatchRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        aggregateBatch: async (aggregateBatchRequest: AggregateBatchRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'aggregateBatchRequest' is not null or undefined
+            assertParamExists('aggregateBatch', 'aggregateBatchRequest', aggregateBatchRequest)
+            const localVarPath = `/api/v2/records/aggregate/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(aggregateBatchRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Archives, anonymizes, or permanently deletes multiple records in one request. Returns HTTP 200 when every item succeeds. Returns HTTP 200 with per-record errors when one or more items fail; successful items are still applied and listed in data.uuids.
+         * @summary Bulk delete records
+         * @param {string} objectName 
+         * @param {BulkDeleteRecordsRequest} bulkDeleteRecordsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bulkDelete: async (objectName: string, bulkDeleteRecordsRequest: BulkDeleteRecordsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'objectName' is not null or undefined
+            assertParamExists('bulkDelete', 'objectName', objectName)
+            // verify required parameter 'bulkDeleteRecordsRequest' is not null or undefined
+            assertParamExists('bulkDelete', 'bulkDeleteRecordsRequest', bulkDeleteRecordsRequest)
+            const localVarPath = `/api/v2/records/{objectName}/bulk-delete`
+                .replace('{objectName}', encodeURIComponent(String(objectName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(bulkDeleteRecordsRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Creates or updates multiple records in one request. Returns HTTP 201 when every item succeeds (no per-record errors). Returns HTTP 200 when one or more items fail validation; successful items are still persisted and listed in data.records, with failures in errors.
+         * @summary Bulk create or update records
+         * @param {string} objectName 
+         * @param {BulkEditRecordsRequest} bulkEditRecordsRequest 
+         * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows each save to proceed while ignoring certain non-critical validation errors, when supported.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bulkEdit: async (objectName: string, bulkEditRecordsRequest: BulkEditRecordsRequest, ignoreErrors?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'objectName' is not null or undefined
+            assertParamExists('bulkEdit', 'objectName', objectName)
+            // verify required parameter 'bulkEditRecordsRequest' is not null or undefined
+            assertParamExists('bulkEdit', 'bulkEditRecordsRequest', bulkEditRecordsRequest)
+            const localVarPath = `/api/v2/records/{objectName}/bulk`
+                .replace('{objectName}', encodeURIComponent(String(objectName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (ignoreErrors !== undefined) {
+                localVarQueryParameter['ignoreErrors'] = ignoreErrors;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(bulkEditRecordsRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create a new record
          * @param {string} objectName 
          * @param {RecordDTO} recordDTO Record data to create
-         * @param {boolean} [parse] If \&#39;true\&#39;, parses the created record to human-readable values before returning.
+         * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create: async (objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        create: async (objectName: string, recordDTO: RecordDTO, parse?: CreateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateRecordReturnFormatEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'objectName' is not null or undefined
             assertParamExists('create', 'objectName', objectName)
             // verify required parameter 'recordDTO' is not null or undefined
@@ -14131,13 +18036,13 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create or update a record
          * @param {string} objectName 
          * @param {RecordDTO} recordDTO Record data to create or update
-         * @param {boolean} [parse] 
+         * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createOrUpdate: async (objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createOrUpdate: async (objectName: string, recordDTO: RecordDTO, parse?: CreateOrUpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateOrUpdateRecordReturnFormatEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'objectName' is not null or undefined
             assertParamExists('createOrUpdate', 'objectName', objectName)
             // verify required parameter 'recordDTO' is not null or undefined
@@ -14191,10 +18096,11 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} relationName 
          * @param {string} toUuid 
          * @param {object} [primary] When \&#39;true\&#39;, marks the created relation as primary. Defaults to \&#39;false\&#39;.
+         * @param {RelationEdgeRequestDTO} [relationEdgeRequestDTO] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createRelation: async (fromUuid: string, relationName: string, toUuid: string, primary?: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createRelation: async (fromUuid: string, relationName: string, toUuid: string, primary?: object, relationEdgeRequestDTO?: RelationEdgeRequestDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'fromUuid' is not null or undefined
             assertParamExists('createRelation', 'fromUuid', fromUuid)
             // verify required parameter 'relationName' is not null or undefined
@@ -14226,11 +18132,13 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
                 }
             }
 
+            localVarHeaderParameter['Content-Type'] = 'application/json';
             localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(relationEdgeRequestDTO, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -14284,17 +18192,70 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
-         * @summary Fetch paginated records
-         * @param {string} body Pagination request for records
-         * @param {boolean} [parse] If set to \&#39;true\&#39;, records are parsed to human-readable values (for example, unix timestamps are formatted as dates).
-         * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
-         * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-         * @param {string} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * Extends a record identified by its UUID to one or more objects. You can use this to move a record or add it to another object so it\'ll be visible in the new object.Returns a SuccessResponse confirming that the record has been extended.
+         * @summary Extend a record
+         * @param {string} uuid 
+         * @param {ExtendRecordRequest} extendRecordRequest 
+         * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ExtendParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        index: async (body: string, parse?: boolean, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        extend: async (uuid: string, extendRecordRequest: ExtendRecordRequest, recordReturnFormat?: ExtendRecordReturnFormatEnum, parse?: ExtendParseEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('extend', 'uuid', uuid)
+            // verify required parameter 'extendRecordRequest' is not null or undefined
+            assertParamExists('extend', 'extendRecordRequest', extendRecordRequest)
+            const localVarPath = `/api/v2/records/{uuid}/extend`
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (recordReturnFormat !== undefined) {
+                localVarQueryParameter['recordReturnFormat'] = recordReturnFormat;
+            }
+
+            if (parse !== undefined) {
+                localVarQueryParameter['parse'] = parse;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(extendRecordRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
+         * @summary Fetch paginated records
+         * @param {string} body Pagination request for records
+         * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
+         * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
+         * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        index: async (body: string, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             assertParamExists('index', 'body', body)
             const localVarPath = `/api/v2/records/index`;
@@ -14347,11 +18308,11 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Fetch records for flow view
          * @param {string} body Pagination request for flow view
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {IndexFlowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        indexFlow: async (body: string, relatedRecordUuid?: string, parse?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        indexFlow: async (body: string, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             assertParamExists('indexFlow', 'body', body)
             const localVarPath = `/api/v2/records/index/flow`;
@@ -14500,69 +18461,16 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Morphs a record identified by its UUID to one or more objects. You can use this to move a record or add it to another object so it\'ll be visible in the new object.Returns a SuccessResponse confirming that the record has been morphed.
-         * @summary Morph a record
-         * @param {string} uuid 
-         * @param {MorphRecordRequest} morphRecordRequest 
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        morph: async (uuid: string, morphRecordRequest: MorphRecordRequest, recordReturnFormat?: string, parse?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'uuid' is not null or undefined
-            assertParamExists('morph', 'uuid', uuid)
-            // verify required parameter 'morphRecordRequest' is not null or undefined
-            assertParamExists('morph', 'morphRecordRequest', morphRecordRequest)
-            const localVarPath = `/api/v2/records/{uuid}/morph`
-                .replace('{uuid}', encodeURIComponent(String(uuid)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (recordReturnFormat !== undefined) {
-                localVarQueryParameter['recordReturnFormat'] = recordReturnFormat;
-            }
-
-            if (parse !== undefined) {
-                localVarQueryParameter['parse'] = parse;
-            }
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(morphRecordRequest, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Retrieves a preview for a record specified by its UUID and preview name. Returns a ShowResponse containing the preview data.
          * @summary Get record preview
          * @param {string} uuid 
          * @param {string} name 
          * @param {string} [object] Optional object name used to resolve the record before building the preview.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {PreviewParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        preview: async (uuid: string, name: string, object?: string, parse?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        preview: async (uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uuid' is not null or undefined
             assertParamExists('preview', 'uuid', uuid)
             // verify required parameter 'name' is not null or undefined
@@ -14598,6 +18506,45 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Executes a two-pass GraphRAG query using natural language or a declarative plan. Returns records with scores and graph evidence.
+         * @summary Advanced graph-aware record query
+         * @param {AdvancedRecordQueryRequest} advancedRecordQueryRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        query: async (advancedRecordQueryRequest: AdvancedRecordQueryRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'advancedRecordQueryRequest' is not null or undefined
+            assertParamExists('query', 'advancedRecordQueryRequest', advancedRecordQueryRequest)
+            const localVarPath = `/api/v2/records/query`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(advancedRecordQueryRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -14647,12 +18594,12 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Search records
          * @param {string} body Search criteria
          * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
-         * @param {boolean} [parse] If \&#39;true\&#39;, parses returned records to human-readable values.
-         * @param {string} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        search: async (body: string, archived?: boolean, parse?: boolean, recordReturnFormat?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        search: async (body: string, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             assertParamExists('search', 'body', body)
             const localVarPath = `/api/v2/records/search`;
@@ -14697,19 +18644,68 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Retrieves detailed information about a record by its UUID. Returns a ShowResponse containing the record details.
+         * Searches records across multiple object types in one request. Use fromObjectUuid + relationName to limit to relation target objects (e.g. event attendees), or objectUuids for an explicit list, or omit both to search all company objects (capped). Returns preview-shaped results suitable for relation pickers.
+         * @summary Search records across objects
+         * @param {CrossObjectRecordSearchRequest} crossObjectRecordSearchRequest 
+         * @param {boolean} [archived] When true, includes archived records.
+         * @param {SearchCrossObjectParseEnum} [parse] Parse property values for display.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchCrossObject: async (crossObjectRecordSearchRequest: CrossObjectRecordSearchRequest, archived?: boolean, parse?: SearchCrossObjectParseEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'crossObjectRecordSearchRequest' is not null or undefined
+            assertParamExists('searchCrossObject', 'crossObjectRecordSearchRequest', crossObjectRecordSearchRequest)
+            const localVarPath = `/api/v2/records/search/cross-object`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (archived !== undefined) {
+                localVarQueryParameter['archived'] = archived;
+            }
+
+            if (parse !== undefined) {
+                localVarQueryParameter['parse'] = parse;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(crossObjectRecordSearchRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieves detailed information about a record by its UUID. Returns a ShowResponse containing the record details. Prefer GET /{objectName}/{uuid} when the object context is known.
          * @summary Get record details
          * @param {string} uuid 
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        show1: async (uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, fields?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        show: async (uuid: string, object?: string, recordReturnFormat?: ShowRecordReturnFormatEnum, parse?: ShowParseEnum, fields?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uuid' is not null or undefined
-            assertParamExists('show1', 'uuid', uuid)
+            assertParamExists('show', 'uuid', uuid)
             const localVarPath = `/api/v2/records/{uuid}`
                 .replace('{uuid}', encodeURIComponent(String(uuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -14755,18 +18751,109 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Retrieves a record by object name and UUID. Same response as GET /{uuid}?object={objectName}.
+         * @summary Get record details by object
+         * @param {string} objectName 
+         * @param {string} uuid 
+         * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowByObjectParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        showByObject: async (objectName: string, uuid: string, recordReturnFormat?: ShowByObjectRecordReturnFormatEnum, parse?: ShowByObjectParseEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'objectName' is not null or undefined
+            assertParamExists('showByObject', 'objectName', objectName)
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('showByObject', 'uuid', uuid)
+            const localVarPath = `/api/v2/records/{objectName}/{uuid}`
+                .replace('{objectName}', encodeURIComponent(String(objectName)))
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (recordReturnFormat !== undefined) {
+                localVarQueryParameter['recordReturnFormat'] = recordReturnFormat;
+            }
+
+            if (parse !== undefined) {
+                localVarQueryParameter['parse'] = parse;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Uses structured OpenAI output plus schema validation to propose dashboard charts for an object. Returns an empty list when AI is unavailable.
+         * @summary Suggest analytics widgets with AI
+         * @param {SuggestAnalyticsWidgetsRequest} suggestAnalyticsWidgetsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        suggestAnalyticsWidgets: async (suggestAnalyticsWidgetsRequest: SuggestAnalyticsWidgetsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'suggestAnalyticsWidgetsRequest' is not null or undefined
+            assertParamExists('suggestAnalyticsWidgets', 'suggestAnalyticsWidgetsRequest', suggestAnalyticsWidgetsRequest)
+            const localVarPath = `/api/v2/records/analytics/suggest-widgets`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(suggestAnalyticsWidgetsRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Updates a record\'s details identified by its UUID. The record data is provided as a RecordDTO. Returns an UpdateResponse with the updated record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Update a record
          * @param {string} uuid 
          * @param {string} objectName 
          * @param {RecordDTO} recordDTO Record data to update
-         * @param {boolean} [parse] If \&#39;true\&#39;, parses the updated record to human-readable values before returning.
+         * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (uuid: string, objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        update: async (uuid: string, objectName: string, recordDTO: RecordDTO, parse?: UpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: UpdateRecordReturnFormatEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uuid' is not null or undefined
             assertParamExists('update', 'uuid', uuid)
             // verify required parameter 'objectName' is not null or undefined
@@ -14816,6 +18903,120 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Updates a record identified by UUID. Optional object query param resolves the object context (same as GET /{uuid}?object=...). When omitted, the record\'s current/primary object is used. Prefer PUT /{objectName}/{uuid} when the object context is known.
+         * @summary Update a record by UUID
+         * @param {string} uuid 
+         * @param {RecordDTO} recordDTO 
+         * @param {string} [object] Optional object name to resolve the record in a specific object context.
+         * @param {UpdateByUuidParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
+         * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateByUuid: async (uuid: string, recordDTO: RecordDTO, object?: string, parse?: UpdateByUuidParseEnum, ignoreErrors?: boolean, recordReturnFormat?: UpdateByUuidRecordReturnFormatEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('updateByUuid', 'uuid', uuid)
+            // verify required parameter 'recordDTO' is not null or undefined
+            assertParamExists('updateByUuid', 'recordDTO', recordDTO)
+            const localVarPath = `/api/v2/records/{uuid}`
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (object !== undefined) {
+                localVarQueryParameter['object'] = object;
+            }
+
+            if (parse !== undefined) {
+                localVarQueryParameter['parse'] = parse;
+            }
+
+            if (ignoreErrors !== undefined) {
+                localVarQueryParameter['ignoreErrors'] = ignoreErrors;
+            }
+
+            if (recordReturnFormat !== undefined) {
+                localVarQueryParameter['recordReturnFormat'] = recordReturnFormat;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(recordDTO, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Patches values stored on an existing relation edge. Only keys present in edgeProperties are written; a null value clears a key.
+         * @summary Update relation edge properties
+         * @param {string} fromUuid 
+         * @param {string} relationName 
+         * @param {string} toUuid 
+         * @param {RelationEdgeRequestDTO} relationEdgeRequestDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRelationEdge: async (fromUuid: string, relationName: string, toUuid: string, relationEdgeRequestDTO: RelationEdgeRequestDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'fromUuid' is not null or undefined
+            assertParamExists('updateRelationEdge', 'fromUuid', fromUuid)
+            // verify required parameter 'relationName' is not null or undefined
+            assertParamExists('updateRelationEdge', 'relationName', relationName)
+            // verify required parameter 'toUuid' is not null or undefined
+            assertParamExists('updateRelationEdge', 'toUuid', toUuid)
+            // verify required parameter 'relationEdgeRequestDTO' is not null or undefined
+            assertParamExists('updateRelationEdge', 'relationEdgeRequestDTO', relationEdgeRequestDTO)
+            const localVarPath = `/api/v2/records/relations/{fromUuid}/{relationName}/{toUuid}`
+                .replace('{fromUuid}', encodeURIComponent(String(fromUuid)))
+                .replace('{relationName}', encodeURIComponent(String(relationName)))
+                .replace('{toUuid}', encodeURIComponent(String(toUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(relationEdgeRequestDTO, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -14840,17 +19041,72 @@ export const RecordsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Groups Neo4j records by property or time bucket and returns series points with optional drilldown filters.
+         * @summary Aggregate records for analytics charts
+         * @param {AggregateRequest} aggregateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async aggregate(aggregateRequest: AggregateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.aggregate(aggregateRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.aggregate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Runs multiple aggregation requests for dashboard widgets.
+         * @summary Batch aggregate records for analytics dashboards
+         * @param {AggregateBatchRequest} aggregateBatchRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async aggregateBatch(aggregateBatchRequest: AggregateBatchRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.aggregateBatch(aggregateBatchRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.aggregateBatch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Archives, anonymizes, or permanently deletes multiple records in one request. Returns HTTP 200 when every item succeeds. Returns HTTP 200 with per-record errors when one or more items fail; successful items are still applied and listed in data.uuids.
+         * @summary Bulk delete records
+         * @param {string} objectName 
+         * @param {BulkDeleteRecordsRequest} bulkDeleteRecordsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async bulkDelete(objectName: string, bulkDeleteRecordsRequest: BulkDeleteRecordsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BulkDeleteRecordsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.bulkDelete(objectName, bulkDeleteRecordsRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.bulkDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Creates or updates multiple records in one request. Returns HTTP 201 when every item succeeds (no per-record errors). Returns HTTP 200 when one or more items fail validation; successful items are still persisted and listed in data.records, with failures in errors.
+         * @summary Bulk create or update records
+         * @param {string} objectName 
+         * @param {BulkEditRecordsRequest} bulkEditRecordsRequest 
+         * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows each save to proceed while ignoring certain non-critical validation errors, when supported.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async bulkEdit(objectName: string, bulkEditRecordsRequest: BulkEditRecordsRequest, ignoreErrors?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BulkEditRecordsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.bulkEdit(objectName, bulkEditRecordsRequest, ignoreErrors, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.bulkEdit']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create a new record
          * @param {string} objectName 
          * @param {RecordDTO} recordDTO Record data to create
-         * @param {boolean} [parse] If \&#39;true\&#39;, parses the created record to human-readable values before returning.
+         * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async create(objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
+        async create(objectName: string, recordDTO: RecordDTO, parse?: CreateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.create(objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.create']?.[localVarOperationServerIndex]?.url;
@@ -14861,13 +19117,13 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @summary Create or update a record
          * @param {string} objectName 
          * @param {RecordDTO} recordDTO Record data to create or update
-         * @param {boolean} [parse] 
+         * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createOrUpdate(objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async createOrUpdate(objectName: string, recordDTO: RecordDTO, parse?: CreateOrUpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateOrUpdateRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createOrUpdate(objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.createOrUpdate']?.[localVarOperationServerIndex]?.url;
@@ -14880,11 +19136,12 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {string} relationName 
          * @param {string} toUuid 
          * @param {object} [primary] When \&#39;true\&#39;, marks the created relation as primary. Defaults to \&#39;false\&#39;.
+         * @param {RelationEdgeRequestDTO} [relationEdgeRequestDTO] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createRelation(fromUuid: string, relationName: string, toUuid: string, primary?: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createRelation(fromUuid, relationName, toUuid, primary, options);
+        async createRelation(fromUuid: string, relationName: string, toUuid: string, primary?: object, relationEdgeRequestDTO?: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createRelation(fromUuid, relationName, toUuid, primary, relationEdgeRequestDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.createRelation']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -14905,17 +19162,33 @@ export const RecordsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
-         * @summary Fetch paginated records
-         * @param {string} body Pagination request for records
-         * @param {boolean} [parse] If set to \&#39;true\&#39;, records are parsed to human-readable values (for example, unix timestamps are formatted as dates).
-         * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
-         * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-         * @param {string} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * Extends a record identified by its UUID to one or more objects. You can use this to move a record or add it to another object so it\'ll be visible in the new object.Returns a SuccessResponse confirming that the record has been extended.
+         * @summary Extend a record
+         * @param {string} uuid 
+         * @param {ExtendRecordRequest} extendRecordRequest 
+         * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ExtendParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async index(body: string, parse?: boolean, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
+        async extend(uuid: string, extendRecordRequest: ExtendRecordRequest, recordReturnFormat?: ExtendRecordReturnFormatEnum, parse?: ExtendParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.extend(uuid, extendRecordRequest, recordReturnFormat, parse, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.extend']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
+         * @summary Fetch paginated records
+         * @param {string} body Pagination request for records
+         * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
+         * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
+         * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async index(body: string, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.index(body, parse, archived, relatedRecordUuid, recordReturnFormat, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.index']?.[localVarOperationServerIndex]?.url;
@@ -14926,11 +19199,11 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @summary Fetch records for flow view
          * @param {string} body Pagination request for flow view
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {IndexFlowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async indexFlow(body: string, relatedRecordUuid?: string, parse?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async indexFlow(body: string, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.indexFlow(body, relatedRecordUuid, parse, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.indexFlow']?.[localVarOperationServerIndex]?.url;
@@ -14969,35 +19242,32 @@ export const RecordsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Morphs a record identified by its UUID to one or more objects. You can use this to move a record or add it to another object so it\'ll be visible in the new object.Returns a SuccessResponse confirming that the record has been morphed.
-         * @summary Morph a record
-         * @param {string} uuid 
-         * @param {MorphRecordRequest} morphRecordRequest 
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async morph(uuid: string, morphRecordRequest: MorphRecordRequest, recordReturnFormat?: string, parse?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.morph(uuid, morphRecordRequest, recordReturnFormat, parse, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['RecordsApi.morph']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
          * Retrieves a preview for a record specified by its UUID and preview name. Returns a ShowResponse containing the preview data.
          * @summary Get record preview
          * @param {string} uuid 
          * @param {string} name 
          * @param {string} [object] Optional object name used to resolve the record before building the preview.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {PreviewParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async preview(uuid: string, name: string, object?: string, parse?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async preview(uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.preview(uuid, name, object, parse, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.preview']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Executes a two-pass GraphRAG query using natural language or a declarative plan. Returns records with scores and graph evidence.
+         * @summary Advanced graph-aware record query
+         * @param {AdvancedRecordQueryRequest} advancedRecordQueryRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async query(advancedRecordQueryRequest: AdvancedRecordQueryRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AdvancedRecordQueryResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.query(advancedRecordQueryRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.query']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -15018,32 +19288,76 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @summary Search records
          * @param {string} body Search criteria
          * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
-         * @param {boolean} [parse] If \&#39;true\&#39;, parses returned records to human-readable values.
-         * @param {string} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async search(body: string, archived?: boolean, parse?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
+        async search(body: string, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.search(body, archived, parse, recordReturnFormat, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.search']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Retrieves detailed information about a record by its UUID. Returns a ShowResponse containing the record details.
+         * Searches records across multiple object types in one request. Use fromObjectUuid + relationName to limit to relation target objects (e.g. event attendees), or objectUuids for an explicit list, or omit both to search all company objects (capped). Returns preview-shaped results suitable for relation pickers.
+         * @summary Search records across objects
+         * @param {CrossObjectRecordSearchRequest} crossObjectRecordSearchRequest 
+         * @param {boolean} [archived] When true, includes archived records.
+         * @param {SearchCrossObjectParseEnum} [parse] Parse property values for display.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchCrossObject(crossObjectRecordSearchRequest: CrossObjectRecordSearchRequest, archived?: boolean, parse?: SearchCrossObjectParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchCrossObject(crossObjectRecordSearchRequest, archived, parse, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.searchCrossObject']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieves detailed information about a record by its UUID. Returns a ShowResponse containing the record details. Prefer GET /{objectName}/{uuid} when the object context is known.
          * @summary Get record details
          * @param {string} uuid 
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async show1(uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, fields?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.show1(uuid, object, recordReturnFormat, parse, fields, options);
+        async show(uuid: string, object?: string, recordReturnFormat?: ShowRecordReturnFormatEnum, parse?: ShowParseEnum, fields?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.show(uuid, object, recordReturnFormat, parse, fields, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['RecordsApi.show1']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.show']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieves a record by object name and UUID. Same response as GET /{uuid}?object={objectName}.
+         * @summary Get record details by object
+         * @param {string} objectName 
+         * @param {string} uuid 
+         * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowByObjectParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async showByObject(objectName: string, uuid: string, recordReturnFormat?: ShowByObjectRecordReturnFormatEnum, parse?: ShowByObjectParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.showByObject(objectName, uuid, recordReturnFormat, parse, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.showByObject']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Uses structured OpenAI output plus schema validation to propose dashboard charts for an object. Returns an empty list when AI is unavailable.
+         * @summary Suggest analytics widgets with AI
+         * @param {SuggestAnalyticsWidgetsRequest} suggestAnalyticsWidgetsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest: SuggestAnalyticsWidgetsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.suggestAnalyticsWidgets']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -15052,16 +19366,50 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {string} uuid 
          * @param {string} objectName 
          * @param {RecordDTO} recordDTO Record data to update
-         * @param {boolean} [parse] If \&#39;true\&#39;, parses the updated record to human-readable values before returning.
+         * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(uuid: string, objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateResponse>> {
+        async update(uuid: string, objectName: string, recordDTO: RecordDTO, parse?: UpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: UpdateRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.update(uuid, objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.update']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Updates a record identified by UUID. Optional object query param resolves the object context (same as GET /{uuid}?object=...). When omitted, the record\'s current/primary object is used. Prefer PUT /{objectName}/{uuid} when the object context is known.
+         * @summary Update a record by UUID
+         * @param {string} uuid 
+         * @param {RecordDTO} recordDTO 
+         * @param {string} [object] Optional object name to resolve the record in a specific object context.
+         * @param {UpdateByUuidParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
+         * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateByUuid(uuid: string, recordDTO: RecordDTO, object?: string, parse?: UpdateByUuidParseEnum, ignoreErrors?: boolean, recordReturnFormat?: UpdateByUuidRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateByUuid(uuid, recordDTO, object, parse, ignoreErrors, recordReturnFormat, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.updateByUuid']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Patches values stored on an existing relation edge. Only keys present in edgeProperties are written; a null value clears a key.
+         * @summary Update relation edge properties
+         * @param {string} fromUuid 
+         * @param {string} relationName 
+         * @param {string} toUuid 
+         * @param {RelationEdgeRequestDTO} relationEdgeRequestDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateRelationEdge(fromUuid: string, relationName: string, toUuid: string, relationEdgeRequestDTO: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateRelationEdge(fromUuid, relationName, toUuid, relationEdgeRequestDTO, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.updateRelationEdge']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -15085,17 +19433,60 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp._delete(uuid, mode, options).then((request) => request(axios, basePath));
         },
         /**
+         * Groups Neo4j records by property or time bucket and returns series points with optional drilldown filters.
+         * @summary Aggregate records for analytics charts
+         * @param {AggregateRequest} aggregateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        aggregate(aggregateRequest: AggregateRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+            return localVarFp.aggregate(aggregateRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Runs multiple aggregation requests for dashboard widgets.
+         * @summary Batch aggregate records for analytics dashboards
+         * @param {AggregateBatchRequest} aggregateBatchRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        aggregateBatch(aggregateBatchRequest: AggregateBatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+            return localVarFp.aggregateBatch(aggregateBatchRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Archives, anonymizes, or permanently deletes multiple records in one request. Returns HTTP 200 when every item succeeds. Returns HTTP 200 with per-record errors when one or more items fail; successful items are still applied and listed in data.uuids.
+         * @summary Bulk delete records
+         * @param {string} objectName 
+         * @param {BulkDeleteRecordsRequest} bulkDeleteRecordsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bulkDelete(objectName: string, bulkDeleteRecordsRequest: BulkDeleteRecordsRequest, options?: RawAxiosRequestConfig): AxiosPromise<BulkDeleteRecordsResponse> {
+            return localVarFp.bulkDelete(objectName, bulkDeleteRecordsRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Creates or updates multiple records in one request. Returns HTTP 201 when every item succeeds (no per-record errors). Returns HTTP 200 when one or more items fail validation; successful items are still persisted and listed in data.records, with failures in errors.
+         * @summary Bulk create or update records
+         * @param {string} objectName 
+         * @param {BulkEditRecordsRequest} bulkEditRecordsRequest 
+         * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows each save to proceed while ignoring certain non-critical validation errors, when supported.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bulkEdit(objectName: string, bulkEditRecordsRequest: BulkEditRecordsRequest, ignoreErrors?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<BulkEditRecordsResponse> {
+            return localVarFp.bulkEdit(objectName, bulkEditRecordsRequest, ignoreErrors, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create a new record
          * @param {string} objectName 
          * @param {RecordDTO} recordDTO Record data to create
-         * @param {boolean} [parse] If \&#39;true\&#39;, parses the created record to human-readable values before returning.
+         * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create(objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
+        create(objectName: string, recordDTO: RecordDTO, parse?: CreateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
             return localVarFp.create(objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options).then((request) => request(axios, basePath));
         },
         /**
@@ -15103,13 +19494,13 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @summary Create or update a record
          * @param {string} objectName 
          * @param {RecordDTO} recordDTO Record data to create or update
-         * @param {boolean} [parse] 
+         * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createOrUpdate(objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        createOrUpdate(objectName: string, recordDTO: RecordDTO, parse?: CreateOrUpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateOrUpdateRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.createOrUpdate(objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options).then((request) => request(axios, basePath));
         },
         /**
@@ -15119,11 +19510,12 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {string} relationName 
          * @param {string} toUuid 
          * @param {object} [primary] When \&#39;true\&#39;, marks the created relation as primary. Defaults to \&#39;false\&#39;.
+         * @param {RelationEdgeRequestDTO} [relationEdgeRequestDTO] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createRelation(fromUuid: string, relationName: string, toUuid: string, primary?: object, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
-            return localVarFp.createRelation(fromUuid, relationName, toUuid, primary, options).then((request) => request(axios, basePath));
+        createRelation(fromUuid: string, relationName: string, toUuid: string, primary?: object, relationEdgeRequestDTO?: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+            return localVarFp.createRelation(fromUuid, relationName, toUuid, primary, relationEdgeRequestDTO, options).then((request) => request(axios, basePath));
         },
         /**
          * Deletes a relation between two records identified by their UUIDs and the relation name.
@@ -15138,17 +19530,30 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.deleteRelation(fromUuid, relationName, toUuid, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
-         * @summary Fetch paginated records
-         * @param {string} body Pagination request for records
-         * @param {boolean} [parse] If set to \&#39;true\&#39;, records are parsed to human-readable values (for example, unix timestamps are formatted as dates).
-         * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
-         * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-         * @param {string} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * Extends a record identified by its UUID to one or more objects. You can use this to move a record or add it to another object so it\'ll be visible in the new object.Returns a SuccessResponse confirming that the record has been extended.
+         * @summary Extend a record
+         * @param {string} uuid 
+         * @param {ExtendRecordRequest} extendRecordRequest 
+         * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ExtendParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        index(body: string, parse?: boolean, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
+        extend(uuid: string, extendRecordRequest: ExtendRecordRequest, recordReturnFormat?: ExtendRecordReturnFormatEnum, parse?: ExtendParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+            return localVarFp.extend(uuid, extendRecordRequest, recordReturnFormat, parse, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
+         * @summary Fetch paginated records
+         * @param {string} body Pagination request for records
+         * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
+         * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
+         * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        index(body: string, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
             return localVarFp.index(body, parse, archived, relatedRecordUuid, recordReturnFormat, options).then((request) => request(axios, basePath));
         },
         /**
@@ -15156,11 +19561,11 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @summary Fetch records for flow view
          * @param {string} body Pagination request for flow view
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {IndexFlowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        indexFlow(body: string, relatedRecordUuid?: string, parse?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        indexFlow(body: string, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
             return localVarFp.indexFlow(body, relatedRecordUuid, parse, options).then((request) => request(axios, basePath));
         },
         /**
@@ -15190,30 +19595,27 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.indexTable(body, relatedRecordUuid, options).then((request) => request(axios, basePath));
         },
         /**
-         * Morphs a record identified by its UUID to one or more objects. You can use this to move a record or add it to another object so it\'ll be visible in the new object.Returns a SuccessResponse confirming that the record has been morphed.
-         * @summary Morph a record
-         * @param {string} uuid 
-         * @param {MorphRecordRequest} morphRecordRequest 
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        morph(uuid: string, morphRecordRequest: MorphRecordRequest, recordReturnFormat?: string, parse?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
-            return localVarFp.morph(uuid, morphRecordRequest, recordReturnFormat, parse, options).then((request) => request(axios, basePath));
-        },
-        /**
          * Retrieves a preview for a record specified by its UUID and preview name. Returns a ShowResponse containing the preview data.
          * @summary Get record preview
          * @param {string} uuid 
          * @param {string} name 
          * @param {string} [object] Optional object name used to resolve the record before building the preview.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {PreviewParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        preview(uuid: string, name: string, object?: string, parse?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        preview(uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
             return localVarFp.preview(uuid, name, object, parse, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Executes a two-pass GraphRAG query using natural language or a declarative plan. Returns records with scores and graph evidence.
+         * @summary Advanced graph-aware record query
+         * @param {AdvancedRecordQueryRequest} advancedRecordQueryRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        query(advancedRecordQueryRequest: AdvancedRecordQueryRequest, options?: RawAxiosRequestConfig): AxiosPromise<AdvancedRecordQueryResponse> {
+            return localVarFp.query(advancedRecordQueryRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Restores a soft-deleted record identified by its UUID. Returns a SuccessResponse confirming that the record has been restored.
@@ -15230,27 +19632,62 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @summary Search records
          * @param {string} body Search criteria
          * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
-         * @param {boolean} [parse] If \&#39;true\&#39;, parses returned records to human-readable values.
-         * @param {string} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        search(body: string, archived?: boolean, parse?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
+        search(body: string, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
             return localVarFp.search(body, archived, parse, recordReturnFormat, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieves detailed information about a record by its UUID. Returns a ShowResponse containing the record details.
+         * Searches records across multiple object types in one request. Use fromObjectUuid + relationName to limit to relation target objects (e.g. event attendees), or objectUuids for an explicit list, or omit both to search all company objects (capped). Returns preview-shaped results suitable for relation pickers.
+         * @summary Search records across objects
+         * @param {CrossObjectRecordSearchRequest} crossObjectRecordSearchRequest 
+         * @param {boolean} [archived] When true, includes archived records.
+         * @param {SearchCrossObjectParseEnum} [parse] Parse property values for display.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchCrossObject(crossObjectRecordSearchRequest: CrossObjectRecordSearchRequest, archived?: boolean, parse?: SearchCrossObjectParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
+            return localVarFp.searchCrossObject(crossObjectRecordSearchRequest, archived, parse, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieves detailed information about a record by its UUID. Returns a ShowResponse containing the record details. Prefer GET /{objectName}/{uuid} when the object context is known.
          * @summary Get record details
          * @param {string} uuid 
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
-         * @param {boolean} [parse] Whether to parse the record before returning it.
+         * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        show1(uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, fields?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
-            return localVarFp.show1(uuid, object, recordReturnFormat, parse, fields, options).then((request) => request(axios, basePath));
+        show(uuid: string, object?: string, recordReturnFormat?: ShowRecordReturnFormatEnum, parse?: ShowParseEnum, fields?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.show(uuid, object, recordReturnFormat, parse, fields, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieves a record by object name and UUID. Same response as GET /{uuid}?object={objectName}.
+         * @summary Get record details by object
+         * @param {string} objectName 
+         * @param {string} uuid 
+         * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowByObjectParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        showByObject(objectName: string, uuid: string, recordReturnFormat?: ShowByObjectRecordReturnFormatEnum, parse?: ShowByObjectParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.showByObject(objectName, uuid, recordReturnFormat, parse, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Uses structured OpenAI output plus schema validation to propose dashboard charts for an object. Returns an empty list when AI is unavailable.
+         * @summary Suggest analytics widgets with AI
+         * @param {SuggestAnalyticsWidgetsRequest} suggestAnalyticsWidgetsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest: SuggestAnalyticsWidgetsRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+            return localVarFp.suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Updates a record\'s details identified by its UUID. The record data is provided as a RecordDTO. Returns an UpdateResponse with the updated record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
@@ -15258,14 +19695,42 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {string} uuid 
          * @param {string} objectName 
          * @param {RecordDTO} recordDTO Record data to update
-         * @param {boolean} [parse] If \&#39;true\&#39;, parses the updated record to human-readable values before returning.
+         * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(uuid: string, objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig): AxiosPromise<UpdateResponse> {
+        update(uuid: string, objectName: string, recordDTO: RecordDTO, parse?: UpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: UpdateRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<UpdateResponse> {
             return localVarFp.update(uuid, objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Updates a record identified by UUID. Optional object query param resolves the object context (same as GET /{uuid}?object=...). When omitted, the record\'s current/primary object is used. Prefer PUT /{objectName}/{uuid} when the object context is known.
+         * @summary Update a record by UUID
+         * @param {string} uuid 
+         * @param {RecordDTO} recordDTO 
+         * @param {string} [object] Optional object name to resolve the record in a specific object context.
+         * @param {UpdateByUuidParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
+         * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateByUuid(uuid: string, recordDTO: RecordDTO, object?: string, parse?: UpdateByUuidParseEnum, ignoreErrors?: boolean, recordReturnFormat?: UpdateByUuidRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<UpdateResponse> {
+            return localVarFp.updateByUuid(uuid, recordDTO, object, parse, ignoreErrors, recordReturnFormat, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Patches values stored on an existing relation edge. Only keys present in edgeProperties are written; a null value clears a key.
+         * @summary Update relation edge properties
+         * @param {string} fromUuid 
+         * @param {string} relationName 
+         * @param {string} toUuid 
+         * @param {RelationEdgeRequestDTO} relationEdgeRequestDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRelationEdge(fromUuid: string, relationName: string, toUuid: string, relationEdgeRequestDTO: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+            return localVarFp.updateRelationEdge(fromUuid, relationName, toUuid, relationEdgeRequestDTO, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -15287,17 +19752,64 @@ export class RecordsApi extends BaseAPI {
     }
 
     /**
+     * Groups Neo4j records by property or time bucket and returns series points with optional drilldown filters.
+     * @summary Aggregate records for analytics charts
+     * @param {AggregateRequest} aggregateRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public aggregate(aggregateRequest: AggregateRequest, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).aggregate(aggregateRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Runs multiple aggregation requests for dashboard widgets.
+     * @summary Batch aggregate records for analytics dashboards
+     * @param {AggregateBatchRequest} aggregateBatchRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public aggregateBatch(aggregateBatchRequest: AggregateBatchRequest, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).aggregateBatch(aggregateBatchRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Archives, anonymizes, or permanently deletes multiple records in one request. Returns HTTP 200 when every item succeeds. Returns HTTP 200 with per-record errors when one or more items fail; successful items are still applied and listed in data.uuids.
+     * @summary Bulk delete records
+     * @param {string} objectName 
+     * @param {BulkDeleteRecordsRequest} bulkDeleteRecordsRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public bulkDelete(objectName: string, bulkDeleteRecordsRequest: BulkDeleteRecordsRequest, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).bulkDelete(objectName, bulkDeleteRecordsRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Creates or updates multiple records in one request. Returns HTTP 201 when every item succeeds (no per-record errors). Returns HTTP 200 when one or more items fail validation; successful items are still persisted and listed in data.records, with failures in errors.
+     * @summary Bulk create or update records
+     * @param {string} objectName 
+     * @param {BulkEditRecordsRequest} bulkEditRecordsRequest 
+     * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows each save to proceed while ignoring certain non-critical validation errors, when supported.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public bulkEdit(objectName: string, bulkEditRecordsRequest: BulkEditRecordsRequest, ignoreErrors?: boolean, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).bulkEdit(objectName, bulkEditRecordsRequest, ignoreErrors, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
      * @summary Create a new record
      * @param {string} objectName 
      * @param {RecordDTO} recordDTO Record data to create
-     * @param {boolean} [parse] If \&#39;true\&#39;, parses the created record to human-readable values before returning.
+     * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
-     * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public create(objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig) {
+    public create(objectName: string, recordDTO: RecordDTO, parse?: CreateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateRecordReturnFormatEnum, options?: RawAxiosRequestConfig) {
         return RecordsApiFp(this.configuration).create(objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -15306,13 +19818,13 @@ export class RecordsApi extends BaseAPI {
      * @summary Create or update a record
      * @param {string} objectName 
      * @param {RecordDTO} recordDTO Record data to create or update
-     * @param {boolean} [parse] 
+     * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [ignoreErrors] 
-     * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public createOrUpdate(objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig) {
+    public createOrUpdate(objectName: string, recordDTO: RecordDTO, parse?: CreateOrUpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateOrUpdateRecordReturnFormatEnum, options?: RawAxiosRequestConfig) {
         return RecordsApiFp(this.configuration).createOrUpdate(objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -15323,11 +19835,12 @@ export class RecordsApi extends BaseAPI {
      * @param {string} relationName 
      * @param {string} toUuid 
      * @param {object} [primary] When \&#39;true\&#39;, marks the created relation as primary. Defaults to \&#39;false\&#39;.
+     * @param {RelationEdgeRequestDTO} [relationEdgeRequestDTO] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public createRelation(fromUuid: string, relationName: string, toUuid: string, primary?: object, options?: RawAxiosRequestConfig) {
-        return RecordsApiFp(this.configuration).createRelation(fromUuid, relationName, toUuid, primary, options).then((request) => request(this.axios, this.basePath));
+    public createRelation(fromUuid: string, relationName: string, toUuid: string, primary?: object, relationEdgeRequestDTO?: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).createRelation(fromUuid, relationName, toUuid, primary, relationEdgeRequestDTO, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15344,17 +19857,31 @@ export class RecordsApi extends BaseAPI {
     }
 
     /**
-     * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
-     * @summary Fetch paginated records
-     * @param {string} body Pagination request for records
-     * @param {boolean} [parse] If set to \&#39;true\&#39;, records are parsed to human-readable values (for example, unix timestamps are formatted as dates).
-     * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
-     * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-     * @param {string} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * Extends a record identified by its UUID to one or more objects. You can use this to move a record or add it to another object so it\'ll be visible in the new object.Returns a SuccessResponse confirming that the record has been extended.
+     * @summary Extend a record
+     * @param {string} uuid 
+     * @param {ExtendRecordRequest} extendRecordRequest 
+     * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {ExtendParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public index(body: string, parse?: boolean, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: string, options?: RawAxiosRequestConfig) {
+    public extend(uuid: string, extendRecordRequest: ExtendRecordRequest, recordReturnFormat?: ExtendRecordReturnFormatEnum, parse?: ExtendParseEnum, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).extend(uuid, extendRecordRequest, recordReturnFormat, parse, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
+     * @summary Fetch paginated records
+     * @param {string} body Pagination request for records
+     * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+     * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
+     * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
+     * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public index(body: string, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options?: RawAxiosRequestConfig) {
         return RecordsApiFp(this.configuration).index(body, parse, archived, relatedRecordUuid, recordReturnFormat, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -15363,11 +19890,11 @@ export class RecordsApi extends BaseAPI {
      * @summary Fetch records for flow view
      * @param {string} body Pagination request for flow view
      * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-     * @param {boolean} [parse] Whether to parse the record before returning it.
+     * @param {IndexFlowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public indexFlow(body: string, relatedRecordUuid?: string, parse?: boolean, options?: RawAxiosRequestConfig) {
+    public indexFlow(body: string, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options?: RawAxiosRequestConfig) {
         return RecordsApiFp(this.configuration).indexFlow(body, relatedRecordUuid, parse, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -15400,31 +19927,28 @@ export class RecordsApi extends BaseAPI {
     }
 
     /**
-     * Morphs a record identified by its UUID to one or more objects. You can use this to move a record or add it to another object so it\'ll be visible in the new object.Returns a SuccessResponse confirming that the record has been morphed.
-     * @summary Morph a record
-     * @param {string} uuid 
-     * @param {MorphRecordRequest} morphRecordRequest 
-     * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
-     * @param {boolean} [parse] Whether to parse the record before returning it.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public morph(uuid: string, morphRecordRequest: MorphRecordRequest, recordReturnFormat?: string, parse?: boolean, options?: RawAxiosRequestConfig) {
-        return RecordsApiFp(this.configuration).morph(uuid, morphRecordRequest, recordReturnFormat, parse, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * Retrieves a preview for a record specified by its UUID and preview name. Returns a ShowResponse containing the preview data.
      * @summary Get record preview
      * @param {string} uuid 
      * @param {string} name 
      * @param {string} [object] Optional object name used to resolve the record before building the preview.
-     * @param {boolean} [parse] Whether to parse the record before returning it.
+     * @param {PreviewParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public preview(uuid: string, name: string, object?: string, parse?: boolean, options?: RawAxiosRequestConfig) {
+    public preview(uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options?: RawAxiosRequestConfig) {
         return RecordsApiFp(this.configuration).preview(uuid, name, object, parse, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Executes a two-pass GraphRAG query using natural language or a declarative plan. Returns records with scores and graph evidence.
+     * @summary Advanced graph-aware record query
+     * @param {AdvancedRecordQueryRequest} advancedRecordQueryRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public query(advancedRecordQueryRequest: AdvancedRecordQueryRequest, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).query(advancedRecordQueryRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15443,28 +19967,66 @@ export class RecordsApi extends BaseAPI {
      * @summary Search records
      * @param {string} body Search criteria
      * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
-     * @param {boolean} [parse] If \&#39;true\&#39;, parses returned records to human-readable values.
-     * @param {string} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+     * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public search(body: string, archived?: boolean, parse?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig) {
+    public search(body: string, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options?: RawAxiosRequestConfig) {
         return RecordsApiFp(this.configuration).search(body, archived, parse, recordReturnFormat, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Retrieves detailed information about a record by its UUID. Returns a ShowResponse containing the record details.
+     * Searches records across multiple object types in one request. Use fromObjectUuid + relationName to limit to relation target objects (e.g. event attendees), or objectUuids for an explicit list, or omit both to search all company objects (capped). Returns preview-shaped results suitable for relation pickers.
+     * @summary Search records across objects
+     * @param {CrossObjectRecordSearchRequest} crossObjectRecordSearchRequest 
+     * @param {boolean} [archived] When true, includes archived records.
+     * @param {SearchCrossObjectParseEnum} [parse] Parse property values for display.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public searchCrossObject(crossObjectRecordSearchRequest: CrossObjectRecordSearchRequest, archived?: boolean, parse?: SearchCrossObjectParseEnum, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).searchCrossObject(crossObjectRecordSearchRequest, archived, parse, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieves detailed information about a record by its UUID. Returns a ShowResponse containing the record details. Prefer GET /{objectName}/{uuid} when the object context is known.
      * @summary Get record details
      * @param {string} uuid 
      * @param {string} [object] Optional object name to resolve the record in a specific object context.
-     * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
-     * @param {boolean} [parse] Whether to parse the record before returning it.
+     * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {ShowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public show1(uuid: string, object?: string, recordReturnFormat?: string, parse?: boolean, fields?: string, options?: RawAxiosRequestConfig) {
-        return RecordsApiFp(this.configuration).show1(uuid, object, recordReturnFormat, parse, fields, options).then((request) => request(this.axios, this.basePath));
+    public show(uuid: string, object?: string, recordReturnFormat?: ShowRecordReturnFormatEnum, parse?: ShowParseEnum, fields?: string, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).show(uuid, object, recordReturnFormat, parse, fields, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieves a record by object name and UUID. Same response as GET /{uuid}?object={objectName}.
+     * @summary Get record details by object
+     * @param {string} objectName 
+     * @param {string} uuid 
+     * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {ShowByObjectParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public showByObject(objectName: string, uuid: string, recordReturnFormat?: ShowByObjectRecordReturnFormatEnum, parse?: ShowByObjectParseEnum, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).showByObject(objectName, uuid, recordReturnFormat, parse, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Uses structured OpenAI output plus schema validation to propose dashboard charts for an object. Returns an empty list when AI is unavailable.
+     * @summary Suggest analytics widgets with AI
+     * @param {SuggestAnalyticsWidgetsRequest} suggestAnalyticsWidgetsRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest: SuggestAnalyticsWidgetsRequest, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15473,17 +20035,173 @@ export class RecordsApi extends BaseAPI {
      * @param {string} uuid 
      * @param {string} objectName 
      * @param {RecordDTO} recordDTO Record data to update
-     * @param {boolean} [parse] If \&#39;true\&#39;, parses the updated record to human-readable values before returning.
+     * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-     * @param {string} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public update(uuid: string, objectName: string, recordDTO: RecordDTO, parse?: boolean, ignoreErrors?: boolean, recordReturnFormat?: string, options?: RawAxiosRequestConfig) {
+    public update(uuid: string, objectName: string, recordDTO: RecordDTO, parse?: UpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: UpdateRecordReturnFormatEnum, options?: RawAxiosRequestConfig) {
         return RecordsApiFp(this.configuration).update(uuid, objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Updates a record identified by UUID. Optional object query param resolves the object context (same as GET /{uuid}?object=...). When omitted, the record\'s current/primary object is used. Prefer PUT /{objectName}/{uuid} when the object context is known.
+     * @summary Update a record by UUID
+     * @param {string} uuid 
+     * @param {RecordDTO} recordDTO 
+     * @param {string} [object] Optional object name to resolve the record in a specific object context.
+     * @param {UpdateByUuidParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+     * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
+     * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public updateByUuid(uuid: string, recordDTO: RecordDTO, object?: string, parse?: UpdateByUuidParseEnum, ignoreErrors?: boolean, recordReturnFormat?: UpdateByUuidRecordReturnFormatEnum, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).updateByUuid(uuid, recordDTO, object, parse, ignoreErrors, recordReturnFormat, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Patches values stored on an existing relation edge. Only keys present in edgeProperties are written; a null value clears a key.
+     * @summary Update relation edge properties
+     * @param {string} fromUuid 
+     * @param {string} relationName 
+     * @param {string} toUuid 
+     * @param {RelationEdgeRequestDTO} relationEdgeRequestDTO 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public updateRelationEdge(fromUuid: string, relationName: string, toUuid: string, relationEdgeRequestDTO: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).updateRelationEdge(fromUuid, relationName, toUuid, relationEdgeRequestDTO, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
+export const CreateParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type CreateParseEnum = typeof CreateParseEnum[keyof typeof CreateParseEnum];
+export const CreateRecordReturnFormatEnum = {
+    Legacy: 'LEGACY',
+    UserFriendly: 'USER_FRIENDLY',
+    Expanded: 'EXPANDED',
+} as const;
+export type CreateRecordReturnFormatEnum = typeof CreateRecordReturnFormatEnum[keyof typeof CreateRecordReturnFormatEnum];
+export const CreateOrUpdateParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type CreateOrUpdateParseEnum = typeof CreateOrUpdateParseEnum[keyof typeof CreateOrUpdateParseEnum];
+export const CreateOrUpdateRecordReturnFormatEnum = {
+    Legacy: 'LEGACY',
+    UserFriendly: 'USER_FRIENDLY',
+    Expanded: 'EXPANDED',
+} as const;
+export type CreateOrUpdateRecordReturnFormatEnum = typeof CreateOrUpdateRecordReturnFormatEnum[keyof typeof CreateOrUpdateRecordReturnFormatEnum];
+export const ExtendRecordReturnFormatEnum = {
+    Legacy: 'LEGACY',
+    UserFriendly: 'USER_FRIENDLY',
+    Expanded: 'EXPANDED',
+} as const;
+export type ExtendRecordReturnFormatEnum = typeof ExtendRecordReturnFormatEnum[keyof typeof ExtendRecordReturnFormatEnum];
+export const ExtendParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type ExtendParseEnum = typeof ExtendParseEnum[keyof typeof ExtendParseEnum];
+export const IndexParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type IndexParseEnum = typeof IndexParseEnum[keyof typeof IndexParseEnum];
+export const IndexRecordReturnFormatEnum = {
+    Legacy: 'LEGACY',
+    UserFriendly: 'USER_FRIENDLY',
+    Expanded: 'EXPANDED',
+} as const;
+export type IndexRecordReturnFormatEnum = typeof IndexRecordReturnFormatEnum[keyof typeof IndexRecordReturnFormatEnum];
+export const IndexFlowParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type IndexFlowParseEnum = typeof IndexFlowParseEnum[keyof typeof IndexFlowParseEnum];
+export const PreviewParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type PreviewParseEnum = typeof PreviewParseEnum[keyof typeof PreviewParseEnum];
+export const SearchParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type SearchParseEnum = typeof SearchParseEnum[keyof typeof SearchParseEnum];
+export const SearchRecordReturnFormatEnum = {
+    Legacy: 'LEGACY',
+    UserFriendly: 'USER_FRIENDLY',
+    Expanded: 'EXPANDED',
+} as const;
+export type SearchRecordReturnFormatEnum = typeof SearchRecordReturnFormatEnum[keyof typeof SearchRecordReturnFormatEnum];
+export const SearchCrossObjectParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type SearchCrossObjectParseEnum = typeof SearchCrossObjectParseEnum[keyof typeof SearchCrossObjectParseEnum];
+export const ShowRecordReturnFormatEnum = {
+    Legacy: 'LEGACY',
+    UserFriendly: 'USER_FRIENDLY',
+    Expanded: 'EXPANDED',
+} as const;
+export type ShowRecordReturnFormatEnum = typeof ShowRecordReturnFormatEnum[keyof typeof ShowRecordReturnFormatEnum];
+export const ShowParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type ShowParseEnum = typeof ShowParseEnum[keyof typeof ShowParseEnum];
+export const ShowByObjectRecordReturnFormatEnum = {
+    Legacy: 'LEGACY',
+    UserFriendly: 'USER_FRIENDLY',
+    Expanded: 'EXPANDED',
+} as const;
+export type ShowByObjectRecordReturnFormatEnum = typeof ShowByObjectRecordReturnFormatEnum[keyof typeof ShowByObjectRecordReturnFormatEnum];
+export const ShowByObjectParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type ShowByObjectParseEnum = typeof ShowByObjectParseEnum[keyof typeof ShowByObjectParseEnum];
+export const UpdateParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type UpdateParseEnum = typeof UpdateParseEnum[keyof typeof UpdateParseEnum];
+export const UpdateRecordReturnFormatEnum = {
+    Legacy: 'LEGACY',
+    UserFriendly: 'USER_FRIENDLY',
+    Expanded: 'EXPANDED',
+} as const;
+export type UpdateRecordReturnFormatEnum = typeof UpdateRecordReturnFormatEnum[keyof typeof UpdateRecordReturnFormatEnum];
+export const UpdateByUuidParseEnum = {
+    Db: 'DB',
+    HumanReadable: 'HUMAN_READABLE',
+    Structured: 'STRUCTURED',
+} as const;
+export type UpdateByUuidParseEnum = typeof UpdateByUuidParseEnum[keyof typeof UpdateByUuidParseEnum];
+export const UpdateByUuidRecordReturnFormatEnum = {
+    Legacy: 'LEGACY',
+    UserFriendly: 'USER_FRIENDLY',
+    Expanded: 'EXPANDED',
+} as const;
+export type UpdateByUuidRecordReturnFormatEnum = typeof UpdateByUuidRecordReturnFormatEnum[keyof typeof UpdateByUuidRecordReturnFormatEnum];
 
 
 /**
@@ -16392,11 +21110,11 @@ export const ServerlessFunctionsApiAxiosParamCreator = function (configuration?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create1: async (appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        create3: async (appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'appUuid' is not null or undefined
-            assertParamExists('create1', 'appUuid', appUuid)
+            assertParamExists('create3', 'appUuid', appUuid)
             // verify required parameter 'serverlessFunctionDTO' is not null or undefined
-            assertParamExists('create1', 'serverlessFunctionDTO', serverlessFunctionDTO)
+            assertParamExists('create3', 'serverlessFunctionDTO', serverlessFunctionDTO)
             const localVarPath = `/api/v2/apps/{appUuid}/serverless-functions`
                 .replace('{appUuid}', encodeURIComponent(String(appUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -16421,6 +21139,48 @@ export const ServerlessFunctionsApiAxiosParamCreator = function (configuration?:
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(serverlessFunctionDTO, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Tears down the GCP Cloud Function (if provisioned) and deletes the serverless function entity.
+         * @summary Delete a serverless function
+         * @param {string} appUuid UUID of the app
+         * @param {string} uuid UUID of the serverless function to delete
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        delete1: async (appUuid: string, uuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('delete1', 'appUuid', appUuid)
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('delete1', 'uuid', uuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/serverless-functions/{uuid}`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -16471,6 +21231,101 @@ export const ServerlessFunctionsApiAxiosParamCreator = function (configuration?:
             };
         },
         /**
+         * Queries Cloud Logging for recent log entries emitted by the Cloud Function backing this serverless function.
+         * @summary Get serverless function logs
+         * @param {string} appUuid UUID of the app
+         * @param {string} uuid UUID of the serverless function
+         * @param {string} [since] Lookback window, e.g. 15m, 1h, 24h
+         * @param {number} [limit] Maximum number of log entries to return
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logs: async (appUuid: string, uuid: string, since?: string, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('logs', 'appUuid', appUuid)
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('logs', 'uuid', uuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/serverless-functions/{uuid}/logs`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (since !== undefined) {
+                localVarQueryParameter['since'] = since;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Builds the same payload shape used for serverless invocations and webhook delivery from a record and event type, without invoking anything.
+         * @summary Generate a sample webhook payload
+         * @param {string} appUuid UUID of the app
+         * @param {SamplePayloadRequest} samplePayloadRequest Sample payload request (recordUuid and eventType)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        samplePayload: async (appUuid: string, samplePayloadRequest: SamplePayloadRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('samplePayload', 'appUuid', appUuid)
+            // verify required parameter 'samplePayloadRequest' is not null or undefined
+            assertParamExists('samplePayload', 'samplePayloadRequest', samplePayloadRequest)
+            const localVarPath = `/api/v2/apps/{appUuid}/serverless-functions/sample-payload`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(samplePayloadRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Retrieves a serverless function by its UUID, ensuring it belongs to the specified app.
          * @summary Get a serverless function
          * @param {string} appUuid UUID of the app
@@ -16478,11 +21333,11 @@ export const ServerlessFunctionsApiAxiosParamCreator = function (configuration?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        show: async (appUuid: string, uuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        show1: async (appUuid: string, uuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'appUuid' is not null or undefined
-            assertParamExists('show', 'appUuid', appUuid)
+            assertParamExists('show1', 'appUuid', appUuid)
             // verify required parameter 'uuid' is not null or undefined
-            assertParamExists('show', 'uuid', uuid)
+            assertParamExists('show1', 'uuid', uuid)
             const localVarPath = `/api/v2/apps/{appUuid}/serverless-functions/{uuid}`
                 .replace('{appUuid}', encodeURIComponent(String(appUuid)))
                 .replace('{uuid}', encodeURIComponent(String(uuid)));
@@ -16623,10 +21478,24 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async create1(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.create1(appUuid, serverlessFunctionDTO, options);
+        async create3(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create3(appUuid, serverlessFunctionDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.create1']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.create3']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Tears down the GCP Cloud Function (if provisioned) and deletes the serverless function entity.
+         * @summary Delete a serverless function
+         * @param {string} appUuid UUID of the app
+         * @param {string} uuid UUID of the serverless function to delete
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async delete1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.delete1(appUuid, uuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.delete1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -16644,6 +21513,36 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Queries Cloud Logging for recent log entries emitted by the Cloud Function backing this serverless function.
+         * @summary Get serverless function logs
+         * @param {string} appUuid UUID of the app
+         * @param {string} uuid UUID of the serverless function
+         * @param {string} [since] Lookback window, e.g. 15m, 1h, 24h
+         * @param {number} [limit] Maximum number of log entries to return
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async logs(appUuid: string, uuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.logs(appUuid, uuid, since, limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.logs']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Builds the same payload shape used for serverless invocations and webhook delivery from a record and event type, without invoking anything.
+         * @summary Generate a sample webhook payload
+         * @param {string} appUuid UUID of the app
+         * @param {SamplePayloadRequest} samplePayloadRequest Sample payload request (recordUuid and eventType)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async samplePayload(appUuid: string, samplePayloadRequest: SamplePayloadRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.samplePayload(appUuid, samplePayloadRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.samplePayload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Retrieves a serverless function by its UUID, ensuring it belongs to the specified app.
          * @summary Get a serverless function
          * @param {string} appUuid UUID of the app
@@ -16651,10 +21550,10 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async show(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.show(appUuid, uuid, options);
+        async show1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.show1(appUuid, uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.show']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.show1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -16704,8 +21603,19 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create1(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
-            return localVarFp.create1(appUuid, serverlessFunctionDTO, options).then((request) => request(axios, basePath));
+        create3(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
+            return localVarFp.create3(appUuid, serverlessFunctionDTO, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Tears down the GCP Cloud Function (if provisioned) and deletes the serverless function entity.
+         * @summary Delete a serverless function
+         * @param {string} appUuid UUID of the app
+         * @param {string} uuid UUID of the serverless function to delete
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        delete1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<DeleteResponse> {
+            return localVarFp.delete1(appUuid, uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of serverless functions that belong to the specified app.
@@ -16719,6 +21629,30 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
             return localVarFp.index2(appUuid, body, options).then((request) => request(axios, basePath));
         },
         /**
+         * Queries Cloud Logging for recent log entries emitted by the Cloud Function backing this serverless function.
+         * @summary Get serverless function logs
+         * @param {string} appUuid UUID of the app
+         * @param {string} uuid UUID of the serverless function
+         * @param {string} [since] Lookback window, e.g. 15m, 1h, 24h
+         * @param {number} [limit] Maximum number of log entries to return
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logs(appUuid: string, uuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+            return localVarFp.logs(appUuid, uuid, since, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Builds the same payload shape used for serverless invocations and webhook delivery from a record and event type, without invoking anything.
+         * @summary Generate a sample webhook payload
+         * @param {string} appUuid UUID of the app
+         * @param {SamplePayloadRequest} samplePayloadRequest Sample payload request (recordUuid and eventType)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        samplePayload(appUuid: string, samplePayloadRequest: SamplePayloadRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+            return localVarFp.samplePayload(appUuid, samplePayloadRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieves a serverless function by its UUID, ensuring it belongs to the specified app.
          * @summary Get a serverless function
          * @param {string} appUuid UUID of the app
@@ -16726,8 +21660,8 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        show(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
-            return localVarFp.show(appUuid, uuid, options).then((request) => request(axios, basePath));
+        show1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.show1(appUuid, uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Provisions (if needed) and invokes a serverless function for a given record and event type, using the same payload shape as webhooks.
@@ -16768,8 +21702,20 @@ export class ServerlessFunctionsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public create1(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig) {
-        return ServerlessFunctionsApiFp(this.configuration).create1(appUuid, serverlessFunctionDTO, options).then((request) => request(this.axios, this.basePath));
+    public create3(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig) {
+        return ServerlessFunctionsApiFp(this.configuration).create3(appUuid, serverlessFunctionDTO, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Tears down the GCP Cloud Function (if provisioned) and deletes the serverless function entity.
+     * @summary Delete a serverless function
+     * @param {string} appUuid UUID of the app
+     * @param {string} uuid UUID of the serverless function to delete
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public delete1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig) {
+        return ServerlessFunctionsApiFp(this.configuration).delete1(appUuid, uuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -16785,6 +21731,32 @@ export class ServerlessFunctionsApi extends BaseAPI {
     }
 
     /**
+     * Queries Cloud Logging for recent log entries emitted by the Cloud Function backing this serverless function.
+     * @summary Get serverless function logs
+     * @param {string} appUuid UUID of the app
+     * @param {string} uuid UUID of the serverless function
+     * @param {string} [since] Lookback window, e.g. 15m, 1h, 24h
+     * @param {number} [limit] Maximum number of log entries to return
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public logs(appUuid: string, uuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig) {
+        return ServerlessFunctionsApiFp(this.configuration).logs(appUuid, uuid, since, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Builds the same payload shape used for serverless invocations and webhook delivery from a record and event type, without invoking anything.
+     * @summary Generate a sample webhook payload
+     * @param {string} appUuid UUID of the app
+     * @param {SamplePayloadRequest} samplePayloadRequest Sample payload request (recordUuid and eventType)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public samplePayload(appUuid: string, samplePayloadRequest: SamplePayloadRequest, options?: RawAxiosRequestConfig) {
+        return ServerlessFunctionsApiFp(this.configuration).samplePayload(appUuid, samplePayloadRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Retrieves a serverless function by its UUID, ensuring it belongs to the specified app.
      * @summary Get a serverless function
      * @param {string} appUuid UUID of the app
@@ -16792,8 +21764,8 @@ export class ServerlessFunctionsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public show(appUuid: string, uuid: string, options?: RawAxiosRequestConfig) {
-        return ServerlessFunctionsApiFp(this.configuration).show(appUuid, uuid, options).then((request) => request(this.axios, this.basePath));
+    public show1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig) {
+        return ServerlessFunctionsApiFp(this.configuration).show1(appUuid, uuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -17490,6 +22462,249 @@ export const TraitsApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Public browser RSVP. Without partstat shows a choice page; with partstat applies after login when the attendee has a user trait. Non-user-trait attendees need no login.
+         * @summary Respond to an event invitation (email link)
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {string} [partstat] 
+         * @param {string} [scope] 
+         * @param {string} [switchAccount] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rsvpBrowserGet: async (companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'companyUuid' is not null or undefined
+            assertParamExists('rsvpBrowserGet', 'companyUuid', companyUuid)
+            // verify required parameter 'eventUuid' is not null or undefined
+            assertParamExists('rsvpBrowserGet', 'eventUuid', eventUuid)
+            // verify required parameter 'attendeeUuid' is not null or undefined
+            assertParamExists('rsvpBrowserGet', 'attendeeUuid', attendeeUuid)
+            const localVarPath = `/api/v2/traits/event/{companyUuid}/{eventUuid}/rsvp/{attendeeUuid}`
+                .replace('{companyUuid}', encodeURIComponent(String(companyUuid)))
+                .replace('{eventUuid}', encodeURIComponent(String(eventUuid)))
+                .replace('{attendeeUuid}', encodeURIComponent(String(attendeeUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (partstat !== undefined) {
+                localVarQueryParameter['partstat'] = partstat;
+            }
+
+            if (scope !== undefined) {
+                localVarQueryParameter['scope'] = scope;
+            }
+
+            if (switchAccount !== undefined) {
+                localVarQueryParameter['switchAccount'] = switchAccount;
+            }
+
+            localVarHeaderParameter['Accept'] = 'text/html';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Email/password login for RSVP
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {string} email 
+         * @param {string} password 
+         * @param {string} [partstat] 
+         * @param {string} [scope] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rsvpBrowserLogin: async (companyUuid: string, eventUuid: string, attendeeUuid: string, email: string, password: string, partstat?: string, scope?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'companyUuid' is not null or undefined
+            assertParamExists('rsvpBrowserLogin', 'companyUuid', companyUuid)
+            // verify required parameter 'eventUuid' is not null or undefined
+            assertParamExists('rsvpBrowserLogin', 'eventUuid', eventUuid)
+            // verify required parameter 'attendeeUuid' is not null or undefined
+            assertParamExists('rsvpBrowserLogin', 'attendeeUuid', attendeeUuid)
+            // verify required parameter 'email' is not null or undefined
+            assertParamExists('rsvpBrowserLogin', 'email', email)
+            // verify required parameter 'password' is not null or undefined
+            assertParamExists('rsvpBrowserLogin', 'password', password)
+            const localVarPath = `/api/v2/traits/event/{companyUuid}/{eventUuid}/rsvp/{attendeeUuid}/login`
+                .replace('{companyUuid}', encodeURIComponent(String(companyUuid)))
+                .replace('{eventUuid}', encodeURIComponent(String(eventUuid)))
+                .replace('{attendeeUuid}', encodeURIComponent(String(attendeeUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new URLSearchParams();
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+            if (email !== undefined) { 
+                localVarFormParams.set('email', email as any);
+            }
+
+            if (password !== undefined) { 
+                localVarFormParams.set('password', password as any);
+            }
+
+            if (partstat !== undefined) { 
+                localVarFormParams.set('partstat', partstat as any);
+            }
+
+            if (scope !== undefined) { 
+                localVarFormParams.set('scope', scope as any);
+            }
+            localVarHeaderParameter['Content-Type'] = 'application/x-www-form-urlencoded';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams.toString();
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Start social login for RSVP
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {string} provider 
+         * @param {string} [partstat] 
+         * @param {string} [scope] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rsvpBrowserSocial: async (companyUuid: string, eventUuid: string, attendeeUuid: string, provider: string, partstat?: string, scope?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'companyUuid' is not null or undefined
+            assertParamExists('rsvpBrowserSocial', 'companyUuid', companyUuid)
+            // verify required parameter 'eventUuid' is not null or undefined
+            assertParamExists('rsvpBrowserSocial', 'eventUuid', eventUuid)
+            // verify required parameter 'attendeeUuid' is not null or undefined
+            assertParamExists('rsvpBrowserSocial', 'attendeeUuid', attendeeUuid)
+            // verify required parameter 'provider' is not null or undefined
+            assertParamExists('rsvpBrowserSocial', 'provider', provider)
+            const localVarPath = `/api/v2/traits/event/{companyUuid}/{eventUuid}/rsvp/{attendeeUuid}/social/{provider}`
+                .replace('{companyUuid}', encodeURIComponent(String(companyUuid)))
+                .replace('{eventUuid}', encodeURIComponent(String(eventUuid)))
+                .replace('{attendeeUuid}', encodeURIComponent(String(attendeeUuid)))
+                .replace('{provider}', encodeURIComponent(String(provider)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (partstat !== undefined) {
+                localVarQueryParameter['partstat'] = partstat;
+            }
+
+            if (scope !== undefined) {
+                localVarQueryParameter['scope'] = scope;
+            }
+
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Patches partstat on the attendees edge. No tools @AccessControl — auth is bearer/session + self-only / partner login rules.
+         * @summary Update event RSVP (JSON)
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {EventRsvpRequest} eventRsvpRequest RSVP payload
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rsvpJson: async (companyUuid: string, eventUuid: string, attendeeUuid: string, eventRsvpRequest: EventRsvpRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'companyUuid' is not null or undefined
+            assertParamExists('rsvpJson', 'companyUuid', companyUuid)
+            // verify required parameter 'eventUuid' is not null or undefined
+            assertParamExists('rsvpJson', 'eventUuid', eventUuid)
+            // verify required parameter 'attendeeUuid' is not null or undefined
+            assertParamExists('rsvpJson', 'attendeeUuid', attendeeUuid)
+            // verify required parameter 'eventRsvpRequest' is not null or undefined
+            assertParamExists('rsvpJson', 'eventRsvpRequest', eventRsvpRequest)
+            const localVarPath = `/api/v2/traits/event/{companyUuid}/{eventUuid}/rsvp/{attendeeUuid}`
+                .replace('{companyUuid}', encodeURIComponent(String(companyUuid)))
+                .replace('{eventUuid}', encodeURIComponent(String(eventUuid)))
+                .replace('{attendeeUuid}', encodeURIComponent(String(attendeeUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(eventRsvpRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -17555,6 +22770,77 @@ export const TraitsApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['TraitsApi.getTraits']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * Public browser RSVP. Without partstat shows a choice page; with partstat applies after login when the attendee has a user trait. Non-user-trait attendees need no login.
+         * @summary Respond to an event invitation (email link)
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {string} [partstat] 
+         * @param {string} [scope] 
+         * @param {string} [switchAccount] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async rsvpBrowserGet(companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.rsvpBrowserGet(companyUuid, eventUuid, attendeeUuid, partstat, scope, switchAccount, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TraitsApi.rsvpBrowserGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Email/password login for RSVP
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {string} email 
+         * @param {string} password 
+         * @param {string} [partstat] 
+         * @param {string} [scope] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async rsvpBrowserLogin(companyUuid: string, eventUuid: string, attendeeUuid: string, email: string, password: string, partstat?: string, scope?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.rsvpBrowserLogin(companyUuid, eventUuid, attendeeUuid, email, password, partstat, scope, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TraitsApi.rsvpBrowserLogin']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Start social login for RSVP
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {string} provider 
+         * @param {string} [partstat] 
+         * @param {string} [scope] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async rsvpBrowserSocial(companyUuid: string, eventUuid: string, attendeeUuid: string, provider: string, partstat?: string, scope?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.rsvpBrowserSocial(companyUuid, eventUuid, attendeeUuid, provider, partstat, scope, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TraitsApi.rsvpBrowserSocial']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Patches partstat on the attendees edge. No tools @AccessControl — auth is bearer/session + self-only / partner login rules.
+         * @summary Update event RSVP (JSON)
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {EventRsvpRequest} eventRsvpRequest RSVP payload
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async rsvpJson(companyUuid: string, eventUuid: string, attendeeUuid: string, eventRsvpRequest: EventRsvpRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.rsvpJson(companyUuid, eventUuid, attendeeUuid, eventRsvpRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TraitsApi.rsvpJson']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -17607,6 +22893,65 @@ export const TraitsApiFactory = function (configuration?: Configuration, basePat
          */
         getTraits(objectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
             return localVarFp.getTraits(objectUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Public browser RSVP. Without partstat shows a choice page; with partstat applies after login when the attendee has a user trait. Non-user-trait attendees need no login.
+         * @summary Respond to an event invitation (email link)
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {string} [partstat] 
+         * @param {string} [scope] 
+         * @param {string} [switchAccount] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rsvpBrowserGet(companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.rsvpBrowserGet(companyUuid, eventUuid, attendeeUuid, partstat, scope, switchAccount, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Email/password login for RSVP
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {string} email 
+         * @param {string} password 
+         * @param {string} [partstat] 
+         * @param {string} [scope] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rsvpBrowserLogin(companyUuid: string, eventUuid: string, attendeeUuid: string, email: string, password: string, partstat?: string, scope?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.rsvpBrowserLogin(companyUuid, eventUuid, attendeeUuid, email, password, partstat, scope, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Start social login for RSVP
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {string} provider 
+         * @param {string} [partstat] 
+         * @param {string} [scope] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rsvpBrowserSocial(companyUuid: string, eventUuid: string, attendeeUuid: string, provider: string, partstat?: string, scope?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.rsvpBrowserSocial(companyUuid, eventUuid, attendeeUuid, provider, partstat, scope, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Patches partstat on the attendees edge. No tools @AccessControl — auth is bearer/session + self-only / partner login rules.
+         * @summary Update event RSVP (JSON)
+         * @param {string} companyUuid 
+         * @param {string} eventUuid 
+         * @param {string} attendeeUuid 
+         * @param {EventRsvpRequest} eventRsvpRequest RSVP payload
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rsvpJson(companyUuid: string, eventUuid: string, attendeeUuid: string, eventRsvpRequest: EventRsvpRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateResponse> {
+            return localVarFp.rsvpJson(companyUuid, eventUuid, attendeeUuid, eventRsvpRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -17661,6 +23006,69 @@ export class TraitsApi extends BaseAPI {
      */
     public getTraits(objectUuid: string, options?: RawAxiosRequestConfig) {
         return TraitsApiFp(this.configuration).getTraits(objectUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Public browser RSVP. Without partstat shows a choice page; with partstat applies after login when the attendee has a user trait. Non-user-trait attendees need no login.
+     * @summary Respond to an event invitation (email link)
+     * @param {string} companyUuid 
+     * @param {string} eventUuid 
+     * @param {string} attendeeUuid 
+     * @param {string} [partstat] 
+     * @param {string} [scope] 
+     * @param {string} [switchAccount] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public rsvpBrowserGet(companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, options?: RawAxiosRequestConfig) {
+        return TraitsApiFp(this.configuration).rsvpBrowserGet(companyUuid, eventUuid, attendeeUuid, partstat, scope, switchAccount, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Email/password login for RSVP
+     * @param {string} companyUuid 
+     * @param {string} eventUuid 
+     * @param {string} attendeeUuid 
+     * @param {string} email 
+     * @param {string} password 
+     * @param {string} [partstat] 
+     * @param {string} [scope] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public rsvpBrowserLogin(companyUuid: string, eventUuid: string, attendeeUuid: string, email: string, password: string, partstat?: string, scope?: string, options?: RawAxiosRequestConfig) {
+        return TraitsApiFp(this.configuration).rsvpBrowserLogin(companyUuid, eventUuid, attendeeUuid, email, password, partstat, scope, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Start social login for RSVP
+     * @param {string} companyUuid 
+     * @param {string} eventUuid 
+     * @param {string} attendeeUuid 
+     * @param {string} provider 
+     * @param {string} [partstat] 
+     * @param {string} [scope] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public rsvpBrowserSocial(companyUuid: string, eventUuid: string, attendeeUuid: string, provider: string, partstat?: string, scope?: string, options?: RawAxiosRequestConfig) {
+        return TraitsApiFp(this.configuration).rsvpBrowserSocial(companyUuid, eventUuid, attendeeUuid, provider, partstat, scope, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Patches partstat on the attendees edge. No tools @AccessControl — auth is bearer/session + self-only / partner login rules.
+     * @summary Update event RSVP (JSON)
+     * @param {string} companyUuid 
+     * @param {string} eventUuid 
+     * @param {string} attendeeUuid 
+     * @param {EventRsvpRequest} eventRsvpRequest RSVP payload
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public rsvpJson(companyUuid: string, eventUuid: string, attendeeUuid: string, eventRsvpRequest: EventRsvpRequest, options?: RawAxiosRequestConfig) {
+        return TraitsApiFp(this.configuration).rsvpJson(companyUuid, eventUuid, attendeeUuid, eventRsvpRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

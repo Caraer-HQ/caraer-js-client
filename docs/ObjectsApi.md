@@ -15,7 +15,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**grantObjectAccess**](#grantobjectaccess) | **POST** /api/v2/objects/{objectUuid}/access-grant | Grant object record access|
 |[**permanentlyDeleteArchivedObject**](#permanentlydeletearchivedobject) | **DELETE** /api/v2/objects/{uuid}/permanent | Permanently delete archived object|
 |[**savePreview**](#savepreview) | **POST** /api/v2/objects/{uuid}/previews/{name} | Save object preview|
-|[**syncMorphObjects**](#syncmorphobjects) | **POST** /api/v2/objects/{uuid}/syncMorphObjects | Sync morph objects for existing records|
+|[**syncExtendedObjects**](#syncextendedobjects) | **POST** /api/v2/objects/{uuid}/syncExtendedObjects | Sync extended objects for existing records|
 |[**updateIndices3**](#updateindices3) | **PUT** /api/v2/objects/updateIndices | Update object indices|
 |[**updateLifecycleProperties**](#updatelifecycleproperties) | **PUT** /api/v2/objects/{objectUuid}/lifecycle-properties | Configure lifecycle property tracking|
 |[**updateObject**](#updateobject) | **PUT** /api/v2/objects/{uuid} | Update object by UUID|
@@ -638,10 +638,10 @@ const { status, data } = await apiInstance.savePreview(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **syncMorphObjects**
-> SuccessResponse syncMorphObjects()
+# **syncExtendedObjects**
+> SuccessResponse syncExtendedObjects()
 
-Synchronizes existing records for an object after morph configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, morph object, or label are re-morphed.
+Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, extended object, or label are re-extended.
 
 ### Example
 
@@ -656,7 +656,7 @@ const apiInstance = new ObjectsApi(configuration);
 
 let uuid: string; // (default to undefined)
 
-const { status, data } = await apiInstance.syncMorphObjects(
+const { status, data } = await apiInstance.syncExtendedObjects(
     uuid
 );
 ```
@@ -685,7 +685,7 @@ const { status, data } = await apiInstance.syncMorphObjects(
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Morph objects synchronized successfully |  -  |
+|**200** | Extended objects synchronized successfully |  -  |
 |**404** | Object not found |  -  |
 |**500** | Internal server error |  -  |
 

@@ -17,7 +17,7 @@ Name | Type | Description | Notes
 **deletedBy** | [**ModelRecord**](ModelRecord.md) | Identifier of the user who deleted the entity | [optional] [default to undefined]
 **index** | **number** | Index number for ordering entities | [optional] [default to undefined]
 **privateApp** | **boolean** | Indicates whether this app is private (only available to the creator\&#39;s company) | [optional] [default to undefined]
-**hideApiKeyField** | **boolean** | Whether to hide the API token field in app settings UI | [optional] [default to undefined]
+**hideApiKeyField** | **boolean** | Whether to hide the API token field in app settings UI. Defaults to true when omitted. | [optional] [default to undefined]
 **details** | [**AppDetailsDTO**](AppDetailsDTO.md) | Additional details and specifications about the application | [optional] [default to undefined]
 **pricingPlans** | [**Array&lt;AppPricingDTO&gt;**](AppPricingDTO.md) | Pricing information for the application | [optional] [default to undefined]
 **appBars** | [**Array&lt;AppBarDTO&gt;**](AppBarDTO.md) | App bars (location-specific configuration and actions) | [optional] [default to undefined]
@@ -27,7 +27,9 @@ Name | Type | Description | Notes
 **rotateWebhook** | [**SubscribeWebhookDTO**](SubscribeWebhookDTO.md) | Webhook triggered when the app installation token is rotated | [optional] [default to undefined]
 **updateWebhook** | [**SubscribeWebhookDTO**](SubscribeWebhookDTO.md) | Webhook triggered when an already installed app is saved again | [optional] [default to undefined]
 **settingsSchema** | [**Array&lt;AppSettingFieldSchema&gt;**](AppSettingFieldSchema.md) | JSON array of AppSettingFieldSchema (app-level setting field definitions) | [optional] [default to undefined]
+**externalOAuthProviders** | [**Array&lt;AppExternalOAuthProviderSummaryDTO&gt;**](AppExternalOAuthProviderSummaryDTO.md) | External OAuth providers installers can Connect (name/logo only; no secrets) | [optional] [default to undefined]
 **webhookRateLimitPerMinute** | **number** | Webhook rate limit per minute | [optional] [default to undefined]
+**jobRateLimitPerMinute** | **number** | App job enqueue rate limit per minute per installation | [optional] [default to undefined]
 **billFailedWebhookRequests** | **boolean** | Whether failed webhook requests are considered billable for this app | [optional] [default to undefined]
 **appPublish** | [**AppPublishDTO**](AppPublishDTO.md) | Publish and review state for the app in the marketplace (creator view) | [optional] [default to undefined]
 **hasApp** | [**HasAppDTO**](HasAppDTO.md) | Installation link (company–app) with token, scopes, and per-installation settingsValues; present when includeSettings is true | [optional] [default to undefined]
@@ -47,6 +49,13 @@ Name | Type | Description | Notes
 **installUrl** | **string** | External URL where end users install this app (e.g. ChatGPT connector page) | [optional] [default to undefined]
 **brandmark** | **string** | Square brandmark URL used in compact app surfaces | [optional] [default to undefined]
 **description** | **string** | Internal app description used in Caraer admin views | [optional] [default to undefined]
+**platformVersion** | **number** | App platform version: 1 &#x3D; legacy per-function Cloud Functions; 2 &#x3D; one container per app | [optional] [default to undefined]
+**runtime** | **string** | Serverless runtime for platform V2 apps (nodejs22 or python312) | [optional] [default to undefined]
+**runtimeBaseUrl** | **string** | Base HTTPS URL of the V2 app container runtime | [optional] [default to undefined]
+**runtimeRevision** | **string** | Last deployed runtime revision id | [optional] [default to undefined]
+**runtimeStatus** | **string** | V2 runtime status: PENDING, PROVISIONING, READY, FAILED | [optional] [default to undefined]
+**runtimeError** | **string** | Last V2 runtime error message when FAILED | [optional] [default to undefined]
+**runtimeGeneration** | **number** | Monotonic generation for async runtime jobs | [optional] [default to undefined]
 
 ## Example
 
@@ -75,7 +84,9 @@ const instance: AppDTO = {
     rotateWebhook,
     updateWebhook,
     settingsSchema,
+    externalOAuthProviders,
     webhookRateLimitPerMinute,
+    jobRateLimitPerMinute,
     billFailedWebhookRequests,
     appPublish,
     hasApp,
@@ -95,6 +106,13 @@ const instance: AppDTO = {
     installUrl,
     brandmark,
     description,
+    platformVersion,
+    runtime,
+    runtimeBaseUrl,
+    runtimeRevision,
+    runtimeStatus,
+    runtimeError,
+    runtimeGeneration,
 };
 ```
 

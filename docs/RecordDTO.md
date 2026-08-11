@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 **deletedAt** | **number** | Unix timestamp when the entity was deleted (null if not deleted) | [optional] [default to undefined]
 **deletedBy** | [**ModelRecord**](ModelRecord.md) | Identifier of the user who deleted the entity | [optional] [default to undefined]
 **index** | **number** | Index number for ordering entities | [optional] [default to undefined]
-**properties** | **{ [key: string]: any | null; }** | A map of property names to their corresponding values for this record. | [optional] [default to undefined]
+**properties** | **{ [key: string]: any | null; }** | Property values as a name→value map, or a LEGACY array of {name,type,value} objects (same shape as LEGACY GET responses). | [optional] [default to undefined]
 **user** | [**PublicUserDTO**](PublicUserDTO.md) | The user of the record if the user trait is enabled. | [optional] [default to undefined]
 **relations** | [**Array&lt;RecordRelationRequestDTO&gt;**](RecordRelationRequestDTO.md) | Relations to create or merge after the record is saved. Each item links to an existing record (uuid) or creates a nested record first. | [optional] [default to undefined]
 

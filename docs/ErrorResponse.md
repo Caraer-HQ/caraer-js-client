@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **stackTrace** | **string** |  | [optional] [default to undefined]
 **roles** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **scopes** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**requestId** | **string** | Request correlation ID for support and log tracing. | [optional] [default to undefined]
 
 ## Example
 
@@ -25,6 +26,7 @@ const instance: ErrorResponse = {
     stackTrace,
     roles,
     scopes,
+    requestId,
 };
 ```
 

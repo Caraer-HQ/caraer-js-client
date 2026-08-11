@@ -1,20 +1,20 @@
-# MorphRecordRequest
+# DevicePollRequest
 
-Request to morph a record
+Poll a device-code login session
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**objects** | [**Set&lt;CaraerObjectDTO&gt;**](CaraerObjectDTO.md) | The objects to morph the record into | [optional] [default to undefined]
+**deviceCode** | **string** | Device code returned by /auth/device/start | [default to undefined]
 
 ## Example
 
 ```typescript
-import { MorphRecordRequest } from '@caraer/client';
+import { DevicePollRequest } from '@caraer/client';
 
-const instance: MorphRecordRequest = {
-    objects,
+const instance: DevicePollRequest = {
+    deviceCode,
 };
 ```
 

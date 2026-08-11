@@ -15,7 +15,9 @@ Name | Type | Description | Notes
 **defaultValue** | **any** |  | [optional] [default to undefined]
 **hidden** | **boolean** |  | [optional] [default to undefined]
 **value** | **any** |  | [optional] [default to undefined]
+**hasValue** | **boolean** |  | [optional] [default to undefined]
 **mappingValue** | [**AppSettingFieldMappingStructure**](AppSettingFieldMappingStructure.md) |  | [optional] [default to undefined]
+**valueScope** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -33,7 +35,9 @@ const instance: AppSettingFieldSchema = {
     defaultValue,
     hidden,
     value,
+    hasValue,
     mappingValue,
+    valueScope,
 };
 ```
 

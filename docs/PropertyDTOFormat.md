@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **filters** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **rules** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **linkedProperty** | [**PropertyDTO**](PropertyDTO.md) |  | [optional] [default to undefined]
+**checkboxProperty** | [**PropertyDTO**](PropertyDTO.md) |  | [optional] [default to undefined]
 
 ## Example
 
@@ -29,6 +30,7 @@ const instance: PropertyDTOFormat = {
     filters,
     rules,
     linkedProperty,
+    checkboxProperty,
 };
 ```
 

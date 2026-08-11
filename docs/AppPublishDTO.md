@@ -21,7 +21,7 @@ Name | Type | Description | Notes
 **reviewedAt** | **number** | Timestamp when review was completed | [optional] [default to undefined]
 **publishedAt** | **number** | Timestamp when app went live in marketplace | [optional] [default to undefined]
 **feedback** | **string** | Feedback shown to developer (e.g. rejection reason) | [optional] [default to undefined]
-**reviewerNotes** | **string** | Internal reviewer notes (admin only, not exposed to developer) | [optional] [default to undefined]
+**reviewerNotes** | **string** | Internal reviewer notes. Only returned for SUPER_ADMIN callers; never exposed to app creators. | [optional] [default to undefined]
 
 ## Example
 

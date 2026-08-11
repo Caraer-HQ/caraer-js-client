@@ -8,10 +8,13 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**getCompany**](#getcompany) | **GET** /api/v2/company/ | Get current company|
 |[**getCompanyByUuid**](#getcompanybyuuid) | **GET** /api/v2/company/{uuid} | Get company by UUID|
 |[**getDigitalIdentity**](#getdigitalidentity) | **GET** /api/v2/company/digital-identity | Get digital identity|
+|[**getSuiteDashboard**](#getsuitedashboard) | **GET** /api/v2/company/suite-dashboards/{suiteName} | Get suite dashboard|
+|[**getSuiteDashboards**](#getsuitedashboards) | **GET** /api/v2/company/suite-dashboards | List suite dashboards|
 |[**getWebsiteSettings**](#getwebsitesettings) | **GET** /api/v2/company/website-settings | Get website settings|
 |[**resumeWebhookDispatch**](#resumewebhookdispatch) | **POST** /api/v2/company/{companyUuid}/webhooks/resume | Resume webhook dispatch|
 |[**updateCompany**](#updatecompany) | **PUT** /api/v2/company/{uuid} | Update company|
 |[**updateDigitalIdentity**](#updatedigitalidentity) | **PUT** /api/v2/company/digital-identity | Update digital identity|
+|[**updateSuiteDashboard**](#updatesuitedashboard) | **PUT** /api/v2/company/suite-dashboards/{suiteName} | Update suite dashboard|
 |[**updateWebsiteSettings**](#updatewebsitesettings) | **PUT** /api/v2/company/website-settings | Update website settings|
 |[**uploadFont**](#uploadfont) | **POST** /api/v2/company/uploadFont | Upload a font file|
 
@@ -213,6 +216,103 @@ This endpoint does not have any parameters.
 |**200** | Digital identity returned successfully |  -  |
 |**401** | Unauthorized |  -  |
 |**403** | Insufficient scope |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getSuiteDashboard**
+> ShowResponse getSuiteDashboard()
+
+Returns the home analytics dashboard for a suite. Empty dashboard when none is saved.
+
+### Example
+
+```typescript
+import {
+    CompanyApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CompanyApi(configuration);
+
+let suiteName: string; // (default to undefined)
+
+const { status, data } = await apiInstance.getSuiteDashboard(
+    suiteName
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **suiteName** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Suite dashboard returned |  -  |
+|**401** | Unauthorized |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getSuiteDashboards**
+> ShowResponse getSuiteDashboards()
+
+Returns all home analytics dashboards keyed by suite name for the selected company.
+
+### Example
+
+```typescript
+import {
+    CompanyApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CompanyApi(configuration);
+
+const { status, data } = await apiInstance.getSuiteDashboards();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**ShowResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Suite dashboards returned |  -  |
+|**401** | Unauthorized |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -425,6 +525,63 @@ const { status, data } = await apiInstance.updateDigitalIdentity(
 |**401** | Unauthorized |  -  |
 |**403** | Insufficient scope |  -  |
 |**404** | Digital identity not found for company |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **updateSuiteDashboard**
+> UpdateResponse updateSuiteDashboard(analyticsDashboardConfig)
+
+Creates or replaces the home analytics dashboard for a suite.
+
+### Example
+
+```typescript
+import {
+    CompanyApi,
+    Configuration,
+    AnalyticsDashboardConfig
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CompanyApi(configuration);
+
+let suiteName: string; // (default to undefined)
+let analyticsDashboardConfig: AnalyticsDashboardConfig; //
+
+const { status, data } = await apiInstance.updateSuiteDashboard(
+    suiteName,
+    analyticsDashboardConfig
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **analyticsDashboardConfig** | **AnalyticsDashboardConfig**|  | |
+| **suiteName** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**UpdateResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Suite dashboard saved |  -  |
+|**400** | Invalid dashboard config |  -  |
+|**401** | Unauthorized |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

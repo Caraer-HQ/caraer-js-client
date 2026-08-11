@@ -18,6 +18,7 @@ Name | Type | Description | Notes
 **index** | **number** | Index number for ordering entities | [optional] [default to undefined]
 **runtime** | **string** | Runtime identifier (e.g. javascript, python) | [optional] [default to undefined]
 **code** | **string** | Function source code | [optional] [default to undefined]
+**sourceFiles** | **{ [key: string]: string; }** | Additional source files relative to the function folder (e.g. shared.js) | [optional] [default to undefined]
 **description** | **string** | Optional description of the serverless function | [optional] [default to undefined]
 
 ## Example
@@ -38,6 +39,7 @@ const instance: ServerlessFunctionDTO = {
     index,
     runtime,
     code,
+    sourceFiles,
     description,
 };
 ```

@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **object** | **string** | The name of the object to which this pagination item belongs. | [optional] [default to undefined]
 **relation** | **string** | The relationship between objects. | [optional] [default to undefined]
+**relationDirection** | **string** | Optional relation direction: outgoing (related→main), incoming (main→related), or omit for undirected. | [optional] [default to undefined]
 **property** | **string** | The name of the property within the object. | [optional] [default to undefined]
 **direction** | **string** | The direction for sorting. Can be ASC (ascending) or DESC (descending). | [optional] [default to undefined]
 
@@ -19,6 +20,7 @@ import { SortItem } from '@caraer/client';
 const instance: SortItem = {
     object,
     relation,
+    relationDirection,
     property,
     direction,
 };

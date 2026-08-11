@@ -9,19 +9,23 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**createPublicApp**](#createpublicapp) | **POST** /api/v2/apps/public | Create a public app|
 |[**deleteAppWebhook**](#deleteappwebhook) | **DELETE** /api/v2/apps/{appUuid}/webhooks/{webhookUuid} | Delete a webhook for an app|
 |[**getApp**](#getapp) | **GET** /api/v2/apps/{uuid} | Retrieve application details by UUID|
+|[**getAppWebhook**](#getappwebhook) | **GET** /api/v2/apps/{appUuid}/webhooks/{webhookUuid} | Get a webhook for an app|
 |[**getAppWebhooks**](#getappwebhooks) | **POST** /api/v2/apps/{appUuid}/webhooks/index | Retrieve a paginated list of webhooks for an app|
 |[**getApps**](#getapps) | **POST** /api/v2/apps/index | Retrieve a paginated list of applications|
 |[**getCompanyInformation**](#getcompanyinformation) | **GET** /api/v2/apps/{appUuid}/me | Get current user\&#39;s company information|
 |[**getMyCreatedApps**](#getmycreatedapps) | **POST** /api/v2/apps/my/index | Retrieve apps created by the logged-in user\&#39;s selected company|
 |[**getPublicApp**](#getpublicapp) | **GET** /api/v2/apps/public/{uuid} | Get a public app (creator view)|
+|[**getRuntimeLogs**](#getruntimelogs) | **GET** /api/v2/apps/{appUuid}/runtime/logs | Get app runtime logs|
 |[**getWebhookEvents**](#getwebhookevents) | **GET** /api/v2/apps/{appUuid}/webhooks/events | Get available webhook record events|
 |[**getWebhookFormats**](#getwebhookformats) | **GET** /api/v2/apps/{appUuid}/webhooks/formats | Get available webhook formats|
 |[**getWebhookPropertyTopics**](#getwebhookpropertytopics) | **GET** /api/v2/apps/{appUuid}/webhooks/property-topics | Get webhook property topic options|
 |[**installApp**](#installapp) | **POST** /api/v2/apps/{uuid}/install | Install an application|
 |[**listAppCategories**](#listappcategories) | **GET** /api/v2/apps/categories | List predefined marketplace app categories|
 |[**loadSettingOptions**](#loadsettingoptions) | **POST** /api/v2/apps/{uuid}/settings-schema/options | Load dynamic options for a setting select field|
+|[**migrateToV2**](#migratetov2) | **POST** /api/v2/apps/{uuid}/migrate-v2 | Migrate an app from platform V1 to V2|
 |[**reviewPublicApp**](#reviewpublicapp) | **POST** /api/v2/apps/public/{uuid}/review | Review a public app|
 |[**rotateApp**](#rotateapp) | **POST** /api/v2/apps/{uuid}/rotate | Rotate application configurations|
+|[**streamRuntimeLogs**](#streamruntimelogs) | **GET** /api/v2/apps/{appUuid}/runtime/logs/stream | Stream app runtime logs (SSE)|
 |[**submitPublicApp**](#submitpublicapp) | **POST** /api/v2/apps/public/{uuid}/submit | Submit a public app for review|
 |[**testAppWebhook**](#testappwebhook) | **POST** /api/v2/apps/{appUuid}/webhooks/test/{webhookUuid}/{recordUuid}/{eventType} | Test a webhook for an app|
 |[**testAppWebhookAuto**](#testappwebhookauto) | **POST** /api/v2/apps/{appUuid}/webhooks/test/{webhookUuid} | Test a webhook for an app (auto-resolve)|
@@ -307,6 +311,62 @@ const { status, data } = await apiInstance.getApp(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **getAppWebhook**
+> ShowResponse getAppWebhook()
+
+Fetches a single webhook that belongs to the specified app.
+
+### Example
+
+```typescript
+import {
+    ApplicationsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new ApplicationsApi(configuration);
+
+let appUuid: string; //UUID of the app that owns the webhook (default to undefined)
+let webhookUuid: string; //UUID of the webhook to fetch (default to undefined)
+
+const { status, data } = await apiInstance.getAppWebhook(
+    appUuid,
+    webhookUuid
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **appUuid** | [**string**] | UUID of the app that owns the webhook | defaults to undefined|
+| **webhookUuid** | [**string**] | UUID of the webhook to fetch | defaults to undefined|
+
+
+### Return type
+
+**ShowResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Webhook retrieved successfully |  -  |
+|**404** | Webhook not found for the specified app or company |  -  |
+|**500** | Internal server error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **getAppWebhooks**
 > PaginationResponse getAppWebhooks(body)
 
@@ -581,6 +641,64 @@ const { status, data } = await apiInstance.getPublicApp(
 |**200** | Successfully retrieved the public app |  -  |
 |**404** | Public app not found |  -  |
 |**500** | Internal server error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getRuntimeLogs**
+> SuccessResponse getRuntimeLogs()
+
+Queries Cloud Logging for the shared V2 app container (app-{uuid}) without filtering to a single function.
+
+### Example
+
+```typescript
+import {
+    ApplicationsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new ApplicationsApi(configuration);
+
+let appUuid: string; //UUID of the app (default to undefined)
+let since: string; //Lookback window, e.g. 15m, 1h, 24h (optional) (default to '1h')
+let limit: number; //Maximum number of log entries to return (optional) (default to 100)
+
+const { status, data } = await apiInstance.getRuntimeLogs(
+    appUuid,
+    since,
+    limit
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **appUuid** | [**string**] | UUID of the app | defaults to undefined|
+| **since** | [**string**] | Lookback window, e.g. 15m, 1h, 24h | (optional) defaults to '1h'|
+| **limit** | [**number**] | Maximum number of log entries to return | (optional) defaults to 100|
+
+
+### Return type
+
+**SuccessResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successfully retrieved logs (may be empty if logging is unavailable) |  -  |
+|**404** | App not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -900,6 +1018,64 @@ const { status, data } = await apiInstance.loadSettingOptions(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **migrateToV2**
+> SuccessResponse migrateToV2()
+
+Opt-in in-place migration to the shared container runtime. Validates a single runtime, sets platformVersion=2, schedules an async rebuild, and keeps invoking via legacy gcpReference until runtimeStatus is READY.
+
+### Example
+
+```typescript
+import {
+    ApplicationsApi,
+    Configuration,
+    MigrateAppToV2Request
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new ApplicationsApi(configuration);
+
+let uuid: string; //UUID of the app to migrate (default to undefined)
+let migrateAppToV2Request: MigrateAppToV2Request; // (optional)
+
+const { status, data } = await apiInstance.migrateToV2(
+    uuid,
+    migrateAppToV2Request
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **migrateAppToV2Request** | **MigrateAppToV2Request**|  | |
+| **uuid** | [**string**] | UUID of the app to migrate | defaults to undefined|
+
+
+### Return type
+
+**SuccessResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Migration started or already in progress |  -  |
+|**400** | Mixed/missing runtimes or invalid request |  -  |
+|**403** | Not allowed to migrate this app |  -  |
+|**404** | App not found |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **reviewPublicApp**
 > ShowResponse reviewPublicApp(reviewRequest)
 
@@ -1007,6 +1183,58 @@ const { status, data } = await apiInstance.rotateApp(
 |**200** | Successfully rotated application configurations |  -  |
 |**404** | Application not found |  -  |
 |**500** | Internal server error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **streamRuntimeLogs**
+> SseEmitter streamRuntimeLogs()
+
+Server-Sent Events stream of Cloud Logging entries for the shared V2 app container. Polls every ~2.5s and stops after 5 minutes or client disconnect.
+
+### Example
+
+```typescript
+import {
+    ApplicationsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new ApplicationsApi(configuration);
+
+let appUuid: string; //UUID of the app (default to undefined)
+
+const { status, data } = await apiInstance.streamRuntimeLogs(
+    appUuid
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **appUuid** | [**string**] | UUID of the app | defaults to undefined|
+
+
+### Return type
+
+**SseEmitter**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/event-stream
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | SSE stream of log entries |  -  |
+|**404** | App not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

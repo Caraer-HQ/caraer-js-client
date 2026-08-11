@@ -10,6 +10,8 @@ Name | Type | Description | Notes
 **description** | **string** | Optional description text for the app. | [optional] [default to undefined]
 **authMethod** | **string** | Authentication method (API_KEY default, OAUTH2 for OAuth 2.0) | [optional] [default to undefined]
 **oauthRedirectUris** | **Array&lt;string&gt;** | Registered OAuth redirect URIs (required when authMethod is OAUTH2) | [optional] [default to undefined]
+**platformVersion** | **number** | Ignored; new private apps are always platform version 2 (async container runtime). | [optional] [default to undefined]
+**runtime** | **string** | Serverless runtime for the app: nodejs22 or python312. Defaults to nodejs22. | [optional] [default to undefined]
 
 ## Example
 
@@ -21,6 +23,8 @@ const instance: CreatePrivateAppRequest = {
     description,
     authMethod,
     oauthRedirectUris,
+    platformVersion,
+    runtime,
 };
 ```
 
