@@ -2957,9 +2957,9 @@ export interface ModelRecord {
     'deleted'?: boolean;
     'complete'?: boolean;
     'uuid': string;
-    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
+    'user'?: PublicUserDTO;
 }
 export interface MultiLine extends PropertyFormat {
 }
@@ -3961,7 +3961,7 @@ export interface RecordRelationRequestDTO {
      */
     'edgeProperties'?: { [key: string]: any | null; };
     /**
-     * Nested record to create before linking, or update first when record.uuid is provided
+     * Nested record to create or update (by uuid or unique properties) before linking
      */
     'record'?: RecordDTO;
     /**
