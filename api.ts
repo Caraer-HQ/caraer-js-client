@@ -1886,6 +1886,8 @@ export interface CustomFontDTO {
     'familyName'?: string;
     'variants'?: Array<FontVariantDTO>;
 }
+export interface DateRange extends PropertyFormat {
+}
 /**
  * Response class representing the result of a delete operation.
  */
@@ -3839,7 +3841,7 @@ export interface PropertyDTO {
  * @type PropertyDTOFormat
  * Format configuration for the property\'s display and validation
  */
-export type PropertyDTOFormat = Currency | CurrencyRange | Duration | Email | LinkedProperty | ModelDate | ModelFile | MultiLine | MultiSelect | Number | NumberRange | Phone | Progress | Recurrence | SingleCheckbox | SingleLine | SingleSelect | Structure | Tag | Url;
+export type PropertyDTOFormat = Currency | CurrencyRange | DateRange | Duration | Email | LinkedProperty | ModelDate | ModelFile | MultiLine | MultiSelect | Number | NumberRange | Phone | Progress | Recurrence | SingleCheckbox | SingleLine | SingleSelect | Structure | Tag | Url;
 
 export interface PropertyFormat {
     'label'?: string;
@@ -6176,6 +6178,8 @@ export interface WebsiteSettingsDTO {
     'headerTertiaryButtonIconColor'?: string;
     'cookieText'?: string;
     'cookieAgreementText'?: string;
+    'cookieBannerEnabled'?: boolean;
+    'cookieBannerModuleUuid'?: string;
     'cssStyles'?: string;
     'headJsScript'?: string;
     'bodyJsScript'?: string;
@@ -24760,50 +24764,6 @@ export const WebpagesApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Returns the PageContent tree for the module configured as custom footer when enabled. Requires X-Caraer-Subdomain; only the UUID configured in website settings is accessible.
-         * @summary Fetch public custom footer module
-         * @param {string} xCaraerSubdomain 
-         * @param {string} moduleUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getPublicCustomFooterModule: async (xCaraerSubdomain: string, moduleUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xCaraerSubdomain' is not null or undefined
-            assertParamExists('getPublicCustomFooterModule', 'xCaraerSubdomain', xCaraerSubdomain)
-            // verify required parameter 'moduleUuid' is not null or undefined
-            assertParamExists('getPublicCustomFooterModule', 'moduleUuid', moduleUuid)
-            const localVarPath = `/api/v2/webpages/public/module/{moduleUuid}`
-                .replace('{moduleUuid}', encodeURIComponent(String(moduleUuid)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            if (xCaraerSubdomain != null) {
-                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
-            }
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Retrieves a list of previews for a public webpage identified by its UUID. Returns a PaginationResponse containing PreviewDTO objects.
          * @summary Get previews for a public webpage
          * @param {string} xCaraerSubdomain 
@@ -25067,6 +25027,50 @@ export const WebpagesApiAxiosParamCreator = function (configuration?: Configurat
             }
             if (xCaraerPrimaryEnvironment != null) {
                 localVarHeaderParameter['X-Caraer-Primary-Environment'] = String(xCaraerPrimaryEnvironment);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns the PageContent tree for a module exposed by website settings, such as the custom footer or the cookie banner. Requires X-Caraer-Subdomain; only the UUIDs configured in website settings are accessible.
+         * @summary Fetch public website module
+         * @param {string} xCaraerSubdomain 
+         * @param {string} moduleUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPublicWebsiteModule: async (xCaraerSubdomain: string, moduleUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('getPublicWebsiteModule', 'xCaraerSubdomain', xCaraerSubdomain)
+            // verify required parameter 'moduleUuid' is not null or undefined
+            assertParamExists('getPublicWebsiteModule', 'moduleUuid', moduleUuid)
+            const localVarPath = `/api/v2/webpages/public/module/{moduleUuid}`
+                .replace('{moduleUuid}', encodeURIComponent(String(moduleUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
             }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -25962,20 +25966,6 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Returns the PageContent tree for the module configured as custom footer when enabled. Requires X-Caraer-Subdomain; only the UUID configured in website settings is accessible.
-         * @summary Fetch public custom footer module
-         * @param {string} xCaraerSubdomain 
-         * @param {string} moduleUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getPublicCustomFooterModule(xCaraerSubdomain: string, moduleUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPublicCustomFooterModule(xCaraerSubdomain, moduleUuid, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WebpagesApi.getPublicCustomFooterModule']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
          * Retrieves a list of previews for a public webpage identified by its UUID. Returns a PaginationResponse containing PreviewDTO objects.
          * @summary Get previews for a public webpage
          * @param {string} xCaraerSubdomain 
@@ -26052,6 +26042,20 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPublicWebpageProtection(xCaraerSubdomain, uuid, xCaraerEnvironment, xCaraerPrimaryEnvironment, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.getPublicWebpageProtection']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Returns the PageContent tree for a module exposed by website settings, such as the custom footer or the cookie banner. Requires X-Caraer-Subdomain; only the UUIDs configured in website settings are accessible.
+         * @summary Fetch public website module
+         * @param {string} xCaraerSubdomain 
+         * @param {string} moduleUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPublicWebsiteModule(xCaraerSubdomain: string, moduleUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPublicWebsiteModule(xCaraerSubdomain, moduleUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebpagesApi.getPublicWebsiteModule']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -26436,17 +26440,6 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.getMenus(xCaraerSubdomain, xCaraerEnvironment, xCaraerPrimaryEnvironment, options).then((request) => request(axios, basePath));
         },
         /**
-         * Returns the PageContent tree for the module configured as custom footer when enabled. Requires X-Caraer-Subdomain; only the UUID configured in website settings is accessible.
-         * @summary Fetch public custom footer module
-         * @param {string} xCaraerSubdomain 
-         * @param {string} moduleUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getPublicCustomFooterModule(xCaraerSubdomain: string, moduleUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
-            return localVarFp.getPublicCustomFooterModule(xCaraerSubdomain, moduleUuid, options).then((request) => request(axios, basePath));
-        },
-        /**
          * Retrieves a list of previews for a public webpage identified by its UUID. Returns a PaginationResponse containing PreviewDTO objects.
          * @summary Get previews for a public webpage
          * @param {string} xCaraerSubdomain 
@@ -26512,6 +26505,17 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          */
         getPublicWebpageProtection(xCaraerSubdomain: string, uuid: string, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseWebpageProtectionInfoDTO> {
             return localVarFp.getPublicWebpageProtection(xCaraerSubdomain, uuid, xCaraerEnvironment, xCaraerPrimaryEnvironment, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Returns the PageContent tree for a module exposed by website settings, such as the custom footer or the cookie banner. Requires X-Caraer-Subdomain; only the UUIDs configured in website settings are accessible.
+         * @summary Fetch public website module
+         * @param {string} xCaraerSubdomain 
+         * @param {string} moduleUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPublicWebsiteModule(xCaraerSubdomain: string, moduleUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.getPublicWebsiteModule(xCaraerSubdomain, moduleUuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves the template webpage for the given object name by querying the TemplateWebpage associated with it. Returns a ShowResponse containing TemplateWebpageDTO data.
@@ -26862,18 +26866,6 @@ export class WebpagesApi extends BaseAPI {
     }
 
     /**
-     * Returns the PageContent tree for the module configured as custom footer when enabled. Requires X-Caraer-Subdomain; only the UUID configured in website settings is accessible.
-     * @summary Fetch public custom footer module
-     * @param {string} xCaraerSubdomain 
-     * @param {string} moduleUuid 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public getPublicCustomFooterModule(xCaraerSubdomain: string, moduleUuid: string, options?: RawAxiosRequestConfig) {
-        return WebpagesApiFp(this.configuration).getPublicCustomFooterModule(xCaraerSubdomain, moduleUuid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * Retrieves a list of previews for a public webpage identified by its UUID. Returns a PaginationResponse containing PreviewDTO objects.
      * @summary Get previews for a public webpage
      * @param {string} xCaraerSubdomain 
@@ -26942,6 +26934,18 @@ export class WebpagesApi extends BaseAPI {
      */
     public getPublicWebpageProtection(xCaraerSubdomain: string, uuid: string, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, options?: RawAxiosRequestConfig) {
         return WebpagesApiFp(this.configuration).getPublicWebpageProtection(xCaraerSubdomain, uuid, xCaraerEnvironment, xCaraerPrimaryEnvironment, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns the PageContent tree for a module exposed by website settings, such as the custom footer or the cookie banner. Requires X-Caraer-Subdomain; only the UUIDs configured in website settings are accessible.
+     * @summary Fetch public website module
+     * @param {string} xCaraerSubdomain 
+     * @param {string} moduleUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getPublicWebsiteModule(xCaraerSubdomain: string, moduleUuid: string, options?: RawAxiosRequestConfig) {
+        return WebpagesApiFp(this.configuration).getPublicWebsiteModule(xCaraerSubdomain, moduleUuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -93,6 +93,8 @@ Name | Type | Description | Notes
 **headerTertiaryButtonIconColor** | **string** |  | [optional] [default to undefined]
 **cookieText** | **string** |  | [optional] [default to undefined]
 **cookieAgreementText** | **string** |  | [optional] [default to undefined]
+**cookieBannerEnabled** | **boolean** |  | [optional] [default to undefined]
+**cookieBannerModuleUuid** | **string** |  | [optional] [default to undefined]
 **cssStyles** | **string** |  | [optional] [default to undefined]
 **headJsScript** | **string** |  | [optional] [default to undefined]
 **bodyJsScript** | **string** |  | [optional] [default to undefined]
@@ -251,6 +253,8 @@ const instance: WebsiteSettingsDTO = {
     headerTertiaryButtonIconColor,
     cookieText,
     cookieAgreementText,
+    cookieBannerEnabled,
+    cookieBannerModuleUuid,
     cssStyles,
     headJsScript,
     bodyJsScript,

@@ -85,6 +85,7 @@ docs/CurrencyRange.md
 docs/CursorLocation.md
 docs/CustomFontDTO.md
 docs/Date.md
+docs/DateRange.md
 docs/DeleteResponse.md
 docs/DeleteResponseString.md
 docs/DeleteResponseVoid.md

@@ -18,11 +18,11 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**getCompanySettings**](#getcompanysettings) | **GET** /api/v2/webpages/public/companySettings | Fetch public company settings|
 |[**getEnvironments**](#getenvironments) | **GET** /api/v2/webpages/environments | Get all environments|
 |[**getMenus**](#getmenus) | **GET** /api/v2/webpages/public/getMenus | Fetch public web menus|
-|[**getPublicCustomFooterModule**](#getpubliccustomfootermodule) | **GET** /api/v2/webpages/public/module/{moduleUuid} | Fetch public custom footer module|
 |[**getPublicPreviews**](#getpublicpreviews) | **POST** /api/v2/webpages/public/previews/{pageUuid}/{componentUuid}/{layout} | Get previews for a public webpage|
 |[**getPublicWebpage**](#getpublicwebpage) | **GET** /api/v2/webpages/public/{rootSlug}/{slug} | Get a public webpage by slug|
 |[**getPublicWebpageByUuid**](#getpublicwebpagebyuuid) | **GET** /api/v2/webpages/public/uuid/{uuid} | Get a public webpage by UUID|
 |[**getPublicWebpageProtection**](#getpublicwebpageprotection) | **GET** /api/v2/webpages/public/uuid/{uuid}/protection | Get webpage protection metadata|
+|[**getPublicWebsiteModule**](#getpublicwebsitemodule) | **GET** /api/v2/webpages/public/module/{moduleUuid} | Fetch public website module|
 |[**getTemplateWebpage**](#gettemplatewebpage) | **GET** /api/v2/webpages/template/{objectName}/{environment} | Get template webpage|
 |[**getTemplateWebpageEditingStatus**](#gettemplatewebpageeditingstatus) | **GET** /api/v2/webpages/template/{objectName}/{environment}/editing-status | Check if a template webpage is being edited|
 |[**getWebpage**](#getwebpage) | **GET** /api/v2/webpages/{uuid} | Get webpage details|
@@ -819,61 +819,6 @@ const { status, data } = await apiInstance.getMenus(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getPublicCustomFooterModule**
-> ShowResponse getPublicCustomFooterModule()
-
-Returns the PageContent tree for the module configured as custom footer when enabled. Requires X-Caraer-Subdomain; only the UUID configured in website settings is accessible.
-
-### Example
-
-```typescript
-import {
-    WebpagesApi,
-    Configuration
-} from '@caraer/client';
-
-const configuration = new Configuration();
-const apiInstance = new WebpagesApi(configuration);
-
-let xCaraerSubdomain: string; // (default to undefined)
-let moduleUuid: string; // (default to undefined)
-
-const { status, data } = await apiInstance.getPublicCustomFooterModule(
-    xCaraerSubdomain,
-    moduleUuid
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **xCaraerSubdomain** | [**string**] |  | defaults to undefined|
-| **moduleUuid** | [**string**] |  | defaults to undefined|
-
-
-### Return type
-
-**ShowResponse**
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | Module retrieved successfully |  -  |
-|**404** | Module not found or not exposed |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **getPublicPreviews**
 > PaginationResponsePreviewDTO getPublicPreviews()
 
@@ -1158,6 +1103,61 @@ const { status, data } = await apiInstance.getPublicWebpageProtection(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getPublicWebsiteModule**
+> ShowResponse getPublicWebsiteModule()
+
+Returns the PageContent tree for a module exposed by website settings, such as the custom footer or the cookie banner. Requires X-Caraer-Subdomain; only the UUIDs configured in website settings are accessible.
+
+### Example
+
+```typescript
+import {
+    WebpagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new WebpagesApi(configuration);
+
+let xCaraerSubdomain: string; // (default to undefined)
+let moduleUuid: string; // (default to undefined)
+
+const { status, data } = await apiInstance.getPublicWebsiteModule(
+    xCaraerSubdomain,
+    moduleUuid
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **xCaraerSubdomain** | [**string**] |  | defaults to undefined|
+| **moduleUuid** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Module retrieved successfully |  -  |
+|**404** | Module not found or not exposed |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
