@@ -10,6 +10,8 @@ Name | Type | Description | Notes
 **query** | **string** | Optional search query typed by the installer. | [optional] [default to undefined]
 **settingsSchema** | [**Array&lt;AppSettingFieldSchema&gt;**](AppSettingFieldSchema.md) | Current draft settings schema with values from the installer UI. | [default to undefined]
 **appBarUuid** | **string** | When loading options for an app bar field, the app bar UUID. | [optional] [default to undefined]
+**recordUuid** | **string** | Record in context when the options field is on an action dialog. | [optional] [default to undefined]
+**object** | **string** | Object name in context when the options field is on an action dialog. | [optional] [default to undefined]
 
 ## Example
 
@@ -21,6 +23,8 @@ const instance: LoadAppSettingOptionsRequest = {
     query,
     settingsSchema,
     appBarUuid,
+    recordUuid,
+    object,
 };
 ```
 

@@ -2227,8 +2227,8 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
     'ymetric'?: string;
+    'xproperty'?: string;
     'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
@@ -2840,6 +2840,14 @@ export interface LoadAppSettingOptionsRequest {
      * When loading options for an app bar field, the app bar UUID.
      */
     'appBarUuid'?: string;
+    /**
+     * Record in context when the options field is on an action dialog.
+     */
+    'recordUuid'?: string;
+    /**
+     * Object name in context when the options field is on an action dialog.
+     */
+    'object'?: string;
 }
 export interface LoginRequest {
     'email': string;
