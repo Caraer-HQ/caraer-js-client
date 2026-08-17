@@ -1017,6 +1017,11 @@ export interface AppScheduleDTO {
     'payloadTemplate'?: string;
     'serverlessFunction'?: ServerlessFunctionRefDTO;
 }
+export interface AppSettingCondition {
+    'field'?: string;
+    'operator'?: string;
+    'value'?: any;
+}
 export interface AppSettingFieldMappingStructure {
     'objectName'?: string;
     'items'?: Array<AppSettingFieldMappingStructureItem>;
@@ -1040,6 +1045,7 @@ export interface AppSettingFieldSchema {
     'optionsSource'?: AppSettingOptionsSource;
     'defaultValue'?: any;
     'hidden'?: boolean;
+    'visibleWhen'?: Array<AppSettingCondition>;
     'value'?: any;
     'hasValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
@@ -2221,8 +2227,8 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
     'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
@@ -2959,9 +2965,9 @@ export interface ModelRecord {
     'deleted'?: boolean;
     'complete'?: boolean;
     'uuid': string;
-    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
+    'user'?: PublicUserDTO;
 }
 export interface MultiLine extends PropertyFormat {
 }
@@ -4474,8 +4480,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {

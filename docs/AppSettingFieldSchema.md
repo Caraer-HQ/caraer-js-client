@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **optionsSource** | [**AppSettingOptionsSource**](AppSettingOptionsSource.md) |  | [optional] [default to undefined]
 **defaultValue** | **any** |  | [optional] [default to undefined]
 **hidden** | **boolean** |  | [optional] [default to undefined]
+**visibleWhen** | [**Array&lt;AppSettingCondition&gt;**](AppSettingCondition.md) |  | [optional] [default to undefined]
 **value** | **any** |  | [optional] [default to undefined]
 **hasValue** | **boolean** |  | [optional] [default to undefined]
 **mappingValue** | [**AppSettingFieldMappingStructure**](AppSettingFieldMappingStructure.md) |  | [optional] [default to undefined]
@@ -34,6 +35,7 @@ const instance: AppSettingFieldSchema = {
     optionsSource,
     defaultValue,
     hidden,
+    visibleWhen,
     value,
     hasValue,
     mappingValue,

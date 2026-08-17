@@ -41,6 +41,7 @@ docs/AppPricingDTO.md
 docs/AppPublishDTO.md
 docs/AppRequest.md
 docs/AppScheduleDTO.md
+docs/AppSettingCondition.md
 docs/AppSettingFieldMappingStructure.md
 docs/AppSettingFieldMappingStructureItem.md
 docs/AppSettingFieldSchema.md
