@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **url** | **string** | The URL of the webhook where requests will be sent. | [optional] [default to undefined]
 **serverlessFunction** | [**ServerlessFunctionDTO**](ServerlessFunctionDTO.md) | UUID of the serverless function to invoke when the webhook is triggered (must belong to the same app). | [optional] [default to undefined]
 **deliveryMode** | **string** | Delivery mode for this webhook: HTTP (use url) or SERVERLESS (use serverlessFunctionUuid). If omitted, legacy behavior applies based on presence of url/serverlessFunctionUuid. | [optional] [default to undefined]
+**waitUntilComplete** | **boolean** | When true, install or settings save waits for this lifecycle hook to finish and returns the settings it wrote. | [optional] [default to undefined]
 **secret** | **string** | The secret used for webhook validation. | [optional] [default to undefined]
 **topic** | **string** | The topic for which the webhook is subscribed. | [optional] [default to undefined]
 **description** | **string** | Optional human-readable description for this webhook | [optional] [default to undefined]
@@ -46,6 +47,7 @@ const instance: SubscribeWebhookDTO = {
     url,
     serverlessFunction,
     deliveryMode,
+    waitUntilComplete,
     secret,
     topic,
     description,

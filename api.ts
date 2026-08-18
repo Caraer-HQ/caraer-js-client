@@ -2982,9 +2982,9 @@ export interface ModelRecord {
     'deleted'?: boolean;
     'complete'?: boolean;
     'uuid': string;
-    'user'?: PublicUserDTO;
-    'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
+    'properties'?: Array<FilledProperty>;
+    'user'?: PublicUserDTO;
 }
 export interface MultiLine extends PropertyFormat {
 }
@@ -5110,6 +5110,10 @@ export interface SubscribeWebhookDTO {
      * Delivery mode for this webhook: HTTP (use url) or SERVERLESS (use serverlessFunctionUuid). If omitted, legacy behavior applies based on presence of url/serverlessFunctionUuid.
      */
     'deliveryMode'?: string;
+    /**
+     * When true, install or settings save waits for this lifecycle hook to finish and returns the settings it wrote.
+     */
+    'waitUntilComplete'?: boolean;
     /**
      * The secret used for webhook validation.
      */
