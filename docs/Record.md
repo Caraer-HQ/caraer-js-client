@@ -14,12 +14,12 @@ Name | Type | Description | Notes
 **updatedByUuid** | **string** |  | [optional] [default to undefined]
 **deletedByUuid** | **string** |  | [optional] [default to undefined]
 **index** | **number** |  | [optional] [default to undefined]
-**deleted** | **boolean** |  | [optional] [default to undefined]
 **complete** | **boolean** |  | [optional] [default to undefined]
+**deleted** | **boolean** |  | [optional] [default to undefined]
 **uuid** | **string** |  | [default to undefined]
-**user** | [**PublicUserDTO**](PublicUserDTO.md) |  | [optional] [default to undefined]
 **properties** | [**Array&lt;FilledProperty&gt;**](FilledProperty.md) |  | [optional] [default to undefined]
 **objects** | **{ [key: string]: any | null; }** |  | [optional] [default to undefined]
+**user** | [**PublicUserDTO**](PublicUserDTO.md) |  | [optional] [default to undefined]
 
 ## Example
 
@@ -36,12 +36,12 @@ const instance: ModelRecord = {
     updatedByUuid,
     deletedByUuid,
     index,
-    deleted,
     complete,
+    deleted,
     uuid,
-    user,
     properties,
     objects,
+    user,
 };
 ```
 

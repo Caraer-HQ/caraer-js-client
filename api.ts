@@ -2237,8 +2237,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'xproperty'?: string;
-    'ymetric'?: string;
     'yproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2979,12 +2979,12 @@ export interface ModelRecord {
     'updatedByUuid'?: string;
     'deletedByUuid'?: string;
     'index'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
-    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
+    'user'?: PublicUserDTO;
 }
 export interface MultiLine extends PropertyFormat {
 }
@@ -4497,8 +4497,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -5353,8 +5353,8 @@ export interface Team {
     'filtersString'?: string;
     'filters'?: { [key: string]: Filter; };
     'memberCount'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
 }
 export interface TeamDTO {
