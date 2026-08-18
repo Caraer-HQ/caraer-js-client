@@ -27,6 +27,7 @@ Name | Type | Description | Notes
 **rotateWebhook** | [**SubscribeWebhookDTO**](SubscribeWebhookDTO.md) | Webhook triggered when the app installation token is rotated | [optional] [default to undefined]
 **updateWebhook** | [**SubscribeWebhookDTO**](SubscribeWebhookDTO.md) | Webhook triggered when an already installed app is saved again | [optional] [default to undefined]
 **settingsSchema** | [**Array&lt;AppSettingFieldSchema&gt;**](AppSettingFieldSchema.md) | JSON array of AppSettingFieldSchema (app-level setting field definitions) | [optional] [default to undefined]
+**settingsSections** | [**Array&lt;AppSettingsSection&gt;**](AppSettingsSection.md) | Optional UI grouping of settingsSchema fields into installer cards | [optional] [default to undefined]
 **externalOAuthProviders** | [**Array&lt;AppExternalOAuthProviderSummaryDTO&gt;**](AppExternalOAuthProviderSummaryDTO.md) | External OAuth providers installers can Connect (name/logo only; no secrets) | [optional] [default to undefined]
 **webhookRateLimitPerMinute** | **number** | Webhook rate limit per minute | [optional] [default to undefined]
 **jobRateLimitPerMinute** | **number** | App job enqueue rate limit per minute per installation | [optional] [default to undefined]
@@ -84,6 +85,7 @@ const instance: AppDTO = {
     rotateWebhook,
     updateWebhook,
     settingsSchema,
+    settingsSections,
     externalOAuthProviders,
     webhookRateLimitPerMinute,
     jobRateLimitPerMinute,

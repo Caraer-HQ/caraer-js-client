@@ -493,6 +493,10 @@ export interface AppDTO {
      */
     'settingsSchema'?: Array<AppSettingFieldSchema>;
     /**
+     * Optional UI grouping of settingsSchema fields into installer cards
+     */
+    'settingsSections'?: Array<AppSettingsSection>;
+    /**
      * External OAuth providers installers can Connect (name/logo only; no secrets)
      */
     'externalOAuthProviders'?: Array<AppExternalOAuthProviderSummaryDTO>;
@@ -1058,6 +1062,11 @@ export interface AppSettingOptionsSource {
     'dependsOn'?: Array<string>;
     'searchable'?: boolean;
     'minQueryLength'?: number;
+}
+export interface AppSettingsSection {
+    'title'?: string;
+    'subtitle'?: string;
+    'settings'?: Array<string>;
 }
 /**
  * Data transfer object for a pricing tier (plan) within tiered app pricing
@@ -2227,9 +2236,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'xproperty'?: string;
     'ymetric'?: string;
     'yproperty'?: string;
-    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2973,9 +2982,9 @@ export interface ModelRecord {
     'deleted'?: boolean;
     'complete'?: boolean;
     'uuid': string;
+    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
-    'user'?: PublicUserDTO;
 }
 export interface MultiLine extends PropertyFormat {
 }
@@ -4488,8 +4497,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -7032,6 +7041,49 @@ export const AppInstallationRuntimeApiAxiosParamCreator = function (configuratio
         },
         /**
          * 
+         * @summary Merge COMPANY-scoped installation settings from the app runtime
+         * @param {string} appUuid 
+         * @param {Array<AppSettingFieldSchema>} appSettingFieldSchema 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mergeCompanySettings: async (appUuid: string, appSettingFieldSchema: Array<AppSettingFieldSchema>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('mergeCompanySettings', 'appUuid', appUuid)
+            // verify required parameter 'appSettingFieldSchema' is not null or undefined
+            assertParamExists('mergeCompanySettings', 'appSettingFieldSchema', appSettingFieldSchema)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/settings`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(appSettingFieldSchema, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Set an encrypted secret
          * @param {string} appUuid 
          * @param {string} name 
@@ -7419,6 +7471,20 @@ export const AppInstallationRuntimeApiFp = function(configuration?: Configuratio
         },
         /**
          * 
+         * @summary Merge COMPANY-scoped installation settings from the app runtime
+         * @param {string} appUuid 
+         * @param {Array<AppSettingFieldSchema>} appSettingFieldSchema 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mergeCompanySettings(appUuid: string, appSettingFieldSchema: Array<AppSettingFieldSchema>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mergeCompanySettings(appUuid, appSettingFieldSchema, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.mergeCompanySettings']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Set an encrypted secret
          * @param {string} appUuid 
          * @param {string} name 
@@ -7600,6 +7666,17 @@ export const AppInstallationRuntimeApiFactory = function (configuration?: Config
         },
         /**
          * 
+         * @summary Merge COMPANY-scoped installation settings from the app runtime
+         * @param {string} appUuid 
+         * @param {Array<AppSettingFieldSchema>} appSettingFieldSchema 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mergeCompanySettings(appUuid: string, appSettingFieldSchema: Array<AppSettingFieldSchema>, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.mergeCompanySettings(appUuid, appSettingFieldSchema, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Set an encrypted secret
          * @param {string} appUuid 
          * @param {string} name 
@@ -7765,6 +7842,18 @@ export class AppInstallationRuntimeApi extends BaseAPI {
      */
     public listSecrets(appUuid: string, options?: RawAxiosRequestConfig) {
         return AppInstallationRuntimeApiFp(this.configuration).listSecrets(appUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Merge COMPANY-scoped installation settings from the app runtime
+     * @param {string} appUuid 
+     * @param {Array<AppSettingFieldSchema>} appSettingFieldSchema 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public mergeCompanySettings(appUuid: string, appSettingFieldSchema: Array<AppSettingFieldSchema>, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).mergeCompanySettings(appUuid, appSettingFieldSchema, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

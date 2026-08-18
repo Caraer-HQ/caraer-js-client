@@ -12,6 +12,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**getStateKey**](#getstatekey) | **GET** /api/v2/apps/{appUuid}/installation/state/{key} | Get a single state key|
 |[**listConnections**](#listconnections) | **GET** /api/v2/apps/{appUuid}/installation/connections | List external OAuth connection status|
 |[**listSecrets**](#listsecrets) | **GET** /api/v2/apps/{appUuid}/installation/secrets | List secret names (no values)|
+|[**mergeCompanySettings**](#mergecompanysettings) | **PUT** /api/v2/apps/{appUuid}/installation/settings | Merge COMPANY-scoped installation settings from the app runtime|
 |[**putSecret**](#putsecret) | **PUT** /api/v2/apps/{appUuid}/installation/secrets/{name} | Set an encrypted secret|
 |[**putState**](#putstate) | **PUT** /api/v2/apps/{appUuid}/installation/state | Replace/merge installation state (shallow merge)|
 |[**putStateKey**](#putstatekey) | **PUT** /api/v2/apps/{appUuid}/installation/state/{key} | Put a single state key|
@@ -432,6 +433,60 @@ const { status, data } = await apiInstance.listSecrets(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **mergeCompanySettings**
+> ShowResponseMapStringObject mergeCompanySettings(appSettingFieldSchema)
+
+
+### Example
+
+```typescript
+import {
+    AppInstallationRuntimeApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new AppInstallationRuntimeApi(configuration);
+
+let appUuid: string; // (default to undefined)
+let appSettingFieldSchema: Array<AppSettingFieldSchema>; //
+
+const { status, data } = await apiInstance.mergeCompanySettings(
+    appUuid,
+    appSettingFieldSchema
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **appSettingFieldSchema** | **Array<AppSettingFieldSchema>**|  | |
+| **appUuid** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponseMapStringObject**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Merged settings map |  -  |
+|**403** | Forbidden |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
