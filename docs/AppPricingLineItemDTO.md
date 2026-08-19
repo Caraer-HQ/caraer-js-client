@@ -1,6 +1,6 @@
-# AppPricingDTO
+# AppPricingLineItemDTO
 
-Data transfer object for app pricing (flat or tiered)
+Billable line item on an app pricing plan
 
 ## Properties
 
@@ -16,24 +16,21 @@ Name | Type | Description | Notes
 **deletedAt** | **number** | Unix timestamp when the entity was deleted (null if not deleted) | [optional] [default to undefined]
 **deletedBy** | [**ModelRecord**](ModelRecord.md) | Identifier of the user who deleted the entity | [optional] [default to undefined]
 **index** | **number** | Index number for ordering entities | [optional] [default to undefined]
-**title** | **string** | Pricing title | [optional] [default to undefined]
-**description** | **string** | Pricing description | [optional] [default to undefined]
-**pricingType** | **string** | Pricing type: TIERED or FLAT | [optional] [default to undefined]
-**pricePerUnit** | **string** | Price per unit (FLAT, e.g. 10.00) | [optional] [default to undefined]
-**unit** | **string** | Unit label (FLAT, e.g. document) | [optional] [default to undefined]
-**freeUnits** | **string** | Free units included (FLAT, e.g. 100) | [optional] [default to undefined]
-**freeUnitsPeriod** | **string** | Free units period (FLAT, e.g. month) | [optional] [default to undefined]
-**tiers** | [**Array&lt;AppTierDTO&gt;**](AppTierDTO.md) | Tiers for tiered pricing (TIERED) | [optional] [default to undefined]
-**billingPeriod** | **string** | Billing period for usage aggregation (default month) | [optional] [default to undefined]
-**commitments** | **Array&lt;string&gt;** | Allowed billing commitments: MONTHLY and/or ANNUAL | [optional] [default to undefined]
-**lineItems** | [**Array&lt;AppPricingLineItemDTO&gt;**](AppPricingLineItemDTO.md) | Billable line items (meters and/or static queries) | [optional] [default to undefined]
+**countType** | **string** | Count type: meter or static_query | [optional] [default to undefined]
+**countingSource** | **string** | Event sources for meter line items: WEBHOOK, MANUAL, WEBHOOK_AND_MANUAL | [optional] [default to undefined]
+**unit** | **string** | Unit label (e.g. webhook, document) | [optional] [default to undefined]
+**includedUnits** | **string** | Included units for FLAT line items | [optional] [default to undefined]
+**pricePerUnit** | **string** | Base price covering included units (FLAT) | [optional] [default to undefined]
+**pricePerExtraUnit** | **string** | Price per unit above includedUnits (FLAT) | [optional] [default to undefined]
+**staticQuery** | [**AppStaticQueryDTO**](AppStaticQueryDTO.md) | Scheduled Cypher snapshot for static_query line items | [optional] [default to undefined]
+**tiers** | [**Array&lt;AppTierDTO&gt;**](AppTierDTO.md) | Tiers for TIERED line items | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { AppPricingDTO } from '@caraer/client';
+import { AppPricingLineItemDTO } from '@caraer/client';
 
-const instance: AppPricingDTO = {
+const instance: AppPricingLineItemDTO = {
     uuid,
     name,
     label,
@@ -44,17 +41,14 @@ const instance: AppPricingDTO = {
     deletedAt,
     deletedBy,
     index,
-    title,
-    description,
-    pricingType,
-    pricePerUnit,
+    countType,
+    countingSource,
     unit,
-    freeUnits,
-    freeUnitsPeriod,
+    includedUnits,
+    pricePerUnit,
+    pricePerExtraUnit,
+    staticQuery,
     tiers,
-    billingPeriod,
-    commitments,
-    lineItems,
 };
 ```
 

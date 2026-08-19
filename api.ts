@@ -392,6 +392,51 @@ export interface AppBarVisibilityEntry {
     'objects'?: Array<string>;
     'suites'?: Array<string>;
 }
+/**
+ * Current-period usage for one pricing line item
+ */
+export interface AppBillingLineItemStatusDTO {
+    'name'?: string;
+    'label'?: string;
+    'countType'?: string;
+    'countingSource'?: string;
+    'usage'?: number;
+    'usageBreakdown'?: { [key: string]: number; };
+    'includedUnits'?: number;
+    'overageUnits'?: number;
+    'projectedCharge'?: number;
+    'status'?: string;
+    'note'?: string;
+}
+/**
+ * UTC calendar-month billing window, with pro-rata fields when the subscription started mid-month
+ */
+export interface AppBillingPeriodDTO {
+    'start'?: string;
+    'end'?: string;
+    'status'?: string;
+    'activeStart'?: string;
+    'daysActive'?: number;
+    'daysInPeriod'?: number;
+    'prorationFactor'?: number;
+}
+/**
+ * Billing status for one or more app installations
+ */
+export interface AppBillingStatusResponse {
+    'appUuid'?: string;
+    'appName'?: string;
+    'period'?: AppBillingPeriodDTO;
+    'installations'?: Array<AppInstallationBillingStatusDTO>;
+    'summary'?: AppBillingSummaryDTO;
+}
+/**
+ * Rollup of installation billing status
+ */
+export interface AppBillingSummaryDTO {
+    'installationCount'?: number;
+    'projectedRevenueTotal'?: number;
+}
 export interface AppConnectionStatusDTO {
     'id'?: string;
     'name'?: string;
@@ -814,6 +859,51 @@ export interface AppInboundRouteDTO {
     'sharedSecret'?: string;
     'serverlessFunction'?: ServerlessFunctionRefDTO;
 }
+/**
+ * Current-period billing status for one installation
+ */
+export interface AppInstallationBillingStatusDTO {
+    'appUuid'?: string;
+    'appName'?: string;
+    'installationUuid'?: string;
+    'companyUuid'?: string;
+    'companyName'?: string;
+    'selectedPricingPlanUuid'?: string;
+    'selectedPricingPlanTitle'?: string;
+    'pricingType'?: string;
+    'billingCommitment'?: string;
+    'pendingPricingPlanUuid'?: string;
+    'pendingEffectiveAt'?: number;
+    'period'?: AppBillingPeriodDTO;
+    'lineItems'?: Array<AppBillingLineItemStatusDTO>;
+    'projectedTotal'?: number;
+    'subscription'?: AppSubscriptionDTO;
+}
+/**
+ * Manual meter event for a billable line item
+ */
+export interface AppMeterEventRequest {
+    'lineItemName': string;
+    /**
+     * Positive unit count; defaults to 1
+     */
+    'quantity'?: number;
+    'idempotencyKey'?: string;
+    /**
+     * ISO-8601 timestamp; defaults to now
+     */
+    'occurredAt'?: string;
+    'metadata'?: { [key: string]: any | null; };
+}
+/**
+ * Recorded meter event
+ */
+export interface AppMeterEventResponse {
+    'eventUuid'?: string;
+    'lineItemName'?: string;
+    'quantity'?: number;
+    'periodUsageAfter'?: number;
+}
 export interface AppOAuthStartResponseDTO {
     'authorizeUrl'?: string;
 }
@@ -891,6 +981,95 @@ export interface AppPricingDTO {
     'freeUnitsPeriod'?: string;
     /**
      * Tiers for tiered pricing (TIERED)
+     */
+    'tiers'?: Array<AppTierDTO>;
+    /**
+     * Billing period for usage aggregation (default month)
+     */
+    'billingPeriod'?: string;
+    /**
+     * Allowed billing commitments: MONTHLY and/or ANNUAL
+     */
+    'commitments'?: Array<string>;
+    /**
+     * Billable line items (meters and/or static queries)
+     */
+    'lineItems'?: Array<AppPricingLineItemDTO>;
+}
+/**
+ * Billable line item on an app pricing plan
+ */
+export interface AppPricingLineItemDTO {
+    /**
+     * Unique identifier for the entity
+     */
+    'uuid': string;
+    /**
+     * The name of the entity
+     */
+    'name': string;
+    /**
+     * Display label for the entity, can be different from name
+     */
+    'label'?: string;
+    /**
+     * Unix timestamp when the entity was created
+     */
+    'createdAt'?: number;
+    /**
+     * Identifier of the user who created the entity
+     */
+    'createdBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was last updated
+     */
+    'updatedAt'?: number;
+    /**
+     * Identifier of the user who last updated the entity
+     */
+    'updatedBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was deleted (null if not deleted)
+     */
+    'deletedAt'?: number;
+    /**
+     * Identifier of the user who deleted the entity
+     */
+    'deletedBy'?: ModelRecord;
+    /**
+     * Index number for ordering entities
+     */
+    'index'?: number;
+    /**
+     * Count type: meter or static_query
+     */
+    'countType'?: string;
+    /**
+     * Event sources for meter line items: WEBHOOK, MANUAL, WEBHOOK_AND_MANUAL
+     */
+    'countingSource'?: string;
+    /**
+     * Unit label (e.g. webhook, document)
+     */
+    'unit'?: string;
+    /**
+     * Included units for FLAT line items
+     */
+    'includedUnits'?: string;
+    /**
+     * Base price covering included units (FLAT)
+     */
+    'pricePerUnit'?: string;
+    /**
+     * Price per unit above includedUnits (FLAT)
+     */
+    'pricePerExtraUnit'?: string;
+    /**
+     * Scheduled Cypher snapshot for static_query line items
+     */
+    'staticQuery'?: AppStaticQueryDTO;
+    /**
+     * Tiers for TIERED line items
      */
     'tiers'?: Array<AppTierDTO>;
 }
@@ -1067,6 +1246,42 @@ export interface AppSettingsSection {
     'title'?: string;
     'subtitle'?: string;
     'settings'?: Array<string>;
+}
+/**
+ * Read-only Cypher snapshot used by static_query line items
+ */
+export interface AppStaticQueryDTO {
+    /**
+     * When the query runs: period_end (default) or period_start
+     */
+    'schedule'?: string;
+    /**
+     * Read-only Cypher that returns count(...) AS count
+     */
+    'cypher'?: string;
+}
+/**
+ * Schedule a plan or commitment change
+ */
+export interface AppSubscriptionChangeRequest {
+    'targetPlanUuid'?: string;
+    /**
+     * MONTHLY or ANNUAL
+     */
+    'targetCommitment'?: string;
+}
+/**
+ * Current and pending subscription state
+ */
+export interface AppSubscriptionDTO {
+    'selectedPricingPlanUuid'?: string;
+    'billingCommitment'?: string;
+    'contractStart'?: number;
+    'contractEnd'?: number;
+    'pendingPricingPlanUuid'?: string;
+    'pendingBillingCommitment'?: string;
+    'pendingEffectiveAt'?: number;
+    'message'?: string;
 }
 /**
  * Data transfer object for a pricing tier (plan) within tiered app pricing
@@ -2754,6 +2969,30 @@ export interface HasAppDTO {
      * UUID of the pricing plan selected for this installation
      */
     'selectedPricingPlanUuid'?: string;
+    /**
+     * MONTHLY or ANNUAL billing commitment
+     */
+    'billingCommitment'?: string;
+    /**
+     * Current contract start (epoch ms)
+     */
+    'contractStart'?: number;
+    /**
+     * Current contract end / renewal date (epoch ms)
+     */
+    'contractEnd'?: number;
+    /**
+     * Plan scheduled to become active
+     */
+    'pendingPricingPlanUuid'?: string;
+    /**
+     * Commitment scheduled to become active
+     */
+    'pendingBillingCommitment'?: string;
+    /**
+     * When the pending subscription change takes effect (epoch ms)
+     */
+    'pendingEffectiveAt'?: number;
 }
 /**
  * Optional initial configuration settings
@@ -4568,6 +4807,19 @@ export interface ShowResponse {
 /**
  * Represents the response for viewing or showing a specific resource.
  */
+export interface ShowResponseAppBillingStatusResponse {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: AppBillingStatusResponse;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
 export interface ShowResponseAppExternalOAuthProviderDTO {
     /**
      * A message detailing the result of the operation.
@@ -4590,6 +4842,32 @@ export interface ShowResponseAppInboundRouteDTO {
      * The data payload of the response, if any.
      */
     'data'?: AppInboundRouteDTO;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseAppInstallationBillingStatusDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: AppInstallationBillingStatusDTO;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseAppMeterEventResponse {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: AppMeterEventResponse;
 }
 /**
  * Represents the response for viewing or showing a specific resource.
@@ -4620,6 +4898,19 @@ export interface ShowResponseAppScheduleDTO {
 /**
  * Represents the response for viewing or showing a specific resource.
  */
+export interface ShowResponseAppSubscriptionDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: AppSubscriptionDTO;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
 export interface ShowResponseListAppConnectionStatusDTO {
     /**
      * A message detailing the result of the operation.
@@ -4629,6 +4920,19 @@ export interface ShowResponseListAppConnectionStatusDTO {
      * The data payload of the response, if any.
      */
     'data'?: Array<AppConnectionStatusDTO>;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseListAppInstallationBillingStatusDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<AppInstallationBillingStatusDTO>;
 }
 /**
  * Represents the response for viewing or showing a specific resource.
@@ -6711,6 +7015,648 @@ export const ListAppBarsLocationEnum = {
     TraitBar: 'TRAIT_BAR',
 } as const;
 export type ListAppBarsLocationEnum = typeof ListAppBarsLocationEnum[keyof typeof ListAppBarsLocationEnum];
+
+
+/**
+ * AppBillingApi - axios parameter creator
+ */
+export const AppBillingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Current-period billing for every installation of an app
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appBillingStatus: async (appUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('appBillingStatus', 'appUuid', appUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/billing/status`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Cancel a scheduled subscription change
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cancelPendingChange: async (appUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('cancelPendingChange', 'appUuid', appUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/subscription/pending`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Current subscription state for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSubscription: async (appUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('getSubscription', 'appUuid', appUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/subscription`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Current-period billing for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        installationBillingStatus: async (appUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('installationBillingStatus', 'appUuid', appUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/billing/status`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Platform-wide current-period app usage billing
+         * @param {string} [appUuid] 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        platformBillingStatus: async (appUuid?: string, page?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/apps/billing/status`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (appUuid !== undefined) {
+                localVarQueryParameter['appUuid'] = appUuid;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Record a manual meter event for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {AppMeterEventRequest} appMeterEventRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        recordMeterEvent: async (appUuid: string, appMeterEventRequest: AppMeterEventRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('recordMeterEvent', 'appUuid', appUuid)
+            // verify required parameter 'appMeterEventRequest' is not null or undefined
+            assertParamExists('recordMeterEvent', 'appMeterEventRequest', appMeterEventRequest)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/meter-events`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(appMeterEventRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Schedule a plan or commitment change
+         * @param {string} appUuid 
+         * @param {AppSubscriptionChangeRequest} appSubscriptionChangeRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        scheduleSubscriptionChange: async (appUuid: string, appSubscriptionChangeRequest: AppSubscriptionChangeRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('scheduleSubscriptionChange', 'appUuid', appUuid)
+            // verify required parameter 'appSubscriptionChangeRequest' is not null or undefined
+            assertParamExists('scheduleSubscriptionChange', 'appSubscriptionChangeRequest', appSubscriptionChangeRequest)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/subscription/change`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(appSubscriptionChangeRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Usage periods for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usagePeriods: async (appUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('usagePeriods', 'appUuid', appUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/usage/periods`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AppBillingApi - functional programming interface
+ */
+export const AppBillingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AppBillingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Current-period billing for every installation of an app
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async appBillingStatus(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppBillingStatusResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.appBillingStatus(appUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppBillingApi.appBillingStatus']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Cancel a scheduled subscription change
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async cancelPendingChange(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppSubscriptionDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cancelPendingChange(appUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppBillingApi.cancelPendingChange']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Current subscription state for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSubscription(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppSubscriptionDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSubscription(appUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppBillingApi.getSubscription']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Current-period billing for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async installationBillingStatus(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppInstallationBillingStatusDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.installationBillingStatus(appUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppBillingApi.installationBillingStatus']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Platform-wide current-period app usage billing
+         * @param {string} [appUuid] 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async platformBillingStatus(appUuid?: string, page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppBillingStatusResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.platformBillingStatus(appUuid, page, limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppBillingApi.platformBillingStatus']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Record a manual meter event for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {AppMeterEventRequest} appMeterEventRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async recordMeterEvent(appUuid: string, appMeterEventRequest: AppMeterEventRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppMeterEventResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.recordMeterEvent(appUuid, appMeterEventRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppBillingApi.recordMeterEvent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Schedule a plan or commitment change
+         * @param {string} appUuid 
+         * @param {AppSubscriptionChangeRequest} appSubscriptionChangeRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async scheduleSubscriptionChange(appUuid: string, appSubscriptionChangeRequest: AppSubscriptionChangeRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppSubscriptionDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.scheduleSubscriptionChange(appUuid, appSubscriptionChangeRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppBillingApi.scheduleSubscriptionChange']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Usage periods for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usagePeriods(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListAppInstallationBillingStatusDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usagePeriods(appUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppBillingApi.usagePeriods']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AppBillingApi - factory interface
+ */
+export const AppBillingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AppBillingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Current-period billing for every installation of an app
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appBillingStatus(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppBillingStatusResponse> {
+            return localVarFp.appBillingStatus(appUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Cancel a scheduled subscription change
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cancelPendingChange(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppSubscriptionDTO> {
+            return localVarFp.cancelPendingChange(appUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Current subscription state for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSubscription(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppSubscriptionDTO> {
+            return localVarFp.getSubscription(appUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Current-period billing for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        installationBillingStatus(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppInstallationBillingStatusDTO> {
+            return localVarFp.installationBillingStatus(appUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Platform-wide current-period app usage billing
+         * @param {string} [appUuid] 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        platformBillingStatus(appUuid?: string, page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppBillingStatusResponse> {
+            return localVarFp.platformBillingStatus(appUuid, page, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Record a manual meter event for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {AppMeterEventRequest} appMeterEventRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        recordMeterEvent(appUuid: string, appMeterEventRequest: AppMeterEventRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppMeterEventResponse> {
+            return localVarFp.recordMeterEvent(appUuid, appMeterEventRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Schedule a plan or commitment change
+         * @param {string} appUuid 
+         * @param {AppSubscriptionChangeRequest} appSubscriptionChangeRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        scheduleSubscriptionChange(appUuid: string, appSubscriptionChangeRequest: AppSubscriptionChangeRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppSubscriptionDTO> {
+            return localVarFp.scheduleSubscriptionChange(appUuid, appSubscriptionChangeRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Usage periods for the selected company\'s installation
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usagePeriods(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListAppInstallationBillingStatusDTO> {
+            return localVarFp.usagePeriods(appUuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AppBillingApi - object-oriented interface
+ */
+export class AppBillingApi extends BaseAPI {
+    /**
+     * 
+     * @summary Current-period billing for every installation of an app
+     * @param {string} appUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public appBillingStatus(appUuid: string, options?: RawAxiosRequestConfig) {
+        return AppBillingApiFp(this.configuration).appBillingStatus(appUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Cancel a scheduled subscription change
+     * @param {string} appUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public cancelPendingChange(appUuid: string, options?: RawAxiosRequestConfig) {
+        return AppBillingApiFp(this.configuration).cancelPendingChange(appUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Current subscription state for the selected company\'s installation
+     * @param {string} appUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getSubscription(appUuid: string, options?: RawAxiosRequestConfig) {
+        return AppBillingApiFp(this.configuration).getSubscription(appUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Current-period billing for the selected company\'s installation
+     * @param {string} appUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public installationBillingStatus(appUuid: string, options?: RawAxiosRequestConfig) {
+        return AppBillingApiFp(this.configuration).installationBillingStatus(appUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Platform-wide current-period app usage billing
+     * @param {string} [appUuid] 
+     * @param {number} [page] 
+     * @param {number} [limit] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public platformBillingStatus(appUuid?: string, page?: number, limit?: number, options?: RawAxiosRequestConfig) {
+        return AppBillingApiFp(this.configuration).platformBillingStatus(appUuid, page, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Record a manual meter event for the selected company\'s installation
+     * @param {string} appUuid 
+     * @param {AppMeterEventRequest} appMeterEventRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public recordMeterEvent(appUuid: string, appMeterEventRequest: AppMeterEventRequest, options?: RawAxiosRequestConfig) {
+        return AppBillingApiFp(this.configuration).recordMeterEvent(appUuid, appMeterEventRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Schedule a plan or commitment change
+     * @param {string} appUuid 
+     * @param {AppSubscriptionChangeRequest} appSubscriptionChangeRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public scheduleSubscriptionChange(appUuid: string, appSubscriptionChangeRequest: AppSubscriptionChangeRequest, options?: RawAxiosRequestConfig) {
+        return AppBillingApiFp(this.configuration).scheduleSubscriptionChange(appUuid, appSubscriptionChangeRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Usage periods for the selected company\'s installation
+     * @param {string} appUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public usagePeriods(appUuid: string, options?: RawAxiosRequestConfig) {
+        return AppBillingApiFp(this.configuration).usagePeriods(appUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
 
 
 /**
