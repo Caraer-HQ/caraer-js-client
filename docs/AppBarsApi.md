@@ -23,7 +23,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new AppBarsApi(configuration);
 
-let location: 'RECORD_PREVIEW' | 'RECORD_OVERVIEW' | 'RECORD_DETAIL' | 'TOOL_BAR' | 'TRAIT_BAR'; //App bar location (default to undefined)
+let location: 'RECORD_PREVIEW' | 'RECORD_OVERVIEW' | 'RECORD_DETAIL' | 'TOOL_BAR' | 'TRAIT_BAR' | 'RECORD_TRAIT'; //App bar location (default to undefined)
 let object: string; //Object name in context (optional) (default to undefined)
 let recordUuid: string; //Record UUID in context (optional) (default to undefined)
 let viewId: string; //View ID in context (optional) (default to undefined)
@@ -42,7 +42,7 @@ const { status, data } = await apiInstance.listAppBars(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **location** | [**&#39;RECORD_PREVIEW&#39; | &#39;RECORD_OVERVIEW&#39; | &#39;RECORD_DETAIL&#39; | &#39;TOOL_BAR&#39; | &#39;TRAIT_BAR&#39;**]**Array<&#39;RECORD_PREVIEW&#39; &#124; &#39;RECORD_OVERVIEW&#39; &#124; &#39;RECORD_DETAIL&#39; &#124; &#39;TOOL_BAR&#39; &#124; &#39;TRAIT_BAR&#39;>** | App bar location | defaults to undefined|
+| **location** | [**&#39;RECORD_PREVIEW&#39; | &#39;RECORD_OVERVIEW&#39; | &#39;RECORD_DETAIL&#39; | &#39;TOOL_BAR&#39; | &#39;TRAIT_BAR&#39; | &#39;RECORD_TRAIT&#39;**]**Array<&#39;RECORD_PREVIEW&#39; &#124; &#39;RECORD_OVERVIEW&#39; &#124; &#39;RECORD_DETAIL&#39; &#124; &#39;TOOL_BAR&#39; &#124; &#39;TRAIT_BAR&#39; &#124; &#39;RECORD_TRAIT&#39;>** | App bar location | defaults to undefined|
 | **object** | [**string**] | Object name in context | (optional) defaults to undefined|
 | **recordUuid** | [**string**] | Record UUID in context | (optional) defaults to undefined|
 | **viewId** | [**string**] | View ID in context | (optional) defaults to undefined|

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **objects** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **suites** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**traits** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -16,6 +17,7 @@ import { AppBarVisibilityEntry } from '@caraer/client';
 const instance: AppBarVisibilityEntry = {
     objects,
     suites,
+    traits,
 };
 ```
 

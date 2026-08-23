@@ -282,7 +282,7 @@ export interface AppBarDTO {
      */
     'index'?: number;
     /**
-     * Bar location: RECORD_PREVIEW, RECORD_OVERVIEW, RECORD_DETAIL, TOOL_BAR, TRAIT_BAR
+     * Bar location: RECORD_PREVIEW, RECORD_OVERVIEW, RECORD_DETAIL, TOOL_BAR, TRAIT_BAR, RECORD_TRAIT
      */
     'location'?: AppBarDTOLocationEnum;
     /**
@@ -321,6 +321,7 @@ export const AppBarDTOLocationEnum = {
     RecordDetail: 'RECORD_DETAIL',
     ToolBar: 'TOOL_BAR',
     TraitBar: 'TRAIT_BAR',
+    RecordTrait: 'RECORD_TRAIT',
 } as const;
 
 export type AppBarDTOLocationEnum = typeof AppBarDTOLocationEnum[keyof typeof AppBarDTOLocationEnum];
@@ -391,6 +392,7 @@ export interface AppBarTriggerRequest {
 export interface AppBarVisibilityEntry {
     'objects'?: Array<string>;
     'suites'?: Array<string>;
+    'traits'?: Array<string>;
 }
 export interface AppConnectionStatusDTO {
     'id'?: string;
@@ -2087,8 +2089,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'ymetric'?: string;
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -6551,6 +6553,7 @@ export const ListAppBarsLocationEnum = {
     RecordDetail: 'RECORD_DETAIL',
     ToolBar: 'TOOL_BAR',
     TraitBar: 'TRAIT_BAR',
+    RecordTrait: 'RECORD_TRAIT',
 } as const;
 export type ListAppBarsLocationEnum = typeof ListAppBarsLocationEnum[keyof typeof ListAppBarsLocationEnum];
 

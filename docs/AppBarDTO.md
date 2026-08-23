@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 **deletedAt** | **number** | Unix timestamp when the entity was deleted (null if not deleted) | [optional] [default to undefined]
 **deletedBy** | [**ModelRecord**](ModelRecord.md) | Identifier of the user who deleted the entity | [optional] [default to undefined]
 **index** | **number** | Index number for ordering entities | [optional] [default to undefined]
-**location** | **string** | Bar location: RECORD_PREVIEW, RECORD_OVERVIEW, RECORD_DETAIL, TOOL_BAR, TRAIT_BAR | [optional] [default to undefined]
+**location** | **string** | Bar location: RECORD_PREVIEW, RECORD_OVERVIEW, RECORD_DETAIL, TOOL_BAR, TRAIT_BAR, RECORD_TRAIT | [optional] [default to undefined]
 **iframeUrl** | **string** | URL for iframe-based locations (supports {recordUuid}, {object}, {viewId}, {trait}, {companyUuid} placeholders) | [optional] [default to undefined]
 **icon** | **string** | Optional icon name/key for this app bar | [optional] [default to undefined]
 **description** | **string** | Description shown under the dialog title for action-based bars | [optional] [default to undefined]
