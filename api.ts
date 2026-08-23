@@ -2086,9 +2086,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
     'ymetric'?: string;
     'yproperty'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -4932,9 +4932,9 @@ export interface StyleSetDTO {
     'hyperlinkLetterSpacing'?: any;
     'hyperlinkColorLight'?: string;
     'hyperlinkColorDark'?: string;
+    'zindex'?: number;
     'xlargeFontSize'?: any;
     'xsmallFontSize'?: any;
-    'zindex'?: number;
 }
 /**
  * Data Transfer Object for subscribing to a webhook. This DTO represents the details required to configure a webhook subscription.

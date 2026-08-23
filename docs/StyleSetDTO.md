@@ -244,9 +244,9 @@ Name | Type | Description | Notes
 **hyperlinkLetterSpacing** | **any** |  | [optional] [default to undefined]
 **hyperlinkColorLight** | **string** |  | [optional] [default to undefined]
 **hyperlinkColorDark** | **string** |  | [optional] [default to undefined]
+**zindex** | **number** |  | [optional] [default to undefined]
 **xlargeFontSize** | **any** |  | [optional] [default to undefined]
 **xsmallFontSize** | **any** |  | [optional] [default to undefined]
-**zindex** | **number** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -493,9 +493,9 @@ const instance: StyleSetDTO = {
     hyperlinkLetterSpacing,
     hyperlinkColorLight,
     hyperlinkColorDark,
+    zindex,
     xlargeFontSize,
     xsmallFontSize,
-    zindex,
 };
 ```
 
