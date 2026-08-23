@@ -19,7 +19,6 @@ Name | Type | Description | Notes
 **privateApp** | **boolean** | Indicates whether this app is private (only available to the creator\&#39;s company) | [optional] [default to undefined]
 **hideApiKeyField** | **boolean** | Whether to hide the API token field in app settings UI. Defaults to true when omitted. | [optional] [default to undefined]
 **details** | [**AppDetailsDTO**](AppDetailsDTO.md) | Additional details and specifications about the application | [optional] [default to undefined]
-**pricingPlans** | [**Array&lt;AppPricingDTO&gt;**](AppPricingDTO.md) | Pricing information for the application | [optional] [default to undefined]
 **appBars** | [**Array&lt;AppBarDTO&gt;**](AppBarDTO.md) | App bars (location-specific configuration and actions) | [optional] [default to undefined]
 **serverlessFunctions** | [**Array&lt;ServerlessFunctionDTO&gt;**](ServerlessFunctionDTO.md) | Serverless functions owned by this app | [optional] [default to undefined]
 **installWebhook** | [**SubscribeWebhookDTO**](SubscribeWebhookDTO.md) | Webhook triggered when the app is installed | [optional] [default to undefined]
@@ -31,7 +30,6 @@ Name | Type | Description | Notes
 **externalOAuthProviders** | [**Array&lt;AppExternalOAuthProviderSummaryDTO&gt;**](AppExternalOAuthProviderSummaryDTO.md) | External OAuth providers installers can Connect (name/logo only; no secrets) | [optional] [default to undefined]
 **webhookRateLimitPerMinute** | **number** | Webhook rate limit per minute | [optional] [default to undefined]
 **jobRateLimitPerMinute** | **number** | App job enqueue rate limit per minute per installation | [optional] [default to undefined]
-**billFailedWebhookRequests** | **boolean** | Whether failed webhook requests are considered billable for this app | [optional] [default to undefined]
 **appPublish** | [**AppPublishDTO**](AppPublishDTO.md) | Publish and review state for the app in the marketplace (creator view) | [optional] [default to undefined]
 **hasApp** | [**HasAppDTO**](HasAppDTO.md) | Installation link (company–app) with token, scopes, and per-installation settingsValues; present when includeSettings is true | [optional] [default to undefined]
 **image** | **string** | URL to the application\&#39;s image or icon (derived from details.image) | [optional] [default to undefined]
@@ -77,7 +75,6 @@ const instance: AppDTO = {
     privateApp,
     hideApiKeyField,
     details,
-    pricingPlans,
     appBars,
     serverlessFunctions,
     installWebhook,
@@ -89,7 +86,6 @@ const instance: AppDTO = {
     externalOAuthProviders,
     webhookRateLimitPerMinute,
     jobRateLimitPerMinute,
-    billFailedWebhookRequests,
     appPublish,
     hasApp,
     image,

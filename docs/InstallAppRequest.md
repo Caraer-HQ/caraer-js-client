@@ -10,7 +10,6 @@ Name | Type | Description | Notes
 **scopes** | **Array&lt;string&gt;** | Optional scopes to grant to the app. | [optional] [default to undefined]
 **filters** | [**{ [key: string]: Filter; }**](Filter.md) | Optional per-object record filters for this installation (object name → filter). | [optional] [default to undefined]
 **appBarVisibility** | [**{ [key: string]: AppBarVisibilityEntry; }**](AppBarVisibilityEntry.md) | Optional per-app-bar placement config keyed by app bar UUID. | [optional] [default to undefined]
-**selectedPricingPlanUuid** | **string** | UUID of the pricing plan selected for this installation. | [optional] [default to undefined]
 
 ## Example
 
@@ -22,7 +21,6 @@ const instance: InstallAppRequest = {
     scopes,
     filters,
     appBarVisibility,
-    selectedPricingPlanUuid,
 };
 ```
 
