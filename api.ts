@@ -8692,6 +8692,51 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+
+        /**
+         * Returns public apps filtered by publish state for Caraer BV ops. Defaults to SUBMITTED and IN_REVIEW.
+         * @summary List public apps in the review queue
+         * @param {string} [states] Comma-separated publish states
+         * @param {number} [page] Page number (1-based)
+         * @param {number} [limit] Page size
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPublicAppReviewQueue: async (states?: string, page?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/apps/public/review-queue`;
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (states !== undefined) {
+                localVarQueryParameter['states'] = states;
+            }
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         submitPublicApp: async (uuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uuid' is not null or undefined
             assertParamExists('submitPublicApp', 'uuid', uuid)
@@ -9310,6 +9355,22 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+
+        /**
+         * Returns public apps filtered by publish state for Caraer BV ops. Defaults to SUBMITTED and IN_REVIEW.
+         * @summary List public apps in the review queue
+         * @param {string} [states] Comma-separated publish states
+         * @param {number} [page] Page number (1-based)
+         * @param {number} [limit] Page size
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listPublicAppReviewQueue(states?: string, page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listPublicAppReviewQueue(states, page, limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.listPublicAppReviewQueue']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         async submitPublicApp(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.submitPublicApp(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -9652,6 +9713,19 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+
+        /**
+         * Returns public apps filtered by publish state for Caraer BV ops. Defaults to SUBMITTED and IN_REVIEW.
+         * @summary List public apps in the review queue
+         * @param {string} [states] Comma-separated publish states
+         * @param {number} [page] Page number (1-based)
+         * @param {number} [limit] Page size
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPublicAppReviewQueue(states?: string, page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.listPublicAppReviewQueue(states, page, limit, options).then((request) => request(axios, basePath));
+        },
         submitPublicApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
             return localVarFp.submitPublicApp(uuid, options).then((request) => request(axios, basePath));
         },
@@ -9993,6 +10067,20 @@ export class ApplicationsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
+
+    /**
+     * Returns public apps filtered by publish state for Caraer BV ops. Defaults to SUBMITTED and IN_REVIEW.
+     * @summary List public apps in the review queue
+     * @param {string} [states] Comma-separated publish states
+     * @param {number} [page] Page number (1-based)
+     * @param {number} [limit] Page size
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listPublicAppReviewQueue(states?: string, page?: number, limit?: number, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).listPublicAppReviewQueue(states, page, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
     public submitPublicApp(uuid: string, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).submitPublicApp(uuid, options).then((request) => request(this.axios, this.basePath));
     }
@@ -10219,6 +10307,41 @@ export const BillingApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+
+        /**
+         * Caraer BV ops: schedule sending of an existing Jortt draft invoice by id and mark the CRM invoice mirror as sent.
+         * @summary Send a Jortt draft invoice
+         * @param {string} jorttInvoiceId Jortt invoice UUID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendJorttInvoice: async (jorttInvoiceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            assertParamExists('sendJorttInvoice', 'jorttInvoiceId', jorttInvoiceId)
+            const localVarPath = `/api/v2/billing/invoices/{jorttInvoiceId}/send`
+                .replace(`{${"jorttInvoiceId"}}`, encodeURIComponent(String(jorttInvoiceId)));
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         sendSetupEmail: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v2/billing/setup-email`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -10274,6 +10397,20 @@ export const BillingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+
+        /**
+         * Caraer BV ops: schedule sending of an existing Jortt draft invoice by id and mark the CRM invoice mirror as sent.
+         * @summary Send a Jortt draft invoice
+         * @param {string} jorttInvoiceId Jortt invoice UUID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sendJorttInvoice(jorttInvoiceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sendJorttInvoice(jorttInvoiceId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BillingApi.sendJorttInvoice']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         async sendSetupEmail(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.sendSetupEmail(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -10304,6 +10441,17 @@ export const BillingApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+
+        /**
+         * Caraer BV ops: schedule sending of an existing Jortt draft invoice by id and mark the CRM invoice mirror as sent.
+         * @summary Send a Jortt draft invoice
+         * @param {string} jorttInvoiceId Jortt invoice UUID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendJorttInvoice(jorttInvoiceId: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+            return localVarFp.sendJorttInvoice(jorttInvoiceId, options).then((request) => request(axios, basePath));
+        },
         sendSetupEmail(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
             return localVarFp.sendSetupEmail(options).then((request) => request(axios, basePath));
         },
@@ -10333,6 +10481,17 @@ export class BillingApi extends BaseAPI {
     public sendSetupEmail(options?: RawAxiosRequestConfig) {
         return BillingApiFp(this.configuration).sendSetupEmail(options).then((request) => request(this.axios, this.basePath));
     }
+    /**
+     * Caraer BV ops: schedule sending of an existing Jortt draft invoice by id and mark the CRM invoice mirror as sent.
+     * @summary Send a Jortt draft invoice
+     * @param {string} jorttInvoiceId Jortt invoice UUID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sendJorttInvoice(jorttInvoiceId: string, options?: RawAxiosRequestConfig) {
+        return BillingApiFp(this.configuration).sendJorttInvoice(jorttInvoiceId, options).then((request) => request(this.axios, this.basePath));
+    }
+
 }
 
 
