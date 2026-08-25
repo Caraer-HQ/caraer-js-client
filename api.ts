@@ -4935,8 +4935,8 @@ export interface StyleSetDTO {
     'hyperlinkColorLight'?: string;
     'hyperlinkColorDark'?: string;
     'zindex'?: number;
-    'xlargeFontSize'?: any;
-    'xsmallFontSize'?: any;
+    'xLargeFontSize'?: any;
+    'xSmallFontSize'?: any;
 }
 /**
  * Data Transfer Object for subscribing to a webhook. This DTO represents the details required to configure a webhook subscription.

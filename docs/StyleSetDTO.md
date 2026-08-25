@@ -245,8 +245,8 @@ Name | Type | Description | Notes
 **hyperlinkColorLight** | **string** |  | [optional] [default to undefined]
 **hyperlinkColorDark** | **string** |  | [optional] [default to undefined]
 **zindex** | **number** |  | [optional] [default to undefined]
-**xlargeFontSize** | **any** |  | [optional] [default to undefined]
-**xsmallFontSize** | **any** |  | [optional] [default to undefined]
+**xLargeFontSize** | **any** |  | [optional] [default to undefined]
+**xSmallFontSize** | **any** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -494,8 +494,8 @@ const instance: StyleSetDTO = {
     hyperlinkColorLight,
     hyperlinkColorDark,
     zindex,
-    xlargeFontSize,
-    xsmallFontSize,
+    xLargeFontSize,
+    xSmallFontSize,
 };
 ```
 
