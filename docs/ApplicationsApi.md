@@ -23,6 +23,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**listAppCategories**](#listappcategories) | **GET** /api/v2/apps/categories | List predefined marketplace app categories|
 |[**loadSettingOptions**](#loadsettingoptions) | **POST** /api/v2/apps/{uuid}/settings-schema/options | Load dynamic options for a setting select field|
 |[**migrateToV2**](#migratetov2) | **POST** /api/v2/apps/{uuid}/migrate-v2 | Migrate an app from platform V1 to V2|
+|[**listPublicAppReviewQueue**](#listpublicappreviewqueue) | **GET** /api/v2/apps/public/review-queue | List public apps in the review queue|
 |[**reviewPublicApp**](#reviewpublicapp) | **POST** /api/v2/apps/public/{uuid}/review | Review a public app|
 |[**rotateApp**](#rotateapp) | **POST** /api/v2/apps/{uuid}/rotate | Rotate application configurations|
 |[**streamRuntimeLogs**](#streamruntimelogs) | **GET** /api/v2/apps/{appUuid}/runtime/logs/stream | Stream app runtime logs (SSE)|
