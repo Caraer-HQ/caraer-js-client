@@ -140,6 +140,7 @@ docs/NotFoundErrorCauseStackTraceInner.md
 docs/NotificationsApi.md
 docs/Number.md
 docs/NumberRange.md
+docs/OAuthRegistrationRequest.md
 docs/ObjectAccessGrantCandidatesDTO.md
 docs/ObjectAccessGrantRequestDTO.md
 docs/ObjectAccessGrantSectionDTO.md

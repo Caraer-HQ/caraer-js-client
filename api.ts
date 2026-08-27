@@ -2097,9 +2097,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'xproperty'?: string;
     'ymetric'?: string;
     'yproperty'?: string;
-    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2899,6 +2899,12 @@ export interface NotFoundErrorCauseStackTraceInner {
 export interface Number extends PropertyFormat {
 }
 export interface NumberRange extends PropertyFormat {
+}
+export interface OAuthRegistrationRequest {
+    'redirect_uris'?: Array<string>;
+    'client_name'?: string;
+    'token_endpoint_auth_method'?: string;
+    'application_type'?: string;
 }
 /**
  * Users, teams, and installed apps available for object access grants.
