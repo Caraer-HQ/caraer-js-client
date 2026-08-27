@@ -17,7 +17,7 @@ Name | Type | Description | Notes
 **deletedBy** | [**ModelRecord**](ModelRecord.md) | Identifier of the user who deleted the entity | [optional] [default to undefined]
 **index** | **number** | Index number for ordering entities | [optional] [default to undefined]
 **privateApp** | **boolean** | Indicates whether this app is private (only available to the creator\&#39;s company) | [optional] [default to undefined]
-**hideApiKeyField** | **boolean** | Whether to hide the API token field in app settings UI. Defaults to true when omitted. | [optional] [default to undefined]
+**hideApiKeyField** | **boolean** | Whether to hide the API token field in marketplace installer UI. Defaults to true when omitted. Private apps show the key regardless. | [optional] [default to undefined]
 **details** | [**AppDetailsDTO**](AppDetailsDTO.md) | Additional details and specifications about the application | [optional] [default to undefined]
 **appBars** | [**Array&lt;AppBarDTO&gt;**](AppBarDTO.md) | App bars (location-specific configuration and actions) | [optional] [default to undefined]
 **serverlessFunctions** | [**Array&lt;ServerlessFunctionDTO&gt;**](ServerlessFunctionDTO.md) | Serverless functions owned by this app | [optional] [default to undefined]

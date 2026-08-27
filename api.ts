@@ -455,7 +455,7 @@ export interface AppDTO {
      */
     'privateApp'?: boolean;
     /**
-     * Whether to hide the API token field in app settings UI. Defaults to true when omitted.
+     * Whether to hide the API token field in marketplace installer UI. Defaults to true when omitted. Private apps show the key regardless.
      */
     'hideApiKeyField'?: boolean;
     /**
@@ -2097,9 +2097,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'yproperty'?: string;
     'xproperty'?: string;
     'ymetric'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -4374,8 +4374,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
