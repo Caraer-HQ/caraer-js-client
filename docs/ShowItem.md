@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 **sticky** | **boolean** | Flag indicating whether this item is sticky and will stay fixed in the list. | [optional] [default to false]
 **width** | **number** | Width of the item in pixels. | [optional] [default to undefined]
 **calculationFunction** | **string** | Calculation function used to calculate the value of the item. | [optional] [default to undefined]
-**calculationResult** | **any** |  | [optional] [default to undefined]
+**calculationResult** | **any** | Result of the calculation. | [optional] [default to undefined]
 
 ## Example
 

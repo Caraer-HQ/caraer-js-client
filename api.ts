@@ -1631,6 +1631,9 @@ export interface CreateResponse {
      * A message detailing the result of the operation.
      */
     'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
     'data'?: any;
 }
 /**
@@ -1763,6 +1766,9 @@ export interface DeleteResponse {
      * A message detailing the result of the operation.
      */
     'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
     'data'?: any;
 }
 /**
@@ -1786,6 +1792,9 @@ export interface DeleteResponseVoid {
      * A message detailing the result of the operation.
      */
     'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
     'data'?: any;
 }
 /**
@@ -2088,9 +2097,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
-    'yproperty'?: string;
     'ymetric'?: string;
+    'yproperty'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2215,6 +2224,9 @@ export interface FilterItem {
      * Defines the operator used in the filter. Available operators are defined in the API documentation.
      */
     'operator'?: string;
+    /**
+     * Represents the value to filter against.
+     */
     'value'?: any;
     /**
      * When true, filter fields contain smart content placeholders resolved at runtime.
@@ -2652,6 +2664,9 @@ export interface Leadscore {
      * Defines the operator used in the filter. Available operators are defined in the API documentation.
      */
     'operator'?: string;
+    /**
+     * Represents the value to filter against.
+     */
     'value'?: any;
     /**
      * When true, filter fields contain smart content placeholders resolved at runtime.
@@ -3425,6 +3440,9 @@ export interface PreviewDTO {
      * Property name used for server-side list sorting
      */
     'sortProperty'?: string;
+    /**
+     * Raw stored value of the sort property for this record
+     */
     'sortValue'?: any;
     /**
      * Unique identifier for the entity
@@ -3479,11 +3497,17 @@ export interface PreviewItemDTO {
      * The text content associated with the preview item.
      */
     'text'?: string;
+    /**
+     * The value associated with the preview item. This can hold custom data.
+     */
     'value'?: any;
     /**
      * The related object information for the preview item.
      */
     'relatedObject'?: PreviewRelatedObjectDTO;
+    /**
+     * The related object value associated with this preview item.
+     */
     'relatedObjectValue'?: any;
     /**
      * Whether the preview item is a divider. (solid, dashed, dotted, spacer)
@@ -3497,7 +3521,13 @@ export interface PreviewItemDTO {
      * The button url associated with the preview item.
      */
     'buttonUrl'?: string;
+    /**
+     * The button text value associated with the preview item.
+     */
     'buttonTextValue'?: any;
+    /**
+     * The button value associated with the preview item.
+     */
     'buttonUrlValue'?: any;
     /**
      * The settings associated with the preview item.
@@ -3956,6 +3986,9 @@ export interface RestoreResponse {
      * A message detailing the result of the operation.
      */
     'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
     'data'?: any;
 }
 /**
@@ -4397,6 +4430,9 @@ export interface ShowItem {
      * Calculation function used to calculate the value of the item.
      */
     'calculationFunction'?: string;
+    /**
+     * Result of the calculation.
+     */
     'calculationResult'?: any;
 }
 /**
@@ -4407,6 +4443,9 @@ export interface ShowResponse {
      * A message detailing the result of the operation.
      */
     'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
     'data'?: any;
 }
 /**
@@ -4508,6 +4547,9 @@ export interface ShowResponseObject {
      * A message detailing the result of the operation.
      */
     'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
     'data'?: any;
 }
 /**
@@ -5075,6 +5117,9 @@ export interface SuccessResponse {
      * A message detailing the result of the operation.
      */
     'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
     'data'?: any;
 }
 /**
@@ -5137,6 +5182,9 @@ export interface SuccessResponseVoid {
      * A message detailing the result of the operation.
      */
     'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
     'data'?: any;
 }
 export interface SuggestAnalyticsWidgetsRequest {
@@ -5449,6 +5497,9 @@ export interface UpdateResponse {
      * A message detailing the result of the operation.
      */
     'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
     'data'?: any;
 }
 export interface Url extends PropertyFormat {
