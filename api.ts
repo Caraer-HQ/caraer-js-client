@@ -2097,9 +2097,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
     'yproperty'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2841,9 +2841,9 @@ export interface ModelRecord {
     'deleted'?: boolean;
     'complete'?: boolean;
     'uuid': string;
+    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
-    'user'?: PublicUserDTO;
 }
 export interface MultiLine extends PropertyFormat {
 }
@@ -4977,8 +4977,8 @@ export interface StyleSetDTO {
     'hyperlinkColorLight'?: string;
     'hyperlinkColorDark'?: string;
     'zindex'?: number;
-    'xlargeFontSize'?: any;
-    'xsmallFontSize'?: any;
+    'xLargeFontSize'?: any;
+    'xSmallFontSize'?: any;
 }
 /**
  * Data Transfer Object for subscribing to a webhook. This DTO represents the details required to configure a webhook subscription.
