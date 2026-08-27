@@ -2097,9 +2097,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'yproperty'?: string;
     'xproperty'?: string;
     'ymetric'?: string;
-    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -20599,6 +20599,44 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
+         * Hard-deletes a soft-deleted relation. Only relations with deletedAt set can be removed.
+         * @summary Permanently delete archived relation
+         * @param {string} relationUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permanentlyDeleteArchivedRelation: async (relationUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'relationUuid' is not null or undefined
+            assertParamExists('permanentlyDeleteArchivedRelation', 'relationUuid', relationUuid)
+            const localVarPath = `/api/v2/relations/{relationUuid}/permanent`
+                .replace('{relationUuid}', encodeURIComponent(String(relationUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Restores a previously deleted relation by its UUID. Returns a RestoreResponse with the restored relation details.
          * @summary Restore a deleted relation
          * @param {string} relationUuid 
@@ -20811,6 +20849,19 @@ export const RelationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Hard-deletes a soft-deleted relation. Only relations with deletedAt set can be removed.
+         * @summary Permanently delete archived relation
+         * @param {string} relationUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async permanentlyDeleteArchivedRelation(relationUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.permanentlyDeleteArchivedRelation(relationUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RelationsApi.permanentlyDeleteArchivedRelation']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Restores a previously deleted relation by its UUID. Returns a RestoreResponse with the restored relation details.
          * @summary Restore a deleted relation
          * @param {string} relationUuid 
@@ -20945,6 +20996,16 @@ export const RelationsApiFactory = function (configuration?: Configuration, base
             return localVarFp.getRelationsByObject(objectUuid, body, options).then((request) => request(axios, basePath));
         },
         /**
+         * Hard-deletes a soft-deleted relation. Only relations with deletedAt set can be removed.
+         * @summary Permanently delete archived relation
+         * @param {string} relationUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permanentlyDeleteArchivedRelation(relationUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<DeleteResponse> {
+            return localVarFp.permanentlyDeleteArchivedRelation(relationUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Restores a previously deleted relation by its UUID. Returns a RestoreResponse with the restored relation details.
          * @summary Restore a deleted relation
          * @param {string} relationUuid 
@@ -21077,6 +21138,17 @@ export class RelationsApi extends BaseAPI {
      */
     public getRelationsByObject(objectUuid: string, body: any, options?: RawAxiosRequestConfig) {
         return RelationsApiFp(this.configuration).getRelationsByObject(objectUuid, body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Hard-deletes a soft-deleted relation. Only relations with deletedAt set can be removed.
+     * @summary Permanently delete archived relation
+     * @param {string} relationUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public permanentlyDeleteArchivedRelation(relationUuid: string, options?: RawAxiosRequestConfig) {
+        return RelationsApiFp(this.configuration).permanentlyDeleteArchivedRelation(relationUuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

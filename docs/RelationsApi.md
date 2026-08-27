@@ -13,6 +13,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**getRelations**](#getrelations) | **POST** /api/v2/relations/index | Fetch paginated relations|
 |[**getRelationsBetweenObjects**](#getrelationsbetweenobjects) | **POST** /api/v2/relations/index/{fromObjectUuid}/{toObjectUuid} | Get all relations between two objects|
 |[**getRelationsByObject**](#getrelationsbyobject) | **POST** /api/v2/relations/index/{objectUuid} | Fetch relations for a specific object|
+|[**permanentlyDeleteArchivedRelation**](#permanentlydeletearchivedrelation) | **DELETE** /api/v2/relations/{relationUuid}/permanent | Permanently delete archived relation|
 |[**restoreRelation**](#restorerelation) | **POST** /api/v2/relations/{relationUuid}/restore | Restore a deleted relation|
 |[**updateIndices**](#updateindices) | **PUT** /api/v2/relations/updateIndices | Update relation indices|
 
@@ -516,6 +517,59 @@ const { status, data } = await apiInstance.getRelationsByObject(
 |**200** | Relations fetched successfully |  -  |
 |**404** | Object not found |  -  |
 |**500** | Internal server error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **permanentlyDeleteArchivedRelation**
+> DeleteResponse permanentlyDeleteArchivedRelation()
+
+Hard-deletes a soft-deleted relation. Only relations with deletedAt set can be removed.
+
+### Example
+
+```typescript
+import {
+    RelationsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new RelationsApi(configuration);
+
+let relationUuid: string; // (default to undefined)
+
+const { status, data } = await apiInstance.permanentlyDeleteArchivedRelation(
+    relationUuid
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **relationUuid** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**DeleteResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, */*
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Relation permanently deleted |  -  |
+|**400** | Relation is not archived |  -  |
+|**404** | Relation not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
