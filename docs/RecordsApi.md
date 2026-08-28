@@ -377,7 +377,7 @@ const { status, data } = await apiInstance.create(
 # **createOrUpdate**
 > createOrUpdate(recordDTO)
 
-Creates a new record or updates an existing one based on uniqueness criteria for the given object. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
+Creates a new record or updates an existing one. Match order: body/path uuid already in the graph, then unique property values. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
 
 ### Example
 
@@ -392,7 +392,7 @@ const configuration = new Configuration();
 const apiInstance = new RecordsApi(configuration);
 
 let objectName: string; // (default to undefined)
-let recordDTO: RecordDTO; //Record data to create or update
+let recordDTO: RecordDTO; //Record data to create or update. Top-level uuid updates that record when it already exists.
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let ignoreErrors: boolean; // (optional) (default to false)
 let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
@@ -410,7 +410,7 @@ const { status, data } = await apiInstance.createOrUpdate(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **recordDTO** | **RecordDTO**| Record data to create or update | |
+| **recordDTO** | **RecordDTO**| Record data to create or update. Top-level uuid updates that record when it already exists. | |
 | **objectName** | [**string**] |  | defaults to undefined|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 | **ignoreErrors** | [**boolean**] |  | (optional) defaults to false|

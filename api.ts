@@ -18045,10 +18045,10 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Creates a new record or updates an existing one based on uniqueness criteria for the given object. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
+         * Creates a new record or updates an existing one. Match order: body/path uuid already in the graph, then unique property values. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create or update a record
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to create or update
+         * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
          * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
          * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
@@ -19126,10 +19126,10 @@ export const RecordsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Creates a new record or updates an existing one based on uniqueness criteria for the given object. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
+         * Creates a new record or updates an existing one. Match order: body/path uuid already in the graph, then unique property values. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create or update a record
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to create or update
+         * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
          * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
          * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
@@ -19503,10 +19503,10 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.create(objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options).then((request) => request(axios, basePath));
         },
         /**
-         * Creates a new record or updates an existing one based on uniqueness criteria for the given object. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
+         * Creates a new record or updates an existing one. Match order: body/path uuid already in the graph, then unique property values. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create or update a record
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to create or update
+         * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
          * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
          * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
@@ -19827,10 +19827,10 @@ export class RecordsApi extends BaseAPI {
     }
 
     /**
-     * Creates a new record or updates an existing one based on uniqueness criteria for the given object. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
+     * Creates a new record or updates an existing one. Match order: body/path uuid already in the graph, then unique property values. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
      * @summary Create or update a record
      * @param {string} objectName 
-     * @param {RecordDTO} recordDTO Record data to create or update
+     * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
      * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [ignoreErrors] 
      * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
