@@ -2097,9 +2097,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'xproperty'?: string;
     'ymetric'?: string;
     'yproperty'?: string;
-    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2841,9 +2841,9 @@ export interface ModelRecord {
     'deleted'?: boolean;
     'complete'?: boolean;
     'uuid': string;
+    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
-    'user'?: PublicUserDTO;
 }
 export interface MultiLine extends PropertyFormat {
 }
@@ -4380,8 +4380,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -8836,7 +8836,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
-         * Generates a test webhook payload using the latest updated record for the webhook topic object and the event type from the webhook topic (uses updated when the topic action is all).
+         * Generates a test webhook payload using the latest updated record that matches the webhook filter (if any) for the topic object. Form-submission topics prefer a record that submitted that form; includeRelations prefer a record that has as many of those related objects as possible. Uses the event type from the webhook topic (updated when the topic action is all).
          * @summary Test a webhook for an app (auto-resolve)
          * @param {string} appUuid UUID of the app that owns the webhook
          * @param {string} webhookUuid UUID of the webhook to test
@@ -8878,7 +8878,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
-         * Generates a test webhook payload from webhook configuration supplied in the request body without persisting the webhook. When recordUuid is omitted, auto-resolves the record and event from the webhook topic (same as the saved-webhook auto test endpoint).
+         * Generates a test webhook payload from webhook configuration supplied in the request body without persisting the webhook. When recordUuid is omitted, auto-resolves the latest updated record that matches the webhook filter (if any), prefers records that submitted the topic form and that have as many includeRelations as possible, and uses the event from the webhook topic.
          * @summary Test an unsaved webhook for an app
          * @param {string} appUuid UUID of the app the webhook belongs to
          * @param {TestWebhookRequest} testWebhookRequest Webhook configuration and optional test event parameters
@@ -9391,7 +9391,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Generates a test webhook payload using the latest updated record for the webhook topic object and the event type from the webhook topic (uses updated when the topic action is all).
+         * Generates a test webhook payload using the latest updated record that matches the webhook filter (if any) for the topic object. Form-submission topics prefer a record that submitted that form; includeRelations prefer a record that has as many of those related objects as possible. Uses the event type from the webhook topic (updated when the topic action is all).
          * @summary Test a webhook for an app (auto-resolve)
          * @param {string} appUuid UUID of the app that owns the webhook
          * @param {string} webhookUuid UUID of the webhook to test
@@ -9405,7 +9405,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Generates a test webhook payload from webhook configuration supplied in the request body without persisting the webhook. When recordUuid is omitted, auto-resolves the record and event from the webhook topic (same as the saved-webhook auto test endpoint).
+         * Generates a test webhook payload from webhook configuration supplied in the request body without persisting the webhook. When recordUuid is omitted, auto-resolves the latest updated record that matches the webhook filter (if any), prefers records that submitted the topic form and that have as many includeRelations as possible, and uses the event from the webhook topic.
          * @summary Test an unsaved webhook for an app
          * @param {string} appUuid UUID of the app the webhook belongs to
          * @param {TestWebhookRequest} testWebhookRequest Webhook configuration and optional test event parameters
@@ -9727,7 +9727,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
             return localVarFp.testAppWebhook(appUuid, webhookUuid, recordUuid, eventType, propertyName, options).then((request) => request(axios, basePath));
         },
         /**
-         * Generates a test webhook payload using the latest updated record for the webhook topic object and the event type from the webhook topic (uses updated when the topic action is all).
+         * Generates a test webhook payload using the latest updated record that matches the webhook filter (if any) for the topic object. Form-submission topics prefer a record that submitted that form; includeRelations prefer a record that has as many of those related objects as possible. Uses the event type from the webhook topic (updated when the topic action is all).
          * @summary Test a webhook for an app (auto-resolve)
          * @param {string} appUuid UUID of the app that owns the webhook
          * @param {string} webhookUuid UUID of the webhook to test
@@ -9738,7 +9738,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
             return localVarFp.testAppWebhookAuto(appUuid, webhookUuid, options).then((request) => request(axios, basePath));
         },
         /**
-         * Generates a test webhook payload from webhook configuration supplied in the request body without persisting the webhook. When recordUuid is omitted, auto-resolves the record and event from the webhook topic (same as the saved-webhook auto test endpoint).
+         * Generates a test webhook payload from webhook configuration supplied in the request body without persisting the webhook. When recordUuid is omitted, auto-resolves the latest updated record that matches the webhook filter (if any), prefers records that submitted the topic form and that have as many includeRelations as possible, and uses the event from the webhook topic.
          * @summary Test an unsaved webhook for an app
          * @param {string} appUuid UUID of the app the webhook belongs to
          * @param {TestWebhookRequest} testWebhookRequest Webhook configuration and optional test event parameters
@@ -10070,7 +10070,7 @@ export class ApplicationsApi extends BaseAPI {
     }
 
     /**
-     * Generates a test webhook payload using the latest updated record for the webhook topic object and the event type from the webhook topic (uses updated when the topic action is all).
+     * Generates a test webhook payload using the latest updated record that matches the webhook filter (if any) for the topic object. Form-submission topics prefer a record that submitted that form; includeRelations prefer a record that has as many of those related objects as possible. Uses the event type from the webhook topic (updated when the topic action is all).
      * @summary Test a webhook for an app (auto-resolve)
      * @param {string} appUuid UUID of the app that owns the webhook
      * @param {string} webhookUuid UUID of the webhook to test
@@ -10082,7 +10082,7 @@ export class ApplicationsApi extends BaseAPI {
     }
 
     /**
-     * Generates a test webhook payload from webhook configuration supplied in the request body without persisting the webhook. When recordUuid is omitted, auto-resolves the record and event from the webhook topic (same as the saved-webhook auto test endpoint).
+     * Generates a test webhook payload from webhook configuration supplied in the request body without persisting the webhook. When recordUuid is omitted, auto-resolves the latest updated record that matches the webhook filter (if any), prefers records that submitted the topic form and that have as many includeRelations as possible, and uses the event from the webhook topic.
      * @summary Test an unsaved webhook for an app
      * @param {string} appUuid UUID of the app the webhook belongs to
      * @param {TestWebhookRequest} testWebhookRequest Webhook configuration and optional test event parameters
