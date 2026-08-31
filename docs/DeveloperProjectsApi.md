@@ -63,6 +63,9 @@ const { status, data } = await apiInstance.create2(
 |**200** | Project created or fetched |  -  |
 |**400** | appUuid is required |  -  |
 |**403** | Caller is not the app creator |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -119,6 +122,10 @@ const { status, data } = await apiInstance.createBuild(
 |-------------|-------------|------------------|
 |**200** | Build recorded (may still have status FAILED if parsing/upload failed) |  -  |
 |**400** | archiveBase64 is required |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -178,6 +185,10 @@ const { status, data } = await apiInstance.deploy(
 |-------------|-------------|------------------|
 |**200** | Deploy recorded |  -  |
 |**400** | Build is not ready to deploy |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -231,11 +242,14 @@ void (empty response body)
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**404** | Build not found for this project |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **listBuilds**
-> any listBuilds()
+> SuccessResponseListProjectBuildDTO listBuilds()
 
 
 ### Example
@@ -265,7 +279,7 @@ const { status, data } = await apiInstance.listBuilds(
 
 ### Return type
 
-**any**
+**SuccessResponseListProjectBuildDTO**
 
 ### Authorization
 
@@ -281,11 +295,15 @@ const { status, data } = await apiInstance.listBuilds(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **listDeploys**
-> any listDeploys()
+> SuccessResponseListProjectDeployDTO listDeploys()
 
 
 ### Example
@@ -315,7 +333,7 @@ const { status, data } = await apiInstance.listDeploys(
 
 ### Return type
 
-**any**
+**SuccessResponseListProjectDeployDTO**
 
 ### Authorization
 
@@ -331,11 +349,15 @@ const { status, data } = await apiInstance.listDeploys(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **show3**
-> ShowResponse show3()
+> ShowResponseDeveloperProjectDTO show3()
 
 
 ### Example
@@ -365,7 +387,7 @@ const { status, data } = await apiInstance.show3(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseDeveloperProjectDTO**
 
 ### Authorization
 
@@ -382,6 +404,9 @@ const { status, data } = await apiInstance.show3(
 |-------------|-------------|------------------|
 |**200** | Project retrieved |  -  |
 |**404** | Project not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

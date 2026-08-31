@@ -89,6 +89,8 @@ const { status, data } = await apiInstance.createAppWebhookForApp(
 |**400** | Invalid input provided or app not installed |  -  |
 |**404** | App not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -144,6 +146,8 @@ const { status, data } = await apiInstance.createPrivateApp(
 |**400** | Invalid request data |  -  |
 |**401** | Unauthorized access |  -  |
 |**500** | Internal server error |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -199,6 +203,8 @@ const { status, data } = await apiInstance.createPublicApp(
 |**400** | Invalid request data |  -  |
 |**401** | Unauthorized access |  -  |
 |**500** | Internal server error |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -255,11 +261,13 @@ const { status, data } = await apiInstance.deleteAppWebhook(
 |**200** | Webhook deleted successfully |  -  |
 |**404** | Webhook not found for the specified app or company |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getApp**
-> ShowResponse getApp()
+> ShowResponseAppDTO getApp()
 
 Fetches details about an application specified by its UUID. Returns the application details as a ShowResponse wrapping an AppDetailDTO.
 
@@ -290,7 +298,7 @@ const { status, data } = await apiInstance.getApp(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseAppDTO**
 
 ### Authorization
 
@@ -308,11 +316,13 @@ const { status, data } = await apiInstance.getApp(
 |**200** | Successfully retrieved application details |  -  |
 |**404** | Application not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getAppWebhook**
-> ShowResponse getAppWebhook()
+> ShowResponseSubscribeWebhookDTO getAppWebhook()
 
 Fetches a single webhook that belongs to the specified app.
 
@@ -346,7 +356,7 @@ const { status, data } = await apiInstance.getAppWebhook(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseSubscribeWebhookDTO**
 
 ### Authorization
 
@@ -364,11 +374,13 @@ const { status, data } = await apiInstance.getAppWebhook(
 |**200** | Webhook retrieved successfully |  -  |
 |**404** | Webhook not found for the specified app or company |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getAppWebhooks**
-> PaginationResponse getAppWebhooks(body)
+> PaginationResponseSubscribeWebhookDTO getAppWebhooks(paginationRequest)
 
 Fetches a paginated and optionally filtered list of webhooks associated with the specified app and the authenticated user\'s selected company.
 
@@ -377,18 +389,19 @@ Fetches a paginated and optionally filtered list of webhooks associated with the
 ```typescript
 import {
     ApplicationsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new ApplicationsApi(configuration);
 
 let appUuid: string; //UUID of the application for which to retrieve webhooks (default to undefined)
-let body: any; //
+let paginationRequest: PaginationRequest; //
 
 const { status, data } = await apiInstance.getAppWebhooks(
     appUuid,
-    body
+    paginationRequest
 );
 ```
 
@@ -396,13 +409,13 @@ const { status, data } = await apiInstance.getAppWebhooks(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**|  | |
+| **paginationRequest** | **PaginationRequest**|  | |
 | **appUuid** | [**string**] | UUID of the application for which to retrieve webhooks | defaults to undefined|
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseSubscribeWebhookDTO**
 
 ### Authorization
 
@@ -422,11 +435,12 @@ const { status, data } = await apiInstance.getAppWebhooks(
 |**401** | Unauthorized access |  -  |
 |**404** | Application not found |  -  |
 |**500** | Internal server error |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getApps**
-> PaginationResponse getApps(body)
+> PaginationResponseAppDTO getApps(paginationRequest)
 
 Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. On success, returns a PaginationResponse containing AppSummaryDTO objects.
 
@@ -435,18 +449,19 @@ Fetches a paginated and optionally filtered list of applications. The list is so
 ```typescript
 import {
     ApplicationsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new ApplicationsApi(configuration);
 
-let body: any; //
+let paginationRequest: PaginationRequest; //
 let type: string; // (optional) (default to '')
 let installedOnly: boolean; // (optional) (default to false)
 
 const { status, data } = await apiInstance.getApps(
-    body,
+    paginationRequest,
     type,
     installedOnly
 );
@@ -456,14 +471,14 @@ const { status, data } = await apiInstance.getApps(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**|  | |
+| **paginationRequest** | **PaginationRequest**|  | |
 | **type** | [**string**] |  | (optional) defaults to ''|
 | **installedOnly** | [**boolean**] |  | (optional) defaults to false|
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseAppDTO**
 
 ### Authorization
 
@@ -482,6 +497,8 @@ const { status, data } = await apiInstance.getApps(
 |**400** | Invalid request data |  -  |
 |**401** | Unauthorized access |  -  |
 |**500** | Internal server error |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -534,11 +551,14 @@ const { status, data } = await apiInstance.getCompanyInformation(
 |-------------|-------------|------------------|
 |**200** | Successfully retrieved company information |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getMyCreatedApps**
-> PaginationResponse getMyCreatedApps(body)
+> PaginationResponseAppDTO getMyCreatedApps(paginationRequest)
 
 Fetches a paginated and optionally filtered list of apps where the selected company is the creator. Returns a PaginationResponse containing AppDTO objects.
 
@@ -547,16 +567,17 @@ Fetches a paginated and optionally filtered list of apps where the selected comp
 ```typescript
 import {
     ApplicationsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new ApplicationsApi(configuration);
 
-let body: any; //
+let paginationRequest: PaginationRequest; //
 
 const { status, data } = await apiInstance.getMyCreatedApps(
-    body
+    paginationRequest
 );
 ```
 
@@ -564,12 +585,12 @@ const { status, data } = await apiInstance.getMyCreatedApps(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**|  | |
+| **paginationRequest** | **PaginationRequest**|  | |
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseAppDTO**
 
 ### Authorization
 
@@ -588,11 +609,13 @@ const { status, data } = await apiInstance.getMyCreatedApps(
 |**400** | Invalid request data |  -  |
 |**401** | Unauthorized access |  -  |
 |**500** | Internal server error |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getPublicApp**
-> ShowResponse getPublicApp()
+> ShowResponseAppDTO getPublicApp()
 
 Gets the full app for the creator, including appPublish, appBars, details, and pricing. Returns AppCreatorDTO with everything under App.
 
@@ -623,7 +646,7 @@ const { status, data } = await apiInstance.getPublicApp(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseAppDTO**
 
 ### Authorization
 
@@ -641,11 +664,13 @@ const { status, data } = await apiInstance.getPublicApp(
 |**200** | Successfully retrieved the public app |  -  |
 |**404** | Public app not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getRuntimeLogs**
-> SuccessResponse getRuntimeLogs()
+> SuccessResponseMapStringObject getRuntimeLogs()
 
 Queries Cloud Logging for the shared V2 app container (app-{uuid}) without filtering to a single function.
 
@@ -682,7 +707,7 @@ const { status, data } = await apiInstance.getRuntimeLogs(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseMapStringObject**
 
 ### Authorization
 
@@ -699,11 +724,14 @@ const { status, data } = await apiInstance.getRuntimeLogs(
 |-------------|-------------|------------------|
 |**200** | Successfully retrieved logs (may be empty if logging is unavailable) |  -  |
 |**404** | App not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getWebhookEvents**
-> getWebhookEvents()
+> Array<{ [key: string]: any | null; }> getWebhookEvents()
 
 Returns all supported record webhook events with their details.
 
@@ -734,7 +762,7 @@ const { status, data } = await apiInstance.getWebhookEvents(
 
 ### Return type
 
-void (empty response body)
+**Array<{ [key: string]: any | null; }>**
 
 ### Authorization
 
@@ -750,11 +778,15 @@ void (empty response body)
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | List of available webhook record events |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getWebhookFormats**
-> getWebhookFormats()
+> Array<{ [key: string]: any | null; }> getWebhookFormats()
 
 Returns all supported webhook payload formats with their details.
 
@@ -785,7 +817,7 @@ const { status, data } = await apiInstance.getWebhookFormats(
 
 ### Return type
 
-void (empty response body)
+**Array<{ [key: string]: any | null; }>**
 
 ### Authorization
 
@@ -801,11 +833,15 @@ void (empty response body)
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | List of available webhook formats |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getWebhookPropertyTopics**
-> getWebhookPropertyTopics()
+> Array<{ [key: string]: string; }> getWebhookPropertyTopics()
 
 Returns property names on an object that can be used in 4-part property_changed webhook topics.
 
@@ -839,7 +875,7 @@ const { status, data } = await apiInstance.getWebhookPropertyTopics(
 
 ### Return type
 
-void (empty response body)
+**Array<{ [key: string]: string; }>**
 
 ### Authorization
 
@@ -855,11 +891,15 @@ void (empty response body)
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | List of property names |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **installApp**
-> ShowResponse installApp()
+> ShowResponseAppDTO installApp()
 
 Installs the application specified by its UUID with optional initial configuration settings. Returns the updated application details as a ShowResponse wrapping an AppDTO.
 
@@ -894,7 +934,7 @@ const { status, data } = await apiInstance.installApp(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseAppDTO**
 
 ### Authorization
 
@@ -912,11 +952,13 @@ const { status, data } = await apiInstance.installApp(
 |**200** | Successfully installed the application |  -  |
 |**404** | Application not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **listAppCategories**
-> listAppCategories()
+> Array<{ [key: string]: any; }> listAppCategories()
 
 Returns the allowed category keys and labels for public app marketplace listings.
 
@@ -940,7 +982,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-void (empty response body)
+**Array<{ [key: string]: any; }>**
 
 ### Authorization
 
@@ -956,11 +998,15 @@ void (empty response body)
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Successfully retrieved app categories |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **loadSettingOptions**
-> ShowResponse loadSettingOptions(loadAppSettingOptionsRequest)
+> ShowResponseLoadAppSettingOptionsResponse loadSettingOptions(loadAppSettingOptionsRequest)
 
 Invokes the app serverless function configured on the field\'s optionsSource and returns options for SINGLE_SELECT / MULTI_SELECT fields. Uses the draft settingsSchema from the installer UI so credentials entered in other fields are available to the loader.
 
@@ -995,7 +1041,7 @@ const { status, data } = await apiInstance.loadSettingOptions(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseLoadAppSettingOptionsResponse**
 
 ### Authorization
 
@@ -1015,11 +1061,13 @@ const { status, data } = await apiInstance.loadSettingOptions(
 |**403** | App not accessible |  -  |
 |**404** | App, field, or serverless function not found |  -  |
 |**502** | Serverless function failed or returned invalid response |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **migrateToV2**
-> SuccessResponse migrateToV2()
+> SuccessResponseMapStringObject migrateToV2()
 
 Opt-in in-place migration to the shared container runtime. Validates a single runtime, sets platformVersion=2, schedules an async rebuild, and keeps invoking via legacy gcpReference until runtimeStatus is READY.
 
@@ -1054,7 +1102,7 @@ const { status, data } = await apiInstance.migrateToV2(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseMapStringObject**
 
 ### Authorization
 
@@ -1073,11 +1121,13 @@ const { status, data } = await apiInstance.migrateToV2(
 |**400** | Mixed/missing runtimes or invalid request |  -  |
 |**403** | Not allowed to migrate this app |  -  |
 |**404** | App not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **reviewPublicApp**
-> ShowResponse reviewPublicApp(reviewRequest)
+> ShowResponseAppDTO reviewPublicApp(reviewRequest)
 
 Sets review outcome (approve/reject/changes requested), feedback, and optional reviewer notes. Returns the updated app details as a ShowResponse wrapping an AppDTO.
 
@@ -1112,7 +1162,7 @@ const { status, data } = await apiInstance.reviewPublicApp(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseAppDTO**
 
 ### Authorization
 
@@ -1130,11 +1180,13 @@ const { status, data } = await apiInstance.reviewPublicApp(
 |**200** | Successfully reviewed the public app |  -  |
 |**404** | Public app not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **rotateApp**
-> ShowResponse rotateApp()
+> ShowResponseAppDTO rotateApp()
 
 Rotates the configuration or settings for the specified application by UUID. On success, returns the updated application details as a ShowResponse wrapping an AppDTO.
 
@@ -1165,7 +1217,7 @@ const { status, data } = await apiInstance.rotateApp(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseAppDTO**
 
 ### Authorization
 
@@ -1183,6 +1235,8 @@ const { status, data } = await apiInstance.rotateApp(
 |**200** | Successfully rotated application configurations |  -  |
 |**404** | Application not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1227,19 +1281,22 @@ const { status, data } = await apiInstance.streamRuntimeLogs(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: text/event-stream
+ - **Accept**: text/event-stream, application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | SSE stream of log entries |  -  |
-|**404** | App not found |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **submitPublicApp**
-> ShowResponse submitPublicApp()
+> ShowResponseAppDTO submitPublicApp()
 
 Submits a public app specified by its UUID for review. Returns the submitted app details as a ShowResponse wrapping an AppDTO.
 
@@ -1270,7 +1327,7 @@ const { status, data } = await apiInstance.submitPublicApp(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseAppDTO**
 
 ### Authorization
 
@@ -1288,11 +1345,13 @@ const { status, data } = await apiInstance.submitPublicApp(
 |**200** | Successfully submitted the public app for review |  -  |
 |**404** | Public app not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **testAppWebhook**
-> testAppWebhook()
+> string testAppWebhook()
 
 Generates a test webhook payload for a specific record and event type. Uses the same payload generation logic as live webhook delivery.
 
@@ -1335,7 +1394,7 @@ const { status, data } = await apiInstance.testAppWebhook(
 
 ### Return type
 
-void (empty response body)
+**string**
 
 ### Authorization
 
@@ -1354,11 +1413,13 @@ void (empty response body)
 |**400** | Invalid event type or app not installed |  -  |
 |**404** | Webhook not found for the specified app or company |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **testAppWebhookAuto**
-> testAppWebhookAuto()
+> string testAppWebhookAuto()
 
 Generates a test webhook payload using the latest matching record for the topic object. Form-submission topics prefer a record that submitted that form; includeRelations prefer a record that has as many of those related objects as possible. If no record exists, a simulated record is used. Missing includeRelations and simulated samples are explained in context.testNote and the X-Webhook-Test-Note header. Uses the event type from the webhook topic (updated when the topic action is all).
 
@@ -1392,7 +1453,7 @@ const { status, data } = await apiInstance.testAppWebhookAuto(
 
 ### Return type
 
-void (empty response body)
+**string**
 
 ### Authorization
 
@@ -1411,11 +1472,13 @@ void (empty response body)
 |**400** | Webhook topic cannot be used for record testing |  -  |
 |**404** | Webhook not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **testAppWebhookUnsaved**
-> testAppWebhookUnsaved(testWebhookRequest)
+> string testAppWebhookUnsaved(testWebhookRequest)
 
 Generates a test webhook payload from webhook configuration supplied in the request body without persisting the webhook. When recordUuid is omitted, auto-resolves the latest matching record, prefers records that submitted the topic form and that have as many includeRelations as possible, and uses the event from the webhook topic. If no record exists, a simulated record is used and context.testNote (also X-Webhook-Test-Note) explains that plus any missing includeRelations.
 
@@ -1450,7 +1513,7 @@ const { status, data } = await apiInstance.testAppWebhookUnsaved(
 
 ### Return type
 
-void (empty response body)
+**string**
 
 ### Authorization
 
@@ -1469,11 +1532,13 @@ void (empty response body)
 |**400** | Invalid webhook configuration or event parameters |  -  |
 |**404** | App not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **uninstallApp**
-> ShowResponse uninstallApp(appRequest)
+> ShowResponseAppDTO uninstallApp(appRequest)
 
 Removes the installed application specified by its UUID using the provided settings. The request body should contain an AppRequest with the uninstallation settings. Returns the updated application details as a ShowResponse wrapping an AppDTO.
 
@@ -1508,7 +1573,7 @@ const { status, data } = await apiInstance.uninstallApp(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseAppDTO**
 
 ### Authorization
 
@@ -1526,6 +1591,8 @@ const { status, data } = await apiInstance.uninstallApp(
 |**200** | Successfully uninstalled the application |  -  |
 |**404** | Application not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1587,11 +1654,13 @@ const { status, data } = await apiInstance.updateAppWebhookForApp(
 |**400** | Invalid input provided or app not installed |  -  |
 |**404** | Webhook not found for the specified app or company |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **updatePublicApp**
-> ShowResponse updatePublicApp(appDTO)
+> ShowResponseAppDTO updatePublicApp(appDTO)
 
 Updates a public app with the full creator payload (label, description, details, pricing, settingsSchema, appBars). Send the entire AppCreatorDTO as returned by GET. Returns the updated app as AppCreatorDTO.
 
@@ -1626,7 +1695,7 @@ const { status, data } = await apiInstance.updatePublicApp(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseAppDTO**
 
 ### Authorization
 
@@ -1645,6 +1714,7 @@ const { status, data } = await apiInstance.updatePublicApp(
 |**404** | Public app not found |  -  |
 |**403** | You are not allowed to update this app |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -19,7 +19,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**uploadFont**](#uploadfont) | **POST** /api/v2/company/uploadFont | Upload a font file|
 
 # **createCompany**
-> SuccessResponse createCompany(createCompanyRequest)
+> SuccessResponseCompanyDTO createCompany(createCompanyRequest)
 
 Creates a new company based on the provided request data.
 
@@ -51,7 +51,7 @@ const { status, data } = await apiInstance.createCompany(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseCompanyDTO**
 
 ### Authorization
 
@@ -70,11 +70,13 @@ const { status, data } = await apiInstance.createCompany(
 |**400** | Invalid input |  -  |
 |**401** | Unauthorized |  -  |
 |**403** | Insufficient scope |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getCompany**
-> ShowResponse getCompany()
+> ShowResponseCompanyDTO getCompany()
 
 Returns the company currently selected by the logged-in user. Requires TOOLS_COMPANY_SETTINGS_READ scope.
 
@@ -98,7 +100,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseCompanyDTO**
 
 ### Authorization
 
@@ -116,11 +118,13 @@ This endpoint does not have any parameters.
 |**200** | Company returned successfully |  -  |
 |**401** | Unauthorized |  -  |
 |**403** | Insufficient scope |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getCompanyByUuid**
-> ShowResponse getCompanyByUuid()
+> ShowResponseCompanyDTO getCompanyByUuid()
 
 Returns a company by its UUID. Requires TOOLS_COMPANY_SETTINGS_READ scope.
 
@@ -151,7 +155,7 @@ const { status, data } = await apiInstance.getCompanyByUuid(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseCompanyDTO**
 
 ### Authorization
 
@@ -170,11 +174,12 @@ const { status, data } = await apiInstance.getCompanyByUuid(
 |**401** | Unauthorized |  -  |
 |**403** | Insufficient scope |  -  |
 |**404** | Company not found |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getDigitalIdentity**
-> ShowResponse getDigitalIdentity()
+> ShowResponseDigitalIdentityDTO getDigitalIdentity()
 
 Returns the digital identity (branding) for the company currently selected by the logged-in user.
 
@@ -198,7 +203,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseDigitalIdentityDTO**
 
 ### Authorization
 
@@ -216,11 +221,13 @@ This endpoint does not have any parameters.
 |**200** | Digital identity returned successfully |  -  |
 |**401** | Unauthorized |  -  |
 |**403** | Insufficient scope |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getSuiteDashboard**
-> ShowResponse getSuiteDashboard()
+> ShowResponseAnalyticsDashboardConfig getSuiteDashboard()
 
 Returns the home analytics dashboard for a suite. Empty dashboard when none is saved.
 
@@ -251,7 +258,7 @@ const { status, data } = await apiInstance.getSuiteDashboard(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseAnalyticsDashboardConfig**
 
 ### Authorization
 
@@ -268,11 +275,14 @@ const { status, data } = await apiInstance.getSuiteDashboard(
 |-------------|-------------|------------------|
 |**200** | Suite dashboard returned |  -  |
 |**401** | Unauthorized |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getSuiteDashboards**
-> ShowResponse getSuiteDashboards()
+> ShowResponseMapStringAnalyticsDashboardConfig getSuiteDashboards()
 
 Returns all home analytics dashboards keyed by suite name for the selected company.
 
@@ -296,7 +306,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseMapStringAnalyticsDashboardConfig**
 
 ### Authorization
 
@@ -313,11 +323,14 @@ This endpoint does not have any parameters.
 |-------------|-------------|------------------|
 |**200** | Suite dashboards returned |  -  |
 |**401** | Unauthorized |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getWebsiteSettings**
-> ShowResponse getWebsiteSettings()
+> ShowResponseWebsiteSettingsDTO getWebsiteSettings()
 
 Returns the website settings for the company currently selected by the logged-in user.
 
@@ -341,7 +354,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseWebsiteSettingsDTO**
 
 ### Authorization
 
@@ -359,11 +372,13 @@ This endpoint does not have any parameters.
 |**200** | Website settings returned successfully |  -  |
 |**401** | Unauthorized |  -  |
 |**403** | Insufficient scope |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **resumeWebhookDispatch**
-> SuccessResponse resumeWebhookDispatch()
+> SuccessResponseMapStringObject resumeWebhookDispatch()
 
 Clears the per-company webhook circuit breaker so outbound deliveries resume immediately.
 
@@ -394,7 +409,7 @@ const { status, data } = await apiInstance.resumeWebhookDispatch(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseMapStringObject**
 
 ### Authorization
 
@@ -412,6 +427,8 @@ const { status, data } = await apiInstance.resumeWebhookDispatch(
 |**200** | Circuit breaker cleared |  -  |
 |**401** | Unauthorized |  -  |
 |**403** | Insufficient scope |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -470,6 +487,7 @@ const { status, data } = await apiInstance.updateCompany(
 |**401** | Unauthorized |  -  |
 |**403** | Insufficient scope |  -  |
 |**404** | Company not found |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -525,6 +543,7 @@ const { status, data } = await apiInstance.updateDigitalIdentity(
 |**401** | Unauthorized |  -  |
 |**403** | Insufficient scope |  -  |
 |**404** | Digital identity not found for company |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -582,6 +601,9 @@ const { status, data } = await apiInstance.updateSuiteDashboard(
 |**200** | Suite dashboard saved |  -  |
 |**400** | Invalid dashboard config |  -  |
 |**401** | Unauthorized |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -637,11 +659,12 @@ const { status, data } = await apiInstance.updateWebsiteSettings(
 |**401** | Unauthorized |  -  |
 |**403** | Insufficient scope |  -  |
 |**404** | Website settings not found for company |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **uploadFont**
-> SuccessResponse uploadFont()
+> SuccessResponseString uploadFont()
 
 Uploads a font file to S3 storage and returns the public URL.
 
@@ -672,7 +695,7 @@ const { status, data } = await apiInstance.uploadFont(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -690,6 +713,9 @@ const { status, data } = await apiInstance.uploadFont(
 |**200** | Font uploaded successfully |  -  |
 |**400** | Invalid file provided |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

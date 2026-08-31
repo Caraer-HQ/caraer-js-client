@@ -1,4 +1,4 @@
-# PaginationResponse
+# PaginationResponseMapStringObject
 
 Response object for paginated data.
 
@@ -7,7 +7,7 @@ Response object for paginated data.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **message** | **string** | A message detailing the result of the operation. | [optional] [default to undefined]
-**data** | **Array&lt;any&gt;** | The data returned in the current page of the pagination. | [optional] [default to undefined]
+**data** | **Array&lt;{ [key: string]: any | null; }&gt;** | The data returned in the current page of the pagination. | [optional] [default to undefined]
 **total** | **number** | The total number of items available. | [optional] [default to undefined]
 **page** | **number** | The current page number (starts from 1). | [optional] [default to undefined]
 **perPage** | **number** | The number of items displayed per page. | [optional] [default to undefined]
@@ -16,9 +16,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PaginationResponse } from '@caraer/client';
+import { PaginationResponseMapStringObject } from '@caraer/client';
 
-const instance: PaginationResponse = {
+const instance: PaginationResponseMapStringObject = {
     message,
     data,
     total,

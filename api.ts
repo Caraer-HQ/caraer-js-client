@@ -1183,6 +1183,19 @@ export interface BulkEditRecordsResponse {
      */
     'errors'?: Array<BulkEditRecordErrorItem>;
 }
+export interface CRUD {
+    'sessionType'?: CRUDSessionTypeEnum;
+    'httpSessionId'?: string;
+    'turnOffMetaRelationships'?: boolean;
+}
+
+export const CRUDSessionTypeEnum = {
+    Main: 'MAIN',
+    User: 'USER',
+} as const;
+
+export type CRUDSessionTypeEnum = typeof CRUDSessionTypeEnum[keyof typeof CRUDSessionTypeEnum];
+
 export interface CaraerErrorType {
     /**
      * The error message providing details about the failure.
@@ -1678,6 +1691,26 @@ export interface CreateResponseAppScheduleDTO {
 /**
  * Response for a successful resource creation operation.
  */
+export interface CreateResponseFeedDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: FeedDTO;
+}
+/**
+ * Success response (CreateResponseMapStringString).
+ */
+export interface CreateResponseMapStringString {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Response for a successful resource creation operation.
+ */
 export interface CreateResponseSignedUrlResultDTO {
     /**
      * A message detailing the result of the operation.
@@ -1774,6 +1807,19 @@ export interface DeleteResponse {
 /**
  * Response class representing the result of a delete operation.
  */
+export interface DeleteResponseFeedDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: FeedDTO;
+}
+/**
+ * Response class representing the result of a delete operation.
+ */
 export interface DeleteResponseString {
     /**
      * A message detailing the result of the operation.
@@ -1809,6 +1855,59 @@ export interface DeployBuildRequest {
      * When true, soft-delete remote functions/webhooks/schedules/inbound routes/OAuth providers that are absent from the build archive. Defaults to false.
      */
     'prune'?: boolean;
+}
+/**
+ * Developer sandbox: a Neo4j DB clone of the owning company. Activate via X-Caraer-Sandbox-Uuid; company identity stays the owner.
+ */
+export interface DeveloperSandboxDTO {
+    /**
+     * Unique identifier for the entity
+     */
+    'uuid': string;
+    /**
+     * The name of the entity
+     */
+    'name': string;
+    /**
+     * Display label for the entity, can be different from name
+     */
+    'label'?: string;
+    /**
+     * Unix timestamp when the entity was created
+     */
+    'createdAt'?: number;
+    /**
+     * Identifier of the user who created the entity
+     */
+    'createdBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was last updated
+     */
+    'updatedAt'?: number;
+    /**
+     * Identifier of the user who last updated the entity
+     */
+    'updatedBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was deleted (null if not deleted)
+     */
+    'deletedAt'?: number;
+    /**
+     * Identifier of the user who deleted the entity
+     */
+    'deletedBy'?: ModelRecord;
+    /**
+     * Index number for ordering entities
+     */
+    'index'?: number;
+    /**
+     * UUID of the owning company — send this as X-Caraer-Company-Uuid
+     */
+    'ownerCompanyUuid'?: string;
+    /**
+     * Neo4j database id of the sandbox clone
+     */
+    'databaseId'?: string;
 }
 /**
  * Approve a pending device-code login (authenticated browser session)
@@ -2045,13 +2144,19 @@ export interface ErrorResponse {
     /**
      * A list of error types providing further details about the error.
      */
-    'errors'?: CaraerErrorType;
+    'errors'?: Array<CaraerErrorType>;
     /**
      * The HTTP status code associated with the error.
      */
     'status'?: number;
     'stackTrace'?: string;
+    /**
+     * Roles the caller is missing when the failure is an authorization error.
+     */
     'roles'?: Array<ErrorResponseRolesEnum>;
+    /**
+     * Scopes the caller is missing when the failure is an authorization error.
+     */
     'scopes'?: Array<string>;
     /**
      * Request correlation ID for support and log tracing.
@@ -2097,9 +2202,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'yproperty'?: string;
-    'xproperty'?: string;
     'ymetric'?: string;
+    'xproperty'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2236,6 +2341,53 @@ export interface FilterItem {
      * When true, propertyName refers to a property stored on the relation edge itself (declared on the relation schema, e.g. partstat on attendees) instead of a property of the related record. Requires relation and propertyName.
      */
     'edgeProperty'?: boolean;
+}
+/**
+ * Request DTO for paginated data flow with filters, sorting, displayed items, and related information.
+ */
+export interface FlowPaginationRequest {
+    'crud'?: CRUD;
+    'showItems'?: Set<ShowItem>;
+    /**
+     * The page index (one-based) to request.
+     */
+    'page'?: number;
+    /**
+     * The number of records to retrieve per page.
+     */
+    'limit'?: number;
+    /**
+     * Filters applied to the query.
+     */
+    'filter'?: Filter;
+    /**
+     * Sorting options for the query.
+     */
+    'sort'?: Set<SortItem>;
+    /**
+     * Specifies what data to show in the response.
+     */
+    'show'?: Array<ShowItem>;
+    /**
+     * A free-text search query applied to the records.
+     */
+    'query'?: string;
+    /**
+     * Preview information for the records, if supported.
+     */
+    'preview'?: string;
+    /**
+     * The main object for categorization or context.
+     */
+    'mainObject'?: string;
+    /**
+     * Column name for sorting or filtering data
+     */
+    'column'?: string;
+    /**
+     * UUID of the property used in the request
+     */
+    'property'?: string;
 }
 export interface FontVariantDTO {
     'weight'?: number;
@@ -3278,9 +3430,60 @@ export interface PageContentStylingDTO {
     'desktop'?: StyleSetDTO;
 }
 /**
+ * Pagination and filtering options for the request
+ */
+export interface PaginationRequest {
+    /**
+     * A list of key-value pairs representing filter criteria for the request. Keys represent fields to filter by, operator can be any of the following: \'=\', \'>\', \'<\', \'>=\', \'<=\', (not) \'in\', \'(not) contains\', \'(not) startswith\', \'(not) endswith\', \'(not) isnull\'.
+     */
+    'filters'?: Array<{ [key: string]: any | null; }>;
+    /**
+     * A list of key-value pairs representing sorting criteria. Keys represent fields to sort by, and values define the sort direction (e.g., \'asc\' or \'desc\').
+     */
+    'sort'?: Array<{ [key: string]: string; }>;
+    /**
+     * A list of field names specifying which fields to include in the response.
+     */
+    'show'?: Array<string>;
+    /**
+     * The maximum number of items to retrieve per page.
+     */
+    'limit'?: number;
+    /**
+     * The page number to retrieve in the paginated response (1-based index).
+     */
+    'page'?: number;
+    /**
+     * Optional search query to filter results. This will apply to all properties on the entity.
+     */
+    'query'?: string;
+}
+/**
+ * Paginated response (PaginationResponseAppDTO).
+ */
+export interface PaginationResponseAppDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponseCaraerObjectDTO).
+ */
+export interface PaginationResponseCaraerObjectDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
  * Response object for paginated data.
  */
-export interface PaginationResponse {
+export interface PaginationResponseCompanyDTO {
     /**
      * A message detailing the result of the operation.
      */
@@ -3288,7 +3491,7 @@ export interface PaginationResponse {
     /**
      * The data returned in the current page of the pagination.
      */
-    'data'?: Array<any>;
+    'data'?: Array<CompanyDTO>;
     /**
      * The total number of items available.
      */
@@ -3304,6 +3507,97 @@ export interface PaginationResponse {
     /**
      * The last page number available for the pagination.
      */
+    'lastPage'?: number;
+}
+/**
+ * Response object for paginated data.
+ */
+export interface PaginationResponseFeedDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data returned in the current page of the pagination.
+     */
+    'data'?: Array<FeedDTO>;
+    /**
+     * The total number of items available.
+     */
+    'total'?: number;
+    /**
+     * The current page number (starts from 1).
+     */
+    'page'?: number;
+    /**
+     * The number of items displayed per page.
+     */
+    'perPage'?: number;
+    /**
+     * The last page number available for the pagination.
+     */
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponseFormDTO).
+ */
+export interface PaginationResponseFormDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Response object for paginated data.
+ */
+export interface PaginationResponseMapStringObject {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data returned in the current page of the pagination.
+     */
+    'data'?: Array<{ [key: string]: any | null; }>;
+    /**
+     * The total number of items available.
+     */
+    'total'?: number;
+    /**
+     * The current page number (starts from 1).
+     */
+    'page'?: number;
+    /**
+     * The number of items displayed per page.
+     */
+    'perPage'?: number;
+    /**
+     * The last page number available for the pagination.
+     */
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponseObject).
+ */
+export interface PaginationResponseObject {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponsePageContentDTO).
+ */
+export interface PaginationResponsePageContentDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
     'lastPage'?: number;
 }
 /**
@@ -3333,6 +3627,196 @@ export interface PaginationResponsePreviewDTO {
     /**
      * The last page number available for the pagination.
      */
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponsePropertyCalculationTypeDTO).
+ */
+export interface PaginationResponsePropertyCalculationTypeDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponsePropertyDTO).
+ */
+export interface PaginationResponsePropertyDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponsePropertyFormat).
+ */
+export interface PaginationResponsePropertyFormat {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Response object for paginated data.
+ */
+export interface PaginationResponsePropertyOption {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data returned in the current page of the pagination.
+     */
+    'data'?: Array<PropertyOption>;
+    /**
+     * The total number of items available.
+     */
+    'total'?: number;
+    /**
+     * The current page number (starts from 1).
+     */
+    'page'?: number;
+    /**
+     * The number of items displayed per page.
+     */
+    'perPage'?: number;
+    /**
+     * The last page number available for the pagination.
+     */
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponsePublicEnvironmentDTO).
+ */
+export interface PaginationResponsePublicEnvironmentDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Response object for paginated data.
+ */
+export interface PaginationResponsePublicFormDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data returned in the current page of the pagination.
+     */
+    'data'?: Array<PublicFormDTO>;
+    /**
+     * The total number of items available.
+     */
+    'total'?: number;
+    /**
+     * The current page number (starts from 1).
+     */
+    'page'?: number;
+    /**
+     * The number of items displayed per page.
+     */
+    'perPage'?: number;
+    /**
+     * The last page number available for the pagination.
+     */
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponseRelationDTO).
+ */
+export interface PaginationResponseRelationDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponseSavedFilterDTO).
+ */
+export interface PaginationResponseSavedFilterDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponseServerlessFunctionDTO).
+ */
+export interface PaginationResponseServerlessFunctionDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponseSubscribeWebhookDTO).
+ */
+export interface PaginationResponseSubscribeWebhookDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponseSyncDTO).
+ */
+export interface PaginationResponseSyncDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponseTraitDTO).
+ */
+export interface PaginationResponseTraitDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponseViewDTO).
+ */
+export interface PaginationResponseViewDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
+    'lastPage'?: number;
+}
+/**
+ * Paginated response (PaginationResponseWebMenuDTO).
+ */
+export interface PaginationResponseWebMenuDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+    'total'?: number;
+    'page'?: number;
+    'perPage'?: number;
     'lastPage'?: number;
 }
 /**
@@ -3614,6 +4098,156 @@ export interface Progress extends PropertyFormat {
     'checkboxProperty'?: PropertyDTO;
 }
 /**
+ * Data transfer object for a developer project build artifact.
+ */
+export interface ProjectBuildDTO {
+    /**
+     * Unique identifier for the entity
+     */
+    'uuid': string;
+    /**
+     * The name of the entity
+     */
+    'name': string;
+    /**
+     * Display label for the entity, can be different from name
+     */
+    'label'?: string;
+    /**
+     * Unix timestamp when the entity was created
+     */
+    'createdAt'?: number;
+    /**
+     * Identifier of the user who created the entity
+     */
+    'createdBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was last updated
+     */
+    'updatedAt'?: number;
+    /**
+     * Identifier of the user who last updated the entity
+     */
+    'updatedBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was deleted (null if not deleted)
+     */
+    'deletedAt'?: number;
+    /**
+     * Identifier of the user who deleted the entity
+     */
+    'deletedBy'?: ModelRecord;
+    /**
+     * Index number for ordering entities
+     */
+    'index'?: number;
+    /**
+     * UUID of the owning developer project
+     */
+    'projectUuid'?: string;
+    /**
+     * PENDING, READY, or FAILED
+     */
+    'status'?: string;
+    /**
+     * production or sandbox
+     */
+    'target'?: string;
+    /**
+     * GCS object path of the uploaded build archive
+     */
+    'artifactGcsPath'?: string;
+    /**
+     * Parsed build manifest (functions, webhooks, app fields), serialized as JSON
+     */
+    'manifestJson'?: string;
+    /**
+     * Error message if the build failed
+     */
+    'errorMessage'?: string;
+    /**
+     * Semantic version for this build
+     */
+    'version'?: string;
+    /**
+     * Release notes for this build
+     */
+    'releaseNotes'?: string;
+}
+/**
+ * Data transfer object for a developer project deploy.
+ */
+export interface ProjectDeployDTO {
+    /**
+     * Unique identifier for the entity
+     */
+    'uuid': string;
+    /**
+     * The name of the entity
+     */
+    'name': string;
+    /**
+     * Display label for the entity, can be different from name
+     */
+    'label'?: string;
+    /**
+     * Unix timestamp when the entity was created
+     */
+    'createdAt'?: number;
+    /**
+     * Identifier of the user who created the entity
+     */
+    'createdBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was last updated
+     */
+    'updatedAt'?: number;
+    /**
+     * Identifier of the user who last updated the entity
+     */
+    'updatedBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was deleted (null if not deleted)
+     */
+    'deletedAt'?: number;
+    /**
+     * Identifier of the user who deleted the entity
+     */
+    'deletedBy'?: ModelRecord;
+    /**
+     * Index number for ordering entities
+     */
+    'index'?: number;
+    /**
+     * UUID of the owning developer project
+     */
+    'projectUuid'?: string;
+    /**
+     * UUID of the build that was deployed
+     */
+    'buildUuid'?: string;
+    /**
+     * Semantic version of the deployed build
+     */
+    'version'?: string;
+    /**
+     * PENDING, SUCCEEDED, FAILED, or PARTIAL
+     */
+    'status'?: string;
+    /**
+     * production or sandbox
+     */
+    'target'?: string;
+    /**
+     * Per-component reconciliation results (app, functions, webhooks), serialized as JSON
+     */
+    'resultsJson'?: string;
+    /**
+     * Unix timestamp (ms) when this deploy was activated
+     */
+    'activatedAt'?: number;
+}
+/**
  * Data transfer object representing a property with its configuration and metadata
  */
 export interface PropertyDTO {
@@ -3764,6 +4398,83 @@ export interface PropertyOption {
     'completed'?: boolean;
     'usedIn'?: UsedInResult;
 }
+/**
+ * Data transfer object representing a form with its associated properties and structure
+ */
+export interface PublicFormDTO {
+    /**
+     * Unique identifier for the entity
+     */
+    'uuid': string;
+    /**
+     * The name of the entity
+     */
+    'name': string;
+    /**
+     * Display label for the entity, can be different from name
+     */
+    'label'?: string;
+    /**
+     * Unix timestamp when the entity was created
+     */
+    'createdAt'?: number;
+    /**
+     * Identifier of the user who created the entity
+     */
+    'createdBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was last updated
+     */
+    'updatedAt'?: number;
+    /**
+     * Identifier of the user who last updated the entity
+     */
+    'updatedBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was deleted (null if not deleted)
+     */
+    'deletedAt'?: number;
+    /**
+     * Identifier of the user who deleted the entity
+     */
+    'deletedBy'?: ModelRecord;
+    /**
+     * Index number for ordering entities
+     */
+    'index'?: number;
+    /**
+     * The associated Caraer object that this form belongs to
+     */
+    'object'?: CaraerObjectDTO;
+    /**
+     * List of form items that make up the form\'s structure. Each grid represents a section or group of form elements
+     */
+    'grids'?: Array<FormItemDTO>;
+    /**
+     * Descriptive text providing additional information about the form
+     */
+    'description'?: string;
+    /**
+     * The styling of the form. Can be \'standard\', \'underline\' or \'plain\'
+     */
+    'styling'?: string;
+    /**
+     * Indicates if the form should be displayed as a step-by-step wizard interface
+     */
+    'wizard'?: boolean;
+    /**
+     * Metadata associated with the form
+     */
+    'metadata'?: { [key: string]: string; };
+    /**
+     * Thank you message to be displayed after the form is submitted
+     */
+    'thankYouMessage'?: string;
+    /**
+     * Redirect URL to be displayed after the form is submitted
+     */
+    'redirectUrl'?: string;
+}
 export interface PublicUserDTO {
     'uuid'?: string;
     'email'?: string;
@@ -3844,6 +4555,47 @@ export interface RecordDTO {
      * Relations to create or merge after the record is saved. Each item links to an existing record (uuid) or creates a nested record first.
      */
     'relations'?: Array<RecordRelationRequestDTO>;
+}
+/**
+ * Contains pagination details and optional query parameters such as filter, sort, and show options.
+ */
+export interface RecordPaginationRequest {
+    /**
+     * The page index (one-based) to request.
+     */
+    'page'?: number;
+    /**
+     * The number of records to retrieve per page.
+     */
+    'limit'?: number;
+    /**
+     * Filters applied to the query.
+     */
+    'filter'?: object;
+    /**
+     * Sorting options for the query.
+     */
+    'sort'?: Array<object>;
+    /**
+     * Specifies what data to show in the response.
+     */
+    'show'?: Array<object>;
+    /**
+     * A free-text search query applied to the records.
+     */
+    'query'?: string;
+    /**
+     * Preview information for the records, if supported.
+     */
+    'preview'?: string;
+    /**
+     * The main object for categorization or context.
+     */
+    'mainObject'?: string;
+    /**
+     * The column to group the records by.
+     */
+    'column'?: string;
 }
 /**
  * Relation to create when saving a record
@@ -4265,6 +5017,31 @@ export interface ScoreBreakdown {
     'components'?: { [key: string]: number; };
 }
 /**
+ * Request DTO for searching records.
+ */
+export interface SearchRequest {
+    /**
+     * The query to search for.
+     */
+    'query'?: string;
+    /**
+     * The UUID of the object to search in.
+     */
+    'objectUuid'?: string;
+    /**
+     * The limit of the search.
+     */
+    'limit'?: number;
+    /**
+     * The page of the search.
+     */
+    'page'?: number;
+    /**
+     * The preview of the search.
+     */
+    'preview'?: string;
+}
+/**
  * Request body for sending an in-app notification to a user
  */
 export interface SendNotificationRequest {
@@ -4442,9 +5219,37 @@ export interface ShowItem {
     'calculationResult'?: any;
 }
 /**
- * Represents the response for viewing or showing a specific resource.
+ * Success response (ShowResponse).
  */
 export interface ShowResponse {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseAnalyticsDashboardConfig).
+ */
+export interface ShowResponseAnalyticsDashboardConfig {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseAppBarIframeSessionContextDTO).
+ */
+export interface ShowResponseAppBarIframeSessionContextDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseAppBarIframeSessionTokenDTO).
+ */
+export interface ShowResponseAppBarIframeSessionTokenDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseAppDTO {
     /**
      * A message detailing the result of the operation.
      */
@@ -4452,7 +5257,7 @@ export interface ShowResponse {
     /**
      * The data payload of the response, if any.
      */
-    'data'?: any;
+    'data'?: AppDTO;
 }
 /**
  * Represents the response for viewing or showing a specific resource.
@@ -4507,6 +5312,61 @@ export interface ShowResponseAppScheduleDTO {
     'data'?: AppScheduleDTO;
 }
 /**
+ * Success response (ShowResponseBillingStatusDTO).
+ */
+export interface ShowResponseBillingStatusDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseCaraerObjectDTO).
+ */
+export interface ShowResponseCaraerObjectDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseCompanyDTO).
+ */
+export interface ShowResponseCompanyDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseDeveloperProjectDTO).
+ */
+export interface ShowResponseDeveloperProjectDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseDigitalIdentityDTO).
+ */
+export interface ShowResponseDigitalIdentityDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseFeedDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: FeedDTO;
+}
+/**
+ * Success response (ShowResponseFormDTO).
+ */
+export interface ShowResponseFormDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
  * Represents the response for viewing or showing a specific resource.
  */
 export interface ShowResponseListAppConnectionStatusDTO {
@@ -4518,6 +5378,34 @@ export interface ShowResponseListAppConnectionStatusDTO {
      * The data payload of the response, if any.
      */
     'data'?: Array<AppConnectionStatusDTO>;
+}
+/**
+ * Success response (ShowResponseListEnvironmentDTO).
+ */
+export interface ShowResponseListEnvironmentDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+}
+/**
+ * Success response (ShowResponseListFormObjectSummaryDTO).
+ */
+export interface ShowResponseListFormObjectSummaryDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+}
+/**
+ * Success response (ShowResponseListInstalledAppBarDTO).
+ */
+export interface ShowResponseListInstalledAppBarDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+}
+/**
+ * Success response (ShowResponseListPropertyDTO).
+ */
+export interface ShowResponseListPropertyDTO {
+    'message'?: string;
+    'data'?: Array<object>;
 }
 /**
  * Represents the response for viewing or showing a specific resource.
@@ -4533,6 +5421,34 @@ export interface ShowResponseListString {
     'data'?: Array<string>;
 }
 /**
+ * Success response (ShowResponseListWebpagePickerItemDTO).
+ */
+export interface ShowResponseListWebpagePickerItemDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+}
+/**
+ * Success response (ShowResponseLoadAppSettingOptionsResponse).
+ */
+export interface ShowResponseLoadAppSettingOptionsResponse {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseMapStringAnalyticsDashboardConfig).
+ */
+export interface ShowResponseMapStringAnalyticsDashboardConfig {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseMapStringBoolean).
+ */
+export interface ShowResponseMapStringBoolean {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
  * Represents the response for viewing or showing a specific resource.
  */
 export interface ShowResponseMapStringObject {
@@ -4544,6 +5460,13 @@ export interface ShowResponseMapStringObject {
      * The data payload of the response, if any.
      */
     'data'?: { [key: string]: any | null; };
+}
+/**
+ * Success response (ShowResponseMapStringString).
+ */
+export interface ShowResponseMapStringString {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
 }
 /**
  * Represents the response for viewing or showing a specific resource.
@@ -4572,6 +5495,103 @@ export interface ShowResponseObjectAccessGrantCandidatesDTO {
     'data'?: ObjectAccessGrantCandidatesDTO;
 }
 /**
+ * Success response (ShowResponsePageContentDTO).
+ */
+export interface ShowResponsePageContentDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponsePreviewDTO).
+ */
+export interface ShowResponsePreviewDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponsePropertyDTO).
+ */
+export interface ShowResponsePropertyDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponsePublicFormDTO).
+ */
+export interface ShowResponsePublicFormDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseRelationDTO).
+ */
+export interface ShowResponseRelationDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseSavedFilterDTO).
+ */
+export interface ShowResponseSavedFilterDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseServerlessFunctionDTO).
+ */
+export interface ShowResponseServerlessFunctionDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseString).
+ */
+export interface ShowResponseString {
+    'message'?: string;
+    'data'?: string;
+}
+/**
+ * Success response (ShowResponseSubscribeWebhookDTO).
+ */
+export interface ShowResponseSubscribeWebhookDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseTemplateWebpageDTO).
+ */
+export interface ShowResponseTemplateWebpageDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (ShowResponseTraitDTO).
+ */
+export interface ShowResponseTraitDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseViewDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: ViewDTO;
+}
+/**
+ * Success response (ShowResponseWebMenuDTO).
+ */
+export interface ShowResponseWebMenuDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
  * Represents the response for viewing or showing a specific resource.
  */
 export interface ShowResponseWebpageProtectionInfoDTO {
@@ -4583,6 +5603,13 @@ export interface ShowResponseWebpageProtectionInfoDTO {
      * The data payload of the response, if any.
      */
     'data'?: WebpageProtectionInfoDTO;
+}
+/**
+ * Success response (ShowResponseWebsiteSettingsDTO).
+ */
+export interface ShowResponseWebsiteSettingsDTO {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
 }
 /**
  * Generated signed URL for a protected webpage
@@ -5116,9 +6143,23 @@ export interface SubscribeWebhookDTO {
     'index'?: number;
 }
 /**
+ * Success response (SuccessResponseAggregateResponse).
+ */
+export interface SuccessResponseAggregateResponse {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (SuccessResponseCollectionRelation).
+ */
+export interface SuccessResponseCollectionRelation {
+    'message'?: string;
+    'data'?: Array<object>;
+}
+/**
  * Represents a standard successful response with a message and optional data.
  */
-export interface SuccessResponse {
+export interface SuccessResponseCompanyDTO {
     /**
      * A message detailing the result of the operation.
      */
@@ -5126,7 +6167,34 @@ export interface SuccessResponse {
     /**
      * The data payload of the response, if any.
      */
-    'data'?: any;
+    'data'?: CompanyDTO;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseFeedDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: FeedDTO;
+}
+/**
+ * Success response (SuccessResponseFlow).
+ */
+export interface SuccessResponseFlow {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (SuccessResponseListAggregateResponse).
+ */
+export interface SuccessResponseListAggregateResponse {
+    'message'?: string;
+    'data'?: Array<object>;
 }
 /**
  * Represents a standard successful response with a message and optional data.
@@ -5168,6 +6236,106 @@ export interface SuccessResponseListAppScheduleDTO {
     'data'?: Array<AppScheduleDTO>;
 }
 /**
+ * Success response (SuccessResponseListCaraerObjectDTO).
+ */
+export interface SuccessResponseListCaraerObjectDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseListDeveloperSandboxDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<DeveloperSandboxDTO>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseListMapStringObject {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<{ [key: string]: any | null; }>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseListProjectBuildDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<ProjectBuildDTO>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseListProjectDeployDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<ProjectDeployDTO>;
+}
+/**
+ * Success response (SuccessResponseListPropertyDTO).
+ */
+export interface SuccessResponseListPropertyDTO {
+    'message'?: string;
+    'data'?: Array<object>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseListString {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<string>;
+}
+/**
+ * Success response (SuccessResponseMapStringInteger).
+ */
+export interface SuccessResponseMapStringInteger {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (SuccessResponseMapStringObject).
+ */
+export interface SuccessResponseMapStringObject {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (SuccessResponseObject).
+ */
+export interface SuccessResponseObject {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
  * Represents a standard successful response with a message and optional data.
  */
 export interface SuccessResponseString {
@@ -5179,6 +6347,20 @@ export interface SuccessResponseString {
      * The data payload of the response, if any.
      */
     'data'?: string;
+}
+/**
+ * Success response (SuccessResponseSuggestAnalyticsWidgetsResponse).
+ */
+export interface SuccessResponseSuggestAnalyticsWidgetsResponse {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
+}
+/**
+ * Success response (SuccessResponseTable).
+ */
+export interface SuccessResponseTable {
+    'message'?: string;
+    'data'?: { [key: string]: any; };
 }
 /**
  * Represents a standard successful response with a message and optional data.
@@ -5507,6 +6689,19 @@ export interface UpdateResponse {
      * The data payload of the response, if any.
      */
     'data'?: any;
+}
+/**
+ * Represents the response returned after a successful update operation.
+ */
+export interface UpdateResponseFeedDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: FeedDTO;
 }
 export interface Url extends PropertyFormat {
 }
@@ -6306,7 +7501,7 @@ export const AppBarIframeSessionsApiFp = function(configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createIframeSession(appBarUuid: string, appBarIframeSessionRequest?: AppBarIframeSessionRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async createIframeSession(appBarUuid: string, appBarIframeSessionRequest?: AppBarIframeSessionRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppBarIframeSessionTokenDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createIframeSession(appBarUuid, appBarIframeSessionRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AppBarIframeSessionsApi.createIframeSession']?.[localVarOperationServerIndex]?.url;
@@ -6319,7 +7514,7 @@ export const AppBarIframeSessionsApiFp = function(configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async validateIframeSession(appBarIframeSessionValidateRequest: AppBarIframeSessionValidateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async validateIframeSession(appBarIframeSessionValidateRequest: AppBarIframeSessionValidateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppBarIframeSessionContextDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.validateIframeSession(appBarIframeSessionValidateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AppBarIframeSessionsApi.validateIframeSession']?.[localVarOperationServerIndex]?.url;
@@ -6342,7 +7537,7 @@ export const AppBarIframeSessionsApiFactory = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createIframeSession(appBarUuid: string, appBarIframeSessionRequest?: AppBarIframeSessionRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        createIframeSession(appBarUuid: string, appBarIframeSessionRequest?: AppBarIframeSessionRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppBarIframeSessionTokenDTO> {
             return localVarFp.createIframeSession(appBarUuid, appBarIframeSessionRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6352,7 +7547,7 @@ export const AppBarIframeSessionsApiFactory = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        validateIframeSession(appBarIframeSessionValidateRequest: AppBarIframeSessionValidateRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        validateIframeSession(appBarIframeSessionValidateRequest: AppBarIframeSessionValidateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppBarIframeSessionContextDTO> {
             return localVarFp.validateIframeSession(appBarIframeSessionValidateRequest, options).then((request) => request(axios, basePath));
         },
     };
@@ -6515,7 +7710,7 @@ export const AppBarsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListInstalledAppBarDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listAppBars(location, object, recordUuid, viewId, trait, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AppBarsApi.listAppBars']?.[localVarOperationServerIndex]?.url;
@@ -6529,7 +7724,7 @@ export const AppBarsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async triggerAppBar(appBarUuid: string, appBarTriggerRequest?: AppBarTriggerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async triggerAppBar(appBarUuid: string, appBarTriggerRequest?: AppBarTriggerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.triggerAppBar(appBarUuid, appBarTriggerRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AppBarsApi.triggerAppBar']?.[localVarOperationServerIndex]?.url;
@@ -6555,7 +7750,7 @@ export const AppBarsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListInstalledAppBarDTO> {
             return localVarFp.listAppBars(location, object, recordUuid, viewId, trait, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6566,7 +7761,7 @@ export const AppBarsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        triggerAppBar(appBarUuid: string, appBarTriggerRequest?: AppBarTriggerRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        triggerAppBar(appBarUuid: string, appBarTriggerRequest?: AppBarTriggerRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.triggerAppBar(appBarUuid, appBarTriggerRequest, options).then((request) => request(axios, basePath));
         },
     };
@@ -8092,15 +9287,15 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
          * Fetches a paginated and optionally filtered list of webhooks associated with the specified app and the authenticated user\'s selected company.
          * @summary Retrieve a paginated list of webhooks for an app
          * @param {string} appUuid UUID of the application for which to retrieve webhooks
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAppWebhooks: async (appUuid: string, body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAppWebhooks: async (appUuid: string, paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'appUuid' is not null or undefined
             assertParamExists('getAppWebhooks', 'appUuid', appUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getAppWebhooks', 'body', body)
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getAppWebhooks', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/apps/{appUuid}/webhooks/index`
                 .replace('{appUuid}', encodeURIComponent(String(appUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -8124,7 +9319,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8134,15 +9329,15 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
         /**
          * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. On success, returns a PaginationResponse containing AppSummaryDTO objects.
          * @summary Retrieve a paginated list of applications
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {string} [type] 
          * @param {boolean} [installedOnly] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApps: async (body: any, type?: string, installedOnly?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getApps', 'body', body)
+        getApps: async (paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getApps', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/apps/index`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8173,7 +9368,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8221,13 +9416,13 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
         /**
          * Fetches a paginated and optionally filtered list of apps where the selected company is the creator. Returns a PaginationResponse containing AppDTO objects.
          * @summary Retrieve apps created by the logged-in user\'s selected company
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMyCreatedApps: async (body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getMyCreatedApps', 'body', body)
+        getMyCreatedApps: async (paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getMyCreatedApps', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/apps/my/index`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8250,7 +9445,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8731,7 +9926,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'text/event-stream';
+            localVarHeaderParameter['Accept'] = 'text/event-stream,application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -9123,7 +10318,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getApp(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getApp(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getApp(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getApp']?.[localVarOperationServerIndex]?.url;
@@ -9137,7 +10332,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseSubscribeWebhookDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAppWebhook(appUuid, webhookUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getAppWebhook']?.[localVarOperationServerIndex]?.url;
@@ -9147,12 +10342,12 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * Fetches a paginated and optionally filtered list of webhooks associated with the specified app and the authenticated user\'s selected company.
          * @summary Retrieve a paginated list of webhooks for an app
          * @param {string} appUuid UUID of the application for which to retrieve webhooks
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAppWebhooks(appUuid: string, body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAppWebhooks(appUuid, body, options);
+        async getAppWebhooks(appUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseSubscribeWebhookDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAppWebhooks(appUuid, paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getAppWebhooks']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -9160,14 +10355,14 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
         /**
          * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. On success, returns a PaginationResponse containing AppSummaryDTO objects.
          * @summary Retrieve a paginated list of applications
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {string} [type] 
          * @param {boolean} [installedOnly] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getApps(body: any, type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getApps(body, type, installedOnly, options);
+        async getApps(paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseAppDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getApps(paginationRequest, type, installedOnly, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getApps']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -9188,12 +10383,12 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
         /**
          * Fetches a paginated and optionally filtered list of apps where the selected company is the creator. Returns a PaginationResponse containing AppDTO objects.
          * @summary Retrieve apps created by the logged-in user\'s selected company
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMyCreatedApps(body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMyCreatedApps(body, options);
+        async getMyCreatedApps(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseAppDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMyCreatedApps(paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getMyCreatedApps']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -9205,7 +10400,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPublicApp(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getPublicApp(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPublicApp(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getPublicApp']?.[localVarOperationServerIndex]?.url;
@@ -9220,7 +10415,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getRuntimeLogs(appUuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async getRuntimeLogs(appUuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseMapStringObject>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getRuntimeLogs(appUuid, since, limit, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getRuntimeLogs']?.[localVarOperationServerIndex]?.url;
@@ -9233,7 +10428,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getWebhookEvents(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async getWebhookEvents(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<{ [key: string]: any | null; }>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getWebhookEvents(appUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getWebhookEvents']?.[localVarOperationServerIndex]?.url;
@@ -9246,7 +10441,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getWebhookFormats(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async getWebhookFormats(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<{ [key: string]: any | null; }>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getWebhookFormats(appUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getWebhookFormats']?.[localVarOperationServerIndex]?.url;
@@ -9260,7 +10455,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getWebhookPropertyTopics(appUuid: string, object: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async getWebhookPropertyTopics(appUuid: string, object: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<{ [key: string]: string; }>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getWebhookPropertyTopics(appUuid, object, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getWebhookPropertyTopics']?.[localVarOperationServerIndex]?.url;
@@ -9274,7 +10469,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async installApp(uuid: string, installAppRequest?: InstallAppRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async installApp(uuid: string, installAppRequest?: InstallAppRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.installApp(uuid, installAppRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.installApp']?.[localVarOperationServerIndex]?.url;
@@ -9286,7 +10481,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listAppCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async listAppCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<{ [key: string]: any; }>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listAppCategories(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.listAppCategories']?.[localVarOperationServerIndex]?.url;
@@ -9300,7 +10495,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loadSettingOptions(uuid: string, loadAppSettingOptionsRequest: LoadAppSettingOptionsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async loadSettingOptions(uuid: string, loadAppSettingOptionsRequest: LoadAppSettingOptionsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseLoadAppSettingOptionsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loadSettingOptions(uuid, loadAppSettingOptionsRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.loadSettingOptions']?.[localVarOperationServerIndex]?.url;
@@ -9314,7 +10509,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async migrateToV2(uuid: string, migrateAppToV2Request?: MigrateAppToV2Request, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async migrateToV2(uuid: string, migrateAppToV2Request?: MigrateAppToV2Request, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseMapStringObject>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.migrateToV2(uuid, migrateAppToV2Request, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.migrateToV2']?.[localVarOperationServerIndex]?.url;
@@ -9328,7 +10523,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async reviewPublicApp(uuid: string, reviewRequest: ReviewRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async reviewPublicApp(uuid: string, reviewRequest: ReviewRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.reviewPublicApp(uuid, reviewRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.reviewPublicApp']?.[localVarOperationServerIndex]?.url;
@@ -9341,7 +10536,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async rotateApp(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async rotateApp(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.rotateApp(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.rotateApp']?.[localVarOperationServerIndex]?.url;
@@ -9367,7 +10562,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async submitPublicApp(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async submitPublicApp(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.submitPublicApp(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.submitPublicApp']?.[localVarOperationServerIndex]?.url;
@@ -9384,7 +10579,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async testAppWebhook(appUuid: string, webhookUuid: string, recordUuid: string, eventType: string, propertyName?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async testAppWebhook(appUuid: string, webhookUuid: string, recordUuid: string, eventType: string, propertyName?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.testAppWebhook(appUuid, webhookUuid, recordUuid, eventType, propertyName, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.testAppWebhook']?.[localVarOperationServerIndex]?.url;
@@ -9398,7 +10593,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async testAppWebhookAuto(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async testAppWebhookAuto(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.testAppWebhookAuto(appUuid, webhookUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.testAppWebhookAuto']?.[localVarOperationServerIndex]?.url;
@@ -9412,7 +10607,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async testAppWebhookUnsaved(appUuid: string, testWebhookRequest: TestWebhookRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async testAppWebhookUnsaved(appUuid: string, testWebhookRequest: TestWebhookRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.testAppWebhookUnsaved(appUuid, testWebhookRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.testAppWebhookUnsaved']?.[localVarOperationServerIndex]?.url;
@@ -9426,7 +10621,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uninstallApp(uuid: string, appRequest: AppRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async uninstallApp(uuid: string, appRequest: AppRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.uninstallApp(uuid, appRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.uninstallApp']?.[localVarOperationServerIndex]?.url;
@@ -9455,7 +10650,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updatePublicApp(uuid: string, appDTO: AppDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async updatePublicApp(uuid: string, appDTO: AppDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updatePublicApp(uuid, appDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.updatePublicApp']?.[localVarOperationServerIndex]?.url;
@@ -9519,7 +10714,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppDTO> {
             return localVarFp.getApp(uuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9530,31 +10725,31 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseSubscribeWebhookDTO> {
             return localVarFp.getAppWebhook(appUuid, webhookUuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Fetches a paginated and optionally filtered list of webhooks associated with the specified app and the authenticated user\'s selected company.
          * @summary Retrieve a paginated list of webhooks for an app
          * @param {string} appUuid UUID of the application for which to retrieve webhooks
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAppWebhooks(appUuid: string, body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getAppWebhooks(appUuid, body, options).then((request) => request(axios, basePath));
+        getAppWebhooks(appUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseSubscribeWebhookDTO> {
+            return localVarFp.getAppWebhooks(appUuid, paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. On success, returns a PaginationResponse containing AppSummaryDTO objects.
          * @summary Retrieve a paginated list of applications
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {string} [type] 
          * @param {boolean} [installedOnly] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApps(body: any, type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getApps(body, type, installedOnly, options).then((request) => request(axios, basePath));
+        getApps(paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseAppDTO> {
+            return localVarFp.getApps(paginationRequest, type, installedOnly, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves the company information of the authenticated user. The response includes public details of the user\'s selected company.
@@ -9569,12 +10764,12 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
         /**
          * Fetches a paginated and optionally filtered list of apps where the selected company is the creator. Returns a PaginationResponse containing AppDTO objects.
          * @summary Retrieve apps created by the logged-in user\'s selected company
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMyCreatedApps(body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getMyCreatedApps(body, options).then((request) => request(axios, basePath));
+        getMyCreatedApps(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseAppDTO> {
+            return localVarFp.getMyCreatedApps(paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets the full app for the creator, including appPublish, appBars, details, and pricing. Returns AppCreatorDTO with everything under App.
@@ -9583,7 +10778,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPublicApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getPublicApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppDTO> {
             return localVarFp.getPublicApp(uuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9595,7 +10790,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRuntimeLogs(appUuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        getRuntimeLogs(appUuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseMapStringObject> {
             return localVarFp.getRuntimeLogs(appUuid, since, limit, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9605,7 +10800,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebhookEvents(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        getWebhookEvents(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<{ [key: string]: any | null; }>> {
             return localVarFp.getWebhookEvents(appUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9615,7 +10810,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebhookFormats(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        getWebhookFormats(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<{ [key: string]: any | null; }>> {
             return localVarFp.getWebhookFormats(appUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9626,7 +10821,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebhookPropertyTopics(appUuid: string, object: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        getWebhookPropertyTopics(appUuid: string, object: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<{ [key: string]: string; }>> {
             return localVarFp.getWebhookPropertyTopics(appUuid, object, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9637,7 +10832,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        installApp(uuid: string, installAppRequest?: InstallAppRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        installApp(uuid: string, installAppRequest?: InstallAppRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppDTO> {
             return localVarFp.installApp(uuid, installAppRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9646,7 +10841,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAppCategories(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        listAppCategories(options?: RawAxiosRequestConfig): AxiosPromise<Array<{ [key: string]: any; }>> {
             return localVarFp.listAppCategories(options).then((request) => request(axios, basePath));
         },
         /**
@@ -9657,7 +10852,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loadSettingOptions(uuid: string, loadAppSettingOptionsRequest: LoadAppSettingOptionsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        loadSettingOptions(uuid: string, loadAppSettingOptionsRequest: LoadAppSettingOptionsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseLoadAppSettingOptionsResponse> {
             return localVarFp.loadSettingOptions(uuid, loadAppSettingOptionsRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9668,7 +10863,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        migrateToV2(uuid: string, migrateAppToV2Request?: MigrateAppToV2Request, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        migrateToV2(uuid: string, migrateAppToV2Request?: MigrateAppToV2Request, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseMapStringObject> {
             return localVarFp.migrateToV2(uuid, migrateAppToV2Request, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9679,7 +10874,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reviewPublicApp(uuid: string, reviewRequest: ReviewRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        reviewPublicApp(uuid: string, reviewRequest: ReviewRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppDTO> {
             return localVarFp.reviewPublicApp(uuid, reviewRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9689,7 +10884,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        rotateApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        rotateApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppDTO> {
             return localVarFp.rotateApp(uuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9709,7 +10904,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        submitPublicApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        submitPublicApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppDTO> {
             return localVarFp.submitPublicApp(uuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9723,7 +10918,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        testAppWebhook(appUuid: string, webhookUuid: string, recordUuid: string, eventType: string, propertyName?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        testAppWebhook(appUuid: string, webhookUuid: string, recordUuid: string, eventType: string, propertyName?: string, options?: RawAxiosRequestConfig): AxiosPromise<string> {
             return localVarFp.testAppWebhook(appUuid, webhookUuid, recordUuid, eventType, propertyName, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9734,7 +10929,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        testAppWebhookAuto(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        testAppWebhookAuto(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<string> {
             return localVarFp.testAppWebhookAuto(appUuid, webhookUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9745,7 +10940,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        testAppWebhookUnsaved(appUuid: string, testWebhookRequest: TestWebhookRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        testAppWebhookUnsaved(appUuid: string, testWebhookRequest: TestWebhookRequest, options?: RawAxiosRequestConfig): AxiosPromise<string> {
             return localVarFp.testAppWebhookUnsaved(appUuid, testWebhookRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9756,7 +10951,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uninstallApp(uuid: string, appRequest: AppRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        uninstallApp(uuid: string, appRequest: AppRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppDTO> {
             return localVarFp.uninstallApp(uuid, appRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9779,7 +10974,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePublicApp(uuid: string, appDTO: AppDTO, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        updatePublicApp(uuid: string, appDTO: AppDTO, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppDTO> {
             return localVarFp.updatePublicApp(uuid, appDTO, options).then((request) => request(axios, basePath));
         },
     };
@@ -9862,25 +11057,25 @@ export class ApplicationsApi extends BaseAPI {
      * Fetches a paginated and optionally filtered list of webhooks associated with the specified app and the authenticated user\'s selected company.
      * @summary Retrieve a paginated list of webhooks for an app
      * @param {string} appUuid UUID of the application for which to retrieve webhooks
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getAppWebhooks(appUuid: string, body: any, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).getAppWebhooks(appUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public getAppWebhooks(appUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).getAppWebhooks(appUuid, paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. On success, returns a PaginationResponse containing AppSummaryDTO objects.
      * @summary Retrieve a paginated list of applications
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {string} [type] 
      * @param {boolean} [installedOnly] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getApps(body: any, type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).getApps(body, type, installedOnly, options).then((request) => request(this.axios, this.basePath));
+    public getApps(paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).getApps(paginationRequest, type, installedOnly, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -9897,12 +11092,12 @@ export class ApplicationsApi extends BaseAPI {
     /**
      * Fetches a paginated and optionally filtered list of apps where the selected company is the creator. Returns a PaginationResponse containing AppDTO objects.
      * @summary Retrieve apps created by the logged-in user\'s selected company
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getMyCreatedApps(body: any, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).getMyCreatedApps(body, options).then((request) => request(this.axios, this.basePath));
+    public getMyCreatedApps(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).getMyCreatedApps(paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -10187,7 +11382,7 @@ export const AutomationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getToken(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async getToken(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getToken(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AutomationsApi.getToken']?.[localVarOperationServerIndex]?.url;
@@ -10208,7 +11403,7 @@ export const AutomationsApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getToken(options?: RawAxiosRequestConfig): AxiosPromise<string> {
+        getToken(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringString> {
             return localVarFp.getToken(options).then((request) => request(axios, basePath));
         },
     };
@@ -10319,7 +11514,7 @@ export const BillingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStatus(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getStatus(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseBillingStatusDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getStatus(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['BillingApi.getStatus']?.[localVarOperationServerIndex]?.url;
@@ -10331,7 +11526,7 @@ export const BillingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async sendSetupEmail(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async sendSetupEmail(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringBoolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.sendSetupEmail(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['BillingApi.sendSetupEmail']?.[localVarOperationServerIndex]?.url;
@@ -10352,7 +11547,7 @@ export const BillingApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStatus(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getStatus(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseBillingStatusDTO> {
             return localVarFp.getStatus(options).then((request) => request(axios, basePath));
         },
         /**
@@ -10361,7 +11556,7 @@ export const BillingApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sendSetupEmail(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        sendSetupEmail(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringBoolean> {
             return localVarFp.sendSetupEmail(options).then((request) => request(axios, basePath));
         },
     };
@@ -10912,7 +12107,7 @@ export const CompanyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createCompany(createCompanyRequest: CreateCompanyRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async createCompany(createCompanyRequest: CreateCompanyRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseCompanyDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createCompany(createCompanyRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CompanyApi.createCompany']?.[localVarOperationServerIndex]?.url;
@@ -10924,7 +12119,7 @@ export const CompanyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCompany(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getCompany(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCompanyDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCompany(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CompanyApi.getCompany']?.[localVarOperationServerIndex]?.url;
@@ -10937,7 +12132,7 @@ export const CompanyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCompanyByUuid(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getCompanyByUuid(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCompanyDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCompanyByUuid(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CompanyApi.getCompanyByUuid']?.[localVarOperationServerIndex]?.url;
@@ -10949,7 +12144,7 @@ export const CompanyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getDigitalIdentity(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getDigitalIdentity(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseDigitalIdentityDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getDigitalIdentity(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CompanyApi.getDigitalIdentity']?.[localVarOperationServerIndex]?.url;
@@ -10962,7 +12157,7 @@ export const CompanyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSuiteDashboard(suiteName: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getSuiteDashboard(suiteName: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAnalyticsDashboardConfig>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSuiteDashboard(suiteName, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CompanyApi.getSuiteDashboard']?.[localVarOperationServerIndex]?.url;
@@ -10974,7 +12169,7 @@ export const CompanyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSuiteDashboards(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getSuiteDashboards(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringAnalyticsDashboardConfig>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSuiteDashboards(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CompanyApi.getSuiteDashboards']?.[localVarOperationServerIndex]?.url;
@@ -10986,7 +12181,7 @@ export const CompanyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getWebsiteSettings(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getWebsiteSettings(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseWebsiteSettingsDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getWebsiteSettings(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CompanyApi.getWebsiteSettings']?.[localVarOperationServerIndex]?.url;
@@ -10999,7 +12194,7 @@ export const CompanyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async resumeWebhookDispatch(companyUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async resumeWebhookDispatch(companyUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseMapStringObject>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.resumeWebhookDispatch(companyUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CompanyApi.resumeWebhookDispatch']?.[localVarOperationServerIndex]?.url;
@@ -11066,7 +12261,7 @@ export const CompanyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadFont(file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async uploadFont(file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.uploadFont(file, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CompanyApi.uploadFont']?.[localVarOperationServerIndex]?.url;
@@ -11088,7 +12283,7 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCompany(createCompanyRequest: CreateCompanyRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        createCompany(createCompanyRequest: CreateCompanyRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseCompanyDTO> {
             return localVarFp.createCompany(createCompanyRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11097,7 +12292,7 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCompany(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getCompany(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCompanyDTO> {
             return localVarFp.getCompany(options).then((request) => request(axios, basePath));
         },
         /**
@@ -11107,7 +12302,7 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCompanyByUuid(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getCompanyByUuid(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCompanyDTO> {
             return localVarFp.getCompanyByUuid(uuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11116,7 +12311,7 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDigitalIdentity(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getDigitalIdentity(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseDigitalIdentityDTO> {
             return localVarFp.getDigitalIdentity(options).then((request) => request(axios, basePath));
         },
         /**
@@ -11126,7 +12321,7 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSuiteDashboard(suiteName: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getSuiteDashboard(suiteName: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAnalyticsDashboardConfig> {
             return localVarFp.getSuiteDashboard(suiteName, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11135,7 +12330,7 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSuiteDashboards(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getSuiteDashboards(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringAnalyticsDashboardConfig> {
             return localVarFp.getSuiteDashboards(options).then((request) => request(axios, basePath));
         },
         /**
@@ -11144,7 +12339,7 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebsiteSettings(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getWebsiteSettings(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseWebsiteSettingsDTO> {
             return localVarFp.getWebsiteSettings(options).then((request) => request(axios, basePath));
         },
         /**
@@ -11154,7 +12349,7 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        resumeWebhookDispatch(companyUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        resumeWebhookDispatch(companyUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseMapStringObject> {
             return localVarFp.resumeWebhookDispatch(companyUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11206,7 +12401,7 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadFont(file: File, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        uploadFont(file: File, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.uploadFont(file, options).then((request) => request(axios, basePath));
         },
     };
@@ -11720,7 +12915,7 @@ export const DeveloperProjectsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listBuilds(projectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+        async listBuilds(projectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListProjectBuildDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listBuilds(projectUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DeveloperProjectsApi.listBuilds']?.[localVarOperationServerIndex]?.url;
@@ -11733,7 +12928,7 @@ export const DeveloperProjectsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listDeploys(projectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+        async listDeploys(projectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListProjectDeployDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listDeploys(projectUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DeveloperProjectsApi.listDeploys']?.[localVarOperationServerIndex]?.url;
@@ -11746,7 +12941,7 @@ export const DeveloperProjectsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async show3(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async show3(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseDeveloperProjectDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.show3(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DeveloperProjectsApi.show3']?.[localVarOperationServerIndex]?.url;
@@ -11812,7 +13007,7 @@ export const DeveloperProjectsApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listBuilds(projectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<any> {
+        listBuilds(projectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListProjectBuildDTO> {
             return localVarFp.listBuilds(projectUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11822,7 +13017,7 @@ export const DeveloperProjectsApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listDeploys(projectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<any> {
+        listDeploys(projectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListProjectDeployDTO> {
             return localVarFp.listDeploys(projectUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11832,7 +13027,7 @@ export const DeveloperProjectsApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        show3(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        show3(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseDeveloperProjectDTO> {
             return localVarFp.show3(uuid, options).then((request) => request(axios, basePath));
         },
     };
@@ -12070,7 +13265,7 @@ export const DeveloperSandboxesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async list(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+        async list(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListDeveloperSandboxDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.list(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DeveloperSandboxesApi.list']?.[localVarOperationServerIndex]?.url;
@@ -12114,7 +13309,7 @@ export const DeveloperSandboxesApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list(options?: RawAxiosRequestConfig): AxiosPromise<any> {
+        list(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListDeveloperSandboxDTO> {
             return localVarFp.list(options).then((request) => request(axios, basePath));
         },
         /**
@@ -12177,13 +13372,13 @@ export const FeedsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary List feeds
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        index1: async (body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('index1', 'body', body)
+        index1: async (paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('index1', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/feeds/index`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -12206,7 +13401,7 @@ export const FeedsApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -12225,12 +13420,12 @@ export const FeedsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary List feeds
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async index1(body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.index1(body, options);
+        async index1(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseFeedDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.index1(paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FeedsApi.index1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12247,12 +13442,12 @@ export const FeedsApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @summary List feeds
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        index1(body: any, options?: RawAxiosRequestConfig): AxiosPromise<any> {
-            return localVarFp.index1(body, options).then((request) => request(axios, basePath));
+        index1(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseFeedDTO> {
+            return localVarFp.index1(paginationRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -12264,12 +13459,12 @@ export class FeedsApi extends BaseAPI {
     /**
      * 
      * @summary List feeds
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public index1(body: any, options?: RawAxiosRequestConfig) {
-        return FeedsApiFp(this.configuration).index1(body, options).then((request) => request(this.axios, this.basePath));
+    public index1(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return FeedsApiFp(this.configuration).index1(paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -12466,7 +13661,7 @@ export const FileManagementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteFile(key: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async deleteFile(key: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseVoid>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteFile(key, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FileManagementApi.deleteFile']?.[localVarOperationServerIndex]?.url;
@@ -12481,7 +13676,7 @@ export const FileManagementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async downloadFile(key: string, expireAfter?: number, download?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async downloadFile(key: string, expireAfter?: number, download?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.downloadFile(key, expireAfter, download, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FileManagementApi.downloadFile']?.[localVarOperationServerIndex]?.url;
@@ -12494,7 +13689,7 @@ export const FileManagementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listFiles(recordUuid?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async listFiles(recordUuid?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listFiles(recordUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FileManagementApi.listFiles']?.[localVarOperationServerIndex]?.url;
@@ -12507,7 +13702,7 @@ export const FileManagementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadFile2(recordUuid?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async uploadFile2(recordUuid?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.uploadFile2(recordUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FileManagementApi.uploadFile2']?.[localVarOperationServerIndex]?.url;
@@ -12529,7 +13724,7 @@ export const FileManagementApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteFile(key: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        deleteFile(key: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseVoid> {
             return localVarFp.deleteFile(key, options).then((request) => request(axios, basePath));
         },
         /**
@@ -12541,7 +13736,7 @@ export const FileManagementApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadFile(key: string, expireAfter?: number, download?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        downloadFile(key: string, expireAfter?: number, download?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.downloadFile(key, expireAfter, download, options).then((request) => request(axios, basePath));
         },
         /**
@@ -12551,7 +13746,7 @@ export const FileManagementApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listFiles(recordUuid?: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        listFiles(recordUuid?: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListString> {
             return localVarFp.listFiles(recordUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -12561,7 +13756,7 @@ export const FileManagementApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadFile2(recordUuid?: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        uploadFile2(recordUuid?: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListString> {
             return localVarFp.uploadFile2(recordUuid, options).then((request) => request(axios, basePath));
         },
     };
@@ -12744,15 +13939,15 @@ export const FilterApiAxiosParamCreator = function (configuration?: Configuratio
          * Fetches a paginated list of saved filters. The request body should contain pagination details such as limit, page, filters, and sort.
          * @summary Fetch paginated saved filters
          * @param {string} objectUuid 
-         * @param {any} body Pagination request details
+         * @param {PaginationRequest} paginationRequest Pagination request details
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFilters: async (objectUuid: string, body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getFilters: async (objectUuid: string, paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'objectUuid' is not null or undefined
             assertParamExists('getFilters', 'objectUuid', objectUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getFilters', 'body', body)
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getFilters', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/filters/index/{objectUuid}`
                 .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -12776,7 +13971,7 @@ export const FilterApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -12868,7 +14063,7 @@ export const FilterApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getFilter(filterUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getFilter(filterUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseSavedFilterDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getFilter(filterUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FilterApi.getFilter']?.[localVarOperationServerIndex]?.url;
@@ -12878,12 +14073,12 @@ export const FilterApiFp = function(configuration?: Configuration) {
          * Fetches a paginated list of saved filters. The request body should contain pagination details such as limit, page, filters, and sort.
          * @summary Fetch paginated saved filters
          * @param {string} objectUuid 
-         * @param {any} body Pagination request details
+         * @param {PaginationRequest} paginationRequest Pagination request details
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getFilters(objectUuid: string, body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getFilters(objectUuid, body, options);
+        async getFilters(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseSavedFilterDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getFilters(objectUuid, paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FilterApi.getFilters']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12938,19 +14133,19 @@ export const FilterApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFilter(filterUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getFilter(filterUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseSavedFilterDTO> {
             return localVarFp.getFilter(filterUuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Fetches a paginated list of saved filters. The request body should contain pagination details such as limit, page, filters, and sort.
          * @summary Fetch paginated saved filters
          * @param {string} objectUuid 
-         * @param {any} body Pagination request details
+         * @param {PaginationRequest} paginationRequest Pagination request details
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFilters(objectUuid: string, body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getFilters(objectUuid, body, options).then((request) => request(axios, basePath));
+        getFilters(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseSavedFilterDTO> {
+            return localVarFp.getFilters(objectUuid, paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Updates an existing saved filter identified by its UUID.
@@ -13007,12 +14202,12 @@ export class FilterApi extends BaseAPI {
      * Fetches a paginated list of saved filters. The request body should contain pagination details such as limit, page, filters, and sort.
      * @summary Fetch paginated saved filters
      * @param {string} objectUuid 
-     * @param {any} body Pagination request details
+     * @param {PaginationRequest} paginationRequest Pagination request details
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getFilters(objectUuid: string, body: any, options?: RawAxiosRequestConfig) {
-        return FilterApiFp(this.configuration).getFilters(objectUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public getFilters(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return FilterApiFp(this.configuration).getFilters(objectUuid, paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13074,7 +14269,7 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = '*/*';
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -13125,7 +14320,7 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = '*/*';
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -13203,7 +14398,7 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -13283,7 +14478,7 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -13297,13 +14492,13 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Retrieves a paginated list of forms based on the provided filters, sorting, and search query. This endpoint returns a list of FormDTO objects wrapped in a PaginationResponse containing the current page, limit, total count, and the forms data.
          * @summary Get paginated list of forms
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getForms: async (body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getForms', 'body', body)
+        getForms: async (paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getForms', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/forms/index`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13326,7 +14521,7 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -13337,15 +14532,15 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
          * Retrieves a paginated list of forms associated with a specific object UUID. The endpoint uses a custom Cypher query to match forms linked to the object.
          * @summary Get forms by object UUID
          * @param {string} objectUuid UUID of the object to get forms for
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFormsByObject: async (objectUuid: string, body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getFormsByObject: async (objectUuid: string, paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'objectUuid' is not null or undefined
             assertParamExists('getFormsByObject', 'objectUuid', objectUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getFormsByObject', 'body', body)
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getFormsByObject', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/forms/{objectUuid}/index`
                 .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -13369,7 +14564,7 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -13380,15 +14575,15 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
          * When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the tenant company and overrides the companyUuid path segment.
          * @summary Get all forms for a company
          * @param {string} companyUuid 
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFormsPublic: async (companyUuid: string, body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getFormsPublic: async (companyUuid: string, paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'companyUuid' is not null or undefined
             assertParamExists('getFormsPublic', 'companyUuid', companyUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getFormsPublic', 'body', body)
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getFormsPublic', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/forms/public/{companyUuid}/index`
                 .replace('{companyUuid}', encodeURIComponent(String(companyUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -13407,12 +14602,12 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = '*/*';
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -13458,17 +14653,17 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
          * @summary Property options (public)
          * @param {string} propertyUuid 
          * @param {string} companyUuid 
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getOptions: async (propertyUuid: string, companyUuid: string, body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getOptions: async (propertyUuid: string, companyUuid: string, paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'propertyUuid' is not null or undefined
             assertParamExists('getOptions', 'propertyUuid', propertyUuid)
             // verify required parameter 'companyUuid' is not null or undefined
             assertParamExists('getOptions', 'companyUuid', companyUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getOptions', 'body', body)
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getOptions', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/forms/public/{companyUuid}/{propertyUuid}/options`
                 .replace('{propertyUuid}', encodeURIComponent(String(propertyUuid)))
                 .replace('{companyUuid}', encodeURIComponent(String(companyUuid)));
@@ -13488,12 +14683,12 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = '*/*';
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -13527,7 +14722,7 @@ export const FormsApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -13696,7 +14891,7 @@ export const FormsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async chatField(companyUuid: string, fieldUuid: string, prompt: string, formWithAiPromptDTO: FormWithAiPromptDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+        async chatField(companyUuid: string, fieldUuid: string, prompt: string, formWithAiPromptDTO: FormWithAiPromptDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.chatField(companyUuid, fieldUuid, prompt, formWithAiPromptDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FormsApi.chatField']?.[localVarOperationServerIndex]?.url;
@@ -13712,7 +14907,7 @@ export const FormsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async chatStep(companyUuid: string, stepTitle: string, prompt: string, formWithAiPromptDTO: FormWithAiPromptDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+        async chatStep(companyUuid: string, stepTitle: string, prompt: string, formWithAiPromptDTO: FormWithAiPromptDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.chatStep(companyUuid, stepTitle, prompt, formWithAiPromptDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FormsApi.chatStep']?.[localVarOperationServerIndex]?.url;
@@ -13751,7 +14946,7 @@ export const FormsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getForm(formUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getForm(formUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseFormDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getForm(formUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FormsApi.getForm']?.[localVarOperationServerIndex]?.url;
@@ -13765,7 +14960,7 @@ export const FormsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getFormPublic(companyUuid: string, formUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getFormPublic(companyUuid: string, formUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponsePublicFormDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getFormPublic(companyUuid, formUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FormsApi.getFormPublic']?.[localVarOperationServerIndex]?.url;
@@ -13774,12 +14969,12 @@ export const FormsApiFp = function(configuration?: Configuration) {
         /**
          * Retrieves a paginated list of forms based on the provided filters, sorting, and search query. This endpoint returns a list of FormDTO objects wrapped in a PaginationResponse containing the current page, limit, total count, and the forms data.
          * @summary Get paginated list of forms
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getForms(body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getForms(body, options);
+        async getForms(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseFormDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getForms(paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FormsApi.getForms']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -13788,12 +14983,12 @@ export const FormsApiFp = function(configuration?: Configuration) {
          * Retrieves a paginated list of forms associated with a specific object UUID. The endpoint uses a custom Cypher query to match forms linked to the object.
          * @summary Get forms by object UUID
          * @param {string} objectUuid UUID of the object to get forms for
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getFormsByObject(objectUuid: string, body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getFormsByObject(objectUuid, body, options);
+        async getFormsByObject(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseFormDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getFormsByObject(objectUuid, paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FormsApi.getFormsByObject']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -13802,12 +14997,12 @@ export const FormsApiFp = function(configuration?: Configuration) {
          * When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the tenant company and overrides the companyUuid path segment.
          * @summary Get all forms for a company
          * @param {string} companyUuid 
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getFormsPublic(companyUuid: string, body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getFormsPublic(companyUuid, body, options);
+        async getFormsPublic(companyUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponsePublicFormDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getFormsPublic(companyUuid, paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FormsApi.getFormsPublic']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -13818,7 +15013,7 @@ export const FormsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getObjectsWithForms(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getObjectsWithForms(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListFormObjectSummaryDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getObjectsWithForms(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FormsApi.getObjectsWithForms']?.[localVarOperationServerIndex]?.url;
@@ -13829,12 +15024,12 @@ export const FormsApiFp = function(configuration?: Configuration) {
          * @summary Property options (public)
          * @param {string} propertyUuid 
          * @param {string} companyUuid 
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getOptions(propertyUuid: string, companyUuid: string, body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getOptions(propertyUuid, companyUuid, body, options);
+        async getOptions(propertyUuid: string, companyUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponsePropertyOption>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getOptions(propertyUuid, companyUuid, paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FormsApi.getOptions']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -13861,7 +15056,7 @@ export const FormsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async submit(companyUuid: string, formUuid: string, formDTO: FormDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async submit(companyUuid: string, formUuid: string, formDTO: FormDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.submit(companyUuid, formUuid, formDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FormsApi.submit']?.[localVarOperationServerIndex]?.url;
@@ -13890,7 +15085,7 @@ export const FormsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadFiles(companyUuid: string, formUuid: string, files: Array<File>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async uploadFiles(companyUuid: string, formUuid: string, files: Array<File>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.uploadFiles(companyUuid, formUuid, files, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FormsApi.uploadFiles']?.[localVarOperationServerIndex]?.url;
@@ -13915,7 +15110,7 @@ export const FormsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatField(companyUuid: string, fieldUuid: string, prompt: string, formWithAiPromptDTO: FormWithAiPromptDTO, options?: RawAxiosRequestConfig): AxiosPromise<any> {
+        chatField(companyUuid: string, fieldUuid: string, prompt: string, formWithAiPromptDTO: FormWithAiPromptDTO, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.chatField(companyUuid, fieldUuid, prompt, formWithAiPromptDTO, options).then((request) => request(axios, basePath));
         },
         /**
@@ -13928,7 +15123,7 @@ export const FormsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatStep(companyUuid: string, stepTitle: string, prompt: string, formWithAiPromptDTO: FormWithAiPromptDTO, options?: RawAxiosRequestConfig): AxiosPromise<any> {
+        chatStep(companyUuid: string, stepTitle: string, prompt: string, formWithAiPromptDTO: FormWithAiPromptDTO, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListString> {
             return localVarFp.chatStep(companyUuid, stepTitle, prompt, formWithAiPromptDTO, options).then((request) => request(axios, basePath));
         },
         /**
@@ -13958,7 +15153,7 @@ export const FormsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getForm(formUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getForm(formUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseFormDTO> {
             return localVarFp.getForm(formUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -13969,40 +15164,40 @@ export const FormsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFormPublic(companyUuid: string, formUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getFormPublic(companyUuid: string, formUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponsePublicFormDTO> {
             return localVarFp.getFormPublic(companyUuid, formUuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of forms based on the provided filters, sorting, and search query. This endpoint returns a list of FormDTO objects wrapped in a PaginationResponse containing the current page, limit, total count, and the forms data.
          * @summary Get paginated list of forms
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getForms(body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getForms(body, options).then((request) => request(axios, basePath));
+        getForms(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseFormDTO> {
+            return localVarFp.getForms(paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of forms associated with a specific object UUID. The endpoint uses a custom Cypher query to match forms linked to the object.
          * @summary Get forms by object UUID
          * @param {string} objectUuid UUID of the object to get forms for
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFormsByObject(objectUuid: string, body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getFormsByObject(objectUuid, body, options).then((request) => request(axios, basePath));
+        getFormsByObject(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseFormDTO> {
+            return localVarFp.getFormsByObject(objectUuid, paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the tenant company and overrides the companyUuid path segment.
          * @summary Get all forms for a company
          * @param {string} companyUuid 
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFormsPublic(companyUuid: string, body: any, options?: RawAxiosRequestConfig): AxiosPromise<any> {
-            return localVarFp.getFormsPublic(companyUuid, body, options).then((request) => request(axios, basePath));
+        getFormsPublic(companyUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponsePublicFormDTO> {
+            return localVarFp.getFormsPublic(companyUuid, paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns distinct custom objects that have at least one non-deleted form, ordered by object index.
@@ -14010,7 +15205,7 @@ export const FormsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getObjectsWithForms(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getObjectsWithForms(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListFormObjectSummaryDTO> {
             return localVarFp.getObjectsWithForms(options).then((request) => request(axios, basePath));
         },
         /**
@@ -14018,12 +15213,12 @@ export const FormsApiFactory = function (configuration?: Configuration, basePath
          * @summary Property options (public)
          * @param {string} propertyUuid 
          * @param {string} companyUuid 
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getOptions(propertyUuid: string, companyUuid: string, body: any, options?: RawAxiosRequestConfig): AxiosPromise<any> {
-            return localVarFp.getOptions(propertyUuid, companyUuid, body, options).then((request) => request(axios, basePath));
+        getOptions(propertyUuid: string, companyUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponsePropertyOption> {
+            return localVarFp.getOptions(propertyUuid, companyUuid, paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Restores a previously deleted form identified by its UUID. Returns the restored form wrapped in a RestoreResponse.
@@ -14044,7 +15239,7 @@ export const FormsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        submit(companyUuid: string, formUuid: string, formDTO: FormDTO, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        submit(companyUuid: string, formUuid: string, formDTO: FormDTO, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.submit(companyUuid, formUuid, formDTO, options).then((request) => request(axios, basePath));
         },
         /**
@@ -14067,7 +15262,7 @@ export const FormsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadFiles(companyUuid: string, formUuid: string, files: Array<File>, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        uploadFiles(companyUuid: string, formUuid: string, files: Array<File>, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListString> {
             return localVarFp.uploadFiles(companyUuid, formUuid, files, options).then((request) => request(axios, basePath));
         },
     };
@@ -14153,36 +15348,36 @@ export class FormsApi extends BaseAPI {
     /**
      * Retrieves a paginated list of forms based on the provided filters, sorting, and search query. This endpoint returns a list of FormDTO objects wrapped in a PaginationResponse containing the current page, limit, total count, and the forms data.
      * @summary Get paginated list of forms
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getForms(body: any, options?: RawAxiosRequestConfig) {
-        return FormsApiFp(this.configuration).getForms(body, options).then((request) => request(this.axios, this.basePath));
+    public getForms(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return FormsApiFp(this.configuration).getForms(paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Retrieves a paginated list of forms associated with a specific object UUID. The endpoint uses a custom Cypher query to match forms linked to the object.
      * @summary Get forms by object UUID
      * @param {string} objectUuid UUID of the object to get forms for
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getFormsByObject(objectUuid: string, body: any, options?: RawAxiosRequestConfig) {
-        return FormsApiFp(this.configuration).getFormsByObject(objectUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public getFormsByObject(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return FormsApiFp(this.configuration).getFormsByObject(objectUuid, paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the tenant company and overrides the companyUuid path segment.
      * @summary Get all forms for a company
      * @param {string} companyUuid 
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getFormsPublic(companyUuid: string, body: any, options?: RawAxiosRequestConfig) {
-        return FormsApiFp(this.configuration).getFormsPublic(companyUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public getFormsPublic(companyUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return FormsApiFp(this.configuration).getFormsPublic(companyUuid, paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14200,12 +15395,12 @@ export class FormsApi extends BaseAPI {
      * @summary Property options (public)
      * @param {string} propertyUuid 
      * @param {string} companyUuid 
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getOptions(propertyUuid: string, companyUuid: string, body: any, options?: RawAxiosRequestConfig) {
-        return FormsApiFp(this.configuration).getOptions(propertyUuid, companyUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public getOptions(propertyUuid: string, companyUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return FormsApiFp(this.configuration).getOptions(propertyUuid, companyUuid, paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14370,7 +15565,7 @@ export const ModuleApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -14408,7 +15603,7 @@ export const ModuleApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -14446,7 +15641,7 @@ export const ModuleApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -14460,13 +15655,13 @@ export const ModuleApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * Retrieves a paginated list of modules.
          * @summary Fetch paginated modules
-         * @param {any} body Pagination details
+         * @param {PaginationRequest} paginationRequest Pagination details
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getModules: async (body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getModules', 'body', body)
+        getModules: async (paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getModules', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/modules/index`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -14489,7 +15684,7 @@ export const ModuleApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -14523,7 +15718,7 @@ export const ModuleApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -14537,13 +15732,13 @@ export const ModuleApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * Retrieves personal modules for the logged-in user.
          * @summary Fetch paginated personal modules
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPersonalModules: async (body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getPersonalModules', 'body', body)
+        getPersonalModules: async (paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getPersonalModules', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/modules/personal/index`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -14566,7 +15761,7 @@ export const ModuleApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -14647,7 +15842,7 @@ export const ModuleApiAxiosParamCreator = function (configuration?: Configuratio
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -14727,7 +15922,7 @@ export const ModuleApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getModule(moduleId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getModule(moduleId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponsePageContentDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getModule(moduleId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ModuleApi.getModule']?.[localVarOperationServerIndex]?.url;
@@ -14736,12 +15931,12 @@ export const ModuleApiFp = function(configuration?: Configuration) {
         /**
          * Retrieves a paginated list of modules.
          * @summary Fetch paginated modules
-         * @param {any} body Pagination details
+         * @param {PaginationRequest} paginationRequest Pagination details
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getModules(body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getModules(body, options);
+        async getModules(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponsePageContentDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getModules(paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ModuleApi.getModules']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -14753,7 +15948,7 @@ export const ModuleApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPersonalModule(moduleId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getPersonalModule(moduleId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponsePageContentDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPersonalModule(moduleId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ModuleApi.getPersonalModule']?.[localVarOperationServerIndex]?.url;
@@ -14762,12 +15957,12 @@ export const ModuleApiFp = function(configuration?: Configuration) {
         /**
          * Retrieves personal modules for the logged-in user.
          * @summary Fetch paginated personal modules
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPersonalModules(body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPersonalModules(body, options);
+        async getPersonalModules(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponsePageContentDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPersonalModules(paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ModuleApi.getPersonalModules']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -14856,18 +16051,18 @@ export const ModuleApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getModule(moduleId: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getModule(moduleId: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponsePageContentDTO> {
             return localVarFp.getModule(moduleId, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of modules.
          * @summary Fetch paginated modules
-         * @param {any} body Pagination details
+         * @param {PaginationRequest} paginationRequest Pagination details
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getModules(body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getModules(body, options).then((request) => request(axios, basePath));
+        getModules(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponsePageContentDTO> {
+            return localVarFp.getModules(paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a personal module by UUID for the logged-in user.
@@ -14876,18 +16071,18 @@ export const ModuleApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPersonalModule(moduleId: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getPersonalModule(moduleId: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponsePageContentDTO> {
             return localVarFp.getPersonalModule(moduleId, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves personal modules for the logged-in user.
          * @summary Fetch paginated personal modules
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPersonalModules(body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getPersonalModules(body, options).then((request) => request(axios, basePath));
+        getPersonalModules(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponsePageContentDTO> {
+            return localVarFp.getPersonalModules(paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Updates the details of an existing module.
@@ -14976,12 +16171,12 @@ export class ModuleApi extends BaseAPI {
     /**
      * Retrieves a paginated list of modules.
      * @summary Fetch paginated modules
-     * @param {any} body Pagination details
+     * @param {PaginationRequest} paginationRequest Pagination details
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getModules(body: any, options?: RawAxiosRequestConfig) {
-        return ModuleApiFp(this.configuration).getModules(body, options).then((request) => request(this.axios, this.basePath));
+    public getModules(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return ModuleApiFp(this.configuration).getModules(paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14998,12 +16193,12 @@ export class ModuleApi extends BaseAPI {
     /**
      * Retrieves personal modules for the logged-in user.
      * @summary Fetch paginated personal modules
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getPersonalModules(body: any, options?: RawAxiosRequestConfig) {
-        return ModuleApiFp(this.configuration).getPersonalModules(body, options).then((request) => request(this.axios, this.basePath));
+    public getPersonalModules(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return ModuleApiFp(this.configuration).getPersonalModules(paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15241,7 +16436,7 @@ export const NotificationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async sendNotification(sendNotificationRequest: SendNotificationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async sendNotification(sendNotificationRequest: SendNotificationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponseMapStringString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.sendNotification(sendNotificationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['NotificationsApi.sendNotification']?.[localVarOperationServerIndex]?.url;
@@ -15292,7 +16487,7 @@ export const NotificationsApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sendNotification(sendNotificationRequest: SendNotificationRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        sendNotification(sendNotificationRequest: SendNotificationRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponseMapStringString> {
             return localVarFp.sendNotification(sendNotificationRequest, options).then((request) => request(axios, basePath));
         },
     };
@@ -15434,7 +16629,7 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -15521,7 +16716,7 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['relations'] = relations;
             }
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -15535,16 +16730,16 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Fetches a paginated list of objects, optionally including views, properties, and/or relations. The request body should contain pagination details such as limit, page, filters, sort, and query.
          * @summary Fetch paginated objects
-         * @param {any} body Pagination request details
+         * @param {PaginationRequest} paginationRequest Pagination request details
          * @param {string} [views] 
          * @param {string} [properties] 
          * @param {string} [relations] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getObjects: async (body: any, views?: string, properties?: string, relations?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getObjects', 'body', body)
+        getObjects: async (paginationRequest: PaginationRequest, views?: string, properties?: string, relations?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getObjects', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/objects/index`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -15579,7 +16774,7 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -15631,13 +16826,13 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Fetches all previews over all objects. Returns a PaginationResponse containing a list of preview DTOs.
          * @summary Get all previews over all objects
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPreviews: async (body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getPreviews', 'body', body)
+        getPreviews: async (paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getPreviews', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/objects/previews`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -15660,7 +16855,7 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -15865,7 +17060,7 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -15879,16 +17074,16 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Updates indices of objects based on the provided mapping. The request body should contain a mapping of object UUIDs to index values. Optional request parameters determine if views, properties, and relations should be included in the response.
          * @summary Update object indices
-         * @param {string} body Mapping of object indices
+         * @param {{ [key: string]: number; }} requestBody Mapping of object indices
          * @param {string} [views] 
          * @param {string} [properties] 
          * @param {string} [relations] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateIndices3: async (body: string, views?: string, properties?: string, relations?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('updateIndices3', 'body', body)
+        updateIndices3: async (requestBody: { [key: string]: number; }, views?: string, properties?: string, relations?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('updateIndices3', 'requestBody', requestBody)
             const localVarPath = `/api/v2/objects/updateIndices`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -15923,7 +17118,7 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -16091,7 +17286,7 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getObject(uuid: string, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getObject(uuid: string, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCaraerObjectDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getObject(uuid, views, properties, relations, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ObjectsApi.getObject']?.[localVarOperationServerIndex]?.url;
@@ -16100,15 +17295,15 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
         /**
          * Fetches a paginated list of objects, optionally including views, properties, and/or relations. The request body should contain pagination details such as limit, page, filters, sort, and query.
          * @summary Fetch paginated objects
-         * @param {any} body Pagination request details
+         * @param {PaginationRequest} paginationRequest Pagination request details
          * @param {string} [views] 
          * @param {string} [properties] 
          * @param {string} [relations] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getObjects(body: any, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getObjects(body, views, properties, relations, options);
+        async getObjects(paginationRequest: PaginationRequest, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseCaraerObjectDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getObjects(paginationRequest, views, properties, relations, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ObjectsApi.getObjects']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -16121,7 +17316,7 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPreview(uuid: string, name: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getPreview(uuid: string, name: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponsePreviewDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPreview(uuid, name, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ObjectsApi.getPreview']?.[localVarOperationServerIndex]?.url;
@@ -16130,12 +17325,12 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
         /**
          * Fetches all previews over all objects. Returns a PaginationResponse containing a list of preview DTOs.
          * @summary Get all previews over all objects
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPreviews(body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPreviews(body, options);
+        async getPreviews(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponsePreviewDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPreviews(paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ObjectsApi.getPreviews']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -16148,7 +17343,7 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPreviews1(uuid: string, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
+        async getPreviews1(uuid: string, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponsePreviewDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPreviews1(uuid, search, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ObjectsApi.getPreviews1']?.[localVarOperationServerIndex]?.url;
@@ -16203,7 +17398,7 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async syncExtendedObjects(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async syncExtendedObjects(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseMapStringInteger>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.syncExtendedObjects(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ObjectsApi.syncExtendedObjects']?.[localVarOperationServerIndex]?.url;
@@ -16212,15 +17407,15 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
         /**
          * Updates indices of objects based on the provided mapping. The request body should contain a mapping of object UUIDs to index values. Optional request parameters determine if views, properties, and relations should be included in the response.
          * @summary Update object indices
-         * @param {string} body Mapping of object indices
+         * @param {{ [key: string]: number; }} requestBody Mapping of object indices
          * @param {string} [views] 
          * @param {string} [properties] 
          * @param {string} [relations] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateIndices3(body: string, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateIndices3(body, views, properties, relations, options);
+        async updateIndices3(requestBody: { [key: string]: number; }, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListCaraerObjectDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateIndices3(requestBody, views, properties, relations, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ObjectsApi.updateIndices3']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -16307,21 +17502,21 @@ export const ObjectsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getObject(uuid: string, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getObject(uuid: string, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCaraerObjectDTO> {
             return localVarFp.getObject(uuid, views, properties, relations, options).then((request) => request(axios, basePath));
         },
         /**
          * Fetches a paginated list of objects, optionally including views, properties, and/or relations. The request body should contain pagination details such as limit, page, filters, sort, and query.
          * @summary Fetch paginated objects
-         * @param {any} body Pagination request details
+         * @param {PaginationRequest} paginationRequest Pagination request details
          * @param {string} [views] 
          * @param {string} [properties] 
          * @param {string} [relations] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getObjects(body: any, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getObjects(body, views, properties, relations, options).then((request) => request(axios, basePath));
+        getObjects(paginationRequest: PaginationRequest, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseCaraerObjectDTO> {
+            return localVarFp.getObjects(paginationRequest, views, properties, relations, options).then((request) => request(axios, basePath));
         },
         /**
          * Fetches a preview for an object by the object\'s UUID and the preview name. Returns the preview data wrapped in a ShowResponse.
@@ -16331,18 +17526,18 @@ export const ObjectsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPreview(uuid: string, name: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getPreview(uuid: string, name: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponsePreviewDTO> {
             return localVarFp.getPreview(uuid, name, options).then((request) => request(axios, basePath));
         },
         /**
          * Fetches all previews over all objects. Returns a PaginationResponse containing a list of preview DTOs.
          * @summary Get all previews over all objects
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPreviews(body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getPreviews(body, options).then((request) => request(axios, basePath));
+        getPreviews(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponsePreviewDTO> {
+            return localVarFp.getPreviews(paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Fetches all previews associated with a specific object. Returns a PaginationResponse containing a list of preview DTOs.
@@ -16352,7 +17547,7 @@ export const ObjectsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPreviews1(uuid: string, search?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
+        getPreviews1(uuid: string, search?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponsePreviewDTO> {
             return localVarFp.getPreviews1(uuid, search, options).then((request) => request(axios, basePath));
         },
         /**
@@ -16395,21 +17590,21 @@ export const ObjectsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        syncExtendedObjects(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        syncExtendedObjects(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseMapStringInteger> {
             return localVarFp.syncExtendedObjects(uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Updates indices of objects based on the provided mapping. The request body should contain a mapping of object UUIDs to index values. Optional request parameters determine if views, properties, and relations should be included in the response.
          * @summary Update object indices
-         * @param {string} body Mapping of object indices
+         * @param {{ [key: string]: number; }} requestBody Mapping of object indices
          * @param {string} [views] 
          * @param {string} [properties] 
          * @param {string} [relations] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateIndices3(body: string, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.updateIndices3(body, views, properties, relations, options).then((request) => request(axios, basePath));
+        updateIndices3(requestBody: { [key: string]: number; }, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListCaraerObjectDTO> {
+            return localVarFp.updateIndices3(requestBody, views, properties, relations, options).then((request) => request(axios, basePath));
         },
         /**
          * Sets which properties on this object should generate lifecycle history records when their values change.
@@ -16495,15 +17690,15 @@ export class ObjectsApi extends BaseAPI {
     /**
      * Fetches a paginated list of objects, optionally including views, properties, and/or relations. The request body should contain pagination details such as limit, page, filters, sort, and query.
      * @summary Fetch paginated objects
-     * @param {any} body Pagination request details
+     * @param {PaginationRequest} paginationRequest Pagination request details
      * @param {string} [views] 
      * @param {string} [properties] 
      * @param {string} [relations] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getObjects(body: any, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig) {
-        return ObjectsApiFp(this.configuration).getObjects(body, views, properties, relations, options).then((request) => request(this.axios, this.basePath));
+    public getObjects(paginationRequest: PaginationRequest, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig) {
+        return ObjectsApiFp(this.configuration).getObjects(paginationRequest, views, properties, relations, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -16521,12 +17716,12 @@ export class ObjectsApi extends BaseAPI {
     /**
      * Fetches all previews over all objects. Returns a PaginationResponse containing a list of preview DTOs.
      * @summary Get all previews over all objects
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getPreviews(body: any, options?: RawAxiosRequestConfig) {
-        return ObjectsApiFp(this.configuration).getPreviews(body, options).then((request) => request(this.axios, this.basePath));
+    public getPreviews(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return ObjectsApiFp(this.configuration).getPreviews(paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -16591,15 +17786,15 @@ export class ObjectsApi extends BaseAPI {
     /**
      * Updates indices of objects based on the provided mapping. The request body should contain a mapping of object UUIDs to index values. Optional request parameters determine if views, properties, and relations should be included in the response.
      * @summary Update object indices
-     * @param {string} body Mapping of object indices
+     * @param {{ [key: string]: number; }} requestBody Mapping of object indices
      * @param {string} [views] 
      * @param {string} [properties] 
      * @param {string} [relations] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public updateIndices3(body: string, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig) {
-        return ObjectsApiFp(this.configuration).updateIndices3(body, views, properties, relations, options).then((request) => request(this.axios, this.basePath));
+    public updateIndices3(requestBody: { [key: string]: number; }, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig) {
+        return ObjectsApiFp(this.configuration).updateIndices3(requestBody, views, properties, relations, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -16754,7 +17949,7 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -16792,7 +17987,7 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -16830,7 +18025,7 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -16845,15 +18040,15 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
          * Retrieves a paginated list of properties for a given object. Depending on the object UUID format, a Cypher query is constructed to filter properties belonging to that object. Returns a PaginationResponse containing PropertyDTO objects.
          * @summary Fetch paginated properties
          * @param {string} objectUuid 
-         * @param {any} body Pagination details (limit, page, filters, sort, query)
+         * @param {PaginationRequest} paginationRequest Pagination details (limit, page, filters, sort, query)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProperties: async (objectUuid: string, body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getProperties: async (objectUuid: string, paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'objectUuid' is not null or undefined
             assertParamExists('getProperties', 'objectUuid', objectUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getProperties', 'body', body)
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getProperties', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/objects/{objectUuid}/properties/index`
                 .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -16877,7 +18072,7 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -16915,7 +18110,7 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -16957,7 +18152,7 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -17041,7 +18236,7 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -17083,7 +18278,7 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -17125,7 +18320,7 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -17140,15 +18335,15 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
          * Updates the indices for properties of a specific object. The request body should contain a mapping between property UUIDs and their new index values. Returns a SuccessResponse containing a list of updated PropertyDTO objects.
          * @summary Update property indices
          * @param {string} objectUuid 
-         * @param {string} body Mapping of property UUIDs to new index values
+         * @param {{ [key: string]: number; }} requestBody Mapping of property UUIDs to new index values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateIndices2: async (objectUuid: string, body: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateIndices2: async (objectUuid: string, requestBody: { [key: string]: number; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'objectUuid' is not null or undefined
             assertParamExists('updateIndices2', 'objectUuid', objectUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('updateIndices2', 'body', body)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('updateIndices2', 'requestBody', requestBody)
             const localVarPath = `/api/v2/objects/{objectUuid}/properties/updateIndices`
                 .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -17172,7 +18367,7 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -17243,7 +18438,7 @@ export const PropertyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async copyPropertiesToObject(objectUuid: string, copyPropertiesToObjectRequest: CopyPropertiesToObjectRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async copyPropertiesToObject(objectUuid: string, copyPropertiesToObjectRequest: CopyPropertiesToObjectRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListPropertyDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.copyPropertiesToObject(objectUuid, copyPropertiesToObjectRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PropertyApi.copyPropertiesToObject']?.[localVarOperationServerIndex]?.url;
@@ -17284,7 +18479,7 @@ export const PropertyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCalculationTypes(objectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
+        async getCalculationTypes(objectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponsePropertyCalculationTypeDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCalculationTypes(objectUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PropertyApi.getCalculationTypes']?.[localVarOperationServerIndex]?.url;
@@ -17297,7 +18492,7 @@ export const PropertyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getFormats(objectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
+        async getFormats(objectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponsePropertyFormat>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getFormats(objectUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PropertyApi.getFormats']?.[localVarOperationServerIndex]?.url;
@@ -17307,12 +18502,12 @@ export const PropertyApiFp = function(configuration?: Configuration) {
          * Retrieves a paginated list of properties for a given object. Depending on the object UUID format, a Cypher query is constructed to filter properties belonging to that object. Returns a PaginationResponse containing PropertyDTO objects.
          * @summary Fetch paginated properties
          * @param {string} objectUuid 
-         * @param {any} body Pagination details (limit, page, filters, sort, query)
+         * @param {PaginationRequest} paginationRequest Pagination details (limit, page, filters, sort, query)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProperties(objectUuid: string, body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProperties(objectUuid, body, options);
+        async getProperties(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponsePropertyDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProperties(objectUuid, paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PropertyApi.getProperties']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -17325,7 +18520,7 @@ export const PropertyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProperty(objectUuid: string, propertyUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getProperty(objectUuid: string, propertyUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponsePropertyDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProperty(objectUuid, propertyUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PropertyApi.getProperty']?.[localVarOperationServerIndex]?.url;
@@ -17339,7 +18534,7 @@ export const PropertyApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPropertyCalculationTypes(objectUuid: string, propertyUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async getPropertyCalculationTypes(objectUuid: string, propertyUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPropertyCalculationTypes(objectUuid, propertyUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PropertyApi.getPropertyCalculationTypes']?.[localVarOperationServerIndex]?.url;
@@ -17405,12 +18600,12 @@ export const PropertyApiFp = function(configuration?: Configuration) {
          * Updates the indices for properties of a specific object. The request body should contain a mapping between property UUIDs and their new index values. Returns a SuccessResponse containing a list of updated PropertyDTO objects.
          * @summary Update property indices
          * @param {string} objectUuid 
-         * @param {string} body Mapping of property UUIDs to new index values
+         * @param {{ [key: string]: number; }} requestBody Mapping of property UUIDs to new index values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateIndices2(objectUuid: string, body: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateIndices2(objectUuid, body, options);
+        async updateIndices2(objectUuid: string, requestBody: { [key: string]: number; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListPropertyDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateIndices2(objectUuid, requestBody, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PropertyApi.updateIndices2']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -17447,7 +18642,7 @@ export const PropertyApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        copyPropertiesToObject(objectUuid: string, copyPropertiesToObjectRequest: CopyPropertiesToObjectRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        copyPropertiesToObject(objectUuid: string, copyPropertiesToObjectRequest: CopyPropertiesToObjectRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListPropertyDTO> {
             return localVarFp.copyPropertiesToObject(objectUuid, copyPropertiesToObjectRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -17479,7 +18674,7 @@ export const PropertyApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCalculationTypes(objectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
+        getCalculationTypes(objectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponsePropertyCalculationTypeDTO> {
             return localVarFp.getCalculationTypes(objectUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -17489,19 +18684,19 @@ export const PropertyApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFormats(objectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
+        getFormats(objectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponsePropertyFormat> {
             return localVarFp.getFormats(objectUuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of properties for a given object. Depending on the object UUID format, a Cypher query is constructed to filter properties belonging to that object. Returns a PaginationResponse containing PropertyDTO objects.
          * @summary Fetch paginated properties
          * @param {string} objectUuid 
-         * @param {any} body Pagination details (limit, page, filters, sort, query)
+         * @param {PaginationRequest} paginationRequest Pagination details (limit, page, filters, sort, query)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProperties(objectUuid: string, body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getProperties(objectUuid, body, options).then((request) => request(axios, basePath));
+        getProperties(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponsePropertyDTO> {
+            return localVarFp.getProperties(objectUuid, paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves details of a property by its UUID and associates it with its parent object. Returns a ShowResponse containing a PropertyDTO object with complete property details.
@@ -17511,7 +18706,7 @@ export const PropertyApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProperty(objectUuid: string, propertyUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getProperty(objectUuid: string, propertyUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponsePropertyDTO> {
             return localVarFp.getProperty(objectUuid, propertyUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -17522,7 +18717,7 @@ export const PropertyApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPropertyCalculationTypes(objectUuid: string, propertyUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        getPropertyCalculationTypes(objectUuid: string, propertyUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListString> {
             return localVarFp.getPropertyCalculationTypes(objectUuid, propertyUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -17573,12 +18768,12 @@ export const PropertyApiFactory = function (configuration?: Configuration, baseP
          * Updates the indices for properties of a specific object. The request body should contain a mapping between property UUIDs and their new index values. Returns a SuccessResponse containing a list of updated PropertyDTO objects.
          * @summary Update property indices
          * @param {string} objectUuid 
-         * @param {string} body Mapping of property UUIDs to new index values
+         * @param {{ [key: string]: number; }} requestBody Mapping of property UUIDs to new index values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateIndices2(objectUuid: string, body: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
-            return localVarFp.updateIndices2(objectUuid, body, options).then((request) => request(axios, basePath));
+        updateIndices2(objectUuid: string, requestBody: { [key: string]: number; }, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListPropertyDTO> {
+            return localVarFp.updateIndices2(objectUuid, requestBody, options).then((request) => request(axios, basePath));
         },
         /**
          * Updates the details of an existing property for a specific object. The property details are provided via SavePropertyDTO, and the property is identified by its UUID. Returns an UpdateResponse containing the updated property as a PropertyDTO. Validation rules: name (required, must be unique, must be lowercase, must match name pattern (lowercase letters, numbers, underscores), cannot be changed after creation), label (required), description (maximum 255 characters), type (required, must be one of valid PropertyTypes, cannot be changed after creation), format (required, must be one of valid PropertyFormats, cannot be changed after creation), rules (required, must be an array of string).
@@ -17661,12 +18856,12 @@ export class PropertyApi extends BaseAPI {
      * Retrieves a paginated list of properties for a given object. Depending on the object UUID format, a Cypher query is constructed to filter properties belonging to that object. Returns a PaginationResponse containing PropertyDTO objects.
      * @summary Fetch paginated properties
      * @param {string} objectUuid 
-     * @param {any} body Pagination details (limit, page, filters, sort, query)
+     * @param {PaginationRequest} paginationRequest Pagination details (limit, page, filters, sort, query)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getProperties(objectUuid: string, body: any, options?: RawAxiosRequestConfig) {
-        return PropertyApiFp(this.configuration).getProperties(objectUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public getProperties(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return PropertyApiFp(this.configuration).getProperties(objectUuid, paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -17745,12 +18940,12 @@ export class PropertyApi extends BaseAPI {
      * Updates the indices for properties of a specific object. The request body should contain a mapping between property UUIDs and their new index values. Returns a SuccessResponse containing a list of updated PropertyDTO objects.
      * @summary Update property indices
      * @param {string} objectUuid 
-     * @param {string} body Mapping of property UUIDs to new index values
+     * @param {{ [key: string]: number; }} requestBody Mapping of property UUIDs to new index values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public updateIndices2(objectUuid: string, body: string, options?: RawAxiosRequestConfig) {
-        return PropertyApiFp(this.configuration).updateIndices2(objectUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public updateIndices2(objectUuid: string, requestBody: { [key: string]: number; }, options?: RawAxiosRequestConfig) {
+        return PropertyApiFp(this.configuration).updateIndices2(objectUuid, requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -18260,7 +19455,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
          * @summary Fetch paginated records
-         * @param {string} body Pagination request for records
+         * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for records
          * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
@@ -18268,9 +19463,9 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        index: async (body: string, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('index', 'body', body)
+        index: async (recordPaginationRequest: RecordPaginationRequest, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordPaginationRequest' is not null or undefined
+            assertParamExists('index', 'recordPaginationRequest', recordPaginationRequest)
             const localVarPath = `/api/v2/records/index`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -18309,7 +19504,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(recordPaginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -18319,15 +19514,15 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Retrieves a list of records formatted for flow view based on a specific property. If the property is not provided in the request, defaults to the \'status\' property of the main object. Returns a SuccessResponse containing the flow records.
          * @summary Fetch records for flow view
-         * @param {string} body Pagination request for flow view
+         * @param {FlowPaginationRequest} flowPaginationRequest Pagination request for flow view
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
          * @param {IndexFlowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        indexFlow: async (body: string, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('indexFlow', 'body', body)
+        indexFlow: async (flowPaginationRequest: FlowPaginationRequest, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'flowPaginationRequest' is not null or undefined
+            assertParamExists('indexFlow', 'flowPaginationRequest', flowPaginationRequest)
             const localVarPath = `/api/v2/records/index/flow`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -18358,7 +19553,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(flowPaginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -18368,7 +19563,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Retrieves a paginated list of webpages for page view. The search query is temporarily removed from the pagination request and passed separately. Returns a PaginationResponse containing WebpageDTO objects.
          * @summary Fetch records for page view
-         * @param {string} body Pagination request for page view
+         * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for page view
          * @param {string} [environment] Target environment for resolving webpages (for example \&#39;staging\&#39; or \&#39;production\&#39;). Defaults to \&#39;staging\&#39;.
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
          * @param {string} [fields] Comma-separated WebpageDTO fields to return (for example: uuid,title). When omitted, the full WebpageDTO is returned.
@@ -18377,9 +19572,9 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        indexPage: async (body: string, environment?: string, relatedRecordUuid?: string, fields?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('indexPage', 'body', body)
+        indexPage: async (recordPaginationRequest: RecordPaginationRequest, environment?: string, relatedRecordUuid?: string, fields?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordPaginationRequest' is not null or undefined
+            assertParamExists('indexPage', 'recordPaginationRequest', recordPaginationRequest)
             const localVarPath = `/api/v2/records/index/page`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -18422,7 +19617,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(recordPaginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -18432,14 +19627,14 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Retrieves records formatted for table display. Returns a PaginationResponse containing records formatted for table view.
          * @summary Fetch records for table view
-         * @param {string} body Pagination request for table view
+         * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for table view
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        indexTable: async (body: string, relatedRecordUuid?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('indexTable', 'body', body)
+        indexTable: async (recordPaginationRequest: RecordPaginationRequest, relatedRecordUuid?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordPaginationRequest' is not null or undefined
+            assertParamExists('indexTable', 'recordPaginationRequest', recordPaginationRequest)
             const localVarPath = `/api/v2/records/index/table`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -18466,7 +19661,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(recordPaginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -18605,16 +19800,16 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Performs a search for records based on the specified criteria in the request body. Returns a PaginationResponse containing matching records.
          * @summary Search records
-         * @param {string} body Search criteria
+         * @param {SearchRequest} searchRequest Search criteria
          * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
          * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        search: async (body: string, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('search', 'body', body)
+        search: async (searchRequest: SearchRequest, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'searchRequest' is not null or undefined
+            assertParamExists('search', 'searchRequest', searchRequest)
             const localVarPath = `/api/v2/records/search`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -18649,7 +19844,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(searchRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -19047,7 +20242,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async _delete(uuid: string, mode?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async _delete(uuid: string, mode?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator._delete(uuid, mode, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi._delete']?.[localVarOperationServerIndex]?.url;
@@ -19060,7 +20255,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async aggregate(aggregateRequest: AggregateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async aggregate(aggregateRequest: AggregateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseAggregateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.aggregate(aggregateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.aggregate']?.[localVarOperationServerIndex]?.url;
@@ -19073,7 +20268,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async aggregateBatch(aggregateBatchRequest: AggregateBatchRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async aggregateBatch(aggregateBatchRequest: AggregateBatchRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListAggregateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.aggregateBatch(aggregateBatchRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.aggregateBatch']?.[localVarOperationServerIndex]?.url;
@@ -19136,7 +20331,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createOrUpdate(objectName: string, recordDTO: RecordDTO, parse?: CreateOrUpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateOrUpdateRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async createOrUpdate(objectName: string, recordDTO: RecordDTO, parse?: CreateOrUpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateOrUpdateRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createOrUpdate(objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.createOrUpdate']?.[localVarOperationServerIndex]?.url;
@@ -19153,7 +20348,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createRelation(fromUuid: string, relationName: string, toUuid: string, primary?: object, relationEdgeRequestDTO?: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async createRelation(fromUuid: string, relationName: string, toUuid: string, primary?: object, relationEdgeRequestDTO?: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createRelation(fromUuid, relationName, toUuid, primary, relationEdgeRequestDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.createRelation']?.[localVarOperationServerIndex]?.url;
@@ -19168,7 +20363,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteRelation(fromUuid: string, relationName: string, toUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async deleteRelation(fromUuid: string, relationName: string, toUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteRelation(fromUuid, relationName, toUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.deleteRelation']?.[localVarOperationServerIndex]?.url;
@@ -19184,7 +20379,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async extend(uuid: string, extendRecordRequest: ExtendRecordRequest, recordReturnFormat?: ExtendRecordReturnFormatEnum, parse?: ExtendParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async extend(uuid: string, extendRecordRequest: ExtendRecordRequest, recordReturnFormat?: ExtendRecordReturnFormatEnum, parse?: ExtendParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseObject>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.extend(uuid, extendRecordRequest, recordReturnFormat, parse, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.extend']?.[localVarOperationServerIndex]?.url;
@@ -19193,7 +20388,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
         /**
          * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
          * @summary Fetch paginated records
-         * @param {string} body Pagination request for records
+         * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for records
          * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
@@ -19201,8 +20396,8 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async index(body: string, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.index(body, parse, archived, relatedRecordUuid, recordReturnFormat, options);
+        async index(recordPaginationRequest: RecordPaginationRequest, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.index(recordPaginationRequest, parse, archived, relatedRecordUuid, recordReturnFormat, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.index']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -19210,14 +20405,14 @@ export const RecordsApiFp = function(configuration?: Configuration) {
         /**
          * Retrieves a list of records formatted for flow view based on a specific property. If the property is not provided in the request, defaults to the \'status\' property of the main object. Returns a SuccessResponse containing the flow records.
          * @summary Fetch records for flow view
-         * @param {string} body Pagination request for flow view
+         * @param {FlowPaginationRequest} flowPaginationRequest Pagination request for flow view
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
          * @param {IndexFlowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async indexFlow(body: string, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.indexFlow(body, relatedRecordUuid, parse, options);
+        async indexFlow(flowPaginationRequest: FlowPaginationRequest, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseFlow>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.indexFlow(flowPaginationRequest, relatedRecordUuid, parse, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.indexFlow']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -19225,7 +20420,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
         /**
          * Retrieves a paginated list of webpages for page view. The search query is temporarily removed from the pagination request and passed separately. Returns a PaginationResponse containing WebpageDTO objects.
          * @summary Fetch records for page view
-         * @param {string} body Pagination request for page view
+         * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for page view
          * @param {string} [environment] Target environment for resolving webpages (for example \&#39;staging\&#39; or \&#39;production\&#39;). Defaults to \&#39;staging\&#39;.
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
          * @param {string} [fields] Comma-separated WebpageDTO fields to return (for example: uuid,title). When omitted, the full WebpageDTO is returned.
@@ -19234,8 +20429,8 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async indexPage(body: string, environment?: string, relatedRecordUuid?: string, fields?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.indexPage(body, environment, relatedRecordUuid, fields, publishedOnly, excludeTemplateRelated, options);
+        async indexPage(recordPaginationRequest: RecordPaginationRequest, environment?: string, relatedRecordUuid?: string, fields?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.indexPage(recordPaginationRequest, environment, relatedRecordUuid, fields, publishedOnly, excludeTemplateRelated, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.indexPage']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -19243,13 +20438,13 @@ export const RecordsApiFp = function(configuration?: Configuration) {
         /**
          * Retrieves records formatted for table display. Returns a PaginationResponse containing records formatted for table view.
          * @summary Fetch records for table view
-         * @param {string} body Pagination request for table view
+         * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for table view
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async indexTable(body: string, relatedRecordUuid?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.indexTable(body, relatedRecordUuid, options);
+        async indexTable(recordPaginationRequest: RecordPaginationRequest, relatedRecordUuid?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseTable>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.indexTable(recordPaginationRequest, relatedRecordUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.indexTable']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -19264,7 +20459,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async preview(uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async preview(uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponsePreviewDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.preview(uuid, name, object, parse, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.preview']?.[localVarOperationServerIndex]?.url;
@@ -19290,7 +20485,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async restore(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async restore(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.restore(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.restore']?.[localVarOperationServerIndex]?.url;
@@ -19299,15 +20494,15 @@ export const RecordsApiFp = function(configuration?: Configuration) {
         /**
          * Performs a search for records based on the specified criteria in the request body. Returns a PaginationResponse containing matching records.
          * @summary Search records
-         * @param {string} body Search criteria
+         * @param {SearchRequest} searchRequest Search criteria
          * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
          * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async search(body: string, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.search(body, archived, parse, recordReturnFormat, options);
+        async search(searchRequest: SearchRequest, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.search(searchRequest, archived, parse, recordReturnFormat, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.search']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -19321,7 +20516,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async searchCrossObject(crossObjectRecordSearchRequest: CrossObjectRecordSearchRequest, archived?: boolean, parse?: SearchCrossObjectParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
+        async searchCrossObject(crossObjectRecordSearchRequest: CrossObjectRecordSearchRequest, archived?: boolean, parse?: SearchCrossObjectParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponsePreviewDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.searchCrossObject(crossObjectRecordSearchRequest, archived, parse, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.searchCrossObject']?.[localVarOperationServerIndex]?.url;
@@ -19338,7 +20533,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async show(uuid: string, object?: string, recordReturnFormat?: ShowRecordReturnFormatEnum, parse?: ShowParseEnum, fields?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async show(uuid: string, object?: string, recordReturnFormat?: ShowRecordReturnFormatEnum, parse?: ShowParseEnum, fields?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseObject>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.show(uuid, object, recordReturnFormat, parse, fields, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.show']?.[localVarOperationServerIndex]?.url;
@@ -19354,7 +20549,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async showByObject(objectName: string, uuid: string, recordReturnFormat?: ShowByObjectRecordReturnFormatEnum, parse?: ShowByObjectParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async showByObject(objectName: string, uuid: string, recordReturnFormat?: ShowByObjectRecordReturnFormatEnum, parse?: ShowByObjectParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseObject>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.showByObject(objectName, uuid, recordReturnFormat, parse, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.showByObject']?.[localVarOperationServerIndex]?.url;
@@ -19367,7 +20562,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest: SuggestAnalyticsWidgetsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest: SuggestAnalyticsWidgetsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseSuggestAnalyticsWidgetsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.suggestAnalyticsWidgets']?.[localVarOperationServerIndex]?.url;
@@ -19419,7 +20614,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateRelationEdge(fromUuid: string, relationName: string, toUuid: string, relationEdgeRequestDTO: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async updateRelationEdge(fromUuid: string, relationName: string, toUuid: string, relationEdgeRequestDTO: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateRelationEdge(fromUuid, relationName, toUuid, relationEdgeRequestDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.updateRelationEdge']?.[localVarOperationServerIndex]?.url;
@@ -19442,7 +20637,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete(uuid: string, mode?: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        _delete(uuid: string, mode?: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp._delete(uuid, mode, options).then((request) => request(axios, basePath));
         },
         /**
@@ -19452,7 +20647,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        aggregate(aggregateRequest: AggregateRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        aggregate(aggregateRequest: AggregateRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseAggregateResponse> {
             return localVarFp.aggregate(aggregateRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -19462,7 +20657,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        aggregateBatch(aggregateBatchRequest: AggregateBatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        aggregateBatch(aggregateBatchRequest: AggregateBatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListAggregateResponse> {
             return localVarFp.aggregateBatch(aggregateBatchRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -19513,7 +20708,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createOrUpdate(objectName: string, recordDTO: RecordDTO, parse?: CreateOrUpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateOrUpdateRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        createOrUpdate(objectName: string, recordDTO: RecordDTO, parse?: CreateOrUpdateParseEnum, ignoreErrors?: boolean, recordReturnFormat?: CreateOrUpdateRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<UpdateResponse> {
             return localVarFp.createOrUpdate(objectName, recordDTO, parse, ignoreErrors, recordReturnFormat, options).then((request) => request(axios, basePath));
         },
         /**
@@ -19527,7 +20722,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createRelation(fromUuid: string, relationName: string, toUuid: string, primary?: object, relationEdgeRequestDTO?: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        createRelation(fromUuid: string, relationName: string, toUuid: string, primary?: object, relationEdgeRequestDTO?: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.createRelation(fromUuid, relationName, toUuid, primary, relationEdgeRequestDTO, options).then((request) => request(axios, basePath));
         },
         /**
@@ -19539,7 +20734,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteRelation(fromUuid: string, relationName: string, toUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        deleteRelation(fromUuid: string, relationName: string, toUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.deleteRelation(fromUuid, relationName, toUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -19552,13 +20747,13 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        extend(uuid: string, extendRecordRequest: ExtendRecordRequest, recordReturnFormat?: ExtendRecordReturnFormatEnum, parse?: ExtendParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        extend(uuid: string, extendRecordRequest: ExtendRecordRequest, recordReturnFormat?: ExtendRecordReturnFormatEnum, parse?: ExtendParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseObject> {
             return localVarFp.extend(uuid, extendRecordRequest, recordReturnFormat, parse, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
          * @summary Fetch paginated records
-         * @param {string} body Pagination request for records
+         * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for records
          * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
@@ -19566,25 +20761,25 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        index(body: string, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.index(body, parse, archived, relatedRecordUuid, recordReturnFormat, options).then((request) => request(axios, basePath));
+        index(recordPaginationRequest: RecordPaginationRequest, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseObject> {
+            return localVarFp.index(recordPaginationRequest, parse, archived, relatedRecordUuid, recordReturnFormat, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a list of records formatted for flow view based on a specific property. If the property is not provided in the request, defaults to the \'status\' property of the main object. Returns a SuccessResponse containing the flow records.
          * @summary Fetch records for flow view
-         * @param {string} body Pagination request for flow view
+         * @param {FlowPaginationRequest} flowPaginationRequest Pagination request for flow view
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
          * @param {IndexFlowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        indexFlow(body: string, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
-            return localVarFp.indexFlow(body, relatedRecordUuid, parse, options).then((request) => request(axios, basePath));
+        indexFlow(flowPaginationRequest: FlowPaginationRequest, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseFlow> {
+            return localVarFp.indexFlow(flowPaginationRequest, relatedRecordUuid, parse, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of webpages for page view. The search query is temporarily removed from the pagination request and passed separately. Returns a PaginationResponse containing WebpageDTO objects.
          * @summary Fetch records for page view
-         * @param {string} body Pagination request for page view
+         * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for page view
          * @param {string} [environment] Target environment for resolving webpages (for example \&#39;staging\&#39; or \&#39;production\&#39;). Defaults to \&#39;staging\&#39;.
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
          * @param {string} [fields] Comma-separated WebpageDTO fields to return (for example: uuid,title). When omitted, the full WebpageDTO is returned.
@@ -19593,19 +20788,19 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        indexPage(body: string, environment?: string, relatedRecordUuid?: string, fields?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.indexPage(body, environment, relatedRecordUuid, fields, publishedOnly, excludeTemplateRelated, options).then((request) => request(axios, basePath));
+        indexPage(recordPaginationRequest: RecordPaginationRequest, environment?: string, relatedRecordUuid?: string, fields?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseObject> {
+            return localVarFp.indexPage(recordPaginationRequest, environment, relatedRecordUuid, fields, publishedOnly, excludeTemplateRelated, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves records formatted for table display. Returns a PaginationResponse containing records formatted for table view.
          * @summary Fetch records for table view
-         * @param {string} body Pagination request for table view
+         * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for table view
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        indexTable(body: string, relatedRecordUuid?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.indexTable(body, relatedRecordUuid, options).then((request) => request(axios, basePath));
+        indexTable(recordPaginationRequest: RecordPaginationRequest, relatedRecordUuid?: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseTable> {
+            return localVarFp.indexTable(recordPaginationRequest, relatedRecordUuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a preview for a record specified by its UUID and preview name. Returns a ShowResponse containing the preview data.
@@ -19617,7 +20812,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        preview(uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        preview(uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponsePreviewDTO> {
             return localVarFp.preview(uuid, name, object, parse, options).then((request) => request(axios, basePath));
         },
         /**
@@ -19637,21 +20832,21 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        restore(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        restore(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.restore(uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Performs a search for records based on the specified criteria in the request body. Returns a PaginationResponse containing matching records.
          * @summary Search records
-         * @param {string} body Search criteria
+         * @param {SearchRequest} searchRequest Search criteria
          * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
          * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        search(body: string, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.search(body, archived, parse, recordReturnFormat, options).then((request) => request(axios, basePath));
+        search(searchRequest: SearchRequest, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseObject> {
+            return localVarFp.search(searchRequest, archived, parse, recordReturnFormat, options).then((request) => request(axios, basePath));
         },
         /**
          * Searches records across multiple object types in one request. Use fromObjectUuid + relationName to limit to relation target objects (e.g. event attendees), or objectUuids for an explicit list, or omit both to search all company objects (capped). Returns preview-shaped results suitable for relation pickers.
@@ -19662,7 +20857,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchCrossObject(crossObjectRecordSearchRequest: CrossObjectRecordSearchRequest, archived?: boolean, parse?: SearchCrossObjectParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
+        searchCrossObject(crossObjectRecordSearchRequest: CrossObjectRecordSearchRequest, archived?: boolean, parse?: SearchCrossObjectParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponsePreviewDTO> {
             return localVarFp.searchCrossObject(crossObjectRecordSearchRequest, archived, parse, options).then((request) => request(axios, basePath));
         },
         /**
@@ -19676,7 +20871,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        show(uuid: string, object?: string, recordReturnFormat?: ShowRecordReturnFormatEnum, parse?: ShowParseEnum, fields?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        show(uuid: string, object?: string, recordReturnFormat?: ShowRecordReturnFormatEnum, parse?: ShowParseEnum, fields?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseObject> {
             return localVarFp.show(uuid, object, recordReturnFormat, parse, fields, options).then((request) => request(axios, basePath));
         },
         /**
@@ -19689,7 +20884,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        showByObject(objectName: string, uuid: string, recordReturnFormat?: ShowByObjectRecordReturnFormatEnum, parse?: ShowByObjectParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        showByObject(objectName: string, uuid: string, recordReturnFormat?: ShowByObjectRecordReturnFormatEnum, parse?: ShowByObjectParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseObject> {
             return localVarFp.showByObject(objectName, uuid, recordReturnFormat, parse, options).then((request) => request(axios, basePath));
         },
         /**
@@ -19699,7 +20894,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest: SuggestAnalyticsWidgetsRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest: SuggestAnalyticsWidgetsRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseSuggestAnalyticsWidgetsResponse> {
             return localVarFp.suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -19742,7 +20937,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateRelationEdge(fromUuid: string, relationName: string, toUuid: string, relationEdgeRequestDTO: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        updateRelationEdge(fromUuid: string, relationName: string, toUuid: string, relationEdgeRequestDTO: RelationEdgeRequestDTO, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.updateRelationEdge(fromUuid, relationName, toUuid, relationEdgeRequestDTO, options).then((request) => request(axios, basePath));
         },
     };
@@ -19886,7 +21081,7 @@ export class RecordsApi extends BaseAPI {
     /**
      * Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
      * @summary Fetch paginated records
-     * @param {string} body Pagination request for records
+     * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for records
      * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
      * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
@@ -19894,27 +21089,27 @@ export class RecordsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public index(body: string, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options?: RawAxiosRequestConfig) {
-        return RecordsApiFp(this.configuration).index(body, parse, archived, relatedRecordUuid, recordReturnFormat, options).then((request) => request(this.axios, this.basePath));
+    public index(recordPaginationRequest: RecordPaginationRequest, parse?: IndexParseEnum, archived?: boolean, relatedRecordUuid?: string, recordReturnFormat?: IndexRecordReturnFormatEnum, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).index(recordPaginationRequest, parse, archived, relatedRecordUuid, recordReturnFormat, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Retrieves a list of records formatted for flow view based on a specific property. If the property is not provided in the request, defaults to the \'status\' property of the main object. Returns a SuccessResponse containing the flow records.
      * @summary Fetch records for flow view
-     * @param {string} body Pagination request for flow view
+     * @param {FlowPaginationRequest} flowPaginationRequest Pagination request for flow view
      * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
      * @param {IndexFlowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public indexFlow(body: string, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options?: RawAxiosRequestConfig) {
-        return RecordsApiFp(this.configuration).indexFlow(body, relatedRecordUuid, parse, options).then((request) => request(this.axios, this.basePath));
+    public indexFlow(flowPaginationRequest: FlowPaginationRequest, relatedRecordUuid?: string, parse?: IndexFlowParseEnum, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).indexFlow(flowPaginationRequest, relatedRecordUuid, parse, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Retrieves a paginated list of webpages for page view. The search query is temporarily removed from the pagination request and passed separately. Returns a PaginationResponse containing WebpageDTO objects.
      * @summary Fetch records for page view
-     * @param {string} body Pagination request for page view
+     * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for page view
      * @param {string} [environment] Target environment for resolving webpages (for example \&#39;staging\&#39; or \&#39;production\&#39;). Defaults to \&#39;staging\&#39;.
      * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
      * @param {string} [fields] Comma-separated WebpageDTO fields to return (for example: uuid,title). When omitted, the full WebpageDTO is returned.
@@ -19923,20 +21118,20 @@ export class RecordsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public indexPage(body: string, environment?: string, relatedRecordUuid?: string, fields?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options?: RawAxiosRequestConfig) {
-        return RecordsApiFp(this.configuration).indexPage(body, environment, relatedRecordUuid, fields, publishedOnly, excludeTemplateRelated, options).then((request) => request(this.axios, this.basePath));
+    public indexPage(recordPaginationRequest: RecordPaginationRequest, environment?: string, relatedRecordUuid?: string, fields?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).indexPage(recordPaginationRequest, environment, relatedRecordUuid, fields, publishedOnly, excludeTemplateRelated, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Retrieves records formatted for table display. Returns a PaginationResponse containing records formatted for table view.
      * @summary Fetch records for table view
-     * @param {string} body Pagination request for table view
+     * @param {RecordPaginationRequest} recordPaginationRequest Pagination request for table view
      * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public indexTable(body: string, relatedRecordUuid?: string, options?: RawAxiosRequestConfig) {
-        return RecordsApiFp(this.configuration).indexTable(body, relatedRecordUuid, options).then((request) => request(this.axios, this.basePath));
+    public indexTable(recordPaginationRequest: RecordPaginationRequest, relatedRecordUuid?: string, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).indexTable(recordPaginationRequest, relatedRecordUuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -19978,15 +21173,15 @@ export class RecordsApi extends BaseAPI {
     /**
      * Performs a search for records based on the specified criteria in the request body. Returns a PaginationResponse containing matching records.
      * @summary Search records
-     * @param {string} body Search criteria
+     * @param {SearchRequest} searchRequest Search criteria
      * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
      * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public search(body: string, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options?: RawAxiosRequestConfig) {
-        return RecordsApiFp(this.configuration).search(body, archived, parse, recordReturnFormat, options).then((request) => request(this.axios, this.basePath));
+    public search(searchRequest: SearchRequest, archived?: boolean, parse?: SearchParseEnum, recordReturnFormat?: SearchRecordReturnFormatEnum, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).search(searchRequest, archived, parse, recordReturnFormat, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -20257,7 +21452,7 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -20346,7 +21541,7 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -20384,7 +21579,7 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -20422,7 +21617,7 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -20478,13 +21673,13 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
         /**
          * Retrieves a paginated list of relations. Returns a PaginationResponse containing RelationDTO objects based on the provided pagination criteria.
          * @summary Fetch paginated relations
-         * @param {any} body Pagination request for relations
+         * @param {PaginationRequest} paginationRequest Pagination request for relations
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRelations: async (body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getRelations', 'body', body)
+        getRelations: async (paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getRelations', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/relations/index`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -20507,7 +21702,7 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -20519,17 +21714,17 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
          * @summary Get all relations between two objects
          * @param {string} fromObjectUuid 
          * @param {string} toObjectUuid 
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRelationsBetweenObjects: async (fromObjectUuid: string, toObjectUuid: string, body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getRelationsBetweenObjects: async (fromObjectUuid: string, toObjectUuid: string, paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'fromObjectUuid' is not null or undefined
             assertParamExists('getRelationsBetweenObjects', 'fromObjectUuid', fromObjectUuid)
             // verify required parameter 'toObjectUuid' is not null or undefined
             assertParamExists('getRelationsBetweenObjects', 'toObjectUuid', toObjectUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getRelationsBetweenObjects', 'body', body)
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getRelationsBetweenObjects', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/relations/index/{fromObjectUuid}/{toObjectUuid}`
                 .replace('{fromObjectUuid}', encodeURIComponent(String(fromObjectUuid)))
                 .replace('{toObjectUuid}', encodeURIComponent(String(toObjectUuid)));
@@ -20554,7 +21749,7 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -20565,15 +21760,15 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
          * Returns relation definitions where this object participates in the **schema** graph for that relation name: either as origin `(thisObject)-[:relationName]->(:Object)` or as target `(:Object)-[:relationName]->(thisObject)`. Unrelated relations (same name elsewhere, or no typed edge touching this object) are excluded. Uses the object’s `name` to filter; request path uses object UUID.
          * @summary Fetch relations for a specific object
          * @param {string} objectUuid 
-         * @param {any} body Pagination request for relations
+         * @param {PaginationRequest} paginationRequest Pagination request for relations
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRelationsByObject: async (objectUuid: string, body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getRelationsByObject: async (objectUuid: string, paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'objectUuid' is not null or undefined
             assertParamExists('getRelationsByObject', 'objectUuid', objectUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getRelationsByObject', 'body', body)
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getRelationsByObject', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/relations/index/{objectUuid}`
                 .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -20597,7 +21792,7 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -20669,7 +21864,7 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -20683,13 +21878,13 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
         /**
          * Updates the indices for relations. The request body should contain a mapping of relation UUIDs to their new index values. Returns a SuccessResponse containing the updated relation objects.
          * @summary Update relation indices
-         * @param {string} body Mapping of relation UUIDs to new index values
+         * @param {{ [key: string]: number; }} requestBody Mapping of relation UUIDs to new index values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateIndices: async (body: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('updateIndices', 'body', body)
+        updateIndices: async (requestBody: { [key: string]: number; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('updateIndices', 'requestBody', requestBody)
             const localVarPath = `/api/v2/relations/updateIndices`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -20712,7 +21907,7 @@ export const RelationsApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -20737,7 +21932,7 @@ export const RelationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async addConnection(relationUuid: string, from: string, to: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async addConnection(relationUuid: string, from: string, to: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.addConnection(relationUuid, from, to, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationsApi.addConnection']?.[localVarOperationServerIndex]?.url;
@@ -20766,7 +21961,7 @@ export const RelationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteConnection(relationUuid: string, from: string, to: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async deleteConnection(relationUuid: string, from: string, to: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteConnection(relationUuid, from, to, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationsApi.deleteConnection']?.[localVarOperationServerIndex]?.url;
@@ -20792,7 +21987,7 @@ export const RelationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getRelation(relationUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getRelation(relationUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseRelationDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getRelation(relationUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationsApi.getRelation']?.[localVarOperationServerIndex]?.url;
@@ -20806,7 +22001,7 @@ export const RelationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getRelationForObject(relationUuid: string, objectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getRelationForObject(relationUuid: string, objectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseRelationDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getRelationForObject(relationUuid, objectUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationsApi.getRelationForObject']?.[localVarOperationServerIndex]?.url;
@@ -20815,12 +22010,12 @@ export const RelationsApiFp = function(configuration?: Configuration) {
         /**
          * Retrieves a paginated list of relations. Returns a PaginationResponse containing RelationDTO objects based on the provided pagination criteria.
          * @summary Fetch paginated relations
-         * @param {any} body Pagination request for relations
+         * @param {PaginationRequest} paginationRequest Pagination request for relations
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getRelations(body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getRelations(body, options);
+        async getRelations(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseRelationDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRelations(paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationsApi.getRelations']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -20830,12 +22025,12 @@ export const RelationsApiFp = function(configuration?: Configuration) {
          * @summary Get all relations between two objects
          * @param {string} fromObjectUuid 
          * @param {string} toObjectUuid 
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getRelationsBetweenObjects(fromObjectUuid: string, toObjectUuid: string, body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getRelationsBetweenObjects(fromObjectUuid, toObjectUuid, body, options);
+        async getRelationsBetweenObjects(fromObjectUuid: string, toObjectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseRelationDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRelationsBetweenObjects(fromObjectUuid, toObjectUuid, paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationsApi.getRelationsBetweenObjects']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -20844,12 +22039,12 @@ export const RelationsApiFp = function(configuration?: Configuration) {
          * Returns relation definitions where this object participates in the **schema** graph for that relation name: either as origin `(thisObject)-[:relationName]->(:Object)` or as target `(:Object)-[:relationName]->(thisObject)`. Unrelated relations (same name elsewhere, or no typed edge touching this object) are excluded. Uses the object’s `name` to filter; request path uses object UUID.
          * @summary Fetch relations for a specific object
          * @param {string} objectUuid 
-         * @param {any} body Pagination request for relations
+         * @param {PaginationRequest} paginationRequest Pagination request for relations
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getRelationsByObject(objectUuid: string, body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getRelationsByObject(objectUuid, body, options);
+        async getRelationsByObject(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseRelationDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRelationsByObject(objectUuid, paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationsApi.getRelationsByObject']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -20883,12 +22078,12 @@ export const RelationsApiFp = function(configuration?: Configuration) {
         /**
          * Updates the indices for relations. The request body should contain a mapping of relation UUIDs to their new index values. Returns a SuccessResponse containing the updated relation objects.
          * @summary Update relation indices
-         * @param {string} body Mapping of relation UUIDs to new index values
+         * @param {{ [key: string]: number; }} requestBody Mapping of relation UUIDs to new index values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateIndices(body: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateIndices(body, options);
+        async updateIndices(requestBody: { [key: string]: number; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseCollectionRelation>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateIndices(requestBody, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationsApi.updateIndices']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -20911,7 +22106,7 @@ export const RelationsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addConnection(relationUuid: string, from: string, to: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        addConnection(relationUuid: string, from: string, to: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.addConnection(relationUuid, from, to, options).then((request) => request(axios, basePath));
         },
         /**
@@ -20934,7 +22129,7 @@ export const RelationsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteConnection(relationUuid: string, from: string, to: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        deleteConnection(relationUuid: string, from: string, to: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.deleteConnection(relationUuid, from, to, options).then((request) => request(axios, basePath));
         },
         /**
@@ -20954,7 +22149,7 @@ export const RelationsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRelation(relationUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getRelation(relationUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseRelationDTO> {
             return localVarFp.getRelation(relationUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -20965,41 +22160,41 @@ export const RelationsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRelationForObject(relationUuid: string, objectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getRelationForObject(relationUuid: string, objectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseRelationDTO> {
             return localVarFp.getRelationForObject(relationUuid, objectUuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of relations. Returns a PaginationResponse containing RelationDTO objects based on the provided pagination criteria.
          * @summary Fetch paginated relations
-         * @param {any} body Pagination request for relations
+         * @param {PaginationRequest} paginationRequest Pagination request for relations
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRelations(body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getRelations(body, options).then((request) => request(axios, basePath));
+        getRelations(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseRelationDTO> {
+            return localVarFp.getRelations(paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves all relations between two objects based on the provided object UUIDs.
          * @summary Get all relations between two objects
          * @param {string} fromObjectUuid 
          * @param {string} toObjectUuid 
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRelationsBetweenObjects(fromObjectUuid: string, toObjectUuid: string, body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getRelationsBetweenObjects(fromObjectUuid, toObjectUuid, body, options).then((request) => request(axios, basePath));
+        getRelationsBetweenObjects(fromObjectUuid: string, toObjectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseRelationDTO> {
+            return localVarFp.getRelationsBetweenObjects(fromObjectUuid, toObjectUuid, paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns relation definitions where this object participates in the **schema** graph for that relation name: either as origin `(thisObject)-[:relationName]->(:Object)` or as target `(:Object)-[:relationName]->(thisObject)`. Unrelated relations (same name elsewhere, or no typed edge touching this object) are excluded. Uses the object’s `name` to filter; request path uses object UUID.
          * @summary Fetch relations for a specific object
          * @param {string} objectUuid 
-         * @param {any} body Pagination request for relations
+         * @param {PaginationRequest} paginationRequest Pagination request for relations
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRelationsByObject(objectUuid: string, body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getRelationsByObject(objectUuid, body, options).then((request) => request(axios, basePath));
+        getRelationsByObject(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseRelationDTO> {
+            return localVarFp.getRelationsByObject(objectUuid, paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Hard-deletes a soft-deleted relation. Only relations with deletedAt set can be removed.
@@ -21024,12 +22219,12 @@ export const RelationsApiFactory = function (configuration?: Configuration, base
         /**
          * Updates the indices for relations. The request body should contain a mapping of relation UUIDs to their new index values. Returns a SuccessResponse containing the updated relation objects.
          * @summary Update relation indices
-         * @param {string} body Mapping of relation UUIDs to new index values
+         * @param {{ [key: string]: number; }} requestBody Mapping of relation UUIDs to new index values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateIndices(body: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
-            return localVarFp.updateIndices(body, options).then((request) => request(axios, basePath));
+        updateIndices(requestBody: { [key: string]: number; }, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseCollectionRelation> {
+            return localVarFp.updateIndices(requestBody, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -21113,12 +22308,12 @@ export class RelationsApi extends BaseAPI {
     /**
      * Retrieves a paginated list of relations. Returns a PaginationResponse containing RelationDTO objects based on the provided pagination criteria.
      * @summary Fetch paginated relations
-     * @param {any} body Pagination request for relations
+     * @param {PaginationRequest} paginationRequest Pagination request for relations
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getRelations(body: any, options?: RawAxiosRequestConfig) {
-        return RelationsApiFp(this.configuration).getRelations(body, options).then((request) => request(this.axios, this.basePath));
+    public getRelations(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return RelationsApiFp(this.configuration).getRelations(paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -21126,24 +22321,24 @@ export class RelationsApi extends BaseAPI {
      * @summary Get all relations between two objects
      * @param {string} fromObjectUuid 
      * @param {string} toObjectUuid 
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getRelationsBetweenObjects(fromObjectUuid: string, toObjectUuid: string, body: any, options?: RawAxiosRequestConfig) {
-        return RelationsApiFp(this.configuration).getRelationsBetweenObjects(fromObjectUuid, toObjectUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public getRelationsBetweenObjects(fromObjectUuid: string, toObjectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return RelationsApiFp(this.configuration).getRelationsBetweenObjects(fromObjectUuid, toObjectUuid, paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns relation definitions where this object participates in the **schema** graph for that relation name: either as origin `(thisObject)-[:relationName]->(:Object)` or as target `(:Object)-[:relationName]->(thisObject)`. Unrelated relations (same name elsewhere, or no typed edge touching this object) are excluded. Uses the object’s `name` to filter; request path uses object UUID.
      * @summary Fetch relations for a specific object
      * @param {string} objectUuid 
-     * @param {any} body Pagination request for relations
+     * @param {PaginationRequest} paginationRequest Pagination request for relations
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getRelationsByObject(objectUuid: string, body: any, options?: RawAxiosRequestConfig) {
-        return RelationsApiFp(this.configuration).getRelationsByObject(objectUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public getRelationsByObject(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return RelationsApiFp(this.configuration).getRelationsByObject(objectUuid, paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -21171,12 +22366,12 @@ export class RelationsApi extends BaseAPI {
     /**
      * Updates the indices for relations. The request body should contain a mapping of relation UUIDs to their new index values. Returns a SuccessResponse containing the updated relation objects.
      * @summary Update relation indices
-     * @param {string} body Mapping of relation UUIDs to new index values
+     * @param {{ [key: string]: number; }} requestBody Mapping of relation UUIDs to new index values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public updateIndices(body: string, options?: RawAxiosRequestConfig) {
-        return RelationsApiFp(this.configuration).updateIndices(body, options).then((request) => request(this.axios, this.basePath));
+    public updateIndices(requestBody: { [key: string]: number; }, options?: RawAxiosRequestConfig) {
+        return RelationsApiFp(this.configuration).updateIndices(requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -21276,15 +22471,15 @@ export const ServerlessFunctionsApiAxiosParamCreator = function (configuration?:
          * Retrieves a paginated list of serverless functions that belong to the specified app.
          * @summary List serverless functions for an app
          * @param {string} appUuid UUID of the app whose serverless functions to list
-         * @param {any} body Pagination and filtering options for the request
+         * @param {PaginationRequest} paginationRequest Pagination and filtering options for the request
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        index2: async (appUuid: string, body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        index2: async (appUuid: string, paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'appUuid' is not null or undefined
             assertParamExists('index2', 'appUuid', appUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('index2', 'body', body)
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('index2', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/apps/{appUuid}/serverless-functions/index`
                 .replace('{appUuid}', encodeURIComponent(String(appUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -21308,7 +22503,7 @@ export const ServerlessFunctionsApiAxiosParamCreator = function (configuration?:
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -21587,12 +22782,12 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * Retrieves a paginated list of serverless functions that belong to the specified app.
          * @summary List serverless functions for an app
          * @param {string} appUuid UUID of the app whose serverless functions to list
-         * @param {any} body Pagination and filtering options for the request
+         * @param {PaginationRequest} paginationRequest Pagination and filtering options for the request
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async index2(appUuid: string, body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.index2(appUuid, body, options);
+        async index2(appUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseServerlessFunctionDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.index2(appUuid, paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.index2']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -21607,7 +22802,7 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async logs(appUuid: string, uuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async logs(appUuid: string, uuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseMapStringObject>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.logs(appUuid, uuid, since, limit, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.logs']?.[localVarOperationServerIndex]?.url;
@@ -21621,7 +22816,7 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async samplePayload(appUuid: string, samplePayloadRequest: SamplePayloadRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async samplePayload(appUuid: string, samplePayloadRequest: SamplePayloadRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseObject>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.samplePayload(appUuid, samplePayloadRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.samplePayload']?.[localVarOperationServerIndex]?.url;
@@ -21635,7 +22830,7 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async show1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async show1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseServerlessFunctionDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.show1(appUuid, uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.show1']?.[localVarOperationServerIndex]?.url;
@@ -21650,7 +22845,7 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async testServerlessFunction(appUuid: string, uuid: string, testServerlessFunctionRequest: TestServerlessFunctionRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async testServerlessFunction(appUuid: string, uuid: string, testServerlessFunctionRequest: TestServerlessFunctionRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseMapStringObject>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.testServerlessFunction(appUuid, uuid, testServerlessFunctionRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.testServerlessFunction']?.[localVarOperationServerIndex]?.url;
@@ -21665,7 +22860,7 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update1(appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async update1(appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseServerlessFunctionDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.update1(appUuid, uuid, serverlessFunctionDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.update1']?.[localVarOperationServerIndex]?.url;
@@ -21706,12 +22901,12 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * Retrieves a paginated list of serverless functions that belong to the specified app.
          * @summary List serverless functions for an app
          * @param {string} appUuid UUID of the app whose serverless functions to list
-         * @param {any} body Pagination and filtering options for the request
+         * @param {PaginationRequest} paginationRequest Pagination and filtering options for the request
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        index2(appUuid: string, body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.index2(appUuid, body, options).then((request) => request(axios, basePath));
+        index2(appUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseServerlessFunctionDTO> {
+            return localVarFp.index2(appUuid, paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Queries Cloud Logging for recent log entries emitted by the Cloud Function backing this serverless function.
@@ -21723,7 +22918,7 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        logs(appUuid: string, uuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        logs(appUuid: string, uuid: string, since?: string, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseMapStringObject> {
             return localVarFp.logs(appUuid, uuid, since, limit, options).then((request) => request(axios, basePath));
         },
         /**
@@ -21734,7 +22929,7 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        samplePayload(appUuid: string, samplePayloadRequest: SamplePayloadRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        samplePayload(appUuid: string, samplePayloadRequest: SamplePayloadRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseObject> {
             return localVarFp.samplePayload(appUuid, samplePayloadRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -21745,7 +22940,7 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        show1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        show1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseServerlessFunctionDTO> {
             return localVarFp.show1(appUuid, uuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -21757,7 +22952,7 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        testServerlessFunction(appUuid: string, uuid: string, testServerlessFunctionRequest: TestServerlessFunctionRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        testServerlessFunction(appUuid: string, uuid: string, testServerlessFunctionRequest: TestServerlessFunctionRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseMapStringObject> {
             return localVarFp.testServerlessFunction(appUuid, uuid, testServerlessFunctionRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -21769,7 +22964,7 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update1(appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        update1(appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseServerlessFunctionDTO> {
             return localVarFp.update1(appUuid, uuid, serverlessFunctionDTO, options).then((request) => request(axios, basePath));
         },
     };
@@ -21807,12 +23002,12 @@ export class ServerlessFunctionsApi extends BaseAPI {
      * Retrieves a paginated list of serverless functions that belong to the specified app.
      * @summary List serverless functions for an app
      * @param {string} appUuid UUID of the app whose serverless functions to list
-     * @param {any} body Pagination and filtering options for the request
+     * @param {PaginationRequest} paginationRequest Pagination and filtering options for the request
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public index2(appUuid: string, body: any, options?: RawAxiosRequestConfig) {
-        return ServerlessFunctionsApiFp(this.configuration).index2(appUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public index2(appUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return ServerlessFunctionsApiFp(this.configuration).index2(appUuid, paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -22015,13 +23210,13 @@ export const SyncApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * Retrieves a paginated list of syncs. Returns a PaginationResponse containing SyncDTO objects based on the provided pagination criteria.
          * @summary Fetch paginated syncs
-         * @param {any} body Pagination request for syncs
+         * @param {PaginationRequest} paginationRequest Pagination request for syncs
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSyncs: async (body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getSyncs', 'body', body)
+        getSyncs: async (paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getSyncs', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/sync/index`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -22044,7 +23239,7 @@ export const SyncApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -22078,7 +23273,7 @@ export const SyncApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -22185,12 +23380,12 @@ export const SyncApiFp = function(configuration?: Configuration) {
         /**
          * Retrieves a paginated list of syncs. Returns a PaginationResponse containing SyncDTO objects based on the provided pagination criteria.
          * @summary Fetch paginated syncs
-         * @param {any} body Pagination request for syncs
+         * @param {PaginationRequest} paginationRequest Pagination request for syncs
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSyncs(body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getSyncs(body, options);
+        async getSyncs(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseSyncDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSyncs(paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SyncApi.getSyncs']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -22266,12 +23461,12 @@ export const SyncApiFactory = function (configuration?: Configuration, basePath?
         /**
          * Retrieves a paginated list of syncs. Returns a PaginationResponse containing SyncDTO objects based on the provided pagination criteria.
          * @summary Fetch paginated syncs
-         * @param {any} body Pagination request for syncs
+         * @param {PaginationRequest} paginationRequest Pagination request for syncs
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSyncs(body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getSyncs(body, options).then((request) => request(axios, basePath));
+        getSyncs(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseSyncDTO> {
+            return localVarFp.getSyncs(paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Restores a previously deleted sync by its UUID. Returns a RestoreResponse containing the restored sync details.
@@ -22339,12 +23534,12 @@ export class SyncApi extends BaseAPI {
     /**
      * Retrieves a paginated list of syncs. Returns a PaginationResponse containing SyncDTO objects based on the provided pagination criteria.
      * @summary Fetch paginated syncs
-     * @param {any} body Pagination request for syncs
+     * @param {PaginationRequest} paginationRequest Pagination request for syncs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getSyncs(body: any, options?: RawAxiosRequestConfig) {
-        return SyncApiFp(this.configuration).getSyncs(body, options).then((request) => request(this.axios, this.basePath));
+    public getSyncs(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return SyncApiFp(this.configuration).getSyncs(paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -22383,11 +23578,11 @@ export const TraitsApiAxiosParamCreator = function (configuration?: Configuratio
          * @summary Create or update a trait for an object
          * @param {string} objectUuid 
          * @param {string} traitName 
-         * @param {string} body Trait details as a JSON map
+         * @param {object} body Trait details as a JSON map
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTrait: async (objectUuid: string, traitName: string, body: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createTrait: async (objectUuid: string, traitName: string, body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'objectUuid' is not null or undefined
             assertParamExists('createTrait', 'objectUuid', objectUuid)
             // verify required parameter 'traitName' is not null or undefined
@@ -22456,7 +23651,7 @@ export const TraitsApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -22498,7 +23693,7 @@ export const TraitsApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -22536,7 +23731,7 @@ export const TraitsApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -22597,7 +23792,7 @@ export const TraitsApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['switchAccount'] = switchAccount;
             }
 
-            localVarHeaderParameter['Accept'] = 'text/html';
+            localVarHeaderParameter['Accept'] = 'text/html,application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -22669,6 +23864,7 @@ export const TraitsApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarFormParams.set('scope', scope as any);
             }
             localVarHeaderParameter['Content-Type'] = 'application/x-www-form-urlencoded';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -22729,6 +23925,7 @@ export const TraitsApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['scope'] = scope;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -22804,11 +24001,11 @@ export const TraitsApiFp = function(configuration?: Configuration) {
          * @summary Create or update a trait for an object
          * @param {string} objectUuid 
          * @param {string} traitName 
-         * @param {string} body Trait details as a JSON map
+         * @param {object} body Trait details as a JSON map
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTrait(objectUuid: string, traitName: string, body: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
+        async createTrait(objectUuid: string, traitName: string, body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createTrait(objectUuid, traitName, body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TraitsApi.createTrait']?.[localVarOperationServerIndex]?.url;
@@ -22836,7 +24033,7 @@ export const TraitsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTrait(objectUuid: string, traitName: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getTrait(objectUuid: string, traitName: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseTraitDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTrait(objectUuid, traitName, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TraitsApi.getTrait']?.[localVarOperationServerIndex]?.url;
@@ -22849,7 +24046,7 @@ export const TraitsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTraits(objectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
+        async getTraits(objectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseTraitDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTraits(objectUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TraitsApi.getTraits']?.[localVarOperationServerIndex]?.url;
@@ -22940,11 +24137,11 @@ export const TraitsApiFactory = function (configuration?: Configuration, basePat
          * @summary Create or update a trait for an object
          * @param {string} objectUuid 
          * @param {string} traitName 
-         * @param {string} body Trait details as a JSON map
+         * @param {object} body Trait details as a JSON map
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTrait(objectUuid: string, traitName: string, body: string, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
+        createTrait(objectUuid: string, traitName: string, body: object, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
             return localVarFp.createTrait(objectUuid, traitName, body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -22966,7 +24163,7 @@ export const TraitsApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTrait(objectUuid: string, traitName: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getTrait(objectUuid: string, traitName: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseTraitDTO> {
             return localVarFp.getTrait(objectUuid, traitName, options).then((request) => request(axios, basePath));
         },
         /**
@@ -22976,7 +24173,7 @@ export const TraitsApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTraits(objectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
+        getTraits(objectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseTraitDTO> {
             return localVarFp.getTraits(objectUuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -23050,11 +24247,11 @@ export class TraitsApi extends BaseAPI {
      * @summary Create or update a trait for an object
      * @param {string} objectUuid 
      * @param {string} traitName 
-     * @param {string} body Trait details as a JSON map
+     * @param {object} body Trait details as a JSON map
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public createTrait(objectUuid: string, traitName: string, body: string, options?: RawAxiosRequestConfig) {
+    public createTrait(objectUuid: string, traitName: string, body: object, options?: RawAxiosRequestConfig) {
         return TraitsApiFp(this.configuration).createTrait(objectUuid, traitName, body, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -23238,7 +24435,7 @@ export const ViewsApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -23280,7 +24477,7 @@ export const ViewsApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -23322,7 +24519,7 @@ export const ViewsApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -23337,15 +24534,15 @@ export const ViewsApiAxiosParamCreator = function (configuration?: Configuration
          * Retrieves a paginated list of views for the specified object. A custom Cypher query is used to filter views based on the object\'s UUID. Returns a PaginationResponse containing ViewDTO objects.
          * @summary Fetch paginated views for an object
          * @param {string} objectUuid 
-         * @param {any} body Pagination request details (limit, page, filters, sort, query)
+         * @param {PaginationRequest} paginationRequest Pagination request details (limit, page, filters, sort, query)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getViews: async (objectUuid: string, body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getViews: async (objectUuid: string, paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'objectUuid' is not null or undefined
             assertParamExists('getViews', 'objectUuid', objectUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getViews', 'body', body)
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('getViews', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/objects/{objectUuid}/views/index`
                 .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -23369,7 +24566,7 @@ export const ViewsApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -23380,15 +24577,15 @@ export const ViewsApiAxiosParamCreator = function (configuration?: Configuration
          * Updates the indices for views associated with the specified object. The request body must include a mapping of view UUIDs to their new index values. Returns a SuccessResponse with the updated view DTOs.
          * @summary Update view indices
          * @param {string} objectUuid 
-         * @param {string} body Mapping of view UUIDs to new index values
+         * @param {{ [key: string]: number; }} requestBody Mapping of view UUIDs to new index values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateIndices1: async (objectUuid: string, body: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateIndices1: async (objectUuid: string, requestBody: { [key: string]: number; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'objectUuid' is not null or undefined
             assertParamExists('updateIndices1', 'objectUuid', objectUuid)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('updateIndices1', 'body', body)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('updateIndices1', 'requestBody', requestBody)
             const localVarPath = `/api/v2/objects/{objectUuid}/views/updateIndices`
                 .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -23412,7 +24609,7 @@ export const ViewsApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -23525,7 +24722,7 @@ export const ViewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getView(objectUuid: string, viewUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getView(objectUuid: string, viewUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseViewDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getView(objectUuid, viewUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ViewsApi.getView']?.[localVarOperationServerIndex]?.url;
@@ -23535,12 +24732,12 @@ export const ViewsApiFp = function(configuration?: Configuration) {
          * Retrieves a paginated list of views for the specified object. A custom Cypher query is used to filter views based on the object\'s UUID. Returns a PaginationResponse containing ViewDTO objects.
          * @summary Fetch paginated views for an object
          * @param {string} objectUuid 
-         * @param {any} body Pagination request details (limit, page, filters, sort, query)
+         * @param {PaginationRequest} paginationRequest Pagination request details (limit, page, filters, sort, query)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getViews(objectUuid: string, body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getViews(objectUuid, body, options);
+        async getViews(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseViewDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getViews(objectUuid, paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ViewsApi.getViews']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -23549,12 +24746,12 @@ export const ViewsApiFp = function(configuration?: Configuration) {
          * Updates the indices for views associated with the specified object. The request body must include a mapping of view UUIDs to their new index values. Returns a SuccessResponse with the updated view DTOs.
          * @summary Update view indices
          * @param {string} objectUuid 
-         * @param {string} body Mapping of view UUIDs to new index values
+         * @param {{ [key: string]: number; }} requestBody Mapping of view UUIDs to new index values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateIndices1(objectUuid: string, body: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateIndices1(objectUuid, body, options);
+        async updateIndices1(objectUuid: string, requestBody: { [key: string]: number; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateIndices1(objectUuid, requestBody, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ViewsApi.updateIndices1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -23624,30 +24821,30 @@ export const ViewsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getView(objectUuid: string, viewUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getView(objectUuid: string, viewUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseViewDTO> {
             return localVarFp.getView(objectUuid, viewUuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of views for the specified object. A custom Cypher query is used to filter views based on the object\'s UUID. Returns a PaginationResponse containing ViewDTO objects.
          * @summary Fetch paginated views for an object
          * @param {string} objectUuid 
-         * @param {any} body Pagination request details (limit, page, filters, sort, query)
+         * @param {PaginationRequest} paginationRequest Pagination request details (limit, page, filters, sort, query)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getViews(objectUuid: string, body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.getViews(objectUuid, body, options).then((request) => request(axios, basePath));
+        getViews(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseViewDTO> {
+            return localVarFp.getViews(objectUuid, paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Updates the indices for views associated with the specified object. The request body must include a mapping of view UUIDs to their new index values. Returns a SuccessResponse with the updated view DTOs.
          * @summary Update view indices
          * @param {string} objectUuid 
-         * @param {string} body Mapping of view UUIDs to new index values
+         * @param {{ [key: string]: number; }} requestBody Mapping of view UUIDs to new index values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateIndices1(objectUuid: string, body: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
-            return localVarFp.updateIndices1(objectUuid, body, options).then((request) => request(axios, basePath));
+        updateIndices1(objectUuid: string, requestBody: { [key: string]: number; }, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
+            return localVarFp.updateIndices1(objectUuid, requestBody, options).then((request) => request(axios, basePath));
         },
         /**
          * Updates the details of an existing view identified by its UUID for the specified object. The request body must contain the updated view details as a ViewDTO. Returns an UpdateResponse with the updated view data.
@@ -23720,24 +24917,24 @@ export class ViewsApi extends BaseAPI {
      * Retrieves a paginated list of views for the specified object. A custom Cypher query is used to filter views based on the object\'s UUID. Returns a PaginationResponse containing ViewDTO objects.
      * @summary Fetch paginated views for an object
      * @param {string} objectUuid 
-     * @param {any} body Pagination request details (limit, page, filters, sort, query)
+     * @param {PaginationRequest} paginationRequest Pagination request details (limit, page, filters, sort, query)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getViews(objectUuid: string, body: any, options?: RawAxiosRequestConfig) {
-        return ViewsApiFp(this.configuration).getViews(objectUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public getViews(objectUuid: string, paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return ViewsApiFp(this.configuration).getViews(objectUuid, paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Updates the indices for views associated with the specified object. The request body must include a mapping of view UUIDs to their new index values. Returns a SuccessResponse with the updated view DTOs.
      * @summary Update view indices
      * @param {string} objectUuid 
-     * @param {string} body Mapping of view UUIDs to new index values
+     * @param {{ [key: string]: number; }} requestBody Mapping of view UUIDs to new index values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public updateIndices1(objectUuid: string, body: string, options?: RawAxiosRequestConfig) {
-        return ViewsApiFp(this.configuration).updateIndices1(objectUuid, body, options).then((request) => request(this.axios, this.basePath));
+    public updateIndices1(objectUuid: string, requestBody: { [key: string]: number; }, options?: RawAxiosRequestConfig) {
+        return ViewsApiFp(this.configuration).updateIndices1(objectUuid, requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -23879,13 +25076,13 @@ export const WebMenusApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * Index web menus
          * @summary Index web menus
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        indexWebMenus: async (body: any, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('indexWebMenus', 'body', body)
+        indexWebMenus: async (paginationRequest: PaginationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paginationRequest' is not null or undefined
+            assertParamExists('indexWebMenus', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/webmenus/index`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -23908,7 +25105,7 @@ export const WebMenusApiAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paginationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -23942,7 +25139,7 @@ export const WebMenusApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            localVarHeaderParameter['Accept'] = 'application/json,*/*';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -24038,7 +25235,7 @@ export const WebMenusApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getWebMenu(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getWebMenu(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseWebMenuDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getWebMenu(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebMenusApi.getWebMenu']?.[localVarOperationServerIndex]?.url;
@@ -24047,12 +25244,12 @@ export const WebMenusApiFp = function(configuration?: Configuration) {
         /**
          * Index web menus
          * @summary Index web menus
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async indexWebMenus(body: any, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.indexWebMenus(body, options);
+        async indexWebMenus(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseWebMenuDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.indexWebMenus(paginationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebMenusApi.indexWebMenus']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -24120,18 +25317,18 @@ export const WebMenusApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebMenu(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getWebMenu(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseWebMenuDTO> {
             return localVarFp.getWebMenu(uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Index web menus
          * @summary Index web menus
-         * @param {any} body 
+         * @param {PaginationRequest} paginationRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        indexWebMenus(body: any, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
-            return localVarFp.indexWebMenus(body, options).then((request) => request(axios, basePath));
+        indexWebMenus(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseWebMenuDTO> {
+            return localVarFp.indexWebMenus(paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Restore a deleted web menu by its UUID
@@ -24197,12 +25394,12 @@ export class WebMenusApi extends BaseAPI {
     /**
      * Index web menus
      * @summary Index web menus
-     * @param {any} body 
+     * @param {PaginationRequest} paginationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public indexWebMenus(body: any, options?: RawAxiosRequestConfig) {
-        return WebMenusApiFp(this.configuration).indexWebMenus(body, options).then((request) => request(this.axios, this.basePath));
+    public indexWebMenus(paginationRequest: PaginationRequest, options?: RawAxiosRequestConfig) {
+        return WebMenusApiFp(this.configuration).indexWebMenus(paginationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -25883,7 +27080,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async copyPropertyToEnvironments(copyPropertyToEnvironmentsRequest: CopyPropertyToEnvironmentsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async copyPropertyToEnvironments(copyPropertyToEnvironmentsRequest: CopyPropertyToEnvironmentsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListPropertyDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.copyPropertyToEnvironments(copyPropertyToEnvironmentsRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.copyPropertyToEnvironments']?.[localVarOperationServerIndex]?.url;
@@ -25926,7 +27123,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createEnvironments(createOrUpdateEnvironmentRequest: CreateOrUpdateEnvironmentRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async createEnvironments(createOrUpdateEnvironmentRequest: CreateOrUpdateEnvironmentRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createEnvironments(createOrUpdateEnvironmentRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.createEnvironments']?.[localVarOperationServerIndex]?.url;
@@ -25983,7 +27180,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteEnvironment(environment: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async deleteEnvironment(environment: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteEnvironment(environment, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.deleteEnvironment']?.[localVarOperationServerIndex]?.url;
@@ -25998,7 +27195,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllSlugs(xCaraerSubdomain: string, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
+        async getAllSlugs(xCaraerSubdomain: string, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponsePublicEnvironmentDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllSlugs(xCaraerSubdomain, xCaraerEnvironment, xCaraerPrimaryEnvironment, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.getAllSlugs']?.[localVarOperationServerIndex]?.url;
@@ -26025,7 +27222,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getEnvironments(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getEnvironments(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListEnvironmentDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getEnvironments(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.getEnvironments']?.[localVarOperationServerIndex]?.url;
@@ -26040,7 +27237,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMenus(xCaraerSubdomain: string, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponse>> {
+        async getMenus(xCaraerSubdomain: string, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseWebMenuDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMenus(xCaraerSubdomain, xCaraerEnvironment, xCaraerPrimaryEnvironment, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.getMenus']?.[localVarOperationServerIndex]?.url;
@@ -26147,7 +27344,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTemplateWebpage(objectName: string, environment: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getTemplateWebpage(objectName: string, environment: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseTemplateWebpageDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTemplateWebpage(objectName, environment, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.getTemplateWebpage']?.[localVarOperationServerIndex]?.url;
@@ -26205,7 +27402,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getWebpagePickerPages(environment?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async getWebpagePickerPages(environment?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListWebpagePickerItemDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getWebpagePickerPages(environment, publishedOnly, excludeTemplateRelated, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.getWebpagePickerPages']?.[localVarOperationServerIndex]?.url;
@@ -26248,7 +27445,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async releaseTemplateWebpageEditingSession(objectName: string, environment: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async releaseTemplateWebpageEditingSession(objectName: string, environment: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.releaseTemplateWebpageEditingSession(objectName, environment, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.releaseTemplateWebpageEditingSession']?.[localVarOperationServerIndex]?.url;
@@ -26261,7 +27458,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async releaseWebpageEditingSession(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponse>> {
+        async releaseWebpageEditingSession(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.releaseWebpageEditingSession(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.releaseWebpageEditingSession']?.[localVarOperationServerIndex]?.url;
@@ -26336,7 +27533,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadFile(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async uploadFile(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.uploadFile(uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.uploadFile']?.[localVarOperationServerIndex]?.url;
@@ -26349,7 +27546,7 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadFile1(file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponse>> {
+        async uploadFile1(file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.uploadFile1(file, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.uploadFile1']?.[localVarOperationServerIndex]?.url;
@@ -26393,7 +27590,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        copyPropertyToEnvironments(copyPropertyToEnvironmentsRequest: CopyPropertyToEnvironmentsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        copyPropertyToEnvironments(copyPropertyToEnvironmentsRequest: CopyPropertyToEnvironmentsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListPropertyDTO> {
             return localVarFp.copyPropertyToEnvironments(copyPropertyToEnvironmentsRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26427,7 +27624,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createEnvironments(createOrUpdateEnvironmentRequest: CreateOrUpdateEnvironmentRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        createEnvironments(createOrUpdateEnvironmentRequest: CreateOrUpdateEnvironmentRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseString> {
             return localVarFp.createEnvironments(createOrUpdateEnvironmentRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26472,7 +27669,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteEnvironment(environment: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        deleteEnvironment(environment: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseString> {
             return localVarFp.deleteEnvironment(environment, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26484,7 +27681,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllSlugs(xCaraerSubdomain: string, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
+        getAllSlugs(xCaraerSubdomain: string, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponsePublicEnvironmentDTO> {
             return localVarFp.getAllSlugs(xCaraerSubdomain, xCaraerEnvironment, xCaraerPrimaryEnvironment, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26505,7 +27702,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getEnvironments(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getEnvironments(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListEnvironmentDTO> {
             return localVarFp.getEnvironments(options).then((request) => request(axios, basePath));
         },
         /**
@@ -26517,7 +27714,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMenus(xCaraerSubdomain: string, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponse> {
+        getMenus(xCaraerSubdomain: string, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseWebMenuDTO> {
             return localVarFp.getMenus(xCaraerSubdomain, xCaraerEnvironment, xCaraerPrimaryEnvironment, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26606,7 +27803,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTemplateWebpage(objectName: string, environment: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getTemplateWebpage(objectName: string, environment: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseTemplateWebpageDTO> {
             return localVarFp.getTemplateWebpage(objectName, environment, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26652,7 +27849,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebpagePickerPages(environment?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        getWebpagePickerPages(environment?: string, publishedOnly?: boolean, excludeTemplateRelated?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListWebpagePickerItemDTO> {
             return localVarFp.getWebpagePickerPages(environment, publishedOnly, excludeTemplateRelated, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26686,7 +27883,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        releaseTemplateWebpageEditingSession(objectName: string, environment: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        releaseTemplateWebpageEditingSession(objectName: string, environment: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseString> {
             return localVarFp.releaseTemplateWebpageEditingSession(objectName, environment, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26696,7 +27893,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        releaseWebpageEditingSession(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponse> {
+        releaseWebpageEditingSession(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseString> {
             return localVarFp.releaseWebpageEditingSession(uuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26756,7 +27953,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadFile(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        uploadFile(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.uploadFile(uuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26766,7 +27963,7 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadFile1(file: File, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponse> {
+        uploadFile1(file: File, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.uploadFile1(file, options).then((request) => request(axios, basePath));
         },
     };

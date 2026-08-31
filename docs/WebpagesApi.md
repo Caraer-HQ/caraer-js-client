@@ -91,6 +91,9 @@ const { status, data } = await apiInstance.claimTemplateWebpageEditingSession(
 |-------------|-------------|------------------|
 |**200** | Editing session claimed or blocked |  -  |
 |**404** | Template webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -147,11 +150,13 @@ const { status, data } = await apiInstance.claimWebpageEditingSession(
 |**200** | Editing session claimed |  -  |
 |**403** | Missing write access on webpage fields for this environment |  -  |
 |**404** | Webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **copyPropertyToEnvironments**
-> ShowResponse copyPropertyToEnvironments(copyPropertyToEnvironmentsRequest)
+> ShowResponseListPropertyDTO copyPropertyToEnvironments(copyPropertyToEnvironmentsRequest)
 
 Copies selected properties for the chosen environments (e.g. production_title → german_production_title).
 
@@ -183,7 +188,7 @@ const { status, data } = await apiInstance.copyPropertyToEnvironments(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseListPropertyDTO**
 
 ### Authorization
 
@@ -201,6 +206,9 @@ const { status, data } = await apiInstance.copyPropertyToEnvironments(
 |**200** | Environment properties copied successfully |  -  |
 |**400** | Invalid input data |  -  |
 |**404** | Object or property not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -259,6 +267,9 @@ const { status, data } = await apiInstance.copyTemplateWebpage(
 |-------------|-------------|------------------|
 |**201** | Template webpage copied successfully |  -  |
 |**404** | Template webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -317,11 +328,14 @@ const { status, data } = await apiInstance.copyWebpage(
 |-------------|-------------|------------------|
 |**201** | Webpage copied successfully |  -  |
 |**404** | Webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **createEnvironments**
-> ShowResponse createEnvironments(createOrUpdateEnvironmentRequest)
+> ShowResponseString createEnvironments(createOrUpdateEnvironmentRequest)
 
 Creates an environment.
 
@@ -353,7 +367,7 @@ const { status, data } = await apiInstance.createEnvironments(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseString**
 
 ### Authorization
 
@@ -370,6 +384,9 @@ const { status, data } = await apiInstance.createEnvironments(
 |-------------|-------------|------------------|
 |**200** | Environments created or updated successfully |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -431,6 +448,8 @@ const { status, data } = await apiInstance.createOrUpdateTemplateWebpage(
 |**201** | Template webpage created successfully |  -  |
 |**404** | Template webpage not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -488,6 +507,10 @@ const { status, data } = await apiInstance.createSignedUrl(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -545,11 +568,14 @@ const { status, data } = await apiInstance.createWebpage(
 |**201** | Webpage created successfully |  -  |
 |**400** | Invalid input data |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **deleteEnvironment**
-> ShowResponse deleteEnvironment()
+> ShowResponseString deleteEnvironment()
 
 Soft deletes an environment.
 
@@ -580,7 +606,7 @@ const { status, data } = await apiInstance.deleteEnvironment(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseString**
 
 ### Authorization
 
@@ -597,11 +623,14 @@ const { status, data } = await apiInstance.deleteEnvironment(
 |-------------|-------------|------------------|
 |**200** | Environment deleted successfully |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getAllSlugs**
-> PaginationResponse getAllSlugs()
+> PaginationResponsePublicEnvironmentDTO getAllSlugs()
 
 Retrieves a list of all webpage slugs for the public site. Returns a PaginationResponse containing WebpageMapItemDTO objects.
 
@@ -638,7 +667,7 @@ const { status, data } = await apiInstance.getAllSlugs(
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponsePublicEnvironmentDTO**
 
 ### Authorization
 
@@ -655,6 +684,9 @@ const { status, data } = await apiInstance.getAllSlugs(
 |-------------|-------------|------------------|
 |**200** | Slugs retrieved successfully |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -713,11 +745,14 @@ const { status, data } = await apiInstance.getCompanySettings(
 |-------------|-------------|------------------|
 |**200** | Company settings retrieved successfully |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getEnvironments**
-> ShowResponse getEnvironments()
+> ShowResponseListEnvironmentDTO getEnvironments()
 
 Retrieves a list of all environments.
 
@@ -741,7 +776,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseListEnvironmentDTO**
 
 ### Authorization
 
@@ -758,11 +793,14 @@ This endpoint does not have any parameters.
 |-------------|-------------|------------------|
 |**200** | Environments retrieved successfully |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getMenus**
-> PaginationResponse getMenus()
+> PaginationResponseWebMenuDTO getMenus()
 
 Retrieves a list of web menus for the public site. Returns a PaginationResponse containing WebMenuDTO objects.
 
@@ -799,7 +837,7 @@ const { status, data } = await apiInstance.getMenus(
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseWebMenuDTO**
 
 ### Authorization
 
@@ -816,6 +854,9 @@ const { status, data } = await apiInstance.getMenus(
 |-------------|-------------|------------------|
 |**200** | Menus retrieved successfully |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -894,6 +935,10 @@ const { status, data } = await apiInstance.getPublicPreviews(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -970,6 +1015,9 @@ const { status, data } = await apiInstance.getPublicWebpage(
 |-------------|-------------|------------------|
 |**200** | Webpage retrieved successfully |  -  |
 |**404** | Webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1043,6 +1091,9 @@ const { status, data } = await apiInstance.getPublicWebpageByUuid(
 |-------------|-------------|------------------|
 |**200** | Webpage retrieved successfully |  -  |
 |**404** | Webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1103,6 +1154,10 @@ const { status, data } = await apiInstance.getPublicWebpageProtection(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1158,11 +1213,14 @@ const { status, data } = await apiInstance.getPublicWebsiteModule(
 |-------------|-------------|------------------|
 |**200** | Module retrieved successfully |  -  |
 |**404** | Module not found or not exposed |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getTemplateWebpage**
-> ShowResponse getTemplateWebpage()
+> ShowResponseTemplateWebpageDTO getTemplateWebpage()
 
 Retrieves the template webpage for the given object name by querying the TemplateWebpage associated with it. Returns a ShowResponse containing TemplateWebpageDTO data.
 
@@ -1196,7 +1254,7 @@ const { status, data } = await apiInstance.getTemplateWebpage(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseTemplateWebpageDTO**
 
 ### Authorization
 
@@ -1213,6 +1271,9 @@ const { status, data } = await apiInstance.getTemplateWebpage(
 |-------------|-------------|------------------|
 |**200** | Template webpage retrieved successfully |  -  |
 |**404** | Template webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1268,6 +1329,9 @@ const { status, data } = await apiInstance.getTemplateWebpageEditingStatus(
 |-------------|-------------|------------------|
 |**200** | Editing status retrieved successfully |  -  |
 |**404** | Template webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1327,6 +1391,8 @@ const { status, data } = await apiInstance.getWebpage(
 |**200** | Webpage retrieved successfully |  -  |
 |**403** | Missing read access on one or more webpage fields for this environment |  -  |
 |**404** | Webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1383,11 +1449,13 @@ const { status, data } = await apiInstance.getWebpageEditingStatus(
 |**200** | Editing status retrieved successfully |  -  |
 |**403** | Missing read access on webpage fields for this environment |  -  |
 |**404** | Webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getWebpagePickerPages**
-> ShowResponse getWebpagePickerPages()
+> ShowResponseListWebpagePickerItemDTO getWebpagePickerPages()
 
 Returns uuid and title for all webpage records across objects with a Page trait. Supports optional filters for published pages and excluding template-related pages.
 
@@ -1424,7 +1492,7 @@ const { status, data } = await apiInstance.getWebpagePickerPages(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseListWebpagePickerItemDTO**
 
 ### Authorization
 
@@ -1440,6 +1508,10 @@ const { status, data } = await apiInstance.getWebpagePickerPages(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Webpages retrieved successfully |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1493,6 +1565,10 @@ const { status, data } = await apiInstance.listProtectionGrants(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1553,11 +1629,13 @@ const { status, data } = await apiInstance.publishWebpage(
 |**400** | Webpage failed publish validation |  -  |
 |**403** | Missing read or write access on webpage property fields for this environment |  -  |
 |**404** | Webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **releaseTemplateWebpageEditingSession**
-> ShowResponse releaseTemplateWebpageEditingSession()
+> ShowResponseString releaseTemplateWebpageEditingSession()
 
 Releases the editing session held by the current user for this template webpage.
 
@@ -1591,7 +1669,7 @@ const { status, data } = await apiInstance.releaseTemplateWebpageEditingSession(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseString**
 
 ### Authorization
 
@@ -1607,11 +1685,15 @@ const { status, data } = await apiInstance.releaseTemplateWebpageEditingSession(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Editing session released |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **releaseWebpageEditingSession**
-> ShowResponse releaseWebpageEditingSession()
+> ShowResponseString releaseWebpageEditingSession()
 
 Releases the editing session held by the current user for this webpage.
 
@@ -1642,7 +1724,7 @@ const { status, data } = await apiInstance.releaseWebpageEditingSession(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseString**
 
 ### Authorization
 
@@ -1659,6 +1741,9 @@ const { status, data } = await apiInstance.releaseWebpageEditingSession(
 |-------------|-------------|------------------|
 |**200** | Editing session released |  -  |
 |**404** | Webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1715,6 +1800,10 @@ const { status, data } = await apiInstance.revokeProtectionGrant(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1779,6 +1868,10 @@ const { status, data } = await apiInstance.unlockPublicWebpage(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1837,6 +1930,9 @@ const { status, data } = await apiInstance.unpublishWebpage(
 |-------------|-------------|------------------|
 |**200** | Webpage unpublished successfully |  -  |
 |**404** | Webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1898,11 +1994,13 @@ const { status, data } = await apiInstance.updateWebpage(
 |**400** | Invalid input data |  -  |
 |**403** | Missing write access on one or more webpage fields for this environment |  -  |
 |**404** | Webpage not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **uploadFile**
-> SuccessResponse uploadFile()
+> SuccessResponseString uploadFile()
 
 Uploads a file to S3 storage under the specified webpage\'s attachments folder, sets the file\'s ACL to public, and returns the public URL for the file in a SuccessResponse.
 
@@ -1933,7 +2031,7 @@ const { status, data } = await apiInstance.uploadFile(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -1951,11 +2049,14 @@ const { status, data } = await apiInstance.uploadFile(
 |**200** | File uploaded successfully |  -  |
 |**400** | Invalid file provided |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **uploadFile1**
-> SuccessResponse uploadFile1()
+> SuccessResponseString uploadFile1()
 
 Uploads a file to S3 storage and returns the public URL for the file in a SuccessResponse.
 
@@ -1986,7 +2087,7 @@ const { status, data } = await apiInstance.uploadFile1(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -2004,6 +2105,9 @@ const { status, data } = await apiInstance.uploadFile1(
 |**200** | File uploaded successfully |  -  |
 |**400** | Invalid file provided |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

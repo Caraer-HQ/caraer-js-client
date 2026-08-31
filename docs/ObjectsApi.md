@@ -79,7 +79,10 @@ const { status, data } = await apiInstance.createObject(
 |-------------|-------------|------------------|
 |**201** | Object successfully created |  -  |
 |**400** | Invalid input |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -124,15 +127,17 @@ const { status, data } = await apiInstance.deleteObject(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Object deleted successfully |  -  |
-|**404** | Object not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -177,11 +182,15 @@ This endpoint does not have any parameters.
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getObject**
-> ShowResponse getObject()
+> ShowResponseCaraerObjectDTO getObject()
 
 Fetches a single object by its UUID. Optional parameters determine whether to include views, properties, and relations in the response.
 
@@ -221,7 +230,7 @@ const { status, data } = await apiInstance.getObject(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseCaraerObjectDTO**
 
 ### Authorization
 
@@ -230,20 +239,22 @@ const { status, data } = await apiInstance.getObject(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Object fetched successfully |  -  |
-|**404** | Object not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getObjects**
-> PaginationResponse getObjects(body)
+> PaginationResponseCaraerObjectDTO getObjects(paginationRequest)
 
 Fetches a paginated list of objects, optionally including views, properties, and/or relations. The request body should contain pagination details such as limit, page, filters, sort, and query.
 
@@ -252,19 +263,20 @@ Fetches a paginated list of objects, optionally including views, properties, and
 ```typescript
 import {
     ObjectsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new ObjectsApi(configuration);
 
-let body: any; //Pagination request details
+let paginationRequest: PaginationRequest; //Pagination request details
 let views: string; // (optional) (default to 'false')
 let properties: string; // (optional) (default to 'false')
 let relations: string; // (optional) (default to 'false')
 
 const { status, data } = await apiInstance.getObjects(
-    body,
+    paginationRequest,
     views,
     properties,
     relations
@@ -275,7 +287,7 @@ const { status, data } = await apiInstance.getObjects(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**| Pagination request details | |
+| **paginationRequest** | **PaginationRequest**| Pagination request details | |
 | **views** | [**string**] |  | (optional) defaults to 'false'|
 | **properties** | [**string**] |  | (optional) defaults to 'false'|
 | **relations** | [**string**] |  | (optional) defaults to 'false'|
@@ -283,7 +295,7 @@ const { status, data } = await apiInstance.getObjects(
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseCaraerObjectDTO**
 
 ### Authorization
 
@@ -301,11 +313,14 @@ const { status, data } = await apiInstance.getObjects(
 |**200** | Objects fetched successfully |  -  |
 |**400** | Bad request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getPreview**
-> ShowResponse getPreview()
+> ShowResponsePreviewDTO getPreview()
 
 Fetches a preview for an object by the object\'s UUID and the preview name. Returns the preview data wrapped in a ShowResponse.
 
@@ -339,7 +354,7 @@ const { status, data } = await apiInstance.getPreview(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponsePreviewDTO**
 
 ### Authorization
 
@@ -357,11 +372,13 @@ const { status, data } = await apiInstance.getPreview(
 |**200** | Successfully fetched preview |  -  |
 |**404** | Object or preview not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getPreviews**
-> PaginationResponse getPreviews(body)
+> PaginationResponsePreviewDTO getPreviews(paginationRequest)
 
 Fetches all previews over all objects. Returns a PaginationResponse containing a list of preview DTOs.
 
@@ -370,16 +387,17 @@ Fetches all previews over all objects. Returns a PaginationResponse containing a
 ```typescript
 import {
     ObjectsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new ObjectsApi(configuration);
 
-let body: any; //
+let paginationRequest: PaginationRequest; //
 
 const { status, data } = await apiInstance.getPreviews(
-    body
+    paginationRequest
 );
 ```
 
@@ -387,12 +405,12 @@ const { status, data } = await apiInstance.getPreviews(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**|  | |
+| **paginationRequest** | **PaginationRequest**|  | |
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponsePreviewDTO**
 
 ### Authorization
 
@@ -409,11 +427,14 @@ const { status, data } = await apiInstance.getPreviews(
 |-------------|-------------|------------------|
 |**200** | Successfully fetched previews |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getPreviews1**
-> PaginationResponse getPreviews1()
+> PaginationResponsePreviewDTO getPreviews1()
 
 Fetches all previews associated with a specific object. Returns a PaginationResponse containing a list of preview DTOs.
 
@@ -447,7 +468,7 @@ const { status, data } = await apiInstance.getPreviews1(
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponsePreviewDTO**
 
 ### Authorization
 
@@ -465,6 +486,8 @@ const { status, data } = await apiInstance.getPreviews1(
 |**200** | Successfully fetched previews |  -  |
 |**404** | Object not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -522,6 +545,9 @@ const { status, data } = await apiInstance.grantObjectAccess(
 |**202** | Grant accepted and processing in the background |  -  |
 |**400** | Invalid request |  -  |
 |**404** | Object not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -574,7 +600,10 @@ const { status, data } = await apiInstance.permanentlyDeleteArchivedObject(
 |-------------|-------------|------------------|
 |**200** | Object permanently deleted |  -  |
 |**400** | Object is not archived |  -  |
-|**404** | Object not found |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -635,11 +664,13 @@ const { status, data } = await apiInstance.savePreview(
 |**201** | Successfully created or updated preview |  -  |
 |**404** | Object or preview not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **syncExtendedObjects**
-> SuccessResponse syncExtendedObjects()
+> SuccessResponseMapStringInteger syncExtendedObjects()
 
 Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, extended object, or label are re-extended.
 
@@ -670,7 +701,7 @@ const { status, data } = await apiInstance.syncExtendedObjects(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseMapStringInteger**
 
 ### Authorization
 
@@ -679,20 +710,22 @@ const { status, data } = await apiInstance.syncExtendedObjects(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Extended objects synchronized successfully |  -  |
-|**404** | Object not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **updateIndices3**
-> updateIndices3(body)
+> SuccessResponseListCaraerObjectDTO updateIndices3(requestBody)
 
 Updates indices of objects based on the provided mapping. The request body should contain a mapping of object UUIDs to index values. Optional request parameters determine if views, properties, and relations should be included in the response.
 
@@ -707,13 +740,13 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ObjectsApi(configuration);
 
-let body: string; //Mapping of object indices
+let requestBody: { [key: string]: number; }; //Mapping of object indices
 let views: string; // (optional) (default to 'false')
 let properties: string; // (optional) (default to 'false')
 let relations: string; // (optional) (default to 'false')
 
 const { status, data } = await apiInstance.updateIndices3(
-    body,
+    requestBody,
     views,
     properties,
     relations
@@ -724,7 +757,7 @@ const { status, data } = await apiInstance.updateIndices3(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **string**| Mapping of object indices | |
+| **requestBody** | **{ [key: string]: number; }**| Mapping of object indices | |
 | **views** | [**string**] |  | (optional) defaults to 'false'|
 | **properties** | [**string**] |  | (optional) defaults to 'false'|
 | **relations** | [**string**] |  | (optional) defaults to 'false'|
@@ -732,7 +765,7 @@ const { status, data } = await apiInstance.updateIndices3(
 
 ### Return type
 
-void (empty response body)
+**SuccessResponseListCaraerObjectDTO**
 
 ### Authorization
 
@@ -749,7 +782,10 @@ void (empty response body)
 |-------------|-------------|------------------|
 |**200** | Indices updated successfully |  -  |
 |**400** | Bad request |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -806,6 +842,9 @@ const { status, data } = await apiInstance.updateLifecycleProperties(
 |-------------|-------------|------------------|
 |**200** | Lifecycle properties updated |  -  |
 |**404** | Object not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -871,8 +910,10 @@ const { status, data } = await apiInstance.updateObject(
 |-------------|-------------|------------------|
 |**200** | Object updated successfully |  -  |
 |**400** | Invalid input |  -  |
-|**404** | Object not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

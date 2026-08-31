@@ -20,7 +20,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**updateProperty**](#updateproperty) | **PUT** /api/v2/objects/{objectUuid}/properties/{propertyUuid} | Update an existing property|
 
 # **copyPropertiesToObject**
-> SuccessResponse copyPropertiesToObject(copyPropertiesToObjectRequest)
+> SuccessResponseListPropertyDTO copyPropertiesToObject(copyPropertiesToObjectRequest)
 
 Attaches existing properties from other objects to the target object in a single request. Archived links on the target object are restored. Properties already active on the target are rejected.
 
@@ -55,7 +55,7 @@ const { status, data } = await apiInstance.copyPropertiesToObject(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseListPropertyDTO**
 
 ### Authorization
 
@@ -73,6 +73,9 @@ const { status, data } = await apiInstance.copyPropertiesToObject(
 |**200** | Properties copied successfully |  -  |
 |**400** | Invalid input data |  -  |
 |**404** | Object or property not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -129,7 +132,10 @@ const { status, data } = await apiInstance.createProperty(
 |-------------|-------------|------------------|
 |**201** | Property created successfully |  -  |
 |**400** | Invalid input data |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -177,20 +183,22 @@ const { status, data } = await apiInstance.deleteProperty(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Property deleted successfully |  -  |
-|**404** | Property not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getCalculationTypes**
-> PaginationResponse getCalculationTypes()
+> PaginationResponsePropertyCalculationTypeDTO getCalculationTypes()
 
 Returns the calculation functions available for each property type (for example min/max on numbers).
 
@@ -221,7 +229,7 @@ const { status, data } = await apiInstance.getCalculationTypes(
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponsePropertyCalculationTypeDTO**
 
 ### Authorization
 
@@ -230,19 +238,22 @@ const { status, data } = await apiInstance.getCalculationTypes(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Calculation types retrieved successfully |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getFormats**
-> PaginationResponse getFormats()
+> PaginationResponsePropertyFormat getFormats()
 
 Fetches a sorted list of available property formats. The formats are retrieved from the PropertyFormats enum and converted to PropertyFormat instances.
 
@@ -273,7 +284,7 @@ const { status, data } = await apiInstance.getFormats(
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponsePropertyFormat**
 
 ### Authorization
 
@@ -282,19 +293,22 @@ const { status, data } = await apiInstance.getFormats(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Property formats retrieved successfully |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getProperties**
-> PaginationResponse getProperties(body)
+> PaginationResponsePropertyDTO getProperties(paginationRequest)
 
 Retrieves a paginated list of properties for a given object. Depending on the object UUID format, a Cypher query is constructed to filter properties belonging to that object. Returns a PaginationResponse containing PropertyDTO objects.
 
@@ -303,18 +317,19 @@ Retrieves a paginated list of properties for a given object. Depending on the ob
 ```typescript
 import {
     PropertyApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new PropertyApi(configuration);
 
 let objectUuid: string; // (default to undefined)
-let body: any; //Pagination details (limit, page, filters, sort, query)
+let paginationRequest: PaginationRequest; //Pagination details (limit, page, filters, sort, query)
 
 const { status, data } = await apiInstance.getProperties(
     objectUuid,
-    body
+    paginationRequest
 );
 ```
 
@@ -322,13 +337,13 @@ const { status, data } = await apiInstance.getProperties(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**| Pagination details (limit, page, filters, sort, query) | |
+| **paginationRequest** | **PaginationRequest**| Pagination details (limit, page, filters, sort, query) | |
 | **objectUuid** | [**string**] |  | defaults to undefined|
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponsePropertyDTO**
 
 ### Authorization
 
@@ -346,11 +361,14 @@ const { status, data } = await apiInstance.getProperties(
 |**200** | Properties fetched successfully |  -  |
 |**400** | Invalid pagination request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getProperty**
-> ShowResponse getProperty()
+> ShowResponsePropertyDTO getProperty()
 
 Retrieves details of a property by its UUID and associates it with its parent object. Returns a ShowResponse containing a PropertyDTO object with complete property details.
 
@@ -384,7 +402,7 @@ const { status, data } = await apiInstance.getProperty(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponsePropertyDTO**
 
 ### Authorization
 
@@ -393,20 +411,22 @@ const { status, data } = await apiInstance.getProperty(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Property retrieved successfully |  -  |
-|**404** | Property not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getPropertyCalculationTypes**
-> SuccessResponse getPropertyCalculationTypes()
+> SuccessResponseListString getPropertyCalculationTypes()
 
 Returns calculation functions supported for the property\'s type.
 
@@ -440,7 +460,7 @@ const { status, data } = await apiInstance.getPropertyCalculationTypes(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseListString**
 
 ### Authorization
 
@@ -449,14 +469,17 @@ const { status, data } = await apiInstance.getPropertyCalculationTypes(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Calculation types retrieved successfully |  -  |
-|**404** | Property or object not found |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -512,7 +535,10 @@ const { status, data } = await apiInstance.permanentlyDeleteArchivedProperty(
 |-------------|-------------|------------------|
 |**200** | Archived property permanently removed |  -  |
 |**400** | Property is not archived for this object |  -  |
-|**404** | Object or property not found |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -560,15 +586,17 @@ const { status, data } = await apiInstance.pinProperty(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Property pinned successfully |  -  |
-|**404** | Property not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -616,15 +644,17 @@ const { status, data } = await apiInstance.restoreProperty(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Property restored successfully |  -  |
-|**404** | Property or Object not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -672,20 +702,22 @@ const { status, data } = await apiInstance.unpinProperty(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Property unpinned successfully |  -  |
-|**404** | Property not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **updateIndices2**
-> SuccessResponse updateIndices2(body)
+> SuccessResponseListPropertyDTO updateIndices2(requestBody)
 
 Updates the indices for properties of a specific object. The request body should contain a mapping between property UUIDs and their new index values. Returns a SuccessResponse containing a list of updated PropertyDTO objects.
 
@@ -701,11 +733,11 @@ const configuration = new Configuration();
 const apiInstance = new PropertyApi(configuration);
 
 let objectUuid: string; // (default to undefined)
-let body: string; //Mapping of property UUIDs to new index values
+let requestBody: { [key: string]: number; }; //Mapping of property UUIDs to new index values
 
 const { status, data } = await apiInstance.updateIndices2(
     objectUuid,
-    body
+    requestBody
 );
 ```
 
@@ -713,13 +745,13 @@ const { status, data } = await apiInstance.updateIndices2(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **string**| Mapping of property UUIDs to new index values | |
+| **requestBody** | **{ [key: string]: number; }**| Mapping of property UUIDs to new index values | |
 | **objectUuid** | [**string**] |  | defaults to undefined|
 
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseListPropertyDTO**
 
 ### Authorization
 
@@ -736,7 +768,10 @@ const { status, data } = await apiInstance.updateIndices2(
 |-------------|-------------|------------------|
 |**200** | Indices updated successfully |  -  |
 |**400** | Invalid input provided |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -796,8 +831,10 @@ const { status, data } = await apiInstance.updateProperty(
 |-------------|-------------|------------------|
 |**200** | Property updated successfully |  -  |
 |**400** | Invalid input data |  -  |
-|**404** | Property not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

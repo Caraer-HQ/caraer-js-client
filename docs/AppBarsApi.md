@@ -8,7 +8,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**triggerAppBar**](#triggerappbar) | **POST** /api/v2/app-bars/{appBarUuid}/trigger | Trigger an action-based app bar|
 
 # **listAppBars**
-> listAppBars()
+> ShowResponseListInstalledAppBarDTO listAppBars()
 
 Returns all app bars from installed apps for the authenticated user\'s company at the given location.
 
@@ -51,7 +51,7 @@ const { status, data } = await apiInstance.listAppBars(
 
 ### Return type
 
-void (empty response body)
+**ShowResponseListInstalledAppBarDTO**
 
 ### Authorization
 
@@ -68,11 +68,15 @@ void (empty response body)
 |-------------|-------------|------------------|
 |**200** | App bars retrieved |  -  |
 |**400** | Invalid request |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **triggerAppBar**
-> triggerAppBar()
+> SuccessResponseString triggerAppBar()
 
 Fires the app bar webhook with optional settings values and record/view context.
 
@@ -107,7 +111,7 @@ const { status, data } = await apiInstance.triggerAppBar(
 
 ### Return type
 
-void (empty response body)
+**SuccessResponseString**
 
 ### Authorization
 
@@ -125,6 +129,9 @@ void (empty response body)
 |**200** | Trigger accepted |  -  |
 |**400** | Invalid request |  -  |
 |**404** | App bar not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

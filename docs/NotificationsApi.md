@@ -57,6 +57,9 @@ const { status, data } = await apiInstance.dismissNotification(
 |-------------|-------------|------------------|
 |**200** | Notification dismissed |  -  |
 |**404** | Notification not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -100,6 +103,10 @@ This endpoint does not have any parameters.
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -151,11 +158,14 @@ const { status, data } = await apiInstance.markAsRead(
 |-------------|-------------|------------------|
 |**200** | Notification marked as read |  -  |
 |**404** | Notification not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **sendNotification**
-> sendNotification(sendNotificationRequest)
+> CreateResponseMapStringString sendNotification(sendNotificationRequest)
 
 Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). The target user must belong to the app\'s company.
 
@@ -187,7 +197,7 @@ const { status, data } = await apiInstance.sendNotification(
 
 ### Return type
 
-void (empty response body)
+**CreateResponseMapStringString**
 
 ### Authorization
 
@@ -206,6 +216,9 @@ void (empty response body)
 |**400** | Invalid request |  -  |
 |**403** | Forbidden |  -  |
 |**429** | Rate limited |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

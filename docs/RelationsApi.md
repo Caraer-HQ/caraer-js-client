@@ -18,7 +18,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**updateIndices**](#updateindices) | **PUT** /api/v2/relations/updateIndices | Update relation indices|
 
 # **addConnection**
-> SuccessResponse addConnection()
+> SuccessResponseString addConnection()
 
 Creates a connection between two objects for a given relation. The \'from\' and \'to\' UUIDs identify the objects to connect.
 
@@ -55,7 +55,7 @@ const { status, data } = await apiInstance.addConnection(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -64,15 +64,17 @@ const { status, data } = await apiInstance.addConnection(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Connection created successfully |  -  |
-|**404** | One or more entities not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -130,12 +132,15 @@ const { status, data } = await apiInstance.createRelationOrUpdate(
 |**200** | Relation updated successfully |  -  |
 |**201** | Relation created successfully |  -  |
 |**400** | Invalid input data |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **deleteConnection**
-> SuccessResponse deleteConnection()
+> SuccessResponseString deleteConnection()
 
 Deletes a connection between two objects for a given relation using the specified UUIDs.
 
@@ -172,7 +177,7 @@ const { status, data } = await apiInstance.deleteConnection(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -181,15 +186,17 @@ const { status, data } = await apiInstance.deleteConnection(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Connection deleted successfully |  -  |
-|**404** | One or more entities not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -234,20 +241,22 @@ const { status, data } = await apiInstance.deleteRelation1(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Relation deleted successfully |  -  |
-|**404** | Relation not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getRelation**
-> ShowResponse getRelation()
+> ShowResponseRelationDTO getRelation()
 
 Retrieves the details of a relation by its UUID. Returns a ShowResponse containing a RelationDTO.
 
@@ -278,7 +287,7 @@ const { status, data } = await apiInstance.getRelation(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseRelationDTO**
 
 ### Authorization
 
@@ -287,19 +296,22 @@ const { status, data } = await apiInstance.getRelation(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Relation retrieved successfully |  -  |
-|**404** | Relation not found |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getRelationForObject**
-> ShowResponse getRelationForObject()
+> ShowResponseRelationDTO getRelationForObject()
 
 Retrieves a relation by its UUID and associates it with the specified object, returning a RelationDTO that includes details from the related object.
 
@@ -333,7 +345,7 @@ const { status, data } = await apiInstance.getRelationForObject(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseRelationDTO**
 
 ### Authorization
 
@@ -350,11 +362,14 @@ const { status, data } = await apiInstance.getRelationForObject(
 |-------------|-------------|------------------|
 |**200** | Relation for object retrieved successfully |  -  |
 |**404** | Relation or object not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getRelations**
-> PaginationResponse getRelations(body)
+> PaginationResponseRelationDTO getRelations(paginationRequest)
 
 Retrieves a paginated list of relations. Returns a PaginationResponse containing RelationDTO objects based on the provided pagination criteria.
 
@@ -363,16 +378,17 @@ Retrieves a paginated list of relations. Returns a PaginationResponse containing
 ```typescript
 import {
     RelationsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new RelationsApi(configuration);
 
-let body: any; //Pagination request for relations
+let paginationRequest: PaginationRequest; //Pagination request for relations
 
 const { status, data } = await apiInstance.getRelations(
-    body
+    paginationRequest
 );
 ```
 
@@ -380,12 +396,12 @@ const { status, data } = await apiInstance.getRelations(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**| Pagination request for relations | |
+| **paginationRequest** | **PaginationRequest**| Pagination request for relations | |
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseRelationDTO**
 
 ### Authorization
 
@@ -403,11 +419,14 @@ const { status, data } = await apiInstance.getRelations(
 |**200** | Relations fetched successfully |  -  |
 |**400** | Invalid pagination request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getRelationsBetweenObjects**
-> PaginationResponse getRelationsBetweenObjects(body)
+> PaginationResponseRelationDTO getRelationsBetweenObjects(paginationRequest)
 
 Retrieves all relations between two objects based on the provided object UUIDs.
 
@@ -416,7 +435,8 @@ Retrieves all relations between two objects based on the provided object UUIDs.
 ```typescript
 import {
     RelationsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
@@ -424,12 +444,12 @@ const apiInstance = new RelationsApi(configuration);
 
 let fromObjectUuid: string; // (default to undefined)
 let toObjectUuid: string; // (default to undefined)
-let body: any; //
+let paginationRequest: PaginationRequest; //
 
 const { status, data } = await apiInstance.getRelationsBetweenObjects(
     fromObjectUuid,
     toObjectUuid,
-    body
+    paginationRequest
 );
 ```
 
@@ -437,14 +457,14 @@ const { status, data } = await apiInstance.getRelationsBetweenObjects(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**|  | |
+| **paginationRequest** | **PaginationRequest**|  | |
 | **fromObjectUuid** | [**string**] |  | defaults to undefined|
 | **toObjectUuid** | [**string**] |  | defaults to undefined|
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseRelationDTO**
 
 ### Authorization
 
@@ -461,11 +481,14 @@ const { status, data } = await apiInstance.getRelationsBetweenObjects(
 |-------------|-------------|------------------|
 |**200** | Relations retrieved successfully |  -  |
 |**404** | One or more objects not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getRelationsByObject**
-> PaginationResponse getRelationsByObject(body)
+> PaginationResponseRelationDTO getRelationsByObject(paginationRequest)
 
 Returns relation definitions where this object participates in the **schema** graph for that relation name: either as origin `(thisObject)-[:relationName]->(:Object)` or as target `(:Object)-[:relationName]->(thisObject)`. Unrelated relations (same name elsewhere, or no typed edge touching this object) are excluded. Uses the object’s `name` to filter; request path uses object UUID.
 
@@ -474,18 +497,19 @@ Returns relation definitions where this object participates in the **schema** gr
 ```typescript
 import {
     RelationsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new RelationsApi(configuration);
 
 let objectUuid: string; // (default to undefined)
-let body: any; //Pagination request for relations
+let paginationRequest: PaginationRequest; //Pagination request for relations
 
 const { status, data } = await apiInstance.getRelationsByObject(
     objectUuid,
-    body
+    paginationRequest
 );
 ```
 
@@ -493,13 +517,13 @@ const { status, data } = await apiInstance.getRelationsByObject(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**| Pagination request for relations | |
+| **paginationRequest** | **PaginationRequest**| Pagination request for relations | |
 | **objectUuid** | [**string**] |  | defaults to undefined|
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseRelationDTO**
 
 ### Authorization
 
@@ -517,6 +541,8 @@ const { status, data } = await apiInstance.getRelationsByObject(
 |**200** | Relations fetched successfully |  -  |
 |**404** | Object not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -569,7 +595,10 @@ const { status, data } = await apiInstance.permanentlyDeleteArchivedRelation(
 |-------------|-------------|------------------|
 |**200** | Relation permanently deleted |  -  |
 |**400** | Relation is not archived |  -  |
-|**404** | Relation not found |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -614,20 +643,22 @@ const { status, data } = await apiInstance.restoreRelation(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Relation restored successfully |  -  |
-|**404** | Relation not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **updateIndices**
-> SuccessResponse updateIndices(body)
+> SuccessResponseCollectionRelation updateIndices(requestBody)
 
 Updates the indices for relations. The request body should contain a mapping of relation UUIDs to their new index values. Returns a SuccessResponse containing the updated relation objects.
 
@@ -642,10 +673,10 @@ import {
 const configuration = new Configuration();
 const apiInstance = new RelationsApi(configuration);
 
-let body: string; //Mapping of relation UUIDs to new index values
+let requestBody: { [key: string]: number; }; //Mapping of relation UUIDs to new index values
 
 const { status, data } = await apiInstance.updateIndices(
-    body
+    requestBody
 );
 ```
 
@@ -653,12 +684,12 @@ const { status, data } = await apiInstance.updateIndices(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **string**| Mapping of relation UUIDs to new index values | |
+| **requestBody** | **{ [key: string]: number; }**| Mapping of relation UUIDs to new index values | |
 
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseCollectionRelation**
 
 ### Authorization
 
@@ -675,7 +706,10 @@ const { status, data } = await apiInstance.updateIndices(
 |-------------|-------------|------------------|
 |**200** | Indices updated successfully |  -  |
 |**400** | Invalid input provided |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -31,7 +31,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**updateRelationEdge**](#updaterelationedge) | **PATCH** /api/v2/records/relations/{fromUuid}/{relationName}/{toUuid} | Update relation edge properties|
 
 # **_delete**
-> SuccessResponse _delete()
+> SuccessResponseString _delete()
 
 Deletes a record specified by its UUID.
 
@@ -65,7 +65,7 @@ const { status, data } = await apiInstance._delete(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -83,11 +83,13 @@ const { status, data } = await apiInstance._delete(
 |**200** | Record deleted successfully |  -  |
 |**404** | Record not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **aggregate**
-> SuccessResponse aggregate(aggregateRequest)
+> SuccessResponseAggregateResponse aggregate(aggregateRequest)
 
 Groups Neo4j records by property or time bucket and returns series points with optional drilldown filters.
 
@@ -119,7 +121,7 @@ const { status, data } = await apiInstance.aggregate(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseAggregateResponse**
 
 ### Authorization
 
@@ -136,11 +138,15 @@ const { status, data } = await apiInstance.aggregate(
 |-------------|-------------|------------------|
 |**200** | Aggregation completed |  -  |
 |**400** | Invalid request |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **aggregateBatch**
-> SuccessResponse aggregateBatch(aggregateBatchRequest)
+> SuccessResponseListAggregateResponse aggregateBatch(aggregateBatchRequest)
 
 Runs multiple aggregation requests for dashboard widgets.
 
@@ -172,7 +178,7 @@ const { status, data } = await apiInstance.aggregateBatch(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseListAggregateResponse**
 
 ### Authorization
 
@@ -189,6 +195,10 @@ const { status, data } = await apiInstance.aggregateBatch(
 |-------------|-------------|------------------|
 |**200** | Batch aggregation completed |  -  |
 |**400** | Invalid request |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -245,6 +255,10 @@ const { status, data } = await apiInstance.bulkDelete(
 |-------------|-------------|------------------|
 |**200** | Bulk delete completed (possibly with per-record errors) |  -  |
 |**400** | Invalid request |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -305,6 +319,10 @@ const { status, data } = await apiInstance.bulkEdit(
 |**201** | All records saved successfully |  -  |
 |**200** | Partial success with per-record validation errors |  -  |
 |**400** | Invalid request |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -371,11 +389,14 @@ const { status, data } = await apiInstance.create(
 |**201** | Record created successfully |  -  |
 |**400** | Invalid input data |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **createOrUpdate**
-> createOrUpdate(recordDTO)
+> UpdateResponse createOrUpdate(recordDTO)
 
 Creates a new record or updates an existing one. Match order: body/path uuid already in the graph, then unique property values. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
 
@@ -419,7 +440,7 @@ const { status, data } = await apiInstance.createOrUpdate(
 
 ### Return type
 
-void (empty response body)
+**UpdateResponse**
 
 ### Authorization
 
@@ -438,11 +459,14 @@ void (empty response body)
 |**201** | Record created successfully |  -  |
 |**400** | Invalid input data |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **createRelation**
-> SuccessResponse createRelation()
+> SuccessResponseString createRelation()
 
 Creates a relation between two records identified by their UUIDs using the provided relation name.
 
@@ -486,7 +510,7 @@ const { status, data } = await apiInstance.createRelation(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -504,11 +528,13 @@ const { status, data } = await apiInstance.createRelation(
 |**200** | Relation created successfully |  -  |
 |**404** | One or more entities not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **deleteRelation**
-> SuccessResponse deleteRelation()
+> SuccessResponseString deleteRelation()
 
 Deletes a relation between two records identified by their UUIDs and the relation name.
 
@@ -545,7 +571,7 @@ const { status, data } = await apiInstance.deleteRelation(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -563,11 +589,13 @@ const { status, data } = await apiInstance.deleteRelation(
 |**200** | Relation deleted successfully |  -  |
 |**404** | One or more entities not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **extend**
-> SuccessResponse extend(extendRecordRequest)
+> SuccessResponseObject extend(extendRecordRequest)
 
 Extends a record identified by its UUID to one or more objects. You can use this to move a record or add it to another object so it\'ll be visible in the new object.Returns a SuccessResponse confirming that the record has been extended.
 
@@ -608,7 +636,7 @@ const { status, data } = await apiInstance.extend(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseObject**
 
 ### Authorization
 
@@ -626,11 +654,13 @@ const { status, data } = await apiInstance.extend(
 |**200** | Record extended successfully |  -  |
 |**404** | Record not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **index**
-> PaginationResponse index(body)
+> PaginationResponseObject index(recordPaginationRequest)
 
 Retrieves a paginated list of records. If a preview type is specified in the request, returns records formatted for preview; otherwise, returns full record details.
 
@@ -639,20 +669,21 @@ Retrieves a paginated list of records. If a preview type is specified in the req
 ```typescript
 import {
     RecordsApi,
-    Configuration
+    Configuration,
+    RecordPaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new RecordsApi(configuration);
 
-let body: string; //Pagination request for records
+let recordPaginationRequest: RecordPaginationRequest; //Pagination request for records
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let archived: boolean; //When \'true\', archived records are returned instead of active records. Defaults to \'false\'. (optional) (default to false)
 let relatedRecordUuid: string; //UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record. (optional) (default to undefined)
 let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
 
 const { status, data } = await apiInstance.index(
-    body,
+    recordPaginationRequest,
     parse,
     archived,
     relatedRecordUuid,
@@ -664,7 +695,7 @@ const { status, data } = await apiInstance.index(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **string**| Pagination request for records | |
+| **recordPaginationRequest** | **RecordPaginationRequest**| Pagination request for records | |
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 | **archived** | [**boolean**] | When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;. | (optional) defaults to false|
 | **relatedRecordUuid** | [**string**] | UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record. | (optional) defaults to undefined|
@@ -673,7 +704,7 @@ const { status, data } = await apiInstance.index(
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseObject**
 
 ### Authorization
 
@@ -688,14 +719,17 @@ const { status, data } = await apiInstance.index(
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Records fetched successfully |  -  |
+|**200** | Records fetched successfully. data items are preview objects when preview is set, otherwise record payloads shaped by recordReturnFormat. |  -  |
 |**400** | Invalid pagination request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **indexFlow**
-> SuccessResponse indexFlow(body)
+> SuccessResponseFlow indexFlow(flowPaginationRequest)
 
 Retrieves a list of records formatted for flow view based on a specific property. If the property is not provided in the request, defaults to the \'status\' property of the main object. Returns a SuccessResponse containing the flow records.
 
@@ -704,18 +738,19 @@ Retrieves a list of records formatted for flow view based on a specific property
 ```typescript
 import {
     RecordsApi,
-    Configuration
+    Configuration,
+    FlowPaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new RecordsApi(configuration);
 
-let body: string; //Pagination request for flow view
+let flowPaginationRequest: FlowPaginationRequest; //Pagination request for flow view
 let relatedRecordUuid: string; //UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record. (optional) (default to undefined)
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 
 const { status, data } = await apiInstance.indexFlow(
-    body,
+    flowPaginationRequest,
     relatedRecordUuid,
     parse
 );
@@ -725,14 +760,14 @@ const { status, data } = await apiInstance.indexFlow(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **string**| Pagination request for flow view | |
+| **flowPaginationRequest** | **FlowPaginationRequest**| Pagination request for flow view | |
 | **relatedRecordUuid** | [**string**] | UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record. | (optional) defaults to undefined|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseFlow**
 
 ### Authorization
 
@@ -750,11 +785,14 @@ const { status, data } = await apiInstance.indexFlow(
 |**200** | Records for flow view fetched successfully |  -  |
 |**400** | Required property not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **indexPage**
-> PaginationResponse indexPage(body)
+> PaginationResponseObject indexPage(recordPaginationRequest)
 
 Retrieves a paginated list of webpages for page view. The search query is temporarily removed from the pagination request and passed separately. Returns a PaginationResponse containing WebpageDTO objects.
 
@@ -763,13 +801,14 @@ Retrieves a paginated list of webpages for page view. The search query is tempor
 ```typescript
 import {
     RecordsApi,
-    Configuration
+    Configuration,
+    RecordPaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new RecordsApi(configuration);
 
-let body: string; //Pagination request for page view
+let recordPaginationRequest: RecordPaginationRequest; //Pagination request for page view
 let environment: string; //Target environment for resolving webpages (for example \'staging\' or \'production\'). Defaults to \'staging\'. (optional) (default to 'staging')
 let relatedRecordUuid: string; //UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record. (optional) (default to undefined)
 let fields: string; //Comma-separated WebpageDTO fields to return (for example: uuid,title). When omitted, the full WebpageDTO is returned. (optional) (default to undefined)
@@ -777,7 +816,7 @@ let publishedOnly: boolean; //When true, only returns pages published in the sel
 let excludeTemplateRelated: boolean; //When true, excludes pages whose options mark them as related to a template. (optional) (default to false)
 
 const { status, data } = await apiInstance.indexPage(
-    body,
+    recordPaginationRequest,
     environment,
     relatedRecordUuid,
     fields,
@@ -790,7 +829,7 @@ const { status, data } = await apiInstance.indexPage(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **string**| Pagination request for page view | |
+| **recordPaginationRequest** | **RecordPaginationRequest**| Pagination request for page view | |
 | **environment** | [**string**] | Target environment for resolving webpages (for example \&#39;staging\&#39; or \&#39;production\&#39;). Defaults to \&#39;staging\&#39;. | (optional) defaults to 'staging'|
 | **relatedRecordUuid** | [**string**] | UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record. | (optional) defaults to undefined|
 | **fields** | [**string**] | Comma-separated WebpageDTO fields to return (for example: uuid,title). When omitted, the full WebpageDTO is returned. | (optional) defaults to undefined|
@@ -800,7 +839,7 @@ const { status, data } = await apiInstance.indexPage(
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseObject**
 
 ### Authorization
 
@@ -817,11 +856,15 @@ const { status, data } = await apiInstance.indexPage(
 |-------------|-------------|------------------|
 |**200** | Webpages fetched successfully |  -  |
 |**400** | Invalid pagination request |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **indexTable**
-> PaginationResponse indexTable(body)
+> SuccessResponseTable indexTable(recordPaginationRequest)
 
 Retrieves records formatted for table display. Returns a PaginationResponse containing records formatted for table view.
 
@@ -830,17 +873,18 @@ Retrieves records formatted for table display. Returns a PaginationResponse cont
 ```typescript
 import {
     RecordsApi,
-    Configuration
+    Configuration,
+    RecordPaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new RecordsApi(configuration);
 
-let body: string; //Pagination request for table view
+let recordPaginationRequest: RecordPaginationRequest; //Pagination request for table view
 let relatedRecordUuid: string; //UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.indexTable(
-    body,
+    recordPaginationRequest,
     relatedRecordUuid
 );
 ```
@@ -849,13 +893,13 @@ const { status, data } = await apiInstance.indexTable(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **string**| Pagination request for table view | |
+| **recordPaginationRequest** | **RecordPaginationRequest**| Pagination request for table view | |
 | **relatedRecordUuid** | [**string**] | UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record. | (optional) defaults to undefined|
 
 
 ### Return type
 
-**PaginationResponse**
+**SuccessResponseTable**
 
 ### Authorization
 
@@ -872,11 +916,15 @@ const { status, data } = await apiInstance.indexTable(
 |-------------|-------------|------------------|
 |**200** | Records for table view fetched successfully |  -  |
 |**400** | Invalid request |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **preview**
-> ShowResponse preview()
+> ShowResponsePreviewDTO preview()
 
 Retrieves a preview for a record specified by its UUID and preview name. Returns a ShowResponse containing the preview data.
 
@@ -916,7 +964,7 @@ const { status, data } = await apiInstance.preview(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponsePreviewDTO**
 
 ### Authorization
 
@@ -933,6 +981,9 @@ const { status, data } = await apiInstance.preview(
 |-------------|-------------|------------------|
 |**200** | Preview retrieved successfully |  -  |
 |**404** | Record or preview not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -986,11 +1037,15 @@ const { status, data } = await apiInstance.query(
 |-------------|-------------|------------------|
 |**200** | Query completed successfully |  -  |
 |**400** | Invalid query request |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **restore**
-> SuccessResponse restore()
+> SuccessResponseString restore()
 
 Restores a soft-deleted record identified by its UUID. Returns a SuccessResponse confirming that the record has been restored.
 
@@ -1021,7 +1076,7 @@ const { status, data } = await apiInstance.restore(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -1039,11 +1094,13 @@ const { status, data } = await apiInstance.restore(
 |**200** | Record restored successfully |  -  |
 |**404** | Record not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **search**
-> PaginationResponse search(body)
+> PaginationResponseObject search(searchRequest)
 
 Performs a search for records based on the specified criteria in the request body. Returns a PaginationResponse containing matching records.
 
@@ -1052,19 +1109,20 @@ Performs a search for records based on the specified criteria in the request bod
 ```typescript
 import {
     RecordsApi,
-    Configuration
+    Configuration,
+    SearchRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new RecordsApi(configuration);
 
-let body: string; //Search criteria
+let searchRequest: SearchRequest; //Search criteria
 let archived: boolean; //When set to \'true\', includes soft-deleted records in the search results. (optional) (default to false)
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
 
 const { status, data } = await apiInstance.search(
-    body,
+    searchRequest,
     archived,
     parse,
     recordReturnFormat
@@ -1075,7 +1133,7 @@ const { status, data } = await apiInstance.search(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **string**| Search criteria | |
+| **searchRequest** | **SearchRequest**| Search criteria | |
 | **archived** | [**boolean**] | When set to \&#39;true\&#39;, includes soft-deleted records in the search results. | (optional) defaults to false|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 | **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39;>** | Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED. | (optional) defaults to 'LEGACY'|
@@ -1083,7 +1141,7 @@ const { status, data } = await apiInstance.search(
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseObject**
 
 ### Authorization
 
@@ -1098,14 +1156,17 @@ const { status, data } = await apiInstance.search(
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Search completed successfully |  -  |
+|**200** | Search completed successfully. data items are preview objects when preview is set, otherwise record payloads shaped by recordReturnFormat. |  -  |
 |**400** | Invalid search parameters |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **searchCrossObject**
-> PaginationResponse searchCrossObject(crossObjectRecordSearchRequest)
+> PaginationResponsePreviewDTO searchCrossObject(crossObjectRecordSearchRequest)
 
 Searches records across multiple object types in one request. Use fromObjectUuid + relationName to limit to relation target objects (e.g. event attendees), or objectUuids for an explicit list, or omit both to search all company objects (capped). Returns preview-shaped results suitable for relation pickers.
 
@@ -1143,7 +1204,7 @@ const { status, data } = await apiInstance.searchCrossObject(
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponsePreviewDTO**
 
 ### Authorization
 
@@ -1160,11 +1221,15 @@ const { status, data } = await apiInstance.searchCrossObject(
 |-------------|-------------|------------------|
 |**200** | Search completed successfully |  -  |
 |**400** | Invalid search parameters |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **show**
-> ShowResponse show()
+> ShowResponseObject show()
 
 Retrieves detailed information about a record by its UUID. Returns a ShowResponse containing the record details. Prefer GET /{objectName}/{uuid} when the object context is known.
 
@@ -1207,7 +1272,7 @@ const { status, data } = await apiInstance.show(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseObject**
 
 ### Authorization
 
@@ -1224,11 +1289,14 @@ const { status, data } = await apiInstance.show(
 |-------------|-------------|------------------|
 |**200** | Record retrieved successfully |  -  |
 |**404** | Record not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **showByObject**
-> ShowResponse showByObject()
+> ShowResponseObject showByObject()
 
 Retrieves a record by object name and UUID. Same response as GET /{uuid}?object={objectName}.
 
@@ -1268,7 +1336,7 @@ const { status, data } = await apiInstance.showByObject(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseObject**
 
 ### Authorization
 
@@ -1285,11 +1353,14 @@ const { status, data } = await apiInstance.showByObject(
 |-------------|-------------|------------------|
 |**200** | Record retrieved successfully |  -  |
 |**404** | Record not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **suggestAnalyticsWidgets**
-> SuccessResponse suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest)
+> SuccessResponseSuggestAnalyticsWidgetsResponse suggestAnalyticsWidgets(suggestAnalyticsWidgetsRequest)
 
 Uses structured OpenAI output plus schema validation to propose dashboard charts for an object. Returns an empty list when AI is unavailable.
 
@@ -1321,7 +1392,7 @@ const { status, data } = await apiInstance.suggestAnalyticsWidgets(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseSuggestAnalyticsWidgetsResponse**
 
 ### Authorization
 
@@ -1339,6 +1410,9 @@ const { status, data } = await apiInstance.suggestAnalyticsWidgets(
 |**200** | Suggestions generated (may be empty) |  -  |
 |**400** | Invalid request |  -  |
 |**404** | Object not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1409,6 +1483,8 @@ const { status, data } = await apiInstance.update(
 |**400** | Invalid input data |  -  |
 |**404** | Record not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1479,11 +1555,13 @@ const { status, data } = await apiInstance.updateByUuid(
 |**400** | Invalid input data |  -  |
 |**404** | Record not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **updateRelationEdge**
-> SuccessResponse updateRelationEdge(relationEdgeRequestDTO)
+> SuccessResponseString updateRelationEdge(relationEdgeRequestDTO)
 
 Patches values stored on an existing relation edge. Only keys present in edgeProperties are written; a null value clears a key.
 
@@ -1524,7 +1602,7 @@ const { status, data } = await apiInstance.updateRelationEdge(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -1542,6 +1620,9 @@ const { status, data } = await apiInstance.updateRelationEdge(
 |**200** | Relation updated successfully |  -  |
 |**400** | Unknown or invalid edge property |  -  |
 |**404** | One or more entities not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

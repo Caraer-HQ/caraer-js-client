@@ -1,20 +1,20 @@
-# SuccessResponse
+# ShowResponseAppDTO
 
-Represents a standard successful response with a message and optional data.
+Represents the response for viewing or showing a specific resource.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **message** | **string** | A message detailing the result of the operation. | [optional] [default to undefined]
-**data** | **any** | The data payload of the response, if any. | [optional] [default to undefined]
+**data** | [**AppDTO**](AppDTO.md) | The data payload of the response, if any. | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { SuccessResponse } from '@caraer/client';
+import { ShowResponseAppDTO } from '@caraer/client';
 
-const instance: SuccessResponse = {
+const instance: ShowResponseAppDTO = {
     message,
     data,
 };

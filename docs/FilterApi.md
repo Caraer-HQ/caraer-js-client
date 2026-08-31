@@ -61,6 +61,9 @@ const { status, data } = await apiInstance.createFilter(
 |**201** | Filter created successfully |  -  |
 |**400** | Invalid input data |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -114,11 +117,13 @@ const { status, data } = await apiInstance.deleteFilter(
 |**200** | Filter deleted successfully |  -  |
 |**404** | Filter not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getFilter**
-> ShowResponse getFilter()
+> ShowResponseSavedFilterDTO getFilter()
 
 Retrieves details of a saved filter by its UUID.
 
@@ -149,7 +154,7 @@ const { status, data } = await apiInstance.getFilter(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseSavedFilterDTO**
 
 ### Authorization
 
@@ -167,11 +172,13 @@ const { status, data } = await apiInstance.getFilter(
 |**200** | Filter retrieved successfully |  -  |
 |**404** | Filter not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getFilters**
-> PaginationResponse getFilters(body)
+> PaginationResponseSavedFilterDTO getFilters(paginationRequest)
 
 Fetches a paginated list of saved filters. The request body should contain pagination details such as limit, page, filters, and sort.
 
@@ -180,18 +187,19 @@ Fetches a paginated list of saved filters. The request body should contain pagin
 ```typescript
 import {
     FilterApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new FilterApi(configuration);
 
 let objectUuid: string; // (default to undefined)
-let body: any; //Pagination request details
+let paginationRequest: PaginationRequest; //Pagination request details
 
 const { status, data } = await apiInstance.getFilters(
     objectUuid,
-    body
+    paginationRequest
 );
 ```
 
@@ -199,13 +207,13 @@ const { status, data } = await apiInstance.getFilters(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**| Pagination request details | |
+| **paginationRequest** | **PaginationRequest**| Pagination request details | |
 | **objectUuid** | [**string**] |  | defaults to undefined|
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseSavedFilterDTO**
 
 ### Authorization
 
@@ -223,6 +231,9 @@ const { status, data } = await apiInstance.getFilters(
 |**200** | Filters fetched successfully |  -  |
 |**400** | Bad request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -281,6 +292,8 @@ const { status, data } = await apiInstance.updateFilter(
 |**400** | Invalid input data |  -  |
 |**404** | Filter not found |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

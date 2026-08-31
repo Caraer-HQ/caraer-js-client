@@ -65,7 +65,10 @@ const { status, data } = await apiInstance.createView(
 |-------------|-------------|------------------|
 |**201** | View created successfully |  -  |
 |**400** | Invalid input data |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -113,15 +116,17 @@ const { status, data } = await apiInstance.deleteView(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | View deleted successfully |  -  |
-|**404** | View not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -169,20 +174,22 @@ const { status, data } = await apiInstance.favoriteView(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | View favorite status updated successfully |  -  |
-|**404** | View not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getView**
-> ShowResponse getView()
+> ShowResponseViewDTO getView()
 
 Retrieves detailed information for a view identified by its UUID for the specified object. Returns a ShowResponse containing the ViewDTO.
 
@@ -216,7 +223,7 @@ const { status, data } = await apiInstance.getView(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseViewDTO**
 
 ### Authorization
 
@@ -225,20 +232,22 @@ const { status, data } = await apiInstance.getView(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | View retrieved successfully |  -  |
-|**404** | View not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getViews**
-> PaginationResponse getViews(body)
+> PaginationResponseViewDTO getViews(paginationRequest)
 
 Retrieves a paginated list of views for the specified object. A custom Cypher query is used to filter views based on the object\'s UUID. Returns a PaginationResponse containing ViewDTO objects.
 
@@ -247,18 +256,19 @@ Retrieves a paginated list of views for the specified object. A custom Cypher qu
 ```typescript
 import {
     ViewsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new ViewsApi(configuration);
 
 let objectUuid: string; // (default to undefined)
-let body: any; //Pagination request details (limit, page, filters, sort, query)
+let paginationRequest: PaginationRequest; //Pagination request details (limit, page, filters, sort, query)
 
 const { status, data } = await apiInstance.getViews(
     objectUuid,
-    body
+    paginationRequest
 );
 ```
 
@@ -266,13 +276,13 @@ const { status, data } = await apiInstance.getViews(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**| Pagination request details (limit, page, filters, sort, query) | |
+| **paginationRequest** | **PaginationRequest**| Pagination request details (limit, page, filters, sort, query) | |
 | **objectUuid** | [**string**] |  | defaults to undefined|
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseViewDTO**
 
 ### Authorization
 
@@ -290,11 +300,14 @@ const { status, data } = await apiInstance.getViews(
 |**200** | Views fetched successfully |  -  |
 |**400** | Invalid pagination request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **updateIndices1**
-> SuccessResponse updateIndices1(body)
+> SuccessResponseString updateIndices1(requestBody)
 
 Updates the indices for views associated with the specified object. The request body must include a mapping of view UUIDs to their new index values. Returns a SuccessResponse with the updated view DTOs.
 
@@ -310,11 +323,11 @@ const configuration = new Configuration();
 const apiInstance = new ViewsApi(configuration);
 
 let objectUuid: string; // (default to undefined)
-let body: string; //Mapping of view UUIDs to new index values
+let requestBody: { [key: string]: number; }; //Mapping of view UUIDs to new index values
 
 const { status, data } = await apiInstance.updateIndices1(
     objectUuid,
-    body
+    requestBody
 );
 ```
 
@@ -322,13 +335,13 @@ const { status, data } = await apiInstance.updateIndices1(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **string**| Mapping of view UUIDs to new index values | |
+| **requestBody** | **{ [key: string]: number; }**| Mapping of view UUIDs to new index values | |
 | **objectUuid** | [**string**] |  | defaults to undefined|
 
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -345,7 +358,10 @@ const { status, data } = await apiInstance.updateIndices1(
 |-------------|-------------|------------------|
 |**200** | View indices updated successfully |  -  |
 |**400** | Invalid input provided |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -405,8 +421,10 @@ const { status, data } = await apiInstance.updateView(
 |-------------|-------------|------------------|
 |**200** | View updated successfully |  -  |
 |**400** | Invalid input data |  -  |
-|**404** | View not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

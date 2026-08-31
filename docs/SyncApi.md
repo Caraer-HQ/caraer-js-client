@@ -62,6 +62,9 @@ const { status, data } = await apiInstance.createSync(
 |**200** | Sync created successfully |  -  |
 |**400** | Invalid sync data |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -119,6 +122,9 @@ const { status, data } = await apiInstance.deleteSync(
 |**200** | Sync deleted successfully |  -  |
 |**400** | Invalid sync data |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -176,11 +182,14 @@ const { status, data } = await apiInstance.getSync(
 |**200** | Sync fetched successfully |  -  |
 |**400** | Invalid sync data |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getSyncs**
-> PaginationResponse getSyncs(body)
+> PaginationResponseSyncDTO getSyncs(paginationRequest)
 
 Retrieves a paginated list of syncs. Returns a PaginationResponse containing SyncDTO objects based on the provided pagination criteria.
 
@@ -189,16 +198,17 @@ Retrieves a paginated list of syncs. Returns a PaginationResponse containing Syn
 ```typescript
 import {
     SyncApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new SyncApi(configuration);
 
-let body: any; //Pagination request for syncs
+let paginationRequest: PaginationRequest; //Pagination request for syncs
 
 const { status, data } = await apiInstance.getSyncs(
-    body
+    paginationRequest
 );
 ```
 
@@ -206,12 +216,12 @@ const { status, data } = await apiInstance.getSyncs(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**| Pagination request for syncs | |
+| **paginationRequest** | **PaginationRequest**| Pagination request for syncs | |
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseSyncDTO**
 
 ### Authorization
 
@@ -229,6 +239,9 @@ const { status, data } = await apiInstance.getSyncs(
 |**200** | Syncs fetched successfully |  -  |
 |**400** | Invalid pagination request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -273,15 +286,17 @@ const { status, data } = await apiInstance.restoreSync(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Sync restored successfully |  -  |
-|**404** | Sync not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -339,6 +354,9 @@ const { status, data } = await apiInstance.updateSync(
 |**200** | Sync updated successfully |  -  |
 |**400** | Invalid sync data |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -10,7 +10,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**uploadFile2**](#uploadfile2) | **POST** /api/v2/files/ | Upload files|
 
 # **deleteFile**
-> SuccessResponse deleteFile()
+> SuccessResponseVoid deleteFile()
 
 Deletes a file from the S3-compatible storage identified by its unique key.
 
@@ -41,7 +41,7 @@ const { status, data } = await apiInstance.deleteFile(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseVoid**
 
 ### Authorization
 
@@ -59,11 +59,13 @@ const { status, data } = await apiInstance.deleteFile(
 |**200** | File deleted successfully. |  -  |
 |**404** | File not found. |  -  |
 |**500** | Internal server error. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **downloadFile**
-> SuccessResponse downloadFile()
+> SuccessResponseString downloadFile()
 
 Generates a pre-signed URL to download a file stored in S3-compatible storage. The URL expiry time and download behavior can be specified using the query parameters.
 
@@ -100,7 +102,7 @@ const { status, data } = await apiInstance.downloadFile(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -118,11 +120,13 @@ const { status, data } = await apiInstance.downloadFile(
 |**200** | File URL generated successfully. |  -  |
 |**404** | File not found. |  -  |
 |**500** | Internal server error. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **listFiles**
-> SuccessResponse listFiles()
+> SuccessResponseListString listFiles()
 
 Lists all files stored in the system or, if a record UUID is provided, lists the files related to that record.
 
@@ -153,7 +157,7 @@ const { status, data } = await apiInstance.listFiles(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseListString**
 
 ### Authorization
 
@@ -170,11 +174,14 @@ const { status, data } = await apiInstance.listFiles(
 |-------------|-------------|------------------|
 |**200** | Files listed successfully. |  -  |
 |**500** | Internal server error. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **uploadFile2**
-> SuccessResponse uploadFile2()
+> SuccessResponseListString uploadFile2()
 
 Uploads multiple files to an S3-compatible storage and returns their unique keys. The request must contain one or more files in multipart/form-data format.
 
@@ -205,7 +212,7 @@ const { status, data } = await apiInstance.uploadFile2(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseListString**
 
 ### Authorization
 
@@ -222,7 +229,10 @@ const { status, data } = await apiInstance.uploadFile2(
 |-------------|-------------|------------------|
 |**200** | Files uploaded successfully. |  -  |
 |**400** | Invalid input, e.g., file size exceeds the limit. |  -  |
-|**500** | Internal server error. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

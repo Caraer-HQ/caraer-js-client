@@ -21,7 +21,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**uploadFiles**](#uploadfiles) | **POST** /api/v2/forms/public/{companyUuid}/{formUuid}/upload | Submit a file|
 
 # **chatField**
-> any chatField(formWithAiPromptDTO)
+> SuccessResponseString chatField(formWithAiPromptDTO)
 
 When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the tenant company and overrides the companyUuid path segment.
 
@@ -62,7 +62,7 @@ const { status, data } = await apiInstance.chatField(
 
 ### Return type
 
-**any**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -71,18 +71,22 @@ const { status, data } = await apiInstance.chatField(
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: */*
+ - **Accept**: */*, application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **chatStep**
-> any chatStep(formWithAiPromptDTO)
+> SuccessResponseListString chatStep(formWithAiPromptDTO)
 
 When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the tenant company and overrides the companyUuid path segment.
 
@@ -123,7 +127,7 @@ const { status, data } = await apiInstance.chatStep(
 
 ### Return type
 
-**any**
+**SuccessResponseListString**
 
 ### Authorization
 
@@ -132,13 +136,17 @@ const { status, data } = await apiInstance.chatStep(
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: */*
+ - **Accept**: */*, application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -194,6 +202,8 @@ const { status, data } = await apiInstance.createForm(
 |**400** | Invalid input |  -  |
 |**401** | Unauthorized access |  -  |
 |**403** | Forbidden |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -238,21 +248,22 @@ const { status, data } = await apiInstance.deleteForm(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Form successfully deleted |  -  |
-|**404** | Form not found |  -  |
-|**401** | Unauthorized access |  -  |
-|**403** | Forbidden |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getForm**
-> ShowResponse getForm()
+> ShowResponseFormDTO getForm()
 
 Retrieves a specific form by its UUID. Returns the details of the form in a FormDTO object wrapped in a ShowResponse.
 
@@ -283,7 +294,7 @@ const { status, data } = await apiInstance.getForm(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseFormDTO**
 
 ### Authorization
 
@@ -302,11 +313,12 @@ const { status, data } = await apiInstance.getForm(
 |**404** | Form not found |  -  |
 |**401** | Unauthorized access |  -  |
 |**403** | Forbidden |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getFormPublic**
-> ShowResponse getFormPublic()
+> ShowResponsePublicFormDTO getFormPublic()
 
 Retrieves a specific form by its UUID. When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the tenant company and overrides the companyUuid path segment.
 
@@ -340,7 +352,7 @@ const { status, data } = await apiInstance.getFormPublic(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponsePublicFormDTO**
 
 ### Authorization
 
@@ -349,21 +361,22 @@ const { status, data } = await apiInstance.getFormPublic(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Successfully retrieved the form |  -  |
-|**404** | Form not found |  -  |
-|**401** | Unauthorized access |  -  |
-|**403** | Forbidden |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getForms**
-> PaginationResponse getForms(body)
+> PaginationResponseFormDTO getForms(paginationRequest)
 
 Retrieves a paginated list of forms based on the provided filters, sorting, and search query. This endpoint returns a list of FormDTO objects wrapped in a PaginationResponse containing the current page, limit, total count, and the forms data.
 
@@ -372,16 +385,17 @@ Retrieves a paginated list of forms based on the provided filters, sorting, and 
 ```typescript
 import {
     FormsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new FormsApi(configuration);
 
-let body: any; //
+let paginationRequest: PaginationRequest; //
 
 const { status, data } = await apiInstance.getForms(
-    body
+    paginationRequest
 );
 ```
 
@@ -389,12 +403,12 @@ const { status, data } = await apiInstance.getForms(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**|  | |
+| **paginationRequest** | **PaginationRequest**|  | |
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseFormDTO**
 
 ### Authorization
 
@@ -413,11 +427,13 @@ const { status, data } = await apiInstance.getForms(
 |**400** | Invalid request |  -  |
 |**401** | Unauthorized access |  -  |
 |**403** | Forbidden |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getFormsByObject**
-> PaginationResponse getFormsByObject(body)
+> PaginationResponseFormDTO getFormsByObject(paginationRequest)
 
 Retrieves a paginated list of forms associated with a specific object UUID. The endpoint uses a custom Cypher query to match forms linked to the object.
 
@@ -426,18 +442,19 @@ Retrieves a paginated list of forms associated with a specific object UUID. The 
 ```typescript
 import {
     FormsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new FormsApi(configuration);
 
 let objectUuid: string; //UUID of the object to get forms for (default to undefined)
-let body: any; //
+let paginationRequest: PaginationRequest; //
 
 const { status, data } = await apiInstance.getFormsByObject(
     objectUuid,
-    body
+    paginationRequest
 );
 ```
 
@@ -445,13 +462,13 @@ const { status, data } = await apiInstance.getFormsByObject(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**|  | |
+| **paginationRequest** | **PaginationRequest**|  | |
 | **objectUuid** | [**string**] | UUID of the object to get forms for | defaults to undefined|
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseFormDTO**
 
 ### Authorization
 
@@ -470,11 +487,13 @@ const { status, data } = await apiInstance.getFormsByObject(
 |**400** | Invalid request |  -  |
 |**401** | Unauthorized access |  -  |
 |**403** | Forbidden |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getFormsPublic**
-> any getFormsPublic(body)
+> PaginationResponsePublicFormDTO getFormsPublic(paginationRequest)
 
 When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the tenant company and overrides the companyUuid path segment.
 
@@ -483,18 +502,19 @@ When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the ten
 ```typescript
 import {
     FormsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new FormsApi(configuration);
 
 let companyUuid: string; // (default to undefined)
-let body: any; //
+let paginationRequest: PaginationRequest; //
 
 const { status, data } = await apiInstance.getFormsPublic(
     companyUuid,
-    body
+    paginationRequest
 );
 ```
 
@@ -502,13 +522,13 @@ const { status, data } = await apiInstance.getFormsPublic(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**|  | |
+| **paginationRequest** | **PaginationRequest**|  | |
 | **companyUuid** | [**string**] |  | defaults to undefined|
 
 
 ### Return type
 
-**any**
+**PaginationResponsePublicFormDTO**
 
 ### Authorization
 
@@ -517,18 +537,22 @@ const { status, data } = await apiInstance.getFormsPublic(
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: */*
+ - **Accept**: */*, application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getObjectsWithForms**
-> ShowResponse getObjectsWithForms()
+> ShowResponseListFormObjectSummaryDTO getObjectsWithForms()
 
 Returns distinct custom objects that have at least one non-deleted form, ordered by object index.
 
@@ -552,7 +576,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseListFormObjectSummaryDTO**
 
 ### Authorization
 
@@ -570,11 +594,13 @@ This endpoint does not have any parameters.
 |**200** | Successfully retrieved objects with forms |  -  |
 |**401** | Unauthorized access |  -  |
 |**403** | Forbidden |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getOptions**
-> any getOptions(body)
+> PaginationResponsePropertyOption getOptions(paginationRequest)
 
 When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the tenant company and overrides the companyUuid path segment.
 
@@ -583,7 +609,8 @@ When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the ten
 ```typescript
 import {
     FormsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
@@ -591,12 +618,12 @@ const apiInstance = new FormsApi(configuration);
 
 let propertyUuid: string; // (default to undefined)
 let companyUuid: string; // (default to undefined)
-let body: any; //
+let paginationRequest: PaginationRequest; //
 
 const { status, data } = await apiInstance.getOptions(
     propertyUuid,
     companyUuid,
-    body
+    paginationRequest
 );
 ```
 
@@ -604,14 +631,14 @@ const { status, data } = await apiInstance.getOptions(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**|  | |
+| **paginationRequest** | **PaginationRequest**|  | |
 | **propertyUuid** | [**string**] |  | defaults to undefined|
 | **companyUuid** | [**string**] |  | defaults to undefined|
 
 
 ### Return type
 
-**any**
+**PaginationResponsePropertyOption**
 
 ### Authorization
 
@@ -620,13 +647,17 @@ const { status, data } = await apiInstance.getOptions(
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: */*
+ - **Accept**: */*, application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -671,21 +702,22 @@ const { status, data } = await apiInstance.restoreForm(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Form successfully restored |  -  |
-|**404** | Form not found |  -  |
-|**401** | Unauthorized access |  -  |
-|**403** | Forbidden |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **submit**
-> SuccessResponse submit(formDTO)
+> SuccessResponseString submit(formDTO)
 
 Submits a form with the provided data. Returns a SuccessResponse upon successful submission. When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the tenant company and overrides the companyUuid path segment.
 
@@ -723,7 +755,7 @@ const { status, data } = await apiInstance.submit(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseString**
 
 ### Authorization
 
@@ -740,7 +772,10 @@ const { status, data } = await apiInstance.submit(
 |-------------|-------------|------------------|
 |**200** | Form successfully submitted |  -  |
 |**400** | Invalid input |  -  |
-|**401** | Invalid X-CARAER-TOKEN |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -800,11 +835,12 @@ const { status, data } = await apiInstance.updateForm(
 |**404** | Form not found |  -  |
 |**401** | Unauthorized access |  -  |
 |**403** | Forbidden |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **uploadFiles**
-> SuccessResponse uploadFiles()
+> SuccessResponseListString uploadFiles()
 
 Submits a file with the provided data. Returns a SuccessResponse upon successful submission. When X-CARAER-TOKEN or X-Caraer-Company-Uuid is sent, that value selects the tenant company and overrides the companyUuid path segment.
 
@@ -841,7 +877,7 @@ const { status, data } = await apiInstance.uploadFiles(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseListString**
 
 ### Authorization
 
@@ -858,7 +894,10 @@ const { status, data } = await apiInstance.uploadFiles(
 |-------------|-------------|------------------|
 |**200** | File successfully submitted |  -  |
 |**400** | Invalid input |  -  |
-|**401** | Invalid X-CARAER-TOKEN |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -62,6 +62,9 @@ const { status, data } = await apiInstance.createWebMenu(
 |**200** | Web menu created successfully |  -  |
 |**400** | Bad request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -114,12 +117,15 @@ const { status, data } = await apiInstance.deleteWebMenu(
 |-------------|-------------|------------------|
 |**200** | Web menu deleted successfully |  -  |
 |**400** | Bad request |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getWebMenu**
-> ShowResponse getWebMenu()
+> ShowResponseWebMenuDTO getWebMenu()
 
 Show web menu
 
@@ -150,7 +156,7 @@ const { status, data } = await apiInstance.getWebMenu(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseWebMenuDTO**
 
 ### Authorization
 
@@ -168,11 +174,14 @@ const { status, data } = await apiInstance.getWebMenu(
 |**200** | Web menu shown successfully |  -  |
 |**400** | Bad request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **indexWebMenus**
-> PaginationResponse indexWebMenus(body)
+> PaginationResponseWebMenuDTO indexWebMenus(paginationRequest)
 
 Index web menus
 
@@ -181,16 +190,17 @@ Index web menus
 ```typescript
 import {
     WebMenusApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new WebMenusApi(configuration);
 
-let body: any; //
+let paginationRequest: PaginationRequest; //
 
 const { status, data } = await apiInstance.indexWebMenus(
-    body
+    paginationRequest
 );
 ```
 
@@ -198,12 +208,12 @@ const { status, data } = await apiInstance.indexWebMenus(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**|  | |
+| **paginationRequest** | **PaginationRequest**|  | |
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseWebMenuDTO**
 
 ### Authorization
 
@@ -221,6 +231,9 @@ const { status, data } = await apiInstance.indexWebMenus(
 |**200** | Web menus indexed successfully |  -  |
 |**400** | Bad request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -265,15 +278,17 @@ const { status, data } = await apiInstance.restoreWebMenu(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Web menu restored successfully |  -  |
-|**404** | Web menu not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -331,6 +346,9 @@ const { status, data } = await apiInstance.updateWebMenu(
 |**200** | Web menu updated successfully |  -  |
 |**400** | Bad request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

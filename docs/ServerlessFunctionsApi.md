@@ -66,6 +66,10 @@ const { status, data } = await apiInstance.create3(
 |-------------|-------------|------------------|
 |**200** | Successfully created serverless function |  -  |
 |**400** | Invalid request or app not installed for company |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -121,11 +125,14 @@ const { status, data } = await apiInstance.delete1(
 |-------------|-------------|------------------|
 |**200** | Successfully deleted serverless function |  -  |
 |**404** | Serverless function not found for this app |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **index2**
-> PaginationResponse index2(body)
+> PaginationResponseServerlessFunctionDTO index2(paginationRequest)
 
 Retrieves a paginated list of serverless functions that belong to the specified app.
 
@@ -134,18 +141,19 @@ Retrieves a paginated list of serverless functions that belong to the specified 
 ```typescript
 import {
     ServerlessFunctionsApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new ServerlessFunctionsApi(configuration);
 
 let appUuid: string; //UUID of the app whose serverless functions to list (default to undefined)
-let body: any; //Pagination and filtering options for the request
+let paginationRequest: PaginationRequest; //Pagination and filtering options for the request
 
 const { status, data } = await apiInstance.index2(
     appUuid,
-    body
+    paginationRequest
 );
 ```
 
@@ -153,13 +161,13 @@ const { status, data } = await apiInstance.index2(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**| Pagination and filtering options for the request | |
+| **paginationRequest** | **PaginationRequest**| Pagination and filtering options for the request | |
 | **appUuid** | [**string**] | UUID of the app whose serverless functions to list | defaults to undefined|
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseServerlessFunctionDTO**
 
 ### Authorization
 
@@ -177,11 +185,14 @@ const { status, data } = await apiInstance.index2(
 |**200** | Successfully retrieved serverless functions |  -  |
 |**400** | Invalid request or app not installed for company |  -  |
 |**401** | Unauthorized access |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **logs**
-> SuccessResponse logs()
+> SuccessResponseMapStringObject logs()
 
 Queries Cloud Logging for recent log entries emitted by the Cloud Function backing this serverless function.
 
@@ -221,7 +232,7 @@ const { status, data } = await apiInstance.logs(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseMapStringObject**
 
 ### Authorization
 
@@ -238,11 +249,14 @@ const { status, data } = await apiInstance.logs(
 |-------------|-------------|------------------|
 |**200** | Successfully retrieved logs (may be empty if logging is unavailable) |  -  |
 |**404** | Serverless function not found for this app |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **samplePayload**
-> SuccessResponse samplePayload(samplePayloadRequest)
+> SuccessResponseObject samplePayload(samplePayloadRequest)
 
 Builds the same payload shape used for serverless invocations and webhook delivery from a record and event type, without invoking anything.
 
@@ -277,7 +291,7 @@ const { status, data } = await apiInstance.samplePayload(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseObject**
 
 ### Authorization
 
@@ -295,11 +309,14 @@ const { status, data } = await apiInstance.samplePayload(
 |**200** | Sample payload generated |  -  |
 |**400** | Invalid input provided |  -  |
 |**404** | App or record not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **show1**
-> ShowResponse show1()
+> ShowResponseServerlessFunctionDTO show1()
 
 Retrieves a serverless function by its UUID, ensuring it belongs to the specified app.
 
@@ -333,7 +350,7 @@ const { status, data } = await apiInstance.show1(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseServerlessFunctionDTO**
 
 ### Authorization
 
@@ -350,11 +367,14 @@ const { status, data } = await apiInstance.show1(
 |-------------|-------------|------------------|
 |**200** | Successfully retrieved serverless function |  -  |
 |**404** | Serverless function not found for this app |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **testServerlessFunction**
-> SuccessResponse testServerlessFunction(testServerlessFunctionRequest)
+> SuccessResponseMapStringObject testServerlessFunction(testServerlessFunctionRequest)
 
 Provisions (if needed) and invokes a serverless function for a given record and event type, using the same payload shape as webhooks.
 
@@ -392,7 +412,7 @@ const { status, data } = await apiInstance.testServerlessFunction(
 
 ### Return type
 
-**SuccessResponse**
+**SuccessResponseMapStringObject**
 
 ### Authorization
 
@@ -410,11 +430,14 @@ const { status, data } = await apiInstance.testServerlessFunction(
 |**200** | Serverless function test executed |  -  |
 |**400** | Invalid input provided |  -  |
 |**404** | App, serverless function, or record not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update1**
-> ShowResponse update1(serverlessFunctionDTO)
+> ShowResponseServerlessFunctionDTO update1(serverlessFunctionDTO)
 
 Updates an existing serverless function\'s runtime and code, keeping it attached to the same app.
 
@@ -452,7 +475,7 @@ const { status, data } = await apiInstance.update1(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseServerlessFunctionDTO**
 
 ### Authorization
 
@@ -469,6 +492,9 @@ const { status, data } = await apiInstance.update1(
 |-------------|-------------|------------------|
 |**200** | Successfully updated serverless function |  -  |
 |**404** | Serverless function not found for this app |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

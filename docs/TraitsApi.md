@@ -31,7 +31,7 @@ const apiInstance = new TraitsApi(configuration);
 
 let objectUuid: string; // (default to undefined)
 let traitName: string; // (default to undefined)
-let body: string; //Trait details as a JSON map
+let body: object; //Trait details as a JSON map
 
 const { status, data } = await apiInstance.createTrait(
     objectUuid,
@@ -44,7 +44,7 @@ const { status, data } = await apiInstance.createTrait(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **string**| Trait details as a JSON map | |
+| **body** | **object**| Trait details as a JSON map | |
 | **objectUuid** | [**string**] |  | defaults to undefined|
 | **traitName** | [**string**] |  | defaults to undefined|
 
@@ -68,8 +68,10 @@ const { status, data } = await apiInstance.createTrait(
 |-------------|-------------|------------------|
 |**201** | Trait created successfully |  -  |
 |**400** | Invalid input data |  -  |
-|**404** | Trait type not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -117,20 +119,22 @@ const { status, data } = await apiInstance.deleteTrait(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Trait removed successfully |  -  |
-|**404** | Trait not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getTrait**
-> ShowResponse getTrait()
+> ShowResponseTraitDTO getTrait()
 
 Retrieves details of a specific trait associated with the specified object, identified by the trait name. Returns a ShowResponse containing the TraitDTO. If the trait is not found, a NotFoundError is thrown.
 
@@ -164,7 +168,7 @@ const { status, data } = await apiInstance.getTrait(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponseTraitDTO**
 
 ### Authorization
 
@@ -173,20 +177,22 @@ const { status, data } = await apiInstance.getTrait(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Trait retrieved successfully |  -  |
-|**404** | Trait not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getTraits**
-> PaginationResponse getTraits()
+> PaginationResponseTraitDTO getTraits()
 
 Retrieves a list of traits associated with the specified object. Returns a paginated response containing TraitDTO objects. The page is set to 0 by default, with a maximum limit of 100.
 
@@ -217,7 +223,7 @@ const { status, data } = await apiInstance.getTraits(
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponseTraitDTO**
 
 ### Authorization
 
@@ -226,15 +232,17 @@ const { status, data } = await apiInstance.getTraits(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Traits retrieved successfully |  -  |
-|**404** | Object or traits not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -294,7 +302,7 @@ void (empty response body)
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: text/html
+ - **Accept**: text/html, application/json
 
 
 ### HTTP response details
@@ -302,9 +310,10 @@ void (empty response body)
 |-------------|-------------|------------------|
 |**200** | HTML choice, login, success, or error page |  -  |
 |**400** | Invalid partstat or scope |  -  |
-|**401** | Login required for JSON clients |  -  |
-|**403** | Not the invited attendee |  -  |
-|**404** | Event, attendee, or invitation not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -366,13 +375,17 @@ void (empty response body)
 ### HTTP request headers
 
  - **Content-Type**: application/x-www-form-urlencoded
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -431,13 +444,17 @@ void (empty response body)
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -503,6 +520,7 @@ const { status, data } = await apiInstance.rsvpJson(
 |**401** | Login required |  -  |
 |**403** | Not the invited attendee |  -  |
 |**404** | Event, attendee, or invitation not found |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

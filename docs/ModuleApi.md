@@ -65,7 +65,10 @@ const { status, data } = await apiInstance.createModule(
 |-------------|-------------|------------------|
 |**201** | Module created successfully |  -  |
 |**400** | Invalid input data |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -119,7 +122,10 @@ const { status, data } = await apiInstance.createPersonalModule(
 |-------------|-------------|------------------|
 |**201** | Module created successfully |  -  |
 |**400** | Invalid input data |  -  |
-|**500** | Internal server error |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -164,15 +170,17 @@ const { status, data } = await apiInstance.deleteModule(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Module deleted successfully |  -  |
-|**404** | Module not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -217,21 +225,22 @@ const { status, data } = await apiInstance.deletePersonalModule(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Module deleted successfully |  -  |
-|**403** | Not authorized |  -  |
-|**404** | Module not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getModule**
-> ShowResponse getModule()
+> ShowResponsePageContentDTO getModule()
 
 Retrieves details of a module by its UUID.
 
@@ -262,7 +271,7 @@ const { status, data } = await apiInstance.getModule(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponsePageContentDTO**
 
 ### Authorization
 
@@ -271,20 +280,22 @@ const { status, data } = await apiInstance.getModule(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Module retrieved successfully |  -  |
-|**404** | Module not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getModules**
-> PaginationResponse getModules(body)
+> PaginationResponsePageContentDTO getModules(paginationRequest)
 
 Retrieves a paginated list of modules.
 
@@ -293,16 +304,17 @@ Retrieves a paginated list of modules.
 ```typescript
 import {
     ModuleApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new ModuleApi(configuration);
 
-let body: any; //Pagination details
+let paginationRequest: PaginationRequest; //Pagination details
 
 const { status, data } = await apiInstance.getModules(
-    body
+    paginationRequest
 );
 ```
 
@@ -310,12 +322,12 @@ const { status, data } = await apiInstance.getModules(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**| Pagination details | |
+| **paginationRequest** | **PaginationRequest**| Pagination details | |
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponsePageContentDTO**
 
 ### Authorization
 
@@ -333,11 +345,14 @@ const { status, data } = await apiInstance.getModules(
 |**200** | Modules fetched successfully |  -  |
 |**400** | Invalid pagination request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getPersonalModule**
-> ShowResponse getPersonalModule()
+> ShowResponsePageContentDTO getPersonalModule()
 
 Retrieves a personal module by UUID for the logged-in user.
 
@@ -368,7 +383,7 @@ const { status, data } = await apiInstance.getPersonalModule(
 
 ### Return type
 
-**ShowResponse**
+**ShowResponsePageContentDTO**
 
 ### Authorization
 
@@ -377,21 +392,22 @@ const { status, data } = await apiInstance.getPersonalModule(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Module retrieved successfully |  -  |
-|**403** | Not authorized |  -  |
-|**404** | Module not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getPersonalModules**
-> PaginationResponse getPersonalModules(body)
+> PaginationResponsePageContentDTO getPersonalModules(paginationRequest)
 
 Retrieves personal modules for the logged-in user.
 
@@ -400,16 +416,17 @@ Retrieves personal modules for the logged-in user.
 ```typescript
 import {
     ModuleApi,
-    Configuration
+    Configuration,
+    PaginationRequest
 } from '@caraer/client';
 
 const configuration = new Configuration();
 const apiInstance = new ModuleApi(configuration);
 
-let body: any; //
+let paginationRequest: PaginationRequest; //
 
 const { status, data } = await apiInstance.getPersonalModules(
-    body
+    paginationRequest
 );
 ```
 
@@ -417,12 +434,12 @@ const { status, data } = await apiInstance.getPersonalModules(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **body** | **any**|  | |
+| **paginationRequest** | **PaginationRequest**|  | |
 
 
 ### Return type
 
-**PaginationResponse**
+**PaginationResponsePageContentDTO**
 
 ### Authorization
 
@@ -440,6 +457,9 @@ const { status, data } = await apiInstance.getPersonalModules(
 |**200** | Modules fetched successfully |  -  |
 |**400** | Invalid pagination request |  -  |
 |**500** | Internal server error |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -496,8 +516,10 @@ const { status, data } = await apiInstance.updateModule(
 |-------------|-------------|------------------|
 |**200** | Module updated successfully |  -  |
 |**400** | Invalid input data |  -  |
-|**404** | Module not found |  -  |
-|**500** | Internal server error |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -546,16 +568,17 @@ const { status, data } = await apiInstance.updatePersonalModule(
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json, */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Module updated successfully |  -  |
-|**403** | Not authorized |  -  |
-|**404** | Module not found |  -  |
-|**500** | Internal server error |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

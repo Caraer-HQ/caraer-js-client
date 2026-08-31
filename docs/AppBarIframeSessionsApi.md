@@ -8,7 +8,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**validateIframeSession**](#validateiframesession) | **POST** /api/v2/app-bars/iframe-session/validate | Validate an iframe session token|
 
 # **createIframeSession**
-> createIframeSession()
+> ShowResponseAppBarIframeSessionTokenDTO createIframeSession()
 
 Issues a short-lived opaque token for an iframe-based app bar. The token can be validated by the embedded app to confirm user, company, view, and filter context.
 
@@ -43,7 +43,7 @@ const { status, data } = await apiInstance.createIframeSession(
 
 ### Return type
 
-void (empty response body)
+**ShowResponseAppBarIframeSessionTokenDTO**
 
 ### Authorization
 
@@ -61,11 +61,14 @@ void (empty response body)
 |**200** | Token created |  -  |
 |**400** | Invalid request |  -  |
 |**404** | App bar not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **validateIframeSession**
-> validateIframeSession(appBarIframeSessionValidateRequest)
+> ShowResponseAppBarIframeSessionContextDTO validateIframeSession(appBarIframeSessionValidateRequest)
 
 Public endpoint for embedded apps to validate a caraer_iframe_token and receive safe context.
 
@@ -97,7 +100,7 @@ const { status, data } = await apiInstance.validateIframeSession(
 
 ### Return type
 
-void (empty response body)
+**ShowResponseAppBarIframeSessionContextDTO**
 
 ### Authorization
 
@@ -114,6 +117,9 @@ void (empty response body)
 |-------------|-------------|------------------|
 |**200** | Token validated |  -  |
 |**401** | Invalid or expired token |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
