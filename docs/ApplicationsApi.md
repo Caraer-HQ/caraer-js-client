@@ -1360,7 +1360,7 @@ void (empty response body)
 # **testAppWebhookAuto**
 > testAppWebhookAuto()
 
-Generates a test webhook payload using the latest updated record that matches the webhook filter (if any) for the topic object. Form-submission topics prefer a record that submitted that form; includeRelations prefer a record that has as many of those related objects as possible. Uses the event type from the webhook topic (updated when the topic action is all).
+Generates a test webhook payload using the latest matching record for the topic object. Form-submission topics prefer a record that submitted that form; includeRelations prefer a record that has as many of those related objects as possible. If no record exists, a simulated record is used. Missing includeRelations and simulated samples are explained in context.testNote and the X-Webhook-Test-Note header. Uses the event type from the webhook topic (updated when the topic action is all).
 
 ### Example
 
@@ -1409,7 +1409,7 @@ void (empty response body)
 |-------------|-------------|------------------|
 |**200** | Webhook test payload generated successfully |  -  |
 |**400** | Webhook topic cannot be used for record testing |  -  |
-|**404** | Webhook not found or no records available for the topic object |  -  |
+|**404** | Webhook not found |  -  |
 |**500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -1417,7 +1417,7 @@ void (empty response body)
 # **testAppWebhookUnsaved**
 > testAppWebhookUnsaved(testWebhookRequest)
 
-Generates a test webhook payload from webhook configuration supplied in the request body without persisting the webhook. When recordUuid is omitted, auto-resolves the latest updated record that matches the webhook filter (if any), prefers records that submitted the topic form and that have as many includeRelations as possible, and uses the event from the webhook topic.
+Generates a test webhook payload from webhook configuration supplied in the request body without persisting the webhook. When recordUuid is omitted, auto-resolves the latest matching record, prefers records that submitted the topic form and that have as many includeRelations as possible, and uses the event from the webhook topic. If no record exists, a simulated record is used and context.testNote (also X-Webhook-Test-Note) explains that plus any missing includeRelations.
 
 ### Example
 
@@ -1467,7 +1467,7 @@ void (empty response body)
 |-------------|-------------|------------------|
 |**200** | Webhook test payload generated successfully |  -  |
 |**400** | Invalid webhook configuration or event parameters |  -  |
-|**404** | App not found or no records available for auto-resolve |  -  |
+|**404** | App not found |  -  |
 |**500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
