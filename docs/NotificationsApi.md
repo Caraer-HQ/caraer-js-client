@@ -58,9 +58,9 @@ const { status, data } = await apiInstance.dismissNotification(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Notification dismissed |  -  |
-|**404** | Notification not found |  -  |
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 |**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
