@@ -6,8 +6,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **yproperty** | **string** |  | [optional] [default to undefined]
-**xproperty** | **string** |  | [optional] [default to undefined]
 **ymetric** | **string** |  | [optional] [default to undefined]
+**xproperty** | **string** |  | [optional] [default to undefined]
 **title** | **string** |  | [optional] [default to undefined]
 **chartType** | **string** |  | [optional] [default to undefined]
 **xProperty** | **string** |  | [optional] [default to undefined]
@@ -21,8 +21,8 @@ import { ExistingWidgetSummary } from '@caraer/client';
 
 const instance: ExistingWidgetSummary = {
     yproperty,
-    xproperty,
     ymetric,
+    xproperty,
     title,
     chartType,
     xProperty,
