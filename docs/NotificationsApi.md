@@ -5,6 +5,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
 |[**dismissNotification**](#dismissnotification) | **DELETE** /api/v2/notifications/{notificationId} | Dismiss a notification|
+|[**listNotifications**](#listnotifications) | **GET** /api/v2/notifications | List in-app notifications for the logged-in user|
 |[**markAllAsRead**](#markallasread) | **PATCH** /api/v2/notifications/read-all | Mark all notifications as read for the current company|
 |[**markAsRead**](#markasread) | **PATCH** /api/v2/notifications/{notificationId}/read | Mark a notification as read|
 |[**sendNotification**](#sendnotification) | **POST** /api/v2/notifications | Send a notification (app token)|
@@ -59,6 +60,63 @@ const { status, data } = await apiInstance.dismissNotification(
 |**404** | Notification not found |  -  |
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **listNotifications**
+> ShowResponseNotificationInboxDTO listNotifications()
+
+
+### Example
+
+```typescript
+import {
+    NotificationsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new NotificationsApi(configuration);
+
+let company: string; // (optional) (default to undefined)
+let limit: number; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.listNotifications(
+    company,
+    limit
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **company** | [**string**] |  | (optional) defaults to undefined|
+| **limit** | [**number**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+**ShowResponseNotificationInboxDTO**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 |**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

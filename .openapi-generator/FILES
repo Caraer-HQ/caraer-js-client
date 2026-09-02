@@ -130,6 +130,7 @@ docs/GridItemDTO.md
 docs/GridItemSettingsDTO.md
 docs/HasAppDTO.md
 docs/InstallAppRequest.md
+docs/Item.md
 docs/Leadscore.md
 docs/LinkedProperty.md
 docs/LoadAppSettingOptionsRequest.md
@@ -144,6 +145,7 @@ docs/MultiValueMapStringString.md
 docs/NotFoundError.md
 docs/NotFoundErrorCause.md
 docs/NotFoundErrorCauseStackTraceInner.md
+docs/NotificationInboxDTO.md
 docs/NotificationsApi.md
 docs/Number.md
 docs/NumberRange.md
@@ -255,6 +257,7 @@ docs/ShowResponseMapStringAnalyticsDashboardConfig.md
 docs/ShowResponseMapStringBoolean.md
 docs/ShowResponseMapStringObject.md
 docs/ShowResponseMapStringString.md
+docs/ShowResponseNotificationInboxDTO.md
 docs/ShowResponseObject.md
 docs/ShowResponseObjectAccessGrantCandidatesDTO.md
 docs/ShowResponsePageContentDTO.md
