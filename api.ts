@@ -2215,8 +2215,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'ymetric'?: string;
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -5495,11 +5495,17 @@ export interface ShowResponseMapStringObject {
     'data'?: { [key: string]: any | null; };
 }
 /**
- * Success response (ShowResponseMapStringString).
+ * Represents the response for viewing or showing a specific resource.
  */
 export interface ShowResponseMapStringString {
+    /**
+     * A message detailing the result of the operation.
+     */
     'message'?: string;
-    'data'?: { [key: string]: any; };
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: { [key: string]: string; };
 }
 /**
  * Represents the response for viewing or showing a specific resource.
@@ -16398,6 +16404,40 @@ export const NotificationsApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @summary Mint a Firebase custom token so the app can listen to its inbox
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        firebaseToken: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/notifications/firebase-token`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary List in-app notifications for the logged-in user
          * @param {string} [company] 
          * @param {number} [limit] 
@@ -16575,6 +16615,18 @@ export const NotificationsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Mint a Firebase custom token so the app can listen to its inbox
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async firebaseToken(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.firebaseToken(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationsApi.firebaseToken']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary List in-app notifications for the logged-in user
          * @param {string} [company] 
          * @param {number} [limit] 
@@ -16646,6 +16698,15 @@ export const NotificationsApiFactory = function (configuration?: Configuration, 
         },
         /**
          * 
+         * @summary Mint a Firebase custom token so the app can listen to its inbox
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        firebaseToken(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringString> {
+            return localVarFp.firebaseToken(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary List in-app notifications for the logged-in user
          * @param {string} [company] 
          * @param {number} [limit] 
@@ -16700,6 +16761,16 @@ export class NotificationsApi extends BaseAPI {
      */
     public dismissNotification(notificationId: string, options?: RawAxiosRequestConfig) {
         return NotificationsApiFp(this.configuration).dismissNotification(notificationId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Mint a Firebase custom token so the app can listen to its inbox
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public firebaseToken(options?: RawAxiosRequestConfig) {
+        return NotificationsApiFp(this.configuration).firebaseToken(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

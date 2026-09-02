@@ -1,13 +1,13 @@
 # ShowResponseMapStringString
 
-Success response (ShowResponseMapStringString).
+Represents the response for viewing or showing a specific resource.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**message** | **string** |  | [optional] [default to undefined]
-**data** | **{ [key: string]: any; }** |  | [optional] [default to undefined]
+**message** | **string** | A message detailing the result of the operation. | [optional] [default to undefined]
+**data** | **{ [key: string]: string; }** | The data payload of the response, if any. | [optional] [default to undefined]
 
 ## Example
 

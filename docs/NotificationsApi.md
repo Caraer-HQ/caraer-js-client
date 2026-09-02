@@ -5,6 +5,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
 |[**dismissNotification**](#dismissnotification) | **DELETE** /api/v2/notifications/{notificationId} | Dismiss a notification|
+|[**firebaseToken**](#firebasetoken) | **GET** /api/v2/notifications/firebase-token | Mint a Firebase custom token so the app can listen to its inbox|
 |[**listNotifications**](#listnotifications) | **GET** /api/v2/notifications | List in-app notifications for the logged-in user|
 |[**markAllAsRead**](#markallasread) | **PATCH** /api/v2/notifications/read-all | Mark all notifications as read for the current company|
 |[**markAsRead**](#markasread) | **PATCH** /api/v2/notifications/{notificationId}/read | Mark a notification as read|
@@ -60,6 +61,53 @@ const { status, data } = await apiInstance.dismissNotification(
 |**404** | Notification not found |  -  |
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **firebaseToken**
+> ShowResponseMapStringString firebaseToken()
+
+
+### Example
+
+```typescript
+import {
+    NotificationsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new NotificationsApi(configuration);
+
+const { status, data } = await apiInstance.firebaseToken();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**ShowResponseMapStringString**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 |**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
