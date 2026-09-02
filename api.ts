@@ -938,6 +938,12 @@ export interface AppScheduleDTO {
     'payloadTemplate'?: string;
     'serverlessFunction'?: ServerlessFunctionRefDTO;
 }
+export interface AppSettingActionSource {
+    'type'?: string;
+    'serverlessFunctionUuid'?: string;
+    'serverlessFunctionName'?: string;
+    'enqueue'?: boolean;
+}
 export interface AppSettingCondition {
     'field'?: string;
     'operator'?: string;
@@ -964,6 +970,7 @@ export interface AppSettingFieldSchema {
     'helpText'?: string;
     'options'?: Array<SettingOption>;
     'optionsSource'?: AppSettingOptionsSource;
+    'actionSource'?: AppSettingActionSource;
     'defaultValue'?: any;
     'hidden'?: boolean;
     'visibleWhen'?: Array<AppSettingCondition>;
@@ -971,6 +978,7 @@ export interface AppSettingFieldSchema {
     'hasValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
+    'action'?: boolean;
 }
 export interface AppSettingOptionsSource {
     'type'?: string;
@@ -5161,8 +5169,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -8456,6 +8464,48 @@ export const AppInstallationRuntimeApiAxiosParamCreator = function (configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Trigger an ACTION setting without saving settings
+         * @param {string} appUuid 
+         * @param {string} fieldName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        triggerSettingAction: async (appUuid: string, fieldName: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('triggerSettingAction', 'appUuid', appUuid)
+            // verify required parameter 'fieldName' is not null or undefined
+            assertParamExists('triggerSettingAction', 'fieldName', fieldName)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/settings/{fieldName}/trigger`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{fieldName}', encodeURIComponent(String(fieldName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -8675,6 +8725,20 @@ export const AppInstallationRuntimeApiFp = function(configuration?: Configuratio
             const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.startOAuth']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @summary Trigger an ACTION setting without saving settings
+         * @param {string} appUuid 
+         * @param {string} fieldName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async triggerSettingAction(appUuid: string, fieldName: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.triggerSettingAction(appUuid, fieldName, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.triggerSettingAction']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -8848,6 +8912,17 @@ export const AppInstallationRuntimeApiFactory = function (configuration?: Config
          */
         startOAuth(appUuid: string, provider: string, redirectUri?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppOAuthStartResponseDTO> {
             return localVarFp.startOAuth(appUuid, provider, redirectUri, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Trigger an ACTION setting without saving settings
+         * @param {string} appUuid 
+         * @param {string} fieldName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        triggerSettingAction(appUuid: string, fieldName: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.triggerSettingAction(appUuid, fieldName, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -9034,6 +9109,18 @@ export class AppInstallationRuntimeApi extends BaseAPI {
      */
     public startOAuth(appUuid: string, provider: string, redirectUri?: string, options?: RawAxiosRequestConfig) {
         return AppInstallationRuntimeApiFp(this.configuration).startOAuth(appUuid, provider, redirectUri, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Trigger an ACTION setting without saving settings
+     * @param {string} appUuid 
+     * @param {string} fieldName 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public triggerSettingAction(appUuid: string, fieldName: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).triggerSettingAction(appUuid, fieldName, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

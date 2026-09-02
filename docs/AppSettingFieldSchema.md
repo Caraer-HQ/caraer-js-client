@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **helpText** | **string** |  | [optional] [default to undefined]
 **_options** | [**Array&lt;SettingOption&gt;**](SettingOption.md) |  | [optional] [default to undefined]
 **optionsSource** | [**AppSettingOptionsSource**](AppSettingOptionsSource.md) |  | [optional] [default to undefined]
+**actionSource** | [**AppSettingActionSource**](AppSettingActionSource.md) |  | [optional] [default to undefined]
 **defaultValue** | **any** |  | [optional] [default to undefined]
 **hidden** | **boolean** |  | [optional] [default to undefined]
 **visibleWhen** | [**Array&lt;AppSettingCondition&gt;**](AppSettingCondition.md) |  | [optional] [default to undefined]
@@ -19,6 +20,7 @@ Name | Type | Description | Notes
 **hasValue** | **boolean** |  | [optional] [default to undefined]
 **mappingValue** | [**AppSettingFieldMappingStructure**](AppSettingFieldMappingStructure.md) |  | [optional] [default to undefined]
 **valueScope** | **string** |  | [optional] [default to undefined]
+**action** | **boolean** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -33,6 +35,7 @@ const instance: AppSettingFieldSchema = {
     helpText,
     _options,
     optionsSource,
+    actionSource,
     defaultValue,
     hidden,
     visibleWhen,
@@ -40,6 +43,7 @@ const instance: AppSettingFieldSchema = {
     hasValue,
     mappingValue,
     valueScope,
+    action,
 };
 ```
 
