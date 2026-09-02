@@ -1130,6 +1130,10 @@ export interface BulkEditRecordItem {
      * Property values to set on the record.
      */
     'properties'?: { [key: string]: any | null; };
+    /**
+     * Relations to create or merge after the record is saved. Same shape as createOrUpdate.
+     */
+    'relations'?: Array<RecordRelationRequestDTO>;
 }
 /**
  * A successfully saved record from a bulk edit operation.
@@ -2203,8 +2207,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'yproperty'?: string;
-    'ymetric'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -5157,8 +5161,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
