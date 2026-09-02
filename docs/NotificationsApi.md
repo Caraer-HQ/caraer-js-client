@@ -7,7 +7,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**dismissNotification**](#dismissnotification) | **DELETE** /api/v2/notifications/{notificationId} | Dismiss a notification|
 |[**firebaseToken**](#firebasetoken) | **GET** /api/v2/notifications/firebase-token | Mint a Firebase custom token so the app can listen to its inbox|
 |[**listNotifications**](#listnotifications) | **GET** /api/v2/notifications | List in-app notifications for the logged-in user|
-|[**markAllAsRead**](#markallasread) | **PATCH** /api/v2/notifications/read-all | Mark all notifications as read for the current company|
+|[**markAllAsRead**](#markallasread) | **PATCH** /api/v2/notifications/read-all | Mark all notifications as read|
 |[**markAsRead**](#markasread) | **PATCH** /api/v2/notifications/{notificationId}/read | Mark a notification as read|
 |[**sendNotification**](#sendnotification) | **POST** /api/v2/notifications | Send a notification (app token)|
 

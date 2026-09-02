@@ -2215,8 +2215,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'ymetric'?: string;
-    'xproperty'?: string;
     'yproperty'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -16482,7 +16482,7 @@ export const NotificationsApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
-         * @summary Mark all notifications as read for the current company
+         * @summary Mark all notifications as read
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16641,7 +16641,7 @@ export const NotificationsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Mark all notifications as read for the current company
+         * @summary Mark all notifications as read
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16718,7 +16718,7 @@ export const NotificationsApiFactory = function (configuration?: Configuration, 
         },
         /**
          * 
-         * @summary Mark all notifications as read for the current company
+         * @summary Mark all notifications as read
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16787,7 +16787,7 @@ export class NotificationsApi extends BaseAPI {
 
     /**
      * 
-     * @summary Mark all notifications as read for the current company
+     * @summary Mark all notifications as read
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
