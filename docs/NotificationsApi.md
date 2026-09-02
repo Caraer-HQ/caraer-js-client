@@ -115,6 +115,7 @@ This endpoint does not have any parameters.
 # **listNotifications**
 > ShowResponseNotificationInboxDTO listNotifications()
 
+Returns notifications for the selected company plus user-general notifications that have no company. Other companies are never included.
 
 ### Example
 
@@ -273,7 +274,7 @@ const { status, data } = await apiInstance.markAsRead(
 # **sendNotification**
 > CreateResponseMapStringString sendNotification(sendNotificationRequest)
 
-Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). The target user must belong to the app\'s company.
+Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). Every notification is scoped to the app\'s company. Omit targetUserUuid to notify every user in that company, or set it to aim the notification at one member.
 
 ### Example
 

@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **data** | **{ [key: string]: any | null; }** |  | [optional] [default to undefined]
 **sender** | **string** |  | [optional] [default to undefined]
 **company** | **string** |  | [optional] [default to undefined]
+**targetUserUuid** | **string** |  | [optional] [default to undefined]
 **createdAt** | **string** |  | [optional] [default to undefined]
 **updatedAt** | **string** |  | [optional] [default to undefined]
 **readAt** | **string** |  | [optional] [default to undefined]
@@ -37,6 +38,7 @@ const instance: Item = {
     data,
     sender,
     company,
+    targetUserUuid,
     createdAt,
     updatedAt,
     readAt,

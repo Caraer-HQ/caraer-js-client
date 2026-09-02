@@ -2214,8 +2214,8 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
     'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
@@ -2811,6 +2811,7 @@ export interface Item {
     'data'?: { [key: string]: any | null; };
     'sender'?: string;
     'company'?: string;
+    'targetUserUuid'?: string;
     'createdAt'?: string;
     'updatedAt'?: string;
     'readAt'?: string;
@@ -5075,13 +5076,13 @@ export interface SearchRequest {
     'preview'?: string;
 }
 /**
- * Request body for sending an in-app notification to a user
+ * Request body for sending an in-app notification in a company
  */
 export interface SendNotificationRequest {
     /**
-     * UUID of the user who should receive the notification
+     * Optional. Aim this notification at one user in the company. Omit to notify every user who has access to the company.
      */
-    'targetUserUuid': string;
+    'targetUserUuid'?: string;
     /**
      * Notification title
      */
@@ -16437,7 +16438,7 @@ export const NotificationsApiAxiosParamCreator = function (configuration?: Confi
             };
         },
         /**
-         * 
+         * Returns notifications for the selected company plus user-general notifications that have no company. Other companies are never included.
          * @summary List in-app notifications for the logged-in user
          * @param {string} [company] 
          * @param {number} [limit] 
@@ -16553,7 +16554,7 @@ export const NotificationsApiAxiosParamCreator = function (configuration?: Confi
             };
         },
         /**
-         * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). The target user must belong to the app\'s company.
+         * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). Every notification is scoped to the app\'s company. Omit targetUserUuid to notify every user in that company, or set it to aim the notification at one member.
          * @summary Send a notification (app token)
          * @param {SendNotificationRequest} sendNotificationRequest 
          * @param {*} [options] Override http request option.
@@ -16626,7 +16627,7 @@ export const NotificationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Returns notifications for the selected company plus user-general notifications that have no company. Other companies are never included.
          * @summary List in-app notifications for the logged-in user
          * @param {string} [company] 
          * @param {number} [limit] 
@@ -16665,7 +16666,7 @@ export const NotificationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). The target user must belong to the app\'s company.
+         * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). Every notification is scoped to the app\'s company. Omit targetUserUuid to notify every user in that company, or set it to aim the notification at one member.
          * @summary Send a notification (app token)
          * @param {SendNotificationRequest} sendNotificationRequest 
          * @param {*} [options] Override http request option.
@@ -16706,7 +16707,7 @@ export const NotificationsApiFactory = function (configuration?: Configuration, 
             return localVarFp.firebaseToken(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Returns notifications for the selected company plus user-general notifications that have no company. Other companies are never included.
          * @summary List in-app notifications for the logged-in user
          * @param {string} [company] 
          * @param {number} [limit] 
@@ -16736,7 +16737,7 @@ export const NotificationsApiFactory = function (configuration?: Configuration, 
             return localVarFp.markAsRead(notificationId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). The target user must belong to the app\'s company.
+         * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). Every notification is scoped to the app\'s company. Omit targetUserUuid to notify every user in that company, or set it to aim the notification at one member.
          * @summary Send a notification (app token)
          * @param {SendNotificationRequest} sendNotificationRequest 
          * @param {*} [options] Override http request option.
@@ -16774,7 +16775,7 @@ export class NotificationsApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Returns notifications for the selected company plus user-general notifications that have no company. Other companies are never included.
      * @summary List in-app notifications for the logged-in user
      * @param {string} [company] 
      * @param {number} [limit] 
@@ -16807,7 +16808,7 @@ export class NotificationsApi extends BaseAPI {
     }
 
     /**
-     * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). The target user must belong to the app\'s company.
+     * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). Every notification is scoped to the app\'s company. Omit targetUserUuid to notify every user in that company, or set it to aim the notification at one member.
      * @summary Send a notification (app token)
      * @param {SendNotificationRequest} sendNotificationRequest 
      * @param {*} [options] Override http request option.

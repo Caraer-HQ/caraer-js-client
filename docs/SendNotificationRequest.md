@@ -1,12 +1,12 @@
 # SendNotificationRequest
 
-Request body for sending an in-app notification to a user
+Request body for sending an in-app notification in a company
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**targetUserUuid** | **string** | UUID of the user who should receive the notification | [default to undefined]
+**targetUserUuid** | **string** | Optional. Aim this notification at one user in the company. Omit to notify every user who has access to the company. | [optional] [default to undefined]
 **title** | **string** | Notification title | [default to undefined]
 **body** | **string** | Notification body (supports Markdown for links) | [default to undefined]
 **type** | **string** | Notification type identifier | [optional] [default to undefined]
