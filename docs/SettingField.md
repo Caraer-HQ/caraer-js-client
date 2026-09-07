@@ -14,8 +14,8 @@ Name | Type | Description | Notes
 **hidden** | **boolean** |  | [optional] [default to undefined]
 **disabled** | **boolean** |  | [optional] [default to undefined]
 **_options** | [**Array&lt;SettingOption&gt;**](SettingOption.md) |  | [optional] [default to undefined]
-**value** | **any** |  | [optional] [default to undefined]
 **defaultValue** | **any** |  | [optional] [default to undefined]
+**value** | **any** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -32,8 +32,8 @@ const instance: SettingField = {
     hidden,
     disabled,
     _options,
-    value,
     defaultValue,
+    value,
 };
 ```
 
