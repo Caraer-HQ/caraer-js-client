@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **actionSource** | [**AppSettingActionSource**](AppSettingActionSource.md) |  | [optional] [default to undefined]
 **defaultValue** | **any** |  | [optional] [default to undefined]
 **hidden** | **boolean** |  | [optional] [default to undefined]
+**filterTraits** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **visibleWhen** | [**Array&lt;AppSettingCondition&gt;**](AppSettingCondition.md) |  | [optional] [default to undefined]
 **value** | **any** |  | [optional] [default to undefined]
 **hasValue** | **boolean** |  | [optional] [default to undefined]
@@ -38,6 +39,7 @@ const instance: AppSettingFieldSchema = {
     actionSource,
     defaultValue,
     hidden,
+    filterTraits,
     visibleWhen,
     value,
     hasValue,
