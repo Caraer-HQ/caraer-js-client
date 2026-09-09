@@ -2215,9 +2215,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
     'xproperty'?: string;
     'yproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -17313,7 +17313,7 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, extended object, or label are re-extended.
+         * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Leftover nodes with a unique object label and no primary_object are stamped first. Records that reference the object as primary object, extended object, or label are re-extended.
          * @summary Sync extended objects for existing records
          * @param {string} uuid 
          * @param {*} [options] Override http request option.
@@ -17671,7 +17671,7 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, extended object, or label are re-extended.
+         * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Leftover nodes with a unique object label and no primary_object are stamped first. Records that reference the object as primary object, extended object, or label are re-extended.
          * @summary Sync extended objects for existing records
          * @param {string} uuid 
          * @param {*} [options] Override http request option.
@@ -17863,7 +17863,7 @@ export const ObjectsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.savePreview(uuid, name, previewDTO, options).then((request) => request(axios, basePath));
         },
         /**
-         * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, extended object, or label are re-extended.
+         * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Leftover nodes with a unique object label and no primary_object are stamped first. Records that reference the object as primary object, extended object, or label are re-extended.
          * @summary Sync extended objects for existing records
          * @param {string} uuid 
          * @param {*} [options] Override http request option.
@@ -18052,7 +18052,7 @@ export class ObjectsApi extends BaseAPI {
     }
 
     /**
-     * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, extended object, or label are re-extended.
+     * Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Leftover nodes with a unique object label and no primary_object are stamped first. Records that reference the object as primary object, extended object, or label are re-extended.
      * @summary Sync extended objects for existing records
      * @param {string} uuid 
      * @param {*} [options] Override http request option.

@@ -672,7 +672,7 @@ const { status, data } = await apiInstance.savePreview(
 # **syncExtendedObjects**
 > SuccessResponseMapStringInteger syncExtendedObjects()
 
-Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Records that reference the object as primary object, extended object, or label are re-extended.
+Synchronizes existing records for an object after extended configuration changes. The object path variable accepts UUID or object name. Leftover nodes with a unique object label and no primary_object are stamped first. Records that reference the object as primary object, extended object, or label are re-extended.
 
 ### Example
 
