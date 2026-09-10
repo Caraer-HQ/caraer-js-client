@@ -19,8 +19,8 @@ Name | Type | Description | Notes
 **filtersString** | **string** |  | [optional] [default to undefined]
 **filters** | [**{ [key: string]: Filter; }**](Filter.md) |  | [optional] [default to undefined]
 **memberCount** | **number** |  | [optional] [default to undefined]
-**complete** | **boolean** |  | [optional] [default to undefined]
 **deleted** | **boolean** |  | [optional] [default to undefined]
+**complete** | **boolean** |  | [optional] [default to undefined]
 **uuid** | **string** |  | [default to undefined]
 
 ## Example
@@ -43,8 +43,8 @@ const instance: Team = {
     filtersString,
     filters,
     memberCount,
-    complete,
     deleted,
+    complete,
     uuid,
 };
 ```

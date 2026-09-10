@@ -1301,10 +1301,6 @@ export interface CaraerObjectDTO {
      */
     'icon'?: string;
     /**
-     * Indicates if this object should be displayed in navigation menus
-     */
-    'showInMenu'?: boolean;
-    /**
      * Name of the default trait applied to this object
      */
     'defaultTrait'?: string;
@@ -2215,9 +2211,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3021,8 +3017,8 @@ export interface ModelRecord {
     'updatedByUuid'?: string;
     'deletedByUuid'?: string;
     'index'?: number;
-    'complete'?: boolean;
     'deleted'?: boolean;
+    'complete'?: boolean;
     'uuid': string;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
@@ -6491,8 +6487,8 @@ export interface Team {
     'filtersString'?: string;
     'filters'?: { [key: string]: Filter; };
     'memberCount'?: number;
-    'complete'?: boolean;
     'deleted'?: boolean;
+    'complete'?: boolean;
     'uuid': string;
 }
 export interface TeamDTO {
@@ -16828,7 +16824,7 @@ export class NotificationsApi extends BaseAPI {
 export const ObjectsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Creates a new Caraer object using the provided details. Optional request parameters specify whether to include views, properties, and relations in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores)), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed), showInMenu (required, must be a boolean).
+         * Creates a new Caraer object using the provided details. Optional request parameters specify whether to include views, properties, and relations in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores)), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed).
          * @summary Create new object
          * @param {CaraerObjectDTO} caraerObjectDTO Details of the object to create
          * @param {string} [views] 
@@ -17448,7 +17444,7 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Updates an existing object identified by its UUID with new details. Optional parameters determine if views, properties, and relations should be included in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores), cannot be changed after creation), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed), showInMenu (required, must be a boolean).
+         * Updates an existing object identified by its UUID with new details. Optional parameters determine if views, properties, and relations should be included in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores), cannot be changed after creation), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed).
          * @summary Update object by UUID
          * @param {string} uuid 
          * @param {CaraerObjectDTO} caraerObjectDTO Updated details of the object
@@ -17515,7 +17511,7 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ObjectsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Creates a new Caraer object using the provided details. Optional request parameters specify whether to include views, properties, and relations in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores)), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed), showInMenu (required, must be a boolean).
+         * Creates a new Caraer object using the provided details. Optional request parameters specify whether to include views, properties, and relations in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores)), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed).
          * @summary Create new object
          * @param {CaraerObjectDTO} caraerObjectDTO Details of the object to create
          * @param {string} [views] 
@@ -17714,7 +17710,7 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Updates an existing object identified by its UUID with new details. Optional parameters determine if views, properties, and relations should be included in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores), cannot be changed after creation), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed), showInMenu (required, must be a boolean).
+         * Updates an existing object identified by its UUID with new details. Optional parameters determine if views, properties, and relations should be included in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores), cannot be changed after creation), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed).
          * @summary Update object by UUID
          * @param {string} uuid 
          * @param {CaraerObjectDTO} caraerObjectDTO Updated details of the object
@@ -17740,7 +17736,7 @@ export const ObjectsApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = ObjectsApiFp(configuration)
     return {
         /**
-         * Creates a new Caraer object using the provided details. Optional request parameters specify whether to include views, properties, and relations in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores)), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed), showInMenu (required, must be a boolean).
+         * Creates a new Caraer object using the provided details. Optional request parameters specify whether to include views, properties, and relations in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores)), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed).
          * @summary Create new object
          * @param {CaraerObjectDTO} caraerObjectDTO Details of the object to create
          * @param {string} [views] 
@@ -17897,7 +17893,7 @@ export const ObjectsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.updateLifecycleProperties(objectUuid, updateLifecyclePropertiesDTO, options).then((request) => request(axios, basePath));
         },
         /**
-         * Updates an existing object identified by its UUID with new details. Optional parameters determine if views, properties, and relations should be included in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores), cannot be changed after creation), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed), showInMenu (required, must be a boolean).
+         * Updates an existing object identified by its UUID with new details. Optional parameters determine if views, properties, and relations should be included in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores), cannot be changed after creation), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed).
          * @summary Update object by UUID
          * @param {string} uuid 
          * @param {CaraerObjectDTO} caraerObjectDTO Updated details of the object
@@ -17918,7 +17914,7 @@ export const ObjectsApiFactory = function (configuration?: Configuration, basePa
  */
 export class ObjectsApi extends BaseAPI {
     /**
-     * Creates a new Caraer object using the provided details. Optional request parameters specify whether to include views, properties, and relations in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores)), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed), showInMenu (required, must be a boolean).
+     * Creates a new Caraer object using the provided details. Optional request parameters specify whether to include views, properties, and relations in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores)), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed).
      * @summary Create new object
      * @param {CaraerObjectDTO} caraerObjectDTO Details of the object to create
      * @param {string} [views] 
@@ -18089,7 +18085,7 @@ export class ObjectsApi extends BaseAPI {
     }
 
     /**
-     * Updates an existing object identified by its UUID with new details. Optional parameters determine if views, properties, and relations should be included in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores), cannot be changed after creation), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed), showInMenu (required, must be a boolean).
+     * Updates an existing object identified by its UUID with new details. Optional parameters determine if views, properties, and relations should be included in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores), cannot be changed after creation), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed).
      * @summary Update object by UUID
      * @param {string} uuid 
      * @param {CaraerObjectDTO} caraerObjectDTO Updated details of the object

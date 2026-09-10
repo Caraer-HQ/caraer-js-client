@@ -20,7 +20,6 @@ Name | Type | Description | Notes
 **description** | **string** | Detailed description of the object\&#39;s purpose and usage | [optional] [default to undefined]
 **groups** | **Array&lt;string&gt;** | Collection of group names this object belongs to | [optional] [default to undefined]
 **icon** | **string** | Icon identifier for visual representation of the object | [optional] [default to undefined]
-**showInMenu** | **boolean** | Indicates if this object should be displayed in navigation menus | [optional] [default to undefined]
 **defaultTrait** | **string** | Name of the default trait applied to this object | [optional] [default to undefined]
 **traits** | **Array&lt;string&gt;** | List of trait names associated with this object | [optional] [default to undefined]
 **views** | [**Array&lt;ViewDTO&gt;**](ViewDTO.md) | List of view configurations for displaying this object | [optional] [default to undefined]
@@ -50,7 +49,6 @@ const instance: CaraerObjectDTO = {
     description,
     groups,
     icon,
-    showInMenu,
     defaultTrait,
     traits,
     views,

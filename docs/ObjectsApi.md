@@ -23,7 +23,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 # **createObject**
 > CreateResponse createObject(caraerObjectDTO)
 
-Creates a new Caraer object using the provided details. Optional request parameters specify whether to include views, properties, and relations in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores)), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed), showInMenu (required, must be a boolean).
+Creates a new Caraer object using the provided details. Optional request parameters specify whether to include views, properties, and relations in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores)), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed).
 
 ### Example
 
@@ -851,7 +851,7 @@ const { status, data } = await apiInstance.updateLifecycleProperties(
 # **updateObject**
 > UpdateResponse updateObject(caraerObjectDTO)
 
-Updates an existing object identified by its UUID with new details. Optional parameters determine if views, properties, and relations should be included in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores), cannot be changed after creation), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed), showInMenu (required, must be a boolean).
+Updates an existing object identified by its UUID with new details. Optional parameters determine if views, properties, and relations should be included in the response. Validation rules: label (required, must be a string, maximum 32 characters), plural (required, must be a string, maximum 32 characters), name (required, must be a string, must be lowercase, must be unique, must match name pattern (lowercase letters, numbers, underscores), cannot be changed after creation), description (optional, maximum 255 characters), groups (required, must be an array of string, no duplicate values allowed).
 
 ### Example
 
