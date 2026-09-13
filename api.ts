@@ -2265,8 +2265,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'ymetric'?: string;
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3070,8 +3070,8 @@ export interface ModelRecord {
     'updatedByUuid'?: string;
     'deletedByUuid'?: string;
     'index'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
@@ -6579,8 +6579,8 @@ export interface Team {
     'filtersString'?: string;
     'filters'?: { [key: string]: Filter; };
     'memberCount'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
 }
 export interface TeamDTO {
