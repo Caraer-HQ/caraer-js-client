@@ -1209,6 +1209,46 @@ export const CRUDSessionTypeEnum = {
 
 export type CRUDSessionTypeEnum = typeof CRUDSessionTypeEnum[keyof typeof CRUDSessionTypeEnum];
 
+export interface CalendarBootstrapDTO {
+    'defaultCalendar'?: CalendarRecordDTO;
+    'calendars'?: Array<CalendarRecordDTO>;
+    'backfilled'?: number;
+    'teamCalendarsCreated'?: number;
+    'companyCalendarCreated'?: boolean;
+}
+export interface CalendarCreateRequest {
+    'title'?: string;
+    'color'?: string;
+    'teamUuid'?: string;
+    'company'?: boolean;
+}
+export interface CalendarRecordDTO {
+    'default'?: boolean;
+    'uuid'?: string;
+    'title'?: string;
+    'color'?: string;
+    'colorHex'?: string;
+    'isDefault'?: boolean;
+    'ownerUuid'?: string;
+    'ownerName'?: string;
+    'ownedByCurrentUser'?: boolean;
+    'teamUuid'?: string;
+    'teamName'?: string;
+    'companyCalendar'?: boolean;
+    'companyName'?: string;
+    'members'?: Array<CalendarTeamMemberDTO>;
+}
+export interface CalendarTeamMemberDTO {
+    'uuid'?: string;
+    'label'?: string;
+    'objectName'?: string;
+    'hasUserTrait'?: boolean;
+}
+export interface CalendarTeamOptionDTO {
+    'uuid'?: string;
+    'name'?: string;
+    'members'?: Array<CalendarTeamMemberDTO>;
+}
 export interface CaraerErrorType {
     /**
      * The error message providing details about the failure.
@@ -1696,6 +1736,19 @@ export interface CreateResponseAppScheduleDTO {
      * The data payload of the response, if any.
      */
     'data'?: AppScheduleDTO;
+}
+/**
+ * Response for a successful resource creation operation.
+ */
+export interface CreateResponseCalendarRecordDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: CalendarRecordDTO;
 }
 /**
  * Response for a successful resource creation operation.
@@ -3020,9 +3073,9 @@ export interface ModelRecord {
     'deleted'?: boolean;
     'complete'?: boolean;
     'uuid': string;
+    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
-    'user'?: PublicUserDTO;
 }
 export interface MultiLine extends PropertyFormat {
 }
@@ -5188,8 +5241,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -6200,6 +6253,19 @@ export interface SuccessResponseAggregateResponse {
     'data'?: { [key: string]: any; };
 }
 /**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseCalendarBootstrapDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: CalendarBootstrapDTO;
+}
+/**
  * Success response (SuccessResponseCollectionRelation).
  */
 export interface SuccessResponseCollectionRelation {
@@ -6284,6 +6350,32 @@ export interface SuccessResponseListAppScheduleDTO {
      * The data payload of the response, if any.
      */
     'data'?: Array<AppScheduleDTO>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseListCalendarRecordDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<CalendarRecordDTO>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseListCalendarTeamOptionDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<CalendarTeamOptionDTO>;
 }
 /**
  * Success response (SuccessResponseListCaraerObjectDTO).
@@ -6927,6 +7019,10 @@ export interface ViewDTO {
     'taskExpandSubtasks'?: boolean;
     'taskCollapsedGroupKeys'?: Array<string>;
     'taskExpandedTaskUuids'?: Array<string>;
+    'calendarOverlay'?: string;
+    'visibleCalendarUuids'?: Array<string>;
+    'selectedCalendarUuid'?: string;
+    'calendarColorBy'?: string;
     'defaultView'?: boolean;
     'isInternallyPublic'?: boolean;
     'analytics'?: AnalyticsDashboardConfig;
@@ -11713,6 +11809,307 @@ export class BillingApi extends BaseAPI {
      */
     public sendSetupEmail(options?: RawAxiosRequestConfig) {
         return BillingApiFp(this.configuration).sendSetupEmail(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * CalendarsApi - axios parameter creator
+ */
+export const CalendarsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Ensure calendar schema, default calendar, and event backfill
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bootstrap: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/calendars/bootstrap`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Create a calendar owned by the current user
+         * @param {CalendarCreateRequest} calendarCreateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create3: async (calendarCreateRequest: CalendarCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'calendarCreateRequest' is not null or undefined
+            assertParamExists('create3', 'calendarCreateRequest', calendarCreateRequest)
+            const localVarPath = `/api/v2/calendars`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(calendarCreateRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List calendars visible to the current company
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list1: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/calendars`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List teams that can be linked to a calendar
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listTeams: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/calendars/teams`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CalendarsApi - functional programming interface
+ */
+export const CalendarsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CalendarsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Ensure calendar schema, default calendar, and event backfill
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async bootstrap(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseCalendarBootstrapDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.bootstrap(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CalendarsApi.bootstrap']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Create a calendar owned by the current user
+         * @param {CalendarCreateRequest} calendarCreateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async create3(calendarCreateRequest: CalendarCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponseCalendarRecordDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create3(calendarCreateRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CalendarsApi.create3']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary List calendars visible to the current company
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async list1(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListCalendarRecordDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list1(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CalendarsApi.list1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary List teams that can be linked to a calendar
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listTeams(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListCalendarTeamOptionDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listTeams(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CalendarsApi.listTeams']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * CalendarsApi - factory interface
+ */
+export const CalendarsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CalendarsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Ensure calendar schema, default calendar, and event backfill
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bootstrap(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseCalendarBootstrapDTO> {
+            return localVarFp.bootstrap(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Create a calendar owned by the current user
+         * @param {CalendarCreateRequest} calendarCreateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create3(calendarCreateRequest: CalendarCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponseCalendarRecordDTO> {
+            return localVarFp.create3(calendarCreateRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List calendars visible to the current company
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list1(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListCalendarRecordDTO> {
+            return localVarFp.list1(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List teams that can be linked to a calendar
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listTeams(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListCalendarTeamOptionDTO> {
+            return localVarFp.listTeams(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CalendarsApi - object-oriented interface
+ */
+export class CalendarsApi extends BaseAPI {
+    /**
+     * 
+     * @summary Ensure calendar schema, default calendar, and event backfill
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public bootstrap(options?: RawAxiosRequestConfig) {
+        return CalendarsApiFp(this.configuration).bootstrap(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Create a calendar owned by the current user
+     * @param {CalendarCreateRequest} calendarCreateRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public create3(calendarCreateRequest: CalendarCreateRequest, options?: RawAxiosRequestConfig) {
+        return CalendarsApiFp(this.configuration).create3(calendarCreateRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List calendars visible to the current company
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public list1(options?: RawAxiosRequestConfig) {
+        return CalendarsApiFp(this.configuration).list1(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List teams that can be linked to a calendar
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listTeams(options?: RawAxiosRequestConfig) {
+        return CalendarsApiFp(this.configuration).listTeams(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -22665,11 +23062,11 @@ export const ServerlessFunctionsApiAxiosParamCreator = function (configuration?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create3: async (appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        create4: async (appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'appUuid' is not null or undefined
-            assertParamExists('create3', 'appUuid', appUuid)
+            assertParamExists('create4', 'appUuid', appUuid)
             // verify required parameter 'serverlessFunctionDTO' is not null or undefined
-            assertParamExists('create3', 'serverlessFunctionDTO', serverlessFunctionDTO)
+            assertParamExists('create4', 'serverlessFunctionDTO', serverlessFunctionDTO)
             const localVarPath = `/api/v2/apps/{appUuid}/serverless-functions`
                 .replace('{appUuid}', encodeURIComponent(String(appUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -23033,10 +23430,10 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async create3(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.create3(appUuid, serverlessFunctionDTO, options);
+        async create4(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create4(appUuid, serverlessFunctionDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.create3']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.create4']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -23158,8 +23555,8 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create3(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
-            return localVarFp.create3(appUuid, serverlessFunctionDTO, options).then((request) => request(axios, basePath));
+        create4(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
+            return localVarFp.create4(appUuid, serverlessFunctionDTO, options).then((request) => request(axios, basePath));
         },
         /**
          * Tears down the GCP Cloud Function (if provisioned) and deletes the serverless function entity.
@@ -23257,8 +23654,8 @@ export class ServerlessFunctionsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public create3(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig) {
-        return ServerlessFunctionsApiFp(this.configuration).create3(appUuid, serverlessFunctionDTO, options).then((request) => request(this.axios, this.basePath));
+    public create4(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig) {
+        return ServerlessFunctionsApiFp(this.configuration).create4(appUuid, serverlessFunctionDTO, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

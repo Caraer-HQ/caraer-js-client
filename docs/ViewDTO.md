@@ -35,6 +35,10 @@ Name | Type | Description | Notes
 **taskExpandSubtasks** | **boolean** |  | [optional] [default to undefined]
 **taskCollapsedGroupKeys** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **taskExpandedTaskUuids** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**calendarOverlay** | **string** |  | [optional] [default to undefined]
+**visibleCalendarUuids** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**selectedCalendarUuid** | **string** |  | [optional] [default to undefined]
+**calendarColorBy** | **string** |  | [optional] [default to undefined]
 **defaultView** | **boolean** |  | [optional] [default to undefined]
 **isInternallyPublic** | **boolean** |  | [optional] [default to undefined]
 **analytics** | [**AnalyticsDashboardConfig**](AnalyticsDashboardConfig.md) |  | [optional] [default to undefined]
@@ -75,6 +79,10 @@ const instance: ViewDTO = {
     taskExpandSubtasks,
     taskCollapsedGroupKeys,
     taskExpandedTaskUuids,
+    calendarOverlay,
+    visibleCalendarUuids,
+    selectedCalendarUuid,
+    calendarColorBy,
     defaultView,
     isInternallyPublic,
     analytics,

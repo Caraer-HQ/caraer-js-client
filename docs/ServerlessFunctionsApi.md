@@ -4,7 +4,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**create3**](#create3) | **POST** /api/v2/apps/{appUuid}/serverless-functions | Create a serverless function|
+|[**create4**](#create4) | **POST** /api/v2/apps/{appUuid}/serverless-functions | Create a serverless function|
 |[**delete1**](#delete1) | **DELETE** /api/v2/apps/{appUuid}/serverless-functions/{uuid} | Delete a serverless function|
 |[**index2**](#index2) | **POST** /api/v2/apps/{appUuid}/serverless-functions/index | List serverless functions for an app|
 |[**logs**](#logs) | **GET** /api/v2/apps/{appUuid}/serverless-functions/{uuid}/logs | Get serverless function logs|
@@ -13,8 +13,8 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**testServerlessFunction**](#testserverlessfunction) | **POST** /api/v2/apps/{appUuid}/serverless-functions/{uuid}/test | Test a serverless function|
 |[**update1**](#update1) | **PUT** /api/v2/apps/{appUuid}/serverless-functions/{uuid} | Update a serverless function|
 
-# **create3**
-> CreateResponse create3(serverlessFunctionDTO)
+# **create4**
+> CreateResponse create4(serverlessFunctionDTO)
 
 Creates a new serverless function attached to the specified app.
 
@@ -33,7 +33,7 @@ const apiInstance = new ServerlessFunctionsApi(configuration);
 let appUuid: string; //UUID of the app to attach the serverless function to (default to undefined)
 let serverlessFunctionDTO: ServerlessFunctionDTO; //Serverless function payload (runtime and code)
 
-const { status, data } = await apiInstance.create3(
+const { status, data } = await apiInstance.create4(
     appUuid,
     serverlessFunctionDTO
 );
