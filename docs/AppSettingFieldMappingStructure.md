@@ -6,7 +6,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **objectName** | **string** |  | [optional] [default to undefined]
+**targetKind** | **string** |  | [optional] [default to undefined]
 **items** | [**Array&lt;AppSettingFieldMappingStructureItem&gt;**](AppSettingFieldMappingStructureItem.md) |  | [optional] [default to undefined]
+**recordTarget** | **boolean** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -15,7 +17,9 @@ import { AppSettingFieldMappingStructure } from '@caraer/client';
 
 const instance: AppSettingFieldMappingStructure = {
     objectName,
+    targetKind,
     items,
+    recordTarget,
 };
 ```
 

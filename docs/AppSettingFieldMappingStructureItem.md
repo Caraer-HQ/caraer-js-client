@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **allowedPropertyTypes** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **allowedPropertyFormats** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **propertyName** | **string** |  | [optional] [default to undefined]
+**recordUuid** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -26,6 +27,7 @@ const instance: AppSettingFieldMappingStructureItem = {
     allowedPropertyTypes,
     allowedPropertyFormats,
     propertyName,
+    recordUuid,
 };
 ```
 

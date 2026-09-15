@@ -951,7 +951,9 @@ export interface AppSettingCondition {
 }
 export interface AppSettingFieldMappingStructure {
     'objectName'?: string;
+    'targetKind'?: string;
     'items'?: Array<AppSettingFieldMappingStructureItem>;
+    'recordTarget'?: boolean;
 }
 export interface AppSettingFieldMappingStructureItem {
     'fieldLabel'?: string;
@@ -961,6 +963,7 @@ export interface AppSettingFieldMappingStructureItem {
     'allowedPropertyTypes'?: Array<string>;
     'allowedPropertyFormats'?: Array<string>;
     'propertyName'?: string;
+    'recordUuid'?: string;
 }
 export interface AppSettingFieldSchema {
     'name'?: string;
