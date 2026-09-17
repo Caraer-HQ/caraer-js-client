@@ -96,7 +96,7 @@ This endpoint does not have any parameters.
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Email requested |  -  |
-|**400** | Missing CRM link, Jortt customer id, or already accepted |  -  |
+|**400** | Billing is not set up, or direct debit is already accepted |  -  |
 |**401** | Unauthorized |  -  |
 |**503** | Jortt or CRM not configured |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
