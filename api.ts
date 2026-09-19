@@ -2577,9 +2577,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
-    'yproperty'?: string;
     'ymetric'?: string;
+    'yproperty'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -14239,6 +14239,53 @@ export const CMSV2PagesApiAxiosParamCreator = function (configuration?: Configur
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Writes test values into the playground session without changing the live page.
+         * @summary Preview field values on the forked module
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateModuleForkFields: async (recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('updateModuleForkFields', 'recordUuid', recordUuid)
+            // verify required parameter 'sessionId' is not null or undefined
+            assertParamExists('updateModuleForkFields', 'sessionId', sessionId)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('updateModuleForkFields', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions/{sessionId}/fields`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)))
+                .replace('{sessionId}', encodeURIComponent(String(sessionId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -14560,6 +14607,21 @@ export const CMSV2PagesApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.unselectEnvironment']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * Writes test values into the playground session without changing the live page.
+         * @summary Preview field values on the forked module
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateModuleForkFields(recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateModuleForkFields(recordUuid, sessionId, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.updateModuleForkFields']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -14814,6 +14876,18 @@ export const CMSV2PagesApiFactory = function (configuration?: Configuration, bas
          */
         unselectEnvironment(recordUuid: string, key: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
             return localVarFp.unselectEnvironment(recordUuid, key, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Writes test values into the playground session without changing the live page.
+         * @summary Preview field values on the forked module
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateModuleForkFields(recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.updateModuleForkFields(recordUuid, sessionId, requestBody, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -15088,6 +15162,19 @@ export class CMSV2PagesApi extends BaseAPI {
      */
     public unselectEnvironment(recordUuid: string, key: string, options?: RawAxiosRequestConfig) {
         return CMSV2PagesApiFp(this.configuration).unselectEnvironment(recordUuid, key, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Writes test values into the playground session without changing the live page.
+     * @summary Preview field values on the forked module
+     * @param {string} recordUuid 
+     * @param {string} sessionId 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public updateModuleForkFields(recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).updateModuleForkFields(recordUuid, sessionId, requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
