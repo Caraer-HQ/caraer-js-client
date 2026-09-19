@@ -18,6 +18,8 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**getCompanySettings**](#getcompanysettings) | **GET** /api/v2/webpages/public/companySettings | Fetch public company settings|
 |[**getEnvironments**](#getenvironments) | **GET** /api/v2/webpages/environments | Get all environments|
 |[**getMenus**](#getmenus) | **GET** /api/v2/webpages/public/getMenus | Fetch public web menus|
+|[**getPublicMapLocations**](#getpublicmaplocations) | **POST** /api/v2/webpages/public/maps/{pageUuid}/{componentUuid} | Get filtered map markers for a public webpage|
+|[**getPublicMapMarkerPreview**](#getpublicmapmarkerpreview) | **POST** /api/v2/webpages/public/maps/{pageUuid}/{componentUuid}/marker-preview | Get a hydrated preview for one public map marker|
 |[**getPublicPreviews**](#getpublicpreviews) | **POST** /api/v2/webpages/public/previews/{pageUuid}/{componentUuid}/{layout} | Get previews for a public webpage|
 |[**getPublicWebpage**](#getpublicwebpage) | **GET** /api/v2/webpages/public/{rootSlug}/{slug} | Get a public webpage by slug|
 |[**getPublicWebpageByUuid**](#getpublicwebpagebyuuid) | **GET** /api/v2/webpages/public/uuid/{uuid} | Get a public webpage by UUID|
@@ -857,6 +859,172 @@ const { status, data } = await apiInstance.getMenus(
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
 |**404** | The requested resource was not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getPublicMapLocations**
+> ShowResponseWebpageMapLocationsDTO getPublicMapLocations(recordPaginationRequest)
+
+Resolves map markers for a public map component. Object-bound sources are filtered in Cypher before the 500-marker cap.
+
+### Example
+
+```typescript
+import {
+    WebpagesApi,
+    Configuration,
+    RecordPaginationRequest
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new WebpagesApi(configuration);
+
+let xCaraerSubdomain: string; // (default to undefined)
+let pageUuid: string; // (default to undefined)
+let componentUuid: string; // (default to undefined)
+let recordPaginationRequest: RecordPaginationRequest; //
+let xCaraerEnvironment: string; // (optional) (default to 'production')
+let xCaraerPrimaryEnvironment: string; // (optional) (default to 'production')
+let authorization: string; // (optional) (default to undefined)
+let xCaraerWebpageAccess: string; // (optional) (default to undefined)
+let access: string; // (optional) (default to undefined)
+let token: string; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.getPublicMapLocations(
+    xCaraerSubdomain,
+    pageUuid,
+    componentUuid,
+    recordPaginationRequest,
+    xCaraerEnvironment,
+    xCaraerPrimaryEnvironment,
+    authorization,
+    xCaraerWebpageAccess,
+    access,
+    token
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **recordPaginationRequest** | **RecordPaginationRequest**|  | |
+| **xCaraerSubdomain** | [**string**] |  | defaults to undefined|
+| **pageUuid** | [**string**] |  | defaults to undefined|
+| **componentUuid** | [**string**] |  | defaults to undefined|
+| **xCaraerEnvironment** | [**string**] |  | (optional) defaults to 'production'|
+| **xCaraerPrimaryEnvironment** | [**string**] |  | (optional) defaults to 'production'|
+| **authorization** | [**string**] |  | (optional) defaults to undefined|
+| **xCaraerWebpageAccess** | [**string**] |  | (optional) defaults to undefined|
+| **access** | [**string**] |  | (optional) defaults to undefined|
+| **token** | [**string**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+**ShowResponseWebpageMapLocationsDTO**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getPublicMapMarkerPreview**
+> ShowResponsePreviewDTO getPublicMapMarkerPreview(mapMarkerPreviewRequest)
+
+Hydrates the hover preview selected on a bound map location for a published record.
+
+### Example
+
+```typescript
+import {
+    WebpagesApi,
+    Configuration,
+    MapMarkerPreviewRequest
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new WebpagesApi(configuration);
+
+let xCaraerSubdomain: string; // (default to undefined)
+let pageUuid: string; // (default to undefined)
+let componentUuid: string; // (default to undefined)
+let mapMarkerPreviewRequest: MapMarkerPreviewRequest; //
+let xCaraerEnvironment: string; // (optional) (default to 'production')
+let xCaraerPrimaryEnvironment: string; // (optional) (default to 'production')
+let authorization: string; // (optional) (default to undefined)
+let xCaraerWebpageAccess: string; // (optional) (default to undefined)
+let access: string; // (optional) (default to undefined)
+let token: string; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.getPublicMapMarkerPreview(
+    xCaraerSubdomain,
+    pageUuid,
+    componentUuid,
+    mapMarkerPreviewRequest,
+    xCaraerEnvironment,
+    xCaraerPrimaryEnvironment,
+    authorization,
+    xCaraerWebpageAccess,
+    access,
+    token
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **mapMarkerPreviewRequest** | **MapMarkerPreviewRequest**|  | |
+| **xCaraerSubdomain** | [**string**] |  | defaults to undefined|
+| **pageUuid** | [**string**] |  | defaults to undefined|
+| **componentUuid** | [**string**] |  | defaults to undefined|
+| **xCaraerEnvironment** | [**string**] |  | (optional) defaults to 'production'|
+| **xCaraerPrimaryEnvironment** | [**string**] |  | (optional) defaults to 'production'|
+| **authorization** | [**string**] |  | (optional) defaults to undefined|
+| **xCaraerWebpageAccess** | [**string**] |  | (optional) defaults to undefined|
+| **access** | [**string**] |  | (optional) defaults to undefined|
+| **token** | [**string**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+**ShowResponsePreviewDTO**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

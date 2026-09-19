@@ -5,7 +5,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
 |[**create1**](#create1) | **POST** /api/v2/developer-sandboxes | Create a developer sandbox|
-|[**list**](#list) | **GET** /api/v2/developer-sandboxes | List developer sandboxes|
+|[**list1**](#list1) | **GET** /api/v2/developer-sandboxes | List developer sandboxes|
 |[**show2**](#show2) | **GET** /api/v2/developer-sandboxes/{uuid} | Get a developer sandbox|
 
 # **create1**
@@ -65,8 +65,8 @@ const { status, data } = await apiInstance.create1(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **list**
-> SuccessResponseListDeveloperSandboxDTO list()
+# **list1**
+> SuccessResponseListDeveloperSandboxDTO list1()
 
 Lists sandboxes owned by the caller\'s selected company.
 
@@ -81,7 +81,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new DeveloperSandboxesApi(configuration);
 
-const { status, data } = await apiInstance.list();
+const { status, data } = await apiInstance.list1();
 ```
 
 ### Parameters

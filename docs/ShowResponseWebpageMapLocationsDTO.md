@@ -1,4 +1,4 @@
-# ShowResponsePreviewDTO
+# ShowResponseWebpageMapLocationsDTO
 
 Represents the response for viewing or showing a specific resource.
 
@@ -7,14 +7,14 @@ Represents the response for viewing or showing a specific resource.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **message** | **string** | A message detailing the result of the operation. | [optional] [default to undefined]
-**data** | [**PreviewDTO**](PreviewDTO.md) | The data payload of the response, if any. | [optional] [default to undefined]
+**data** | [**WebpageMapLocationsDTO**](WebpageMapLocationsDTO.md) | The data payload of the response, if any. | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { ShowResponsePreviewDTO } from '@caraer/client';
+import { ShowResponseWebpageMapLocationsDTO } from '@caraer/client';
 
-const instance: ShowResponsePreviewDTO = {
+const instance: ShowResponseWebpageMapLocationsDTO = {
     message,
     data,
 };

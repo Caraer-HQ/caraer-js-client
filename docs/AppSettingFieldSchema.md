@@ -15,8 +15,13 @@ Name | Type | Description | Notes
 **actionSource** | [**AppSettingActionSource**](AppSettingActionSource.md) |  | [optional] [default to undefined]
 **defaultValue** | **any** |  | [optional] [default to undefined]
 **hidden** | **boolean** |  | [optional] [default to undefined]
+**advanced** | **boolean** |  | [optional] [default to undefined]
 **filterTraits** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **visibleWhen** | [**Array&lt;AppSettingCondition&gt;**](AppSettingCondition.md) |  | [optional] [default to undefined]
+**itemFields** | [**Array&lt;AppSettingFieldSchema&gt;**](AppSettingFieldSchema.md) |  | [optional] [default to undefined]
+**min** | **number** |  | [optional] [default to undefined]
+**max** | **number** |  | [optional] [default to undefined]
+**itemLabel** | **string** |  | [optional] [default to undefined]
 **value** | **any** |  | [optional] [default to undefined]
 **hasValue** | **boolean** |  | [optional] [default to undefined]
 **mappingValue** | [**AppSettingFieldMappingStructure**](AppSettingFieldMappingStructure.md) |  | [optional] [default to undefined]
@@ -39,8 +44,13 @@ const instance: AppSettingFieldSchema = {
     actionSource,
     defaultValue,
     hidden,
+    advanced,
     filterTraits,
     visibleWhen,
+    itemFields,
+    min,
+    max,
+    itemLabel,
     value,
     hasValue,
     mappingValue,

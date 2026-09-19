@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **name** | **string** |  | [optional] [default to undefined]
 **label** | **string** |  | [optional] [default to undefined]
 **helpText** | **string** |  | [optional] [default to undefined]
+**preview** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -18,6 +19,7 @@ const instance: SettingOption = {
     name,
     label,
     helpText,
+    preview,
 };
 ```
 

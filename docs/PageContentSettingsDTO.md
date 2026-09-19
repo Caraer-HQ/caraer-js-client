@@ -52,6 +52,11 @@ Name | Type | Description | Notes
 **ctaButtonText** | **string** | The button text of the CTA | [optional] [default to undefined]
 **ctaButtonLink** | **string** | The button link of the CTA | [optional] [default to undefined]
 **platforms** | **Array&lt;string&gt;** | The platforms shown in the share component | [optional] [default to undefined]
+**mapLatitude** | **number** | Latitude for the map component | [optional] [default to undefined]
+**mapLongitude** | **number** | Longitude for the map component | [optional] [default to undefined]
+**mapLocations** | [**Array&lt;MapLocationDTO&gt;**](MapLocationDTO.md) | Multiple map markers | [optional] [default to undefined]
+**distanceFilterEnabled** | **boolean** | Show a public distance-from-location filter on this map | [optional] [default to undefined]
+**locationContainsFilterEnabled** | **boolean** | Show a public contains filter for city, street, or postcode on this map | [optional] [default to undefined]
 
 ## Example
 
@@ -105,6 +110,11 @@ const instance: PageContentSettingsDTO = {
     ctaButtonText,
     ctaButtonLink,
     platforms,
+    mapLatitude,
+    mapLongitude,
+    mapLocations,
+    distanceFilterEnabled,
+    locationContainsFilterEnabled,
 };
 ```
 

@@ -28,6 +28,7 @@ Name | Type | Description | Notes
 **sidebar** | [**PreviewDTO**](PreviewDTO.md) | Preview of the sidebar | [optional] [default to undefined]
 **sidebarRelation** | [**RelationDTO**](RelationDTO.md) | Relation of the sidebar | [optional] [default to undefined]
 **sidebarObject** | [**CaraerObjectDTO**](CaraerObjectDTO.md) | Object of the sidebar | [optional] [default to undefined]
+**floatingActionBarModuleUuid** | **string** | UUID of the CMS module rendered as a floating action bar on this page. Null or empty disables the bar. | [optional] [default to undefined]
 **_options** | [**WebpageOptionsDTO**](WebpageOptionsDTO.md) | Custom options and configurations specific to the webpage. | [optional] [default to undefined]
 **metaData** | **{ [key: string]: any | null; }** | Map of additional metadata and attributes for the webpage. | [optional] [default to undefined]
 **object** | [**CaraerObjectDTO**](CaraerObjectDTO.md) | Represents the associated Caraer object | [optional] [default to undefined]
@@ -60,6 +61,7 @@ const instance: TemplateWebpageDTO = {
     sidebar,
     sidebarRelation,
     sidebarObject,
+    floatingActionBarModuleUuid,
     _options,
     metaData,
     object,

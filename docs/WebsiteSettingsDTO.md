@@ -112,6 +112,10 @@ Name | Type | Description | Notes
 **footerCompanyText** | **string** |  | [optional] [default to undefined]
 **customFooterEnabled** | **boolean** |  | [optional] [default to undefined]
 **customFooterModuleUuid** | **string** |  | [optional] [default to undefined]
+**cmsHeaderModule** | **string** |  | [optional] [default to undefined]
+**cmsFooterModule** | **string** |  | [optional] [default to undefined]
+**cmsCookieBannerModule** | **string** |  | [optional] [default to undefined]
+**cmsModuleDefaults** | **string** |  | [optional] [default to undefined]
 **footerBackgroundColor** | **string** |  | [optional] [default to undefined]
 **footerForegroundColor** | **string** |  | [optional] [default to undefined]
 **footerShowSocialButtons** | **boolean** |  | [optional] [default to undefined]
@@ -142,6 +146,7 @@ Name | Type | Description | Notes
 **tertiaryButtonStyling** | [**PageContentStylingDTO**](PageContentStylingDTO.md) |  | [optional] [default to undefined]
 **imageStyling** | [**PageContentStylingDTO**](PageContentStylingDTO.md) |  | [optional] [default to undefined]
 **videoStyling** | [**PageContentStylingDTO**](PageContentStylingDTO.md) |  | [optional] [default to undefined]
+**mapStyling** | [**PageContentStylingDTO**](PageContentStylingDTO.md) |  | [optional] [default to undefined]
 **formStyling** | [**PageContentStylingDTO**](PageContentStylingDTO.md) |  | [optional] [default to undefined]
 **sliderStyling** | [**PageContentStylingDTO**](PageContentStylingDTO.md) |  | [optional] [default to undefined]
 **accordionStyling** | [**PageContentStylingDTO**](PageContentStylingDTO.md) |  | [optional] [default to undefined]
@@ -272,6 +277,10 @@ const instance: WebsiteSettingsDTO = {
     footerCompanyText,
     customFooterEnabled,
     customFooterModuleUuid,
+    cmsHeaderModule,
+    cmsFooterModule,
+    cmsCookieBannerModule,
+    cmsModuleDefaults,
     footerBackgroundColor,
     footerForegroundColor,
     footerShowSocialButtons,
@@ -302,6 +311,7 @@ const instance: WebsiteSettingsDTO = {
     tertiaryButtonStyling,
     imageStyling,
     videoStyling,
+    mapStyling,
     formStyling,
     sliderStyling,
     accordionStyling,

@@ -20,6 +20,10 @@ Name | Type | Description | Notes
 **digitalIdentity** | [**DigitalIdentityDTO**](DigitalIdentityDTO.md) | The digital identity of the company. | [optional] [default to undefined]
 **websiteSettings** | [**WebsiteSettingsDTO**](WebsiteSettingsDTO.md) | The website settings of the company. | [optional] [default to undefined]
 **billingSettings** | [**BillingSettingsDTO**](BillingSettingsDTO.md) | The billing settings of the company. | [optional] [default to undefined]
+**cmsVersion** | **number** | Which CMS serves this company: 1 &#x3D; WerkenBij, 2 &#x3D; caraer-web | [optional] [default to undefined]
+**cmsV2PreviewOrigin** | **string** | Origin of the v2 sidecar site while the live hostname is still v1 | [optional] [default to undefined]
+**cmsV2ProjectId** | **string** |  | [optional] [default to undefined]
+**cmsV1ProjectId** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -41,6 +45,10 @@ const instance: CompanyDTO = {
     digitalIdentity,
     websiteSettings,
     billingSettings,
+    cmsVersion,
+    cmsV2PreviewOrigin,
+    cmsV2ProjectId,
+    cmsV1ProjectId,
 };
 ```
 

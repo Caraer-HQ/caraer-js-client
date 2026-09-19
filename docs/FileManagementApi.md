@@ -7,6 +7,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**deleteFile**](#deletefile) | **DELETE** /api/v2/files/ | Delete file|
 |[**downloadFile**](#downloadfile) | **GET** /api/v2/files/ | Download file|
 |[**listFiles**](#listfiles) | **GET** /api/v2/files/list | List files|
+|[**listLibrary**](#listlibrary) | **GET** /api/v2/files/library | List company files with metadata for the media library|
 |[**uploadFile2**](#uploadfile2) | **POST** /api/v2/files/ | Upload files|
 
 # **deleteFile**
@@ -177,6 +178,60 @@ const { status, data } = await apiInstance.listFiles(
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
 |**404** | The requested resource was not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **listLibrary**
+> SuccessResponseListFileListItemDTO listLibrary()
+
+
+### Example
+
+```typescript
+import {
+    FileManagementApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new FileManagementApi(configuration);
+
+let recordUuid: string; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.listLibrary(
+    recordUuid
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **recordUuid** | [**string**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+**SuccessResponseListFileListItemDTO**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

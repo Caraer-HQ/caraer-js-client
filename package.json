@@ -1,6 +1,6 @@
 {
   "name": "@caraer/client",
-  "version": "2.0.504",
+  "version": "2.0.505",
   "description": "Generated TypeScript client for the Caraer API",
   "author": "OpenAPI-Generator Contributors",
   "repository": {

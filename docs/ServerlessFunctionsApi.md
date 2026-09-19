@@ -4,17 +4,17 @@ All URIs are relative to *https://v2.api.caraer.com*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**create4**](#create4) | **POST** /api/v2/apps/{appUuid}/serverless-functions | Create a serverless function|
-|[**delete1**](#delete1) | **DELETE** /api/v2/apps/{appUuid}/serverless-functions/{uuid} | Delete a serverless function|
+|[**create5**](#create5) | **POST** /api/v2/apps/{appUuid}/serverless-functions | Create a serverless function|
+|[**delete2**](#delete2) | **DELETE** /api/v2/apps/{appUuid}/serverless-functions/{uuid} | Delete a serverless function|
 |[**index2**](#index2) | **POST** /api/v2/apps/{appUuid}/serverless-functions/index | List serverless functions for an app|
 |[**logs**](#logs) | **GET** /api/v2/apps/{appUuid}/serverless-functions/{uuid}/logs | Get serverless function logs|
 |[**samplePayload**](#samplepayload) | **POST** /api/v2/apps/{appUuid}/serverless-functions/sample-payload | Generate a sample webhook payload|
 |[**show1**](#show1) | **GET** /api/v2/apps/{appUuid}/serverless-functions/{uuid} | Get a serverless function|
 |[**testServerlessFunction**](#testserverlessfunction) | **POST** /api/v2/apps/{appUuid}/serverless-functions/{uuid}/test | Test a serverless function|
-|[**update1**](#update1) | **PUT** /api/v2/apps/{appUuid}/serverless-functions/{uuid} | Update a serverless function|
+|[**update2**](#update2) | **PUT** /api/v2/apps/{appUuid}/serverless-functions/{uuid} | Update a serverless function|
 
-# **create4**
-> CreateResponse create4(serverlessFunctionDTO)
+# **create5**
+> CreateResponse create5(serverlessFunctionDTO)
 
 Creates a new serverless function attached to the specified app.
 
@@ -33,7 +33,7 @@ const apiInstance = new ServerlessFunctionsApi(configuration);
 let appUuid: string; //UUID of the app to attach the serverless function to (default to undefined)
 let serverlessFunctionDTO: ServerlessFunctionDTO; //Serverless function payload (runtime and code)
 
-const { status, data } = await apiInstance.create4(
+const { status, data } = await apiInstance.create5(
     appUuid,
     serverlessFunctionDTO
 );
@@ -73,8 +73,8 @@ const { status, data } = await apiInstance.create4(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **delete1**
-> DeleteResponse delete1()
+# **delete2**
+> DeleteResponse delete2()
 
 Tears down the GCP Cloud Function (if provisioned) and deletes the serverless function entity.
 
@@ -92,7 +92,7 @@ const apiInstance = new ServerlessFunctionsApi(configuration);
 let appUuid: string; //UUID of the app (default to undefined)
 let uuid: string; //UUID of the serverless function to delete (default to undefined)
 
-const { status, data } = await apiInstance.delete1(
+const { status, data } = await apiInstance.delete2(
     appUuid,
     uuid
 );
@@ -436,8 +436,8 @@ const { status, data } = await apiInstance.testServerlessFunction(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **update1**
-> ShowResponseServerlessFunctionDTO update1(serverlessFunctionDTO)
+# **update2**
+> ShowResponseServerlessFunctionDTO update2(serverlessFunctionDTO)
 
 Updates an existing serverless function\'s runtime and code, keeping it attached to the same app.
 
@@ -457,7 +457,7 @@ let appUuid: string; //UUID of the app (default to undefined)
 let uuid: string; //UUID of the serverless function to update (default to undefined)
 let serverlessFunctionDTO: ServerlessFunctionDTO; //Updated serverless function payload (runtime and code)
 
-const { status, data } = await apiInstance.update1(
+const { status, data } = await apiInstance.update2(
     appUuid,
     uuid,
     serverlessFunctionDTO

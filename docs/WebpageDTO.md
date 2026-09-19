@@ -19,6 +19,8 @@ Name | Type | Description | Notes
 **sidebar** | [**PreviewDTO**](PreviewDTO.md) | Preview of the sidebar | [optional] [default to undefined]
 **sidebarRelation** | [**RelationDTO**](RelationDTO.md) | Relation of the sidebar | [optional] [default to undefined]
 **sidebarObject** | [**CaraerObjectDTO**](CaraerObjectDTO.md) | Object of the sidebar | [optional] [default to undefined]
+**floatingActionBarModuleUuid** | **string** | UUID of the CMS module rendered as a floating action bar on this page. Null or empty disables the bar. | [optional] [default to undefined]
+**floatingActionBar** | [**PageContentDTO**](PageContentDTO.md) | Hydrated module tree for the floating action bar. Set only on public page responses. | [optional] [default to undefined]
 **object** | [**CaraerObjectDTO**](CaraerObjectDTO.md) | The Object object associated with the webpage, representing application data. | [optional] [default to undefined]
 **record** | [**WebpagePublicRecordDTO**](WebpagePublicRecordDTO.md) | Webpage-public backing record values (internal + parsed). Set only on public page responses. | [optional] [default to undefined]
 **_options** | [**WebpageOptionsDTO**](WebpageOptionsDTO.md) | Custom options and configurations specific to the webpage. | [optional] [default to undefined]
@@ -51,6 +53,8 @@ const instance: WebpageDTO = {
     sidebar,
     sidebarRelation,
     sidebarObject,
+    floatingActionBarModuleUuid,
+    floatingActionBar,
     object,
     record,
     _options,

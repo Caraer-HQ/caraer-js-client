@@ -976,8 +976,13 @@ export interface AppSettingFieldSchema {
     'actionSource'?: AppSettingActionSource;
     'defaultValue'?: any;
     'hidden'?: boolean;
+    'advanced'?: boolean;
     'filterTraits'?: Array<string>;
     'visibleWhen'?: Array<AppSettingCondition>;
+    'itemFields'?: Array<AppSettingFieldSchema>;
+    'min'?: number;
+    'max'?: number;
+    'itemLabel'?: string;
     'value'?: any;
     'hasValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
@@ -1376,6 +1381,92 @@ export interface CaraerObjectDTO {
      */
     'editable'?: boolean;
 }
+export interface CmsEnvironmentDTO {
+    'uuid'?: string;
+    'key'?: string;
+    'label'?: string;
+    'routing'?: string;
+    'slugPrefix'?: string;
+    'hostLabel'?: string;
+    'requiresAuth'?: boolean;
+    'htmlLang'?: string;
+    'default'?: boolean;
+}
+export interface CmsModuleDTO {
+    'uuid'?: string;
+    'name'?: string;
+    'label'?: string;
+    'ref'?: string;
+    'kind'?: string;
+    'description'?: string;
+    'category'?: string;
+    'icon'?: string;
+    'preview'?: string;
+    'appUuid'?: string;
+    'appName'?: string;
+    'appLabel'?: string;
+    'packageName'?: string;
+    'version'?: string;
+    'retired'?: boolean;
+    'fields'?: Array<AppSettingFieldSchema>;
+    'frameworks'?: { [key: string]: string; };
+}
+export interface CmsPageDTO {
+    'uuid'?: string;
+    'title'?: string;
+    'slug'?: string;
+    'locale'?: string;
+    'environment'?: string;
+    'state'?: string;
+    'published'?: boolean;
+    'document'?: CmsPageDocument;
+    'record'?: RecordSummary;
+    'protection'?: { [key: string]: any | null; };
+    'locales'?: Array<string>;
+    'publishAt'?: number;
+    'unpublishAt'?: number;
+}
+export interface CmsPageDocument {
+    'version'?: number;
+    'revision'?: number;
+    'modules'?: Array<CmsPageModuleInstance>;
+    'seo'?: { [key: string]: any | null; };
+    'title'?: string;
+    'slug'?: string;
+    'excerpt'?: string;
+    'css'?: string;
+    'headJs'?: string;
+    'bodyJs'?: string;
+}
+export interface CmsPageModuleInstance {
+    'id'?: string;
+    'module'?: string;
+    'fields'?: { [key: string]: any | null; };
+    'hidden'?: boolean;
+}
+export interface CmsPagePatch {
+    'op'?: string;
+    'moduleId'?: string;
+    'field'?: string;
+    'value'?: any;
+    'fields'?: { [key: string]: any | null; };
+    'module'?: CmsPageModuleInstance;
+    'index'?: number;
+    'toIndex'?: number;
+    'hidden'?: boolean;
+    'modules'?: Array<CmsPageModuleInstance>;
+    'seo'?: { [key: string]: any | null; };
+}
+export interface CmsPagePatchRequest {
+    'locale'?: string;
+    'patches'?: Array<CmsPagePatch>;
+    'expectedRevision'?: number;
+}
+export interface CmsPublicMenuDTO {
+    'location'?: string;
+    'title'?: string;
+    'items'?: Array<WebMenuItem>;
+}
 /**
  * A DTO representing a company with its various settings and details.
  */
@@ -1436,6 +1527,16 @@ export interface CompanyDTO {
      * The billing settings of the company.
      */
     'billingSettings'?: BillingSettingsDTO;
+    /**
+     * Which CMS serves this company: 1 = WerkenBij, 2 = caraer-web
+     */
+    'cmsVersion'?: number;
+    /**
+     * Origin of the v2 sidecar site while the live hostname is still v1
+     */
+    'cmsV2PreviewOrigin'?: string;
+    'cmsV2ProjectId'?: string;
+    'cmsV1ProjectId'?: string;
 }
 /**
  * A DTO representing the details of a company.
@@ -2057,6 +2158,110 @@ export interface DigitalIdentityDTO {
      */
     'lightAccentColor'?: string;
     /**
+     * The lightPrimary50Color of the company.
+     */
+    'lightPrimary50Color'?: string;
+    /**
+     * The lightPrimary200Color of the company.
+     */
+    'lightPrimary200Color'?: string;
+    /**
+     * The lightPrimary300Color of the company.
+     */
+    'lightPrimary300Color'?: string;
+    /**
+     * The lightPrimary400Color of the company.
+     */
+    'lightPrimary400Color'?: string;
+    /**
+     * The lightPrimary600Color of the company.
+     */
+    'lightPrimary600Color'?: string;
+    /**
+     * The lightPrimary700Color of the company.
+     */
+    'lightPrimary700Color'?: string;
+    /**
+     * The lightPrimary800Color of the company.
+     */
+    'lightPrimary800Color'?: string;
+    /**
+     * The lightPrimary900Color of the company.
+     */
+    'lightPrimary900Color'?: string;
+    /**
+     * The lightSecondary50Color of the company.
+     */
+    'lightSecondary50Color'?: string;
+    /**
+     * The lightSecondary100Color of the company.
+     */
+    'lightSecondary100Color'?: string;
+    /**
+     * The lightSecondary200Color of the company.
+     */
+    'lightSecondary200Color'?: string;
+    /**
+     * The lightSecondary300Color of the company.
+     */
+    'lightSecondary300Color'?: string;
+    /**
+     * The lightSecondary400Color of the company.
+     */
+    'lightSecondary400Color'?: string;
+    /**
+     * The lightSecondary600Color of the company.
+     */
+    'lightSecondary600Color'?: string;
+    /**
+     * The lightSecondary700Color of the company.
+     */
+    'lightSecondary700Color'?: string;
+    /**
+     * The lightSecondary800Color of the company.
+     */
+    'lightSecondary800Color'?: string;
+    /**
+     * The lightSecondary900Color of the company.
+     */
+    'lightSecondary900Color'?: string;
+    /**
+     * The lightAccent50Color of the company.
+     */
+    'lightAccent50Color'?: string;
+    /**
+     * The lightAccent100Color of the company.
+     */
+    'lightAccent100Color'?: string;
+    /**
+     * The lightAccent200Color of the company.
+     */
+    'lightAccent200Color'?: string;
+    /**
+     * The lightAccent300Color of the company.
+     */
+    'lightAccent300Color'?: string;
+    /**
+     * The lightAccent400Color of the company.
+     */
+    'lightAccent400Color'?: string;
+    /**
+     * The lightAccent600Color of the company.
+     */
+    'lightAccent600Color'?: string;
+    /**
+     * The lightAccent700Color of the company.
+     */
+    'lightAccent700Color'?: string;
+    /**
+     * The lightAccent800Color of the company.
+     */
+    'lightAccent800Color'?: string;
+    /**
+     * The lightAccent900Color of the company.
+     */
+    'lightAccent900Color'?: string;
+    /**
      * The black color of the company in light mode.
      */
     'lightBlackColor'?: string;
@@ -2132,6 +2337,110 @@ export interface DigitalIdentityDTO {
      * The accent color of the company in dark mode.
      */
     'darkAccentColor'?: string;
+    /**
+     * The darkPrimary50Color of the company.
+     */
+    'darkPrimary50Color'?: string;
+    /**
+     * The darkPrimary200Color of the company.
+     */
+    'darkPrimary200Color'?: string;
+    /**
+     * The darkPrimary300Color of the company.
+     */
+    'darkPrimary300Color'?: string;
+    /**
+     * The darkPrimary400Color of the company.
+     */
+    'darkPrimary400Color'?: string;
+    /**
+     * The darkPrimary600Color of the company.
+     */
+    'darkPrimary600Color'?: string;
+    /**
+     * The darkPrimary700Color of the company.
+     */
+    'darkPrimary700Color'?: string;
+    /**
+     * The darkPrimary800Color of the company.
+     */
+    'darkPrimary800Color'?: string;
+    /**
+     * The darkPrimary900Color of the company.
+     */
+    'darkPrimary900Color'?: string;
+    /**
+     * The darkSecondary50Color of the company.
+     */
+    'darkSecondary50Color'?: string;
+    /**
+     * The darkSecondary100Color of the company.
+     */
+    'darkSecondary100Color'?: string;
+    /**
+     * The darkSecondary200Color of the company.
+     */
+    'darkSecondary200Color'?: string;
+    /**
+     * The darkSecondary300Color of the company.
+     */
+    'darkSecondary300Color'?: string;
+    /**
+     * The darkSecondary400Color of the company.
+     */
+    'darkSecondary400Color'?: string;
+    /**
+     * The darkSecondary600Color of the company.
+     */
+    'darkSecondary600Color'?: string;
+    /**
+     * The darkSecondary700Color of the company.
+     */
+    'darkSecondary700Color'?: string;
+    /**
+     * The darkSecondary800Color of the company.
+     */
+    'darkSecondary800Color'?: string;
+    /**
+     * The darkSecondary900Color of the company.
+     */
+    'darkSecondary900Color'?: string;
+    /**
+     * The darkAccent50Color of the company.
+     */
+    'darkAccent50Color'?: string;
+    /**
+     * The darkAccent100Color of the company.
+     */
+    'darkAccent100Color'?: string;
+    /**
+     * The darkAccent200Color of the company.
+     */
+    'darkAccent200Color'?: string;
+    /**
+     * The darkAccent300Color of the company.
+     */
+    'darkAccent300Color'?: string;
+    /**
+     * The darkAccent400Color of the company.
+     */
+    'darkAccent400Color'?: string;
+    /**
+     * The darkAccent600Color of the company.
+     */
+    'darkAccent600Color'?: string;
+    /**
+     * The darkAccent700Color of the company.
+     */
+    'darkAccent700Color'?: string;
+    /**
+     * The darkAccent800Color of the company.
+     */
+    'darkAccent800Color'?: string;
+    /**
+     * The darkAccent900Color of the company.
+     */
+    'darkAccent900Color'?: string;
     /**
      * The black color of the company in dark mode.
      */
@@ -2268,8 +2577,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'ymetric'?: string;
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2340,6 +2649,13 @@ export interface FeedDTO {
     'itemElement'?: string;
     'cacheTtlSeconds'?: number;
     'active'?: boolean;
+}
+export interface FileListItemDTO {
+    'key'?: string;
+    'name'?: string;
+    'size'?: number;
+    'lastModified'?: number;
+    'contentType'?: string;
 }
 export interface FilledProperty {
     'icon'?: string;
@@ -2952,9 +3268,107 @@ export interface LoadAppSettingOptionsRequest {
      */
     'object'?: string;
 }
+export interface Location extends PropertyFormat {
+}
 export interface LoginRequest {
     'email': string;
     'password': string;
+}
+/**
+ * A map marker from one source: custom lat/lng, a page location property, or an object
+ */
+export interface MapLocationDTO {
+    'latitude'?: number;
+    'longitude'?: number;
+    /**
+     * UUID of a location property
+     */
+    'propertyUuid'?: string;
+    /**
+     * Name of a location property (fallback if uuid missing)
+     */
+    'propertyName'?: string;
+    /**
+     * When set, resolve markers from published records of this object. Exclusive with propertyUuid and custom lat/lng.
+     */
+    'objectUuid'?: string;
+    /**
+     * Object name fallback when uuid is missing
+     */
+    'objectName'?: string;
+    /**
+     * FontAwesome icon key for the marker
+     */
+    'icon'?: string;
+    /**
+     * Marker icon color (hex or rgba)
+     */
+    'iconColor'?: string;
+    /**
+     * Marker pin background fill color (hex or rgba)
+     */
+    'iconBackgroundColor'?: string;
+    /**
+     * Marker pin size in CSS pixels
+     */
+    'markerSize'?: number;
+    /**
+     * Marker glyph size in CSS pixels
+     */
+    'iconSize'?: number;
+    /**
+     * Text shown when hovering the marker (supports smart content)
+     */
+    'label'?: string;
+    /**
+     * UUID of a property whose value is shown as hover text
+     */
+    'labelPropertyUuid'?: string;
+    /**
+     * Name of a property whose value is shown as hover text
+     */
+    'labelPropertyName'?: string;
+    /**
+     * UUID of the preview shown when hovering a bound marker
+     */
+    'hoverPreviewUuid'?: string;
+    /**
+     * Name of the preview shown when hovering a bound marker
+     */
+    'hoverPreviewName'?: string;
+    /**
+     * Record this concrete public marker was resolved from
+     */
+    'recordUuid'?: string;
+    /**
+     * Marker click target: liveUrl, custom, or unset
+     */
+    'clickLinkType'?: string;
+    /**
+     * Custom URL used when clickLinkType is custom
+     */
+    'clickLinkUrl'?: string;
+    /**
+     * Open the marker link in a new tab
+     */
+    'clickLinkOpenInNewWindow'?: boolean;
+    /**
+     * Resolved public URL for this concrete marker
+     */
+    'href'?: string;
+    /**
+     * Properties exposed as public filters for object-bound markers
+     */
+    'filterProperties'?: Array<PropertyDTO>;
+    /**
+     * Resolved property values used to filter this concrete marker
+     */
+    'filterValues'?: { [key: string]: any | null; };
+}
+export interface MapMarkerPreviewRequest {
+    'recordUuid'?: string;
+    'previewUuid'?: string;
+    'previewName'?: string;
 }
 export interface MappingDTO {
     /**
@@ -3079,6 +3493,8 @@ export interface ModelRecord {
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
     'user'?: PublicUserDTO;
+}
+export interface MultiFile extends PropertyFormat {
 }
 export interface MultiLine extends PropertyFormat {
 }
@@ -3497,6 +3913,26 @@ export interface PageContentSettingsDTO {
      * The platforms shown in the share component
      */
     'platforms'?: Array<string>;
+    /**
+     * Latitude for the map component
+     */
+    'mapLatitude'?: number;
+    /**
+     * Longitude for the map component
+     */
+    'mapLongitude'?: number;
+    /**
+     * Multiple map markers
+     */
+    'mapLocations'?: Array<MapLocationDTO>;
+    /**
+     * Show a public distance-from-location filter on this map
+     */
+    'distanceFilterEnabled'?: boolean;
+    /**
+     * Show a public contains filter for city, street, or postcode on this map
+     */
+    'locationContainsFilterEnabled'?: boolean;
 }
 export interface PageContentStylingDTO {
     /**
@@ -4465,7 +4901,7 @@ export interface PropertyDTO {
  * @type PropertyDTOFormat
  * Format configuration for the property\'s display and validation
  */
-export type PropertyDTOFormat = Currency | CurrencyRange | DateRange | Duration | Email | LinkedProperty | ModelDate | ModelFile | MultiLine | MultiSelect | Number | NumberRange | Phone | Progress | Recurrence | SingleCheckbox | SingleLine | SingleSelect | Structure | Tag | Url;
+export type PropertyDTOFormat = Currency | CurrencyRange | DateRange | Duration | Email | LinkedProperty | Location | ModelDate | ModelFile | MultiFile | MultiLine | MultiSelect | Number | NumberRange | Phone | Progress | Recurrence | SingleCheckbox | SingleLine | SingleSelect | Structure | Tag | Url;
 
 export interface PropertyFormat {
     'label'?: string;
@@ -4720,6 +5156,12 @@ export interface RecordRelationRequestDTO {
      * When true, MERGE relation edge instead of CREATE
      */
     'merge'?: boolean;
+}
+export interface RecordSummary {
+    'uuid'?: string;
+    'object'?: string;
+    'properties'?: { [key: string]: any | null; };
+    'parsedProperties'?: { [key: string]: any | null; };
 }
 export interface Recurrence extends PropertyFormat {
 }
@@ -5263,6 +5705,7 @@ export interface SettingOption {
     'name'?: string;
     'label'?: string;
     'helpText'?: string;
+    'preview'?: string;
 }
 /**
  * DTO representing an item with properties defined for displaying and handling in UI related operations.
@@ -5413,11 +5856,56 @@ export interface ShowResponseCaraerObjectDTO {
     'data'?: { [key: string]: any; };
 }
 /**
- * Success response (ShowResponseCompanyDTO).
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseCmsEnvironmentDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: CmsEnvironmentDTO;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseCmsPageDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: CmsPageDTO;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseCmsPageDocument {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: CmsPageDocument;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
  */
 export interface ShowResponseCompanyDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
     'message'?: string;
-    'data'?: { [key: string]: any; };
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: CompanyDTO;
 }
 /**
  * Success response (ShowResponseDeveloperProjectDTO).
@@ -5467,6 +5955,58 @@ export interface ShowResponseListAppConnectionStatusDTO {
     'data'?: Array<AppConnectionStatusDTO>;
 }
 /**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseListCmsEnvironmentDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<CmsEnvironmentDTO>;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseListCmsModuleDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<CmsModuleDTO>;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseListCmsPageDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<CmsPageDTO>;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseListCmsPublicMenuDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<CmsPublicMenuDTO>;
+}
+/**
  * Success response (ShowResponseListEnvironmentDTO).
  */
 export interface ShowResponseListEnvironmentDTO {
@@ -5488,6 +6028,19 @@ export interface ShowResponseListInstalledAppBarDTO {
     'data'?: Array<object>;
 }
 /**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseListMapStringObject {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<{ [key: string]: any | null; }>;
+}
+/**
  * Success response (ShowResponseListPropertyDTO).
  */
 export interface ShowResponseListPropertyDTO {
@@ -5506,6 +6059,19 @@ export interface ShowResponseListString {
      * The data payload of the response, if any.
      */
     'data'?: Array<string>;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseListWebpageAccessGrantDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<WebpageAccessGrantDTO>;
 }
 /**
  * Success response (ShowResponseListWebpagePickerItemDTO).
@@ -5608,11 +6174,17 @@ export interface ShowResponsePageContentDTO {
     'data'?: { [key: string]: any; };
 }
 /**
- * Success response (ShowResponsePreviewDTO).
+ * Represents the response for viewing or showing a specific resource.
  */
 export interface ShowResponsePreviewDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
     'message'?: string;
-    'data'?: { [key: string]: any; };
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: PreviewDTO;
 }
 /**
  * Success response (ShowResponsePropertyDTO).
@@ -5648,6 +6220,19 @@ export interface ShowResponseSavedFilterDTO {
 export interface ShowResponseServerlessFunctionDTO {
     'message'?: string;
     'data'?: { [key: string]: any; };
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseSignedUrlResultDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: SignedUrlResultDTO;
 }
 /**
  * Success response (ShowResponseString).
@@ -5696,6 +6281,19 @@ export interface ShowResponseViewDTO {
 export interface ShowResponseWebMenuDTO {
     'message'?: string;
     'data'?: { [key: string]: any; };
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseWebpageMapLocationsDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: WebpageMapLocationsDTO;
 }
 /**
  * Represents the response for viewing or showing a specific resource.
@@ -6403,6 +7001,19 @@ export interface SuccessResponseListDeveloperSandboxDTO {
 /**
  * Represents a standard successful response with a message and optional data.
  */
+export interface SuccessResponseListFileListItemDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<FileListItemDTO>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
 export interface SuccessResponseListMapStringObject {
     /**
      * A message detailing the result of the operation.
@@ -6725,6 +7336,10 @@ export interface TemplateWebpageDTO {
      * Object of the sidebar
      */
     'sidebarObject'?: CaraerObjectDTO;
+    /**
+     * UUID of the CMS module rendered as a floating action bar on this page. Null or empty disables the bar.
+     */
+    'floatingActionBarModuleUuid'?: string;
     /**
      * Custom options and configurations specific to the webpage.
      */
@@ -7216,6 +7831,14 @@ export interface WebpageDTO {
      */
     'sidebarObject'?: CaraerObjectDTO;
     /**
+     * UUID of the CMS module rendered as a floating action bar on this page. Null or empty disables the bar.
+     */
+    'floatingActionBarModuleUuid'?: string;
+    /**
+     * Hydrated module tree for the floating action bar. Set only on public page responses.
+     */
+    'floatingActionBar'?: PageContentDTO;
+    /**
      * The Object object associated with the webpage, representing application data.
      */
     'object'?: CaraerObjectDTO;
@@ -7280,6 +7903,15 @@ export interface WebpageEditingStatusDTO {
      * Human-readable message for the client UI
      */
     'message'?: string;
+}
+/**
+ * Resolved public map markers for a webpage map block
+ */
+export interface WebpageMapLocationsDTO {
+    /**
+     * Concrete markers after applying public filters
+     */
+    'mapLocations'?: Array<MapLocationDTO>;
 }
 /**
  * Data Transfer Object representing options for a webpage.
@@ -7469,6 +8101,10 @@ export interface WebsiteSettingsDTO {
     'footerCompanyText'?: string;
     'customFooterEnabled'?: boolean;
     'customFooterModuleUuid'?: string;
+    'cmsHeaderModule'?: string;
+    'cmsFooterModule'?: string;
+    'cmsCookieBannerModule'?: string;
+    'cmsModuleDefaults'?: string;
     'footerBackgroundColor'?: string;
     'footerForegroundColor'?: string;
     'footerShowSocialButtons'?: boolean;
@@ -7499,6 +8135,7 @@ export interface WebsiteSettingsDTO {
     'tertiaryButtonStyling'?: PageContentStylingDTO;
     'imageStyling'?: PageContentStylingDTO;
     'videoStyling'?: PageContentStylingDTO;
+    'mapStyling'?: PageContentStylingDTO;
     'formStyling'?: PageContentStylingDTO;
     'sliderStyling'?: PageContentStylingDTO;
     'accordionStyling'?: PageContentStylingDTO;
@@ -11818,6 +12455,3820 @@ export class BillingApi extends BaseAPI {
 
 
 /**
+ * CMSModulesApi - axios parameter creator
+ */
+export const CMSModulesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Includes retired modules, so a developer can see what a push removed.
+         * @summary List an app\'s CMS modules
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list: async (appUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('list', 'appUuid', appUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/cms-modules`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Accepts a staged npm tarball (base64) and module manifests. Publishes to the platform registry with the host token, then replaces the catalog.
+         * @summary Publish an app\'s CMS module package
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publishPackage: async (appUuid: string, requestBody: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('publishPackage', 'appUuid', appUuid)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('publishPackage', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/apps/{appUuid}/cms-modules/package`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Registers the modules shipped by a published package version. Modules missing from the payload are retired rather than deleted, because pages may still reference them.
+         * @summary Replace an app\'s CMS module catalog
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        upsert: async (appUuid: string, requestBody: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('upsert', 'appUuid', appUuid)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('upsert', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/apps/{appUuid}/cms-modules`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CMSModulesApi - functional programming interface
+ */
+export const CMSModulesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CMSModulesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Includes retired modules, so a developer can see what a push removed.
+         * @summary List an app\'s CMS modules
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async list(appUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListCmsModuleDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(appUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSModulesApi.list']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Accepts a staged npm tarball (base64) and module manifests. Publishes to the platform registry with the host token, then replaces the catalog.
+         * @summary Publish an app\'s CMS module package
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async publishPackage(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListCmsModuleDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.publishPackage(appUuid, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSModulesApi.publishPackage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Registers the modules shipped by a published package version. Modules missing from the payload are retired rather than deleted, because pages may still reference them.
+         * @summary Replace an app\'s CMS module catalog
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async upsert(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListCmsModuleDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.upsert(appUuid, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSModulesApi.upsert']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * CMSModulesApi - factory interface
+ */
+export const CMSModulesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CMSModulesApiFp(configuration)
+    return {
+        /**
+         * Includes retired modules, so a developer can see what a push removed.
+         * @summary List an app\'s CMS modules
+         * @param {string} appUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list(appUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListCmsModuleDTO> {
+            return localVarFp.list(appUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Accepts a staged npm tarball (base64) and module manifests. Publishes to the platform registry with the host token, then replaces the catalog.
+         * @summary Publish an app\'s CMS module package
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publishPackage(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListCmsModuleDTO> {
+            return localVarFp.publishPackage(appUuid, requestBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Registers the modules shipped by a published package version. Modules missing from the payload are retired rather than deleted, because pages may still reference them.
+         * @summary Replace an app\'s CMS module catalog
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        upsert(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListCmsModuleDTO> {
+            return localVarFp.upsert(appUuid, requestBody, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CMSModulesApi - object-oriented interface
+ */
+export class CMSModulesApi extends BaseAPI {
+    /**
+     * Includes retired modules, so a developer can see what a push removed.
+     * @summary List an app\'s CMS modules
+     * @param {string} appUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public list(appUuid: string, options?: RawAxiosRequestConfig) {
+        return CMSModulesApiFp(this.configuration).list(appUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Accepts a staged npm tarball (base64) and module manifests. Publishes to the platform registry with the host token, then replaces the catalog.
+     * @summary Publish an app\'s CMS module package
+     * @param {string} appUuid 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public publishPackage(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return CMSModulesApiFp(this.configuration).publishPackage(appUuid, requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Registers the modules shipped by a published package version. Modules missing from the payload are retired rather than deleted, because pages may still reference them.
+     * @summary Replace an app\'s CMS module catalog
+     * @param {string} appUuid 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public upsert(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return CMSModulesApiFp(this.configuration).upsert(appUuid, requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * CMSV2EnvironmentsApi - axios parameter creator
+ */
+export const CMSV2EnvironmentsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Create an environment
+         * @param {CmsEnvironmentDTO} cmsEnvironmentDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create3: async (cmsEnvironmentDTO: CmsEnvironmentDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cmsEnvironmentDTO' is not null or undefined
+            assertParamExists('create3', 'cmsEnvironmentDTO', cmsEnvironmentDTO)
+            const localVarPath = `/api/v2/cms/environments`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(cmsEnvironmentDTO, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete an environment except main
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        delete1: async (key: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('delete1', 'key', key)
+            const localVarPath = `/api/v2/cms/environments/{key}`
+                .replace('{key}', encodeURIComponent(String(key)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Translation group for a record
+         * @param {string} recordUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        group: async (recordUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('group', 'recordUuid', recordUuid)
+            const localVarPath = `/api/v2/cms/environments/translations/{recordUuid}`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Link two records as translations
+         * @param {string} fromUuid 
+         * @param {string} toUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        link: async (fromUuid: string, toUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'fromUuid' is not null or undefined
+            assertParamExists('link', 'fromUuid', fromUuid)
+            // verify required parameter 'toUuid' is not null or undefined
+            assertParamExists('link', 'toUuid', toUuid)
+            const localVarPath = `/api/v2/cms/environments/translations/{fromUuid}/link/{toUuid}`
+                .replace('{fromUuid}', encodeURIComponent(String(fromUuid)))
+                .replace('{toUuid}', encodeURIComponent(String(toUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List company environments
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list2: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/cms/environments`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Unlink a translation edge
+         * @param {string} fromUuid 
+         * @param {string} toUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unlink: async (fromUuid: string, toUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'fromUuid' is not null or undefined
+            assertParamExists('unlink', 'fromUuid', fromUuid)
+            // verify required parameter 'toUuid' is not null or undefined
+            assertParamExists('unlink', 'toUuid', toUuid)
+            const localVarPath = `/api/v2/cms/environments/translations/{fromUuid}/link/{toUuid}`
+                .replace('{fromUuid}', encodeURIComponent(String(fromUuid)))
+                .replace('{toUuid}', encodeURIComponent(String(toUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update routing, auth or htmlLang. Keys are immutable.
+         * @param {string} key 
+         * @param {CmsEnvironmentDTO} cmsEnvironmentDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        update1: async (key: string, cmsEnvironmentDTO: CmsEnvironmentDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('update1', 'key', key)
+            // verify required parameter 'cmsEnvironmentDTO' is not null or undefined
+            assertParamExists('update1', 'cmsEnvironmentDTO', cmsEnvironmentDTO)
+            const localVarPath = `/api/v2/cms/environments/{key}`
+                .replace('{key}', encodeURIComponent(String(key)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(cmsEnvironmentDTO, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CMSV2EnvironmentsApi - functional programming interface
+ */
+export const CMSV2EnvironmentsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CMSV2EnvironmentsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Create an environment
+         * @param {CmsEnvironmentDTO} cmsEnvironmentDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async create3(cmsEnvironmentDTO: CmsEnvironmentDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsEnvironmentDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create3(cmsEnvironmentDTO, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2EnvironmentsApi.create3']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Delete an environment except main
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async delete1(key: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.delete1(key, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2EnvironmentsApi.delete1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Translation group for a record
+         * @param {string} recordUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async group(recordUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.group(recordUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2EnvironmentsApi.group']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Link two records as translations
+         * @param {string} fromUuid 
+         * @param {string} toUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async link(fromUuid: string, toUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.link(fromUuid, toUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2EnvironmentsApi.link']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary List company environments
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async list2(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListCmsEnvironmentDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list2(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2EnvironmentsApi.list2']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Unlink a translation edge
+         * @param {string} fromUuid 
+         * @param {string} toUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async unlink(fromUuid: string, toUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.unlink(fromUuid, toUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2EnvironmentsApi.unlink']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Update routing, auth or htmlLang. Keys are immutable.
+         * @param {string} key 
+         * @param {CmsEnvironmentDTO} cmsEnvironmentDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async update1(key: string, cmsEnvironmentDTO: CmsEnvironmentDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsEnvironmentDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update1(key, cmsEnvironmentDTO, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2EnvironmentsApi.update1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * CMSV2EnvironmentsApi - factory interface
+ */
+export const CMSV2EnvironmentsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CMSV2EnvironmentsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Create an environment
+         * @param {CmsEnvironmentDTO} cmsEnvironmentDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create3(cmsEnvironmentDTO: CmsEnvironmentDTO, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsEnvironmentDTO> {
+            return localVarFp.create3(cmsEnvironmentDTO, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete an environment except main
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        delete1(key: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
+            return localVarFp.delete1(key, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Translation group for a record
+         * @param {string} recordUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        group(recordUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.group(recordUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Link two records as translations
+         * @param {string} fromUuid 
+         * @param {string} toUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        link(fromUuid: string, toUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
+            return localVarFp.link(fromUuid, toUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List company environments
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list2(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListCmsEnvironmentDTO> {
+            return localVarFp.list2(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Unlink a translation edge
+         * @param {string} fromUuid 
+         * @param {string} toUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unlink(fromUuid: string, toUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
+            return localVarFp.unlink(fromUuid, toUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update routing, auth or htmlLang. Keys are immutable.
+         * @param {string} key 
+         * @param {CmsEnvironmentDTO} cmsEnvironmentDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        update1(key: string, cmsEnvironmentDTO: CmsEnvironmentDTO, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsEnvironmentDTO> {
+            return localVarFp.update1(key, cmsEnvironmentDTO, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CMSV2EnvironmentsApi - object-oriented interface
+ */
+export class CMSV2EnvironmentsApi extends BaseAPI {
+    /**
+     * 
+     * @summary Create an environment
+     * @param {CmsEnvironmentDTO} cmsEnvironmentDTO 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public create3(cmsEnvironmentDTO: CmsEnvironmentDTO, options?: RawAxiosRequestConfig) {
+        return CMSV2EnvironmentsApiFp(this.configuration).create3(cmsEnvironmentDTO, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete an environment except main
+     * @param {string} key 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public delete1(key: string, options?: RawAxiosRequestConfig) {
+        return CMSV2EnvironmentsApiFp(this.configuration).delete1(key, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Translation group for a record
+     * @param {string} recordUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public group(recordUuid: string, options?: RawAxiosRequestConfig) {
+        return CMSV2EnvironmentsApiFp(this.configuration).group(recordUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Link two records as translations
+     * @param {string} fromUuid 
+     * @param {string} toUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public link(fromUuid: string, toUuid: string, options?: RawAxiosRequestConfig) {
+        return CMSV2EnvironmentsApiFp(this.configuration).link(fromUuid, toUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List company environments
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public list2(options?: RawAxiosRequestConfig) {
+        return CMSV2EnvironmentsApiFp(this.configuration).list2(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Unlink a translation edge
+     * @param {string} fromUuid 
+     * @param {string} toUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public unlink(fromUuid: string, toUuid: string, options?: RawAxiosRequestConfig) {
+        return CMSV2EnvironmentsApiFp(this.configuration).unlink(fromUuid, toUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update routing, auth or htmlLang. Keys are immutable.
+     * @param {string} key 
+     * @param {CmsEnvironmentDTO} cmsEnvironmentDTO 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public update1(key: string, cmsEnvironmentDTO: CmsEnvironmentDTO, options?: RawAxiosRequestConfig) {
+        return CMSV2EnvironmentsApiFp(this.configuration).update1(key, cmsEnvironmentDTO, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * CMSV2PagesApi - axios parameter creator
+ */
+export const CMSV2PagesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Returns patches the editor applies through the same revision channel as a manual edit, so the change is undoable. Page scope may add, remove and reorder modules. A module\'s code lives in a shared npm package, so the AI rewrites field values and composition, never the component itself.
+         * @summary Rewrite a page or a module from a prompt
+         * @param {string} recordUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        aiRewrite: async (recordUuid: string, requestBody: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('aiRewrite', 'recordUuid', recordUuid)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('aiRewrite', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/ai/rewrite`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Create a translated sibling page for an environment
+         * @param {string} recordUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTranslation: async (recordUuid: string, key: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('createTranslation', 'recordUuid', recordUuid)
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('createTranslation', 'key', key)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/environments/{key}/translate`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)))
+                .replace('{key}', encodeURIComponent(String(key)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Finds the page at /404 on the root Webpage object, or creates an empty draft there, and stores it as the company custom 404 page.
+         * @summary Create or reuse the custom 404 page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        ensureNotFound: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/webpages/v2/pages/not-found`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Environment coverage for the builder dropdown
+         * @param {string} recordUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        environmentCoverage: async (recordUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('environmentCoverage', 'recordUuid', recordUuid)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/environments`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Load a page for the builder
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        get: async (recordUuid: string, locale?: string, state?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('get', 'recordUuid', recordUuid)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            if (state !== undefined) {
+                localVarQueryParameter['state'] = state;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary CMS v2 object template document
+         * @param {string} objectUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTemplate: async (objectUuid: string, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'objectUuid' is not null or undefined
+            assertParamExists('getTemplate', 'objectUuid', objectUuid)
+            const localVarPath = `/api/v2/webpages/v2/pages/templates/{objectUuid}`
+                .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Draft snapshots for one locale
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        history: async (recordUuid: string, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('history', 'recordUuid', recordUuid)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/history`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Host this page on another environment
+         * @param {string} recordUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hostOnEnvironment: async (recordUuid: string, key: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('hostOnEnvironment', 'recordUuid', recordUuid)
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('hostOnEnvironment', 'key', key)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/environments/{key}/host`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)))
+                .replace('{key}', encodeURIComponent(String(key)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Backs the builder\'s library picker. Only modules from installed apps, and never retired ones, because a new page must be able to render them.
+         * @summary Modules available to this company
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        library: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/webpages/v2/pages/library/modules`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Rejected with 409 when expectedRevision does not match, so a stale client cannot overwrite another editor\'s work.
+         * @summary Apply patches to a page draft
+         * @param {string} recordUuid 
+         * @param {CmsPagePatchRequest} cmsPagePatchRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patch: async (recordUuid: string, cmsPagePatchRequest: CmsPagePatchRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('patch', 'recordUuid', recordUuid)
+            // verify required parameter 'cmsPagePatchRequest' is not null or undefined
+            assertParamExists('patch', 'cmsPagePatchRequest', cmsPagePatchRequest)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/patch`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(cmsPagePatchRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * The iframe renders the draft document, which the public API will not serve. The signature covers the page and an expiry so a leaked link cannot be retargeted or replayed.
+         * @summary Signed preview URL for the builder iframe
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        previewLink: async (recordUuid: string, locale?: string, state?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('previewLink', 'recordUuid', recordUuid)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/preview-link`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            if (state !== undefined) {
+                localVarQueryParameter['state'] = state;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Copies the draft over the published document. Publishing is per locale so a translated page can ship without republishing the others.
+         * @summary Publish one locale, or all of them
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {boolean} [allLocales] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publish: async (recordUuid: string, locale?: string, allLocales?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('publish', 'recordUuid', recordUuid)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/publish`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            if (allLocales !== undefined) {
+                localVarQueryParameter['allLocales'] = allLocales;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Restore a draft snapshot
+         * @param {string} recordUuid 
+         * @param {number} index 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restoreHistory: async (recordUuid: string, index: number, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('restoreHistory', 'recordUuid', recordUuid)
+            // verify required parameter 'index' is not null or undefined
+            assertParamExists('restoreHistory', 'index', index)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/history/{index}/restore`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)))
+                .replace('{index}', encodeURIComponent(String(index)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Replace a page draft
+         * @param {string} recordUuid 
+         * @param {CmsPageDocument} cmsPageDocument 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        save: async (recordUuid: string, cmsPageDocument: CmsPageDocument, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('save', 'recordUuid', recordUuid)
+            // verify required parameter 'cmsPageDocument' is not null or undefined
+            assertParamExists('save', 'cmsPageDocument', cmsPageDocument)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(cmsPageDocument, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update slug, title, excerpt, SEO and page scripts
+         * @param {string} recordUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveMeta: async (recordUuid: string, requestBody: { [key: string]: any | null; }, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('saveMeta', 'recordUuid', recordUuid)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('saveMeta', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/meta`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Replace a CMS v2 object template
+         * @param {string} objectUuid 
+         * @param {CmsPageDocument} cmsPageDocument 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveTemplate: async (objectUuid: string, cmsPageDocument: CmsPageDocument, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'objectUuid' is not null or undefined
+            assertParamExists('saveTemplate', 'objectUuid', objectUuid)
+            // verify required parameter 'cmsPageDocument' is not null or undefined
+            assertParamExists('saveTemplate', 'cmsPageDocument', cmsPageDocument)
+            const localVarPath = `/api/v2/webpages/v2/pages/templates/{objectUuid}`
+                .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(cmsPageDocument, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Take one locale offline
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unpublish: async (recordUuid: string, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('unpublish', 'recordUuid', recordUuid)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/unpublish`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Remove an environment from this page only
+         * @param {string} recordUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unselectEnvironment: async (recordUuid: string, key: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('unselectEnvironment', 'recordUuid', recordUuid)
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('unselectEnvironment', 'key', key)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/environments/{key}`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)))
+                .replace('{key}', encodeURIComponent(String(key)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CMSV2PagesApi - functional programming interface
+ */
+export const CMSV2PagesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CMSV2PagesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Returns patches the editor applies through the same revision channel as a manual edit, so the change is undoable. Page scope may add, remove and reorder modules. A module\'s code lives in a shared npm package, so the AI rewrites field values and composition, never the component itself.
+         * @summary Rewrite a page or a module from a prompt
+         * @param {string} recordUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async aiRewrite(recordUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.aiRewrite(recordUuid, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.aiRewrite']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Create a translated sibling page for an environment
+         * @param {string} recordUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTranslation(recordUuid: string, key: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTranslation(recordUuid, key, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.createTranslation']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Finds the page at /404 on the root Webpage object, or creates an empty draft there, and stores it as the company custom 404 page.
+         * @summary Create or reuse the custom 404 page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async ensureNotFound(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.ensureNotFound(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.ensureNotFound']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Environment coverage for the builder dropdown
+         * @param {string} recordUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async environmentCoverage(recordUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.environmentCoverage(recordUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.environmentCoverage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Load a page for the builder
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async get(recordUuid: string, locale?: string, state?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.get(recordUuid, locale, state, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.get']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary CMS v2 object template document
+         * @param {string} objectUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTemplate(objectUuid: string, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDocument>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTemplate(objectUuid, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.getTemplate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Draft snapshots for one locale
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async history(recordUuid: string, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.history(recordUuid, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.history']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Host this page on another environment
+         * @param {string} recordUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async hostOnEnvironment(recordUuid: string, key: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.hostOnEnvironment(recordUuid, key, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.hostOnEnvironment']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Backs the builder\'s library picker. Only modules from installed apps, and never retired ones, because a new page must be able to render them.
+         * @summary Modules available to this company
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async library(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListCmsModuleDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.library(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.library']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Rejected with 409 when expectedRevision does not match, so a stale client cannot overwrite another editor\'s work.
+         * @summary Apply patches to a page draft
+         * @param {string} recordUuid 
+         * @param {CmsPagePatchRequest} cmsPagePatchRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async patch(recordUuid: string, cmsPagePatchRequest: CmsPagePatchRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.patch(recordUuid, cmsPagePatchRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.patch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * The iframe renders the draft document, which the public API will not serve. The signature covers the page and an expiry so a leaked link cannot be retargeted or replayed.
+         * @summary Signed preview URL for the builder iframe
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async previewLink(recordUuid: string, locale?: string, state?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.previewLink(recordUuid, locale, state, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.previewLink']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Copies the draft over the published document. Publishing is per locale so a translated page can ship without republishing the others.
+         * @summary Publish one locale, or all of them
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {boolean} [allLocales] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async publish(recordUuid: string, locale?: string, allLocales?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.publish(recordUuid, locale, allLocales, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.publish']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Restore a draft snapshot
+         * @param {string} recordUuid 
+         * @param {number} index 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async restoreHistory(recordUuid: string, index: number, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.restoreHistory(recordUuid, index, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.restoreHistory']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Replace a page draft
+         * @param {string} recordUuid 
+         * @param {CmsPageDocument} cmsPageDocument 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async save(recordUuid: string, cmsPageDocument: CmsPageDocument, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.save(recordUuid, cmsPageDocument, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.save']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Update slug, title, excerpt, SEO and page scripts
+         * @param {string} recordUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async saveMeta(recordUuid: string, requestBody: { [key: string]: any | null; }, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.saveMeta(recordUuid, requestBody, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.saveMeta']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Replace a CMS v2 object template
+         * @param {string} objectUuid 
+         * @param {CmsPageDocument} cmsPageDocument 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async saveTemplate(objectUuid: string, cmsPageDocument: CmsPageDocument, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDocument>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.saveTemplate(objectUuid, cmsPageDocument, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.saveTemplate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Take one locale offline
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async unpublish(recordUuid: string, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.unpublish(recordUuid, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.unpublish']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Remove an environment from this page only
+         * @param {string} recordUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async unselectEnvironment(recordUuid: string, key: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.unselectEnvironment(recordUuid, key, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.unselectEnvironment']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * CMSV2PagesApi - factory interface
+ */
+export const CMSV2PagesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CMSV2PagesApiFp(configuration)
+    return {
+        /**
+         * Returns patches the editor applies through the same revision channel as a manual edit, so the change is undoable. Page scope may add, remove and reorder modules. A module\'s code lives in a shared npm package, so the AI rewrites field values and composition, never the component itself.
+         * @summary Rewrite a page or a module from a prompt
+         * @param {string} recordUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        aiRewrite(recordUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.aiRewrite(recordUuid, requestBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Create a translated sibling page for an environment
+         * @param {string} recordUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTranslation(recordUuid: string, key: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.createTranslation(recordUuid, key, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Finds the page at /404 on the root Webpage object, or creates an empty draft there, and stores it as the company custom 404 page.
+         * @summary Create or reuse the custom 404 page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        ensureNotFound(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.ensureNotFound(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Environment coverage for the builder dropdown
+         * @param {string} recordUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        environmentCoverage(recordUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.environmentCoverage(recordUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Load a page for the builder
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        get(recordUuid: string, locale?: string, state?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.get(recordUuid, locale, state, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary CMS v2 object template document
+         * @param {string} objectUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTemplate(objectUuid: string, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDocument> {
+            return localVarFp.getTemplate(objectUuid, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Draft snapshots for one locale
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        history(recordUuid: string, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListMapStringObject> {
+            return localVarFp.history(recordUuid, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Host this page on another environment
+         * @param {string} recordUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        hostOnEnvironment(recordUuid: string, key: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.hostOnEnvironment(recordUuid, key, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Backs the builder\'s library picker. Only modules from installed apps, and never retired ones, because a new page must be able to render them.
+         * @summary Modules available to this company
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        library(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListCmsModuleDTO> {
+            return localVarFp.library(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Rejected with 409 when expectedRevision does not match, so a stale client cannot overwrite another editor\'s work.
+         * @summary Apply patches to a page draft
+         * @param {string} recordUuid 
+         * @param {CmsPagePatchRequest} cmsPagePatchRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patch(recordUuid: string, cmsPagePatchRequest: CmsPagePatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.patch(recordUuid, cmsPagePatchRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * The iframe renders the draft document, which the public API will not serve. The signature covers the page and an expiry so a leaked link cannot be retargeted or replayed.
+         * @summary Signed preview URL for the builder iframe
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        previewLink(recordUuid: string, locale?: string, state?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.previewLink(recordUuid, locale, state, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Copies the draft over the published document. Publishing is per locale so a translated page can ship without republishing the others.
+         * @summary Publish one locale, or all of them
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {boolean} [allLocales] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publish(recordUuid: string, locale?: string, allLocales?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListCmsPageDTO> {
+            return localVarFp.publish(recordUuid, locale, allLocales, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Restore a draft snapshot
+         * @param {string} recordUuid 
+         * @param {number} index 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restoreHistory(recordUuid: string, index: number, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.restoreHistory(recordUuid, index, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Replace a page draft
+         * @param {string} recordUuid 
+         * @param {CmsPageDocument} cmsPageDocument 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        save(recordUuid: string, cmsPageDocument: CmsPageDocument, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.save(recordUuid, cmsPageDocument, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update slug, title, excerpt, SEO and page scripts
+         * @param {string} recordUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveMeta(recordUuid: string, requestBody: { [key: string]: any | null; }, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.saveMeta(recordUuid, requestBody, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Replace a CMS v2 object template
+         * @param {string} objectUuid 
+         * @param {CmsPageDocument} cmsPageDocument 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveTemplate(objectUuid: string, cmsPageDocument: CmsPageDocument, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDocument> {
+            return localVarFp.saveTemplate(objectUuid, cmsPageDocument, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Take one locale offline
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unpublish(recordUuid: string, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.unpublish(recordUuid, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Remove an environment from this page only
+         * @param {string} recordUuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unselectEnvironment(recordUuid: string, key: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.unselectEnvironment(recordUuid, key, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CMSV2PagesApi - object-oriented interface
+ */
+export class CMSV2PagesApi extends BaseAPI {
+    /**
+     * Returns patches the editor applies through the same revision channel as a manual edit, so the change is undoable. Page scope may add, remove and reorder modules. A module\'s code lives in a shared npm package, so the AI rewrites field values and composition, never the component itself.
+     * @summary Rewrite a page or a module from a prompt
+     * @param {string} recordUuid 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public aiRewrite(recordUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).aiRewrite(recordUuid, requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Create a translated sibling page for an environment
+     * @param {string} recordUuid 
+     * @param {string} key 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public createTranslation(recordUuid: string, key: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).createTranslation(recordUuid, key, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Finds the page at /404 on the root Webpage object, or creates an empty draft there, and stores it as the company custom 404 page.
+     * @summary Create or reuse the custom 404 page
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public ensureNotFound(options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).ensureNotFound(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Environment coverage for the builder dropdown
+     * @param {string} recordUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public environmentCoverage(recordUuid: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).environmentCoverage(recordUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Load a page for the builder
+     * @param {string} recordUuid 
+     * @param {string} [locale] 
+     * @param {string} [state] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public get(recordUuid: string, locale?: string, state?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).get(recordUuid, locale, state, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary CMS v2 object template document
+     * @param {string} objectUuid 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getTemplate(objectUuid: string, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).getTemplate(objectUuid, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Draft snapshots for one locale
+     * @param {string} recordUuid 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public history(recordUuid: string, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).history(recordUuid, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Host this page on another environment
+     * @param {string} recordUuid 
+     * @param {string} key 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public hostOnEnvironment(recordUuid: string, key: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).hostOnEnvironment(recordUuid, key, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Backs the builder\'s library picker. Only modules from installed apps, and never retired ones, because a new page must be able to render them.
+     * @summary Modules available to this company
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public library(options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).library(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Rejected with 409 when expectedRevision does not match, so a stale client cannot overwrite another editor\'s work.
+     * @summary Apply patches to a page draft
+     * @param {string} recordUuid 
+     * @param {CmsPagePatchRequest} cmsPagePatchRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public patch(recordUuid: string, cmsPagePatchRequest: CmsPagePatchRequest, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).patch(recordUuid, cmsPagePatchRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * The iframe renders the draft document, which the public API will not serve. The signature covers the page and an expiry so a leaked link cannot be retargeted or replayed.
+     * @summary Signed preview URL for the builder iframe
+     * @param {string} recordUuid 
+     * @param {string} [locale] 
+     * @param {string} [state] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public previewLink(recordUuid: string, locale?: string, state?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).previewLink(recordUuid, locale, state, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Copies the draft over the published document. Publishing is per locale so a translated page can ship without republishing the others.
+     * @summary Publish one locale, or all of them
+     * @param {string} recordUuid 
+     * @param {string} [locale] 
+     * @param {boolean} [allLocales] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public publish(recordUuid: string, locale?: string, allLocales?: boolean, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).publish(recordUuid, locale, allLocales, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Restore a draft snapshot
+     * @param {string} recordUuid 
+     * @param {number} index 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public restoreHistory(recordUuid: string, index: number, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).restoreHistory(recordUuid, index, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Replace a page draft
+     * @param {string} recordUuid 
+     * @param {CmsPageDocument} cmsPageDocument 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public save(recordUuid: string, cmsPageDocument: CmsPageDocument, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).save(recordUuid, cmsPageDocument, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update slug, title, excerpt, SEO and page scripts
+     * @param {string} recordUuid 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public saveMeta(recordUuid: string, requestBody: { [key: string]: any | null; }, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).saveMeta(recordUuid, requestBody, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Replace a CMS v2 object template
+     * @param {string} objectUuid 
+     * @param {CmsPageDocument} cmsPageDocument 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public saveTemplate(objectUuid: string, cmsPageDocument: CmsPageDocument, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).saveTemplate(objectUuid, cmsPageDocument, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Take one locale offline
+     * @param {string} recordUuid 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public unpublish(recordUuid: string, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).unpublish(recordUuid, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Remove an environment from this page only
+     * @param {string} recordUuid 
+     * @param {string} key 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public unselectEnvironment(recordUuid: string, key: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).unselectEnvironment(recordUuid, key, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * CMSV2PublicApi - axios parameter creator
+ */
+export const CMSV2PublicApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Installed app settings with SECRET fields removed
+         * @param {string} xCaraerSubdomain 
+         * @param {string} appName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appSettings: async (xCaraerSubdomain: string, appName: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('appSettings', 'xCaraerSubdomain', xCaraerSubdomain)
+            // verify required parameter 'appName' is not null or undefined
+            assertParamExists('appSettings', 'appName', appName)
+            const localVarPath = `/api/v2/webpages/v2/public/apps/{appName}/settings`
+                .replace('{appName}', encodeURIComponent(String(appName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Redirect to a company file for the website runtime
+         * @param {string} xCaraerSubdomain 
+         * @param {string} key 
+         * @param {string} [pageUuid] 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {string} [caraerExpires] 
+         * @param {string} [caraerSig] 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        asset: async (xCaraerSubdomain: string, key: string, pageUuid?: string, environment?: string, locale?: string, access?: string, token?: string, caraerExpires?: string, caraerSig?: string, xCaraerWebpageAccess?: string, authorization?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('asset', 'xCaraerSubdomain', xCaraerSubdomain)
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('asset', 'key', key)
+            const localVarPath = `/api/v2/webpages/v2/public/asset`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (key !== undefined) {
+                localVarQueryParameter['key'] = key;
+            }
+
+            if (pageUuid !== undefined) {
+                localVarQueryParameter['pageUuid'] = pageUuid;
+            }
+
+            if (environment !== undefined) {
+                localVarQueryParameter['environment'] = environment;
+            }
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            if (access !== undefined) {
+                localVarQueryParameter['access'] = access;
+            }
+
+            if (token !== undefined) {
+                localVarQueryParameter['token'] = token;
+            }
+
+            if (caraerExpires !== undefined) {
+                localVarQueryParameter['caraer_expires'] = caraerExpires;
+            }
+
+            if (caraerSig !== undefined) {
+                localVarQueryParameter['caraer_sig'] = caraerSig;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            if (xCaraerWebpageAccess != null) {
+                localVarHeaderParameter['X-Caraer-Webpage-Access'] = String(xCaraerWebpageAccess);
+            }
+            if (authorization != null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Installed apps and modules for a company\'s website build
+         * @param {string} xCaraerSubdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        buildManifest: async (xCaraerSubdomain: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('buildManifest', 'xCaraerSubdomain', xCaraerSubdomain)
+            const localVarPath = `/api/v2/webpages/v2/build/manifest`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Navigation menus for the header and footer
+         * @param {string} xCaraerSubdomain 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        menus: async (xCaraerSubdomain: string, environment?: string, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('menus', 'xCaraerSubdomain', xCaraerSubdomain)
+            const localVarPath = `/api/v2/webpages/v2/public/menus`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (environment !== undefined) {
+                localVarQueryParameter['environment'] = environment;
+            }
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary A published page by URL path
+         * @param {string} xCaraerSubdomain 
+         * @param {string} path 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [authorization] 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageByPath: async (xCaraerSubdomain: string, path: string, xCaraerWebpageAccess?: string, authorization?: string, environment?: string, locale?: string, access?: string, token?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('pageByPath', 'xCaraerSubdomain', xCaraerSubdomain)
+            // verify required parameter 'path' is not null or undefined
+            assertParamExists('pageByPath', 'path', path)
+            const localVarPath = `/api/v2/webpages/v2/public/page`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (environment !== undefined) {
+                localVarQueryParameter['environment'] = environment;
+            }
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            if (path !== undefined) {
+                localVarQueryParameter['path'] = path;
+            }
+
+            if (access !== undefined) {
+                localVarQueryParameter['access'] = access;
+            }
+
+            if (token !== undefined) {
+                localVarQueryParameter['token'] = token;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            if (xCaraerWebpageAccess != null) {
+                localVarHeaderParameter['X-Caraer-Webpage-Access'] = String(xCaraerWebpageAccess);
+            }
+            if (authorization != null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Used by the builder preview, which addresses a page by uuid because a draft may not have a slug yet.
+         * @summary A page by record uuid
+         * @param {string} xCaraerSubdomain 
+         * @param {string} uuid 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [authorization] 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {string} [caraerExpires] 
+         * @param {string} [caraerSig] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageByUuid: async (xCaraerSubdomain: string, uuid: string, xCaraerWebpageAccess?: string, authorization?: string, environment?: string, locale?: string, state?: string, access?: string, token?: string, caraerExpires?: string, caraerSig?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('pageByUuid', 'xCaraerSubdomain', xCaraerSubdomain)
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('pageByUuid', 'uuid', uuid)
+            const localVarPath = `/api/v2/webpages/v2/public/page/{uuid}`
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (environment !== undefined) {
+                localVarQueryParameter['environment'] = environment;
+            }
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            if (state !== undefined) {
+                localVarQueryParameter['state'] = state;
+            }
+
+            if (access !== undefined) {
+                localVarQueryParameter['access'] = access;
+            }
+
+            if (token !== undefined) {
+                localVarQueryParameter['token'] = token;
+            }
+
+            if (caraerExpires !== undefined) {
+                localVarQueryParameter['caraer_expires'] = caraerExpires;
+            }
+
+            if (caraerSig !== undefined) {
+                localVarQueryParameter['caraer_sig'] = caraerSig;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            if (xCaraerWebpageAccess != null) {
+                localVarHeaderParameter['X-Caraer-Webpage-Access'] = String(xCaraerWebpageAccess);
+            }
+            if (authorization != null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Protection info for a path, without the page document
+         * @param {string} xCaraerSubdomain 
+         * @param {string} path 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageGate: async (xCaraerSubdomain: string, path: string, environment?: string, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('pageGate', 'xCaraerSubdomain', xCaraerSubdomain)
+            // verify required parameter 'path' is not null or undefined
+            assertParamExists('pageGate', 'path', path)
+            const localVarPath = `/api/v2/webpages/v2/public/page/gate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (environment !== undefined) {
+                localVarQueryParameter['environment'] = environment;
+            }
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            if (path !== undefined) {
+                localVarQueryParameter['path'] = path;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Published paths per environment, for sitemaps and cache warming
+         * @param {string} xCaraerSubdomain 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        paths: async (xCaraerSubdomain: string, environment?: string, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('paths', 'xCaraerSubdomain', xCaraerSubdomain)
+            const localVarPath = `/api/v2/webpages/v2/public/paths`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (environment !== undefined) {
+                localVarQueryParameter['environment'] = environment;
+            }
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Public records visible in an environment
+         * @param {string} xCaraerSubdomain 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        records: async (xCaraerSubdomain: string, requestBody: { [key: string]: any | null; }, environment?: string, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('records', 'xCaraerSubdomain', xCaraerSubdomain)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('records', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/webpages/v2/public/records`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (environment !== undefined) {
+                localVarQueryParameter['environment'] = environment;
+            }
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Company settings, branding and locales
+         * @param {string} xCaraerSubdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        settings: async (xCaraerSubdomain: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('settings', 'xCaraerSubdomain', xCaraerSubdomain)
+            const localVarPath = `/api/v2/webpages/v2/public/settings`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Unlock a password-protected CMS v2 page
+         * @param {string} xCaraerSubdomain 
+         * @param {string} uuid 
+         * @param {{ [key: string]: string; }} requestBody 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unlock: async (xCaraerSubdomain: string, uuid: string, requestBody: { [key: string]: string; }, environment?: string, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('unlock', 'xCaraerSubdomain', xCaraerSubdomain)
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('unlock', 'uuid', uuid)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('unlock', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/webpages/v2/public/page/{uuid}/unlock`
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (environment !== undefined) {
+                localVarQueryParameter['environment'] = environment;
+            }
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CMSV2PublicApi - functional programming interface
+ */
+export const CMSV2PublicApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CMSV2PublicApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Installed app settings with SECRET fields removed
+         * @param {string} xCaraerSubdomain 
+         * @param {string} appName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async appSettings(xCaraerSubdomain: string, appName: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.appSettings(xCaraerSubdomain, appName, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.appSettings']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Redirect to a company file for the website runtime
+         * @param {string} xCaraerSubdomain 
+         * @param {string} key 
+         * @param {string} [pageUuid] 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {string} [caraerExpires] 
+         * @param {string} [caraerSig] 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async asset(xCaraerSubdomain: string, key: string, pageUuid?: string, environment?: string, locale?: string, access?: string, token?: string, caraerExpires?: string, caraerSig?: string, xCaraerWebpageAccess?: string, authorization?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.asset(xCaraerSubdomain, key, pageUuid, environment, locale, access, token, caraerExpires, caraerSig, xCaraerWebpageAccess, authorization, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.asset']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Installed apps and modules for a company\'s website build
+         * @param {string} xCaraerSubdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async buildManifest(xCaraerSubdomain: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.buildManifest(xCaraerSubdomain, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.buildManifest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Navigation menus for the header and footer
+         * @param {string} xCaraerSubdomain 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async menus(xCaraerSubdomain: string, environment?: string, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListCmsPublicMenuDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.menus(xCaraerSubdomain, environment, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.menus']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary A published page by URL path
+         * @param {string} xCaraerSubdomain 
+         * @param {string} path 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [authorization] 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pageByPath(xCaraerSubdomain: string, path: string, xCaraerWebpageAccess?: string, authorization?: string, environment?: string, locale?: string, access?: string, token?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pageByPath(xCaraerSubdomain, path, xCaraerWebpageAccess, authorization, environment, locale, access, token, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.pageByPath']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Used by the builder preview, which addresses a page by uuid because a draft may not have a slug yet.
+         * @summary A page by record uuid
+         * @param {string} xCaraerSubdomain 
+         * @param {string} uuid 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [authorization] 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {string} [caraerExpires] 
+         * @param {string} [caraerSig] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pageByUuid(xCaraerSubdomain: string, uuid: string, xCaraerWebpageAccess?: string, authorization?: string, environment?: string, locale?: string, state?: string, access?: string, token?: string, caraerExpires?: string, caraerSig?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pageByUuid(xCaraerSubdomain, uuid, xCaraerWebpageAccess, authorization, environment, locale, state, access, token, caraerExpires, caraerSig, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.pageByUuid']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Protection info for a path, without the page document
+         * @param {string} xCaraerSubdomain 
+         * @param {string} path 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pageGate(xCaraerSubdomain: string, path: string, environment?: string, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pageGate(xCaraerSubdomain, path, environment, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.pageGate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Published paths per environment, for sitemaps and cache warming
+         * @param {string} xCaraerSubdomain 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async paths(xCaraerSubdomain: string, environment?: string, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paths(xCaraerSubdomain, environment, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.paths']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Public records visible in an environment
+         * @param {string} xCaraerSubdomain 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async records(xCaraerSubdomain: string, requestBody: { [key: string]: any | null; }, environment?: string, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.records(xCaraerSubdomain, requestBody, environment, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.records']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Company settings, branding and locales
+         * @param {string} xCaraerSubdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async settings(xCaraerSubdomain: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.settings(xCaraerSubdomain, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.settings']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Unlock a password-protected CMS v2 page
+         * @param {string} xCaraerSubdomain 
+         * @param {string} uuid 
+         * @param {{ [key: string]: string; }} requestBody 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async unlock(xCaraerSubdomain: string, uuid: string, requestBody: { [key: string]: string; }, environment?: string, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.unlock(xCaraerSubdomain, uuid, requestBody, environment, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.unlock']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * CMSV2PublicApi - factory interface
+ */
+export const CMSV2PublicApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CMSV2PublicApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Installed app settings with SECRET fields removed
+         * @param {string} xCaraerSubdomain 
+         * @param {string} appName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appSettings(xCaraerSubdomain: string, appName: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.appSettings(xCaraerSubdomain, appName, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Redirect to a company file for the website runtime
+         * @param {string} xCaraerSubdomain 
+         * @param {string} key 
+         * @param {string} [pageUuid] 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {string} [caraerExpires] 
+         * @param {string} [caraerSig] 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        asset(xCaraerSubdomain: string, key: string, pageUuid?: string, environment?: string, locale?: string, access?: string, token?: string, caraerExpires?: string, caraerSig?: string, xCaraerWebpageAccess?: string, authorization?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.asset(xCaraerSubdomain, key, pageUuid, environment, locale, access, token, caraerExpires, caraerSig, xCaraerWebpageAccess, authorization, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Installed apps and modules for a company\'s website build
+         * @param {string} xCaraerSubdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        buildManifest(xCaraerSubdomain: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.buildManifest(xCaraerSubdomain, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Navigation menus for the header and footer
+         * @param {string} xCaraerSubdomain 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        menus(xCaraerSubdomain: string, environment?: string, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListCmsPublicMenuDTO> {
+            return localVarFp.menus(xCaraerSubdomain, environment, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary A published page by URL path
+         * @param {string} xCaraerSubdomain 
+         * @param {string} path 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [authorization] 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageByPath(xCaraerSubdomain: string, path: string, xCaraerWebpageAccess?: string, authorization?: string, environment?: string, locale?: string, access?: string, token?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.pageByPath(xCaraerSubdomain, path, xCaraerWebpageAccess, authorization, environment, locale, access, token, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Used by the builder preview, which addresses a page by uuid because a draft may not have a slug yet.
+         * @summary A page by record uuid
+         * @param {string} xCaraerSubdomain 
+         * @param {string} uuid 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [authorization] 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {string} [caraerExpires] 
+         * @param {string} [caraerSig] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageByUuid(xCaraerSubdomain: string, uuid: string, xCaraerWebpageAccess?: string, authorization?: string, environment?: string, locale?: string, state?: string, access?: string, token?: string, caraerExpires?: string, caraerSig?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.pageByUuid(xCaraerSubdomain, uuid, xCaraerWebpageAccess, authorization, environment, locale, state, access, token, caraerExpires, caraerSig, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Protection info for a path, without the page document
+         * @param {string} xCaraerSubdomain 
+         * @param {string} path 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageGate(xCaraerSubdomain: string, path: string, environment?: string, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.pageGate(xCaraerSubdomain, path, environment, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Published paths per environment, for sitemaps and cache warming
+         * @param {string} xCaraerSubdomain 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        paths(xCaraerSubdomain: string, environment?: string, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListMapStringObject> {
+            return localVarFp.paths(xCaraerSubdomain, environment, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Public records visible in an environment
+         * @param {string} xCaraerSubdomain 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        records(xCaraerSubdomain: string, requestBody: { [key: string]: any | null; }, environment?: string, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.records(xCaraerSubdomain, requestBody, environment, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Company settings, branding and locales
+         * @param {string} xCaraerSubdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        settings(xCaraerSubdomain: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.settings(xCaraerSubdomain, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Unlock a password-protected CMS v2 page
+         * @param {string} xCaraerSubdomain 
+         * @param {string} uuid 
+         * @param {{ [key: string]: string; }} requestBody 
+         * @param {string} [environment] 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unlock(xCaraerSubdomain: string, uuid: string, requestBody: { [key: string]: string; }, environment?: string, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
+            return localVarFp.unlock(xCaraerSubdomain, uuid, requestBody, environment, locale, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CMSV2PublicApi - object-oriented interface
+ */
+export class CMSV2PublicApi extends BaseAPI {
+    /**
+     * 
+     * @summary Installed app settings with SECRET fields removed
+     * @param {string} xCaraerSubdomain 
+     * @param {string} appName 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public appSettings(xCaraerSubdomain: string, appName: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).appSettings(xCaraerSubdomain, appName, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Redirect to a company file for the website runtime
+     * @param {string} xCaraerSubdomain 
+     * @param {string} key 
+     * @param {string} [pageUuid] 
+     * @param {string} [environment] 
+     * @param {string} [locale] 
+     * @param {string} [access] 
+     * @param {string} [token] 
+     * @param {string} [caraerExpires] 
+     * @param {string} [caraerSig] 
+     * @param {string} [xCaraerWebpageAccess] 
+     * @param {string} [authorization] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public asset(xCaraerSubdomain: string, key: string, pageUuid?: string, environment?: string, locale?: string, access?: string, token?: string, caraerExpires?: string, caraerSig?: string, xCaraerWebpageAccess?: string, authorization?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).asset(xCaraerSubdomain, key, pageUuid, environment, locale, access, token, caraerExpires, caraerSig, xCaraerWebpageAccess, authorization, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Installed apps and modules for a company\'s website build
+     * @param {string} xCaraerSubdomain 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public buildManifest(xCaraerSubdomain: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).buildManifest(xCaraerSubdomain, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Navigation menus for the header and footer
+     * @param {string} xCaraerSubdomain 
+     * @param {string} [environment] 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public menus(xCaraerSubdomain: string, environment?: string, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).menus(xCaraerSubdomain, environment, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary A published page by URL path
+     * @param {string} xCaraerSubdomain 
+     * @param {string} path 
+     * @param {string} [xCaraerWebpageAccess] 
+     * @param {string} [authorization] 
+     * @param {string} [environment] 
+     * @param {string} [locale] 
+     * @param {string} [access] 
+     * @param {string} [token] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public pageByPath(xCaraerSubdomain: string, path: string, xCaraerWebpageAccess?: string, authorization?: string, environment?: string, locale?: string, access?: string, token?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).pageByPath(xCaraerSubdomain, path, xCaraerWebpageAccess, authorization, environment, locale, access, token, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Used by the builder preview, which addresses a page by uuid because a draft may not have a slug yet.
+     * @summary A page by record uuid
+     * @param {string} xCaraerSubdomain 
+     * @param {string} uuid 
+     * @param {string} [xCaraerWebpageAccess] 
+     * @param {string} [authorization] 
+     * @param {string} [environment] 
+     * @param {string} [locale] 
+     * @param {string} [state] 
+     * @param {string} [access] 
+     * @param {string} [token] 
+     * @param {string} [caraerExpires] 
+     * @param {string} [caraerSig] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public pageByUuid(xCaraerSubdomain: string, uuid: string, xCaraerWebpageAccess?: string, authorization?: string, environment?: string, locale?: string, state?: string, access?: string, token?: string, caraerExpires?: string, caraerSig?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).pageByUuid(xCaraerSubdomain, uuid, xCaraerWebpageAccess, authorization, environment, locale, state, access, token, caraerExpires, caraerSig, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Protection info for a path, without the page document
+     * @param {string} xCaraerSubdomain 
+     * @param {string} path 
+     * @param {string} [environment] 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public pageGate(xCaraerSubdomain: string, path: string, environment?: string, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).pageGate(xCaraerSubdomain, path, environment, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Published paths per environment, for sitemaps and cache warming
+     * @param {string} xCaraerSubdomain 
+     * @param {string} [environment] 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public paths(xCaraerSubdomain: string, environment?: string, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).paths(xCaraerSubdomain, environment, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Public records visible in an environment
+     * @param {string} xCaraerSubdomain 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {string} [environment] 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public records(xCaraerSubdomain: string, requestBody: { [key: string]: any | null; }, environment?: string, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).records(xCaraerSubdomain, requestBody, environment, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Company settings, branding and locales
+     * @param {string} xCaraerSubdomain 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public settings(xCaraerSubdomain: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).settings(xCaraerSubdomain, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Unlock a password-protected CMS v2 page
+     * @param {string} xCaraerSubdomain 
+     * @param {string} uuid 
+     * @param {{ [key: string]: string; }} requestBody 
+     * @param {string} [environment] 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public unlock(xCaraerSubdomain: string, uuid: string, requestBody: { [key: string]: string; }, environment?: string, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).unlock(xCaraerSubdomain, uuid, requestBody, environment, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * CMSV2TransferApi - axios parameter creator
+ */
+export const CMSV2TransferApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Attach a manually created caraer-web project
+         * @param {string} companyUuid 
+         * @param {{ [key: string]: string; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        attach: async (companyUuid: string, requestBody: { [key: string]: string; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'companyUuid' is not null or undefined
+            assertParamExists('attach', 'companyUuid', companyUuid)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('attach', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/company/{companyUuid}/cms-transfer/attach`
+                .replace('{companyUuid}', encodeURIComponent(String(companyUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Switch the live site to CMS v2: schema, caraer-web repo, and hostname
+         * @param {string} companyUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cutover: async (companyUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'companyUuid' is not null or undefined
+            assertParamExists('cutover', 'companyUuid', companyUuid)
+            const localVarPath = `/api/v2/company/{companyUuid}/cms-transfer/cutover`
+                .replace('{companyUuid}', encodeURIComponent(String(companyUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Restore the live hostname to the stored v1 project
+         * @param {string} companyUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rollback: async (companyUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'companyUuid' is not null or undefined
+            assertParamExists('rollback', 'companyUuid', companyUuid)
+            const localVarPath = `/api/v2/company/{companyUuid}/cms-transfer/rollback`
+                .replace('{companyUuid}', encodeURIComponent(String(companyUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Transfer status for one company
+         * @param {string} companyUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        status: async (companyUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'companyUuid' is not null or undefined
+            assertParamExists('status', 'companyUuid', companyUuid)
+            const localVarPath = `/api/v2/company/{companyUuid}/cms-transfer`
+                .replace('{companyUuid}', encodeURIComponent(String(companyUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CMSV2TransferApi - functional programming interface
+ */
+export const CMSV2TransferApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CMSV2TransferApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Attach a manually created caraer-web project
+         * @param {string} companyUuid 
+         * @param {{ [key: string]: string; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async attach(companyUuid: string, requestBody: { [key: string]: string; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCompanyDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.attach(companyUuid, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2TransferApi.attach']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Switch the live site to CMS v2: schema, caraer-web repo, and hostname
+         * @param {string} companyUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async cutover(companyUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCompanyDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cutover(companyUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2TransferApi.cutover']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Restore the live hostname to the stored v1 project
+         * @param {string} companyUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async rollback(companyUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCompanyDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.rollback(companyUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2TransferApi.rollback']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Transfer status for one company
+         * @param {string} companyUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async status(companyUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.status(companyUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2TransferApi.status']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * CMSV2TransferApi - factory interface
+ */
+export const CMSV2TransferApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CMSV2TransferApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Attach a manually created caraer-web project
+         * @param {string} companyUuid 
+         * @param {{ [key: string]: string; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        attach(companyUuid: string, requestBody: { [key: string]: string; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCompanyDTO> {
+            return localVarFp.attach(companyUuid, requestBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Switch the live site to CMS v2: schema, caraer-web repo, and hostname
+         * @param {string} companyUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cutover(companyUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCompanyDTO> {
+            return localVarFp.cutover(companyUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Restore the live hostname to the stored v1 project
+         * @param {string} companyUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rollback(companyUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCompanyDTO> {
+            return localVarFp.rollback(companyUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Transfer status for one company
+         * @param {string} companyUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        status(companyUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.status(companyUuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CMSV2TransferApi - object-oriented interface
+ */
+export class CMSV2TransferApi extends BaseAPI {
+    /**
+     * 
+     * @summary Attach a manually created caraer-web project
+     * @param {string} companyUuid 
+     * @param {{ [key: string]: string; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public attach(companyUuid: string, requestBody: { [key: string]: string; }, options?: RawAxiosRequestConfig) {
+        return CMSV2TransferApiFp(this.configuration).attach(companyUuid, requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Switch the live site to CMS v2: schema, caraer-web repo, and hostname
+     * @param {string} companyUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public cutover(companyUuid: string, options?: RawAxiosRequestConfig) {
+        return CMSV2TransferApiFp(this.configuration).cutover(companyUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Restore the live hostname to the stored v1 project
+     * @param {string} companyUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public rollback(companyUuid: string, options?: RawAxiosRequestConfig) {
+        return CMSV2TransferApiFp(this.configuration).rollback(companyUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Transfer status for one company
+     * @param {string} companyUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public status(companyUuid: string, options?: RawAxiosRequestConfig) {
+        return CMSV2TransferApiFp(this.configuration).status(companyUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * CalendarsApi - axios parameter creator
  */
 export const CalendarsApiAxiosParamCreator = function (configuration?: Configuration) {
@@ -11863,9 +16314,9 @@ export const CalendarsApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create3: async (calendarCreateRequest: CalendarCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        create4: async (calendarCreateRequest: CalendarCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'calendarCreateRequest' is not null or undefined
-            assertParamExists('create3', 'calendarCreateRequest', calendarCreateRequest)
+            assertParamExists('create4', 'calendarCreateRequest', calendarCreateRequest)
             const localVarPath = `/api/v2/calendars`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -11901,7 +16352,7 @@ export const CalendarsApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list1: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        list3: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v2/calendars`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -11991,10 +16442,10 @@ export const CalendarsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async create3(calendarCreateRequest: CalendarCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponseCalendarRecordDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.create3(calendarCreateRequest, options);
+        async create4(calendarCreateRequest: CalendarCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponseCalendarRecordDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create4(calendarCreateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CalendarsApi.create3']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CalendarsApi.create4']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -12003,10 +16454,10 @@ export const CalendarsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async list1(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListCalendarRecordDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list1(options);
+        async list3(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListCalendarRecordDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list3(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CalendarsApi.list1']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CalendarsApi.list3']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -12046,8 +16497,8 @@ export const CalendarsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create3(calendarCreateRequest: CalendarCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponseCalendarRecordDTO> {
-            return localVarFp.create3(calendarCreateRequest, options).then((request) => request(axios, basePath));
+        create4(calendarCreateRequest: CalendarCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponseCalendarRecordDTO> {
+            return localVarFp.create4(calendarCreateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12055,8 +16506,8 @@ export const CalendarsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list1(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListCalendarRecordDTO> {
-            return localVarFp.list1(options).then((request) => request(axios, basePath));
+        list3(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListCalendarRecordDTO> {
+            return localVarFp.list3(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12091,8 +16542,8 @@ export class CalendarsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public create3(calendarCreateRequest: CalendarCreateRequest, options?: RawAxiosRequestConfig) {
-        return CalendarsApiFp(this.configuration).create3(calendarCreateRequest, options).then((request) => request(this.axios, this.basePath));
+    public create4(calendarCreateRequest: CalendarCreateRequest, options?: RawAxiosRequestConfig) {
+        return CalendarsApiFp(this.configuration).create4(calendarCreateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -12101,8 +16552,8 @@ export class CalendarsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public list1(options?: RawAxiosRequestConfig) {
-        return CalendarsApiFp(this.configuration).list1(options).then((request) => request(this.axios, this.basePath));
+    public list3(options?: RawAxiosRequestConfig) {
+        return CalendarsApiFp(this.configuration).list3(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13700,7 +18151,7 @@ export const DeveloperSandboxesApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        list1: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v2/developer-sandboxes`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13794,10 +18245,10 @@ export const DeveloperSandboxesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async list(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListDeveloperSandboxDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list(options);
+        async list1(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListDeveloperSandboxDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list1(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DeveloperSandboxesApi.list']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperSandboxesApi.list1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -13838,8 +18289,8 @@ export const DeveloperSandboxesApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListDeveloperSandboxDTO> {
-            return localVarFp.list(options).then((request) => request(axios, basePath));
+        list1(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListDeveloperSandboxDTO> {
+            return localVarFp.list1(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13875,8 +18326,8 @@ export class DeveloperSandboxesApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public list(options?: RawAxiosRequestConfig) {
-        return DeveloperSandboxesApiFp(this.configuration).list(options).then((request) => request(this.axios, this.basePath));
+    public list1(options?: RawAxiosRequestConfig) {
+        return DeveloperSandboxesApiFp(this.configuration).list1(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14136,6 +18587,45 @@ export const FileManagementApiAxiosParamCreator = function (configuration?: Conf
             };
         },
         /**
+         * 
+         * @summary List company files with metadata for the media library
+         * @param {string} [recordUuid] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listLibrary: async (recordUuid?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/files/library`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (recordUuid !== undefined) {
+                localVarQueryParameter['recordUuid'] = recordUuid;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Uploads multiple files to an S3-compatible storage and returns their unique keys. The request must contain one or more files in multipart/form-data format.
          * @summary Upload files
          * @param {string} [recordUuid] Optional record UUID to directly link uploaded files as attachments.
@@ -14225,6 +18715,19 @@ export const FileManagementApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 
+         * @summary List company files with metadata for the media library
+         * @param {string} [recordUuid] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listLibrary(recordUuid?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListFileListItemDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listLibrary(recordUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FileManagementApi.listLibrary']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Uploads multiple files to an S3-compatible storage and returns their unique keys. The request must contain one or more files in multipart/form-data format.
          * @summary Upload files
          * @param {string} [recordUuid] Optional record UUID to directly link uploaded files as attachments.
@@ -14279,6 +18782,16 @@ export const FileManagementApiFactory = function (configuration?: Configuration,
             return localVarFp.listFiles(recordUuid, options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @summary List company files with metadata for the media library
+         * @param {string} [recordUuid] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listLibrary(recordUuid?: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListFileListItemDTO> {
+            return localVarFp.listLibrary(recordUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Uploads multiple files to an S3-compatible storage and returns their unique keys. The request must contain one or more files in multipart/form-data format.
          * @summary Upload files
          * @param {string} [recordUuid] Optional record UUID to directly link uploaded files as attachments.
@@ -14328,6 +18841,17 @@ export class FileManagementApi extends BaseAPI {
      */
     public listFiles(recordUuid?: string, options?: RawAxiosRequestConfig) {
         return FileManagementApiFp(this.configuration).listFiles(recordUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List company files with metadata for the media library
+     * @param {string} [recordUuid] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listLibrary(recordUuid?: string, options?: RawAxiosRequestConfig) {
+        return FileManagementApiFp(this.configuration).listLibrary(recordUuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -23065,11 +27589,11 @@ export const ServerlessFunctionsApiAxiosParamCreator = function (configuration?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create4: async (appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        create5: async (appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'appUuid' is not null or undefined
-            assertParamExists('create4', 'appUuid', appUuid)
+            assertParamExists('create5', 'appUuid', appUuid)
             // verify required parameter 'serverlessFunctionDTO' is not null or undefined
-            assertParamExists('create4', 'serverlessFunctionDTO', serverlessFunctionDTO)
+            assertParamExists('create5', 'serverlessFunctionDTO', serverlessFunctionDTO)
             const localVarPath = `/api/v2/apps/{appUuid}/serverless-functions`
                 .replace('{appUuid}', encodeURIComponent(String(appUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -23108,11 +27632,11 @@ export const ServerlessFunctionsApiAxiosParamCreator = function (configuration?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        delete1: async (appUuid: string, uuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        delete2: async (appUuid: string, uuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'appUuid' is not null or undefined
-            assertParamExists('delete1', 'appUuid', appUuid)
+            assertParamExists('delete2', 'appUuid', appUuid)
             // verify required parameter 'uuid' is not null or undefined
-            assertParamExists('delete1', 'uuid', uuid)
+            assertParamExists('delete2', 'uuid', uuid)
             const localVarPath = `/api/v2/apps/{appUuid}/serverless-functions/{uuid}`
                 .replace('{appUuid}', encodeURIComponent(String(appUuid)))
                 .replace('{uuid}', encodeURIComponent(String(uuid)));
@@ -23378,13 +27902,13 @@ export const ServerlessFunctionsApiAxiosParamCreator = function (configuration?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update1: async (appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        update2: async (appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'appUuid' is not null or undefined
-            assertParamExists('update1', 'appUuid', appUuid)
+            assertParamExists('update2', 'appUuid', appUuid)
             // verify required parameter 'uuid' is not null or undefined
-            assertParamExists('update1', 'uuid', uuid)
+            assertParamExists('update2', 'uuid', uuid)
             // verify required parameter 'serverlessFunctionDTO' is not null or undefined
-            assertParamExists('update1', 'serverlessFunctionDTO', serverlessFunctionDTO)
+            assertParamExists('update2', 'serverlessFunctionDTO', serverlessFunctionDTO)
             const localVarPath = `/api/v2/apps/{appUuid}/serverless-functions/{uuid}`
                 .replace('{appUuid}', encodeURIComponent(String(appUuid)))
                 .replace('{uuid}', encodeURIComponent(String(uuid)));
@@ -23433,10 +27957,10 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async create4(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.create4(appUuid, serverlessFunctionDTO, options);
+        async create5(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create5(appUuid, serverlessFunctionDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.create4']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.create5']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -23447,10 +27971,10 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async delete1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.delete1(appUuid, uuid, options);
+        async delete2(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.delete2(appUuid, uuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.delete1']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.delete2']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -23535,10 +28059,10 @@ export const ServerlessFunctionsApiFp = function(configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update1(appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseServerlessFunctionDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update1(appUuid, uuid, serverlessFunctionDTO, options);
+        async update2(appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseServerlessFunctionDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update2(appUuid, uuid, serverlessFunctionDTO, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.update1']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ServerlessFunctionsApi.update2']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -23558,8 +28082,8 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create4(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
-            return localVarFp.create4(appUuid, serverlessFunctionDTO, options).then((request) => request(axios, basePath));
+        create5(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponse> {
+            return localVarFp.create5(appUuid, serverlessFunctionDTO, options).then((request) => request(axios, basePath));
         },
         /**
          * Tears down the GCP Cloud Function (if provisioned) and deletes the serverless function entity.
@@ -23569,8 +28093,8 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        delete1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<DeleteResponse> {
-            return localVarFp.delete1(appUuid, uuid, options).then((request) => request(axios, basePath));
+        delete2(appUuid: string, uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<DeleteResponse> {
+            return localVarFp.delete2(appUuid, uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of serverless functions that belong to the specified app.
@@ -23639,8 +28163,8 @@ export const ServerlessFunctionsApiFactory = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update1(appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseServerlessFunctionDTO> {
-            return localVarFp.update1(appUuid, uuid, serverlessFunctionDTO, options).then((request) => request(axios, basePath));
+        update2(appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseServerlessFunctionDTO> {
+            return localVarFp.update2(appUuid, uuid, serverlessFunctionDTO, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -23657,8 +28181,8 @@ export class ServerlessFunctionsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public create4(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig) {
-        return ServerlessFunctionsApiFp(this.configuration).create4(appUuid, serverlessFunctionDTO, options).then((request) => request(this.axios, this.basePath));
+    public create5(appUuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig) {
+        return ServerlessFunctionsApiFp(this.configuration).create5(appUuid, serverlessFunctionDTO, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -23669,8 +28193,8 @@ export class ServerlessFunctionsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public delete1(appUuid: string, uuid: string, options?: RawAxiosRequestConfig) {
-        return ServerlessFunctionsApiFp(this.configuration).delete1(appUuid, uuid, options).then((request) => request(this.axios, this.basePath));
+    public delete2(appUuid: string, uuid: string, options?: RawAxiosRequestConfig) {
+        return ServerlessFunctionsApiFp(this.configuration).delete2(appUuid, uuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -23745,8 +28269,8 @@ export class ServerlessFunctionsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public update1(appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig) {
-        return ServerlessFunctionsApiFp(this.configuration).update1(appUuid, uuid, serverlessFunctionDTO, options).then((request) => request(this.axios, this.basePath));
+    public update2(appUuid: string, uuid: string, serverlessFunctionDTO: ServerlessFunctionDTO, options?: RawAxiosRequestConfig) {
+        return ServerlessFunctionsApiFp(this.configuration).update2(appUuid, uuid, serverlessFunctionDTO, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -26717,6 +31241,164 @@ export const WebpagesApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
+         * Resolves map markers for a public map component. Object-bound sources are filtered in Cypher before the 500-marker cap.
+         * @summary Get filtered map markers for a public webpage
+         * @param {string} xCaraerSubdomain 
+         * @param {string} pageUuid 
+         * @param {string} componentUuid 
+         * @param {RecordPaginationRequest} recordPaginationRequest 
+         * @param {string} [xCaraerEnvironment] 
+         * @param {string} [xCaraerPrimaryEnvironment] 
+         * @param {string} [authorization] 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPublicMapLocations: async (xCaraerSubdomain: string, pageUuid: string, componentUuid: string, recordPaginationRequest: RecordPaginationRequest, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, authorization?: string, xCaraerWebpageAccess?: string, access?: string, token?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('getPublicMapLocations', 'xCaraerSubdomain', xCaraerSubdomain)
+            // verify required parameter 'pageUuid' is not null or undefined
+            assertParamExists('getPublicMapLocations', 'pageUuid', pageUuid)
+            // verify required parameter 'componentUuid' is not null or undefined
+            assertParamExists('getPublicMapLocations', 'componentUuid', componentUuid)
+            // verify required parameter 'recordPaginationRequest' is not null or undefined
+            assertParamExists('getPublicMapLocations', 'recordPaginationRequest', recordPaginationRequest)
+            const localVarPath = `/api/v2/webpages/public/maps/{pageUuid}/{componentUuid}`
+                .replace('{pageUuid}', encodeURIComponent(String(pageUuid)))
+                .replace('{componentUuid}', encodeURIComponent(String(componentUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (access !== undefined) {
+                localVarQueryParameter['access'] = access;
+            }
+
+            if (token !== undefined) {
+                localVarQueryParameter['token'] = token;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            if (xCaraerEnvironment != null) {
+                localVarHeaderParameter['X-Caraer-Environment'] = String(xCaraerEnvironment);
+            }
+            if (xCaraerPrimaryEnvironment != null) {
+                localVarHeaderParameter['X-Caraer-Primary-Environment'] = String(xCaraerPrimaryEnvironment);
+            }
+            if (authorization != null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
+            if (xCaraerWebpageAccess != null) {
+                localVarHeaderParameter['X-Caraer-Webpage-Access'] = String(xCaraerWebpageAccess);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(recordPaginationRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Hydrates the hover preview selected on a bound map location for a published record.
+         * @summary Get a hydrated preview for one public map marker
+         * @param {string} xCaraerSubdomain 
+         * @param {string} pageUuid 
+         * @param {string} componentUuid 
+         * @param {MapMarkerPreviewRequest} mapMarkerPreviewRequest 
+         * @param {string} [xCaraerEnvironment] 
+         * @param {string} [xCaraerPrimaryEnvironment] 
+         * @param {string} [authorization] 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPublicMapMarkerPreview: async (xCaraerSubdomain: string, pageUuid: string, componentUuid: string, mapMarkerPreviewRequest: MapMarkerPreviewRequest, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, authorization?: string, xCaraerWebpageAccess?: string, access?: string, token?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xCaraerSubdomain' is not null or undefined
+            assertParamExists('getPublicMapMarkerPreview', 'xCaraerSubdomain', xCaraerSubdomain)
+            // verify required parameter 'pageUuid' is not null or undefined
+            assertParamExists('getPublicMapMarkerPreview', 'pageUuid', pageUuid)
+            // verify required parameter 'componentUuid' is not null or undefined
+            assertParamExists('getPublicMapMarkerPreview', 'componentUuid', componentUuid)
+            // verify required parameter 'mapMarkerPreviewRequest' is not null or undefined
+            assertParamExists('getPublicMapMarkerPreview', 'mapMarkerPreviewRequest', mapMarkerPreviewRequest)
+            const localVarPath = `/api/v2/webpages/public/maps/{pageUuid}/{componentUuid}/marker-preview`
+                .replace('{pageUuid}', encodeURIComponent(String(pageUuid)))
+                .replace('{componentUuid}', encodeURIComponent(String(componentUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (access !== undefined) {
+                localVarQueryParameter['access'] = access;
+            }
+
+            if (token !== undefined) {
+                localVarQueryParameter['token'] = token;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xCaraerSubdomain != null) {
+                localVarHeaderParameter['X-Caraer-Subdomain'] = String(xCaraerSubdomain);
+            }
+            if (xCaraerEnvironment != null) {
+                localVarHeaderParameter['X-Caraer-Environment'] = String(xCaraerEnvironment);
+            }
+            if (xCaraerPrimaryEnvironment != null) {
+                localVarHeaderParameter['X-Caraer-Primary-Environment'] = String(xCaraerPrimaryEnvironment);
+            }
+            if (authorization != null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
+            if (xCaraerWebpageAccess != null) {
+                localVarHeaderParameter['X-Caraer-Webpage-Access'] = String(xCaraerWebpageAccess);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(mapMarkerPreviewRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Retrieves a list of previews for a public webpage identified by its UUID. Returns a PaginationResponse containing PreviewDTO objects.
          * @summary Get previews for a public webpage
          * @param {string} xCaraerSubdomain 
@@ -27919,6 +32601,50 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Resolves map markers for a public map component. Object-bound sources are filtered in Cypher before the 500-marker cap.
+         * @summary Get filtered map markers for a public webpage
+         * @param {string} xCaraerSubdomain 
+         * @param {string} pageUuid 
+         * @param {string} componentUuid 
+         * @param {RecordPaginationRequest} recordPaginationRequest 
+         * @param {string} [xCaraerEnvironment] 
+         * @param {string} [xCaraerPrimaryEnvironment] 
+         * @param {string} [authorization] 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPublicMapLocations(xCaraerSubdomain: string, pageUuid: string, componentUuid: string, recordPaginationRequest: RecordPaginationRequest, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, authorization?: string, xCaraerWebpageAccess?: string, access?: string, token?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseWebpageMapLocationsDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPublicMapLocations(xCaraerSubdomain, pageUuid, componentUuid, recordPaginationRequest, xCaraerEnvironment, xCaraerPrimaryEnvironment, authorization, xCaraerWebpageAccess, access, token, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebpagesApi.getPublicMapLocations']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Hydrates the hover preview selected on a bound map location for a published record.
+         * @summary Get a hydrated preview for one public map marker
+         * @param {string} xCaraerSubdomain 
+         * @param {string} pageUuid 
+         * @param {string} componentUuid 
+         * @param {MapMarkerPreviewRequest} mapMarkerPreviewRequest 
+         * @param {string} [xCaraerEnvironment] 
+         * @param {string} [xCaraerPrimaryEnvironment] 
+         * @param {string} [authorization] 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPublicMapMarkerPreview(xCaraerSubdomain: string, pageUuid: string, componentUuid: string, mapMarkerPreviewRequest: MapMarkerPreviewRequest, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, authorization?: string, xCaraerWebpageAccess?: string, access?: string, token?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponsePreviewDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPublicMapMarkerPreview(xCaraerSubdomain, pageUuid, componentUuid, mapMarkerPreviewRequest, xCaraerEnvironment, xCaraerPrimaryEnvironment, authorization, xCaraerWebpageAccess, access, token, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebpagesApi.getPublicMapMarkerPreview']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Retrieves a list of previews for a public webpage identified by its UUID. Returns a PaginationResponse containing PreviewDTO objects.
          * @summary Get previews for a public webpage
          * @param {string} xCaraerSubdomain 
@@ -28393,6 +33119,44 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.getMenus(xCaraerSubdomain, xCaraerEnvironment, xCaraerPrimaryEnvironment, options).then((request) => request(axios, basePath));
         },
         /**
+         * Resolves map markers for a public map component. Object-bound sources are filtered in Cypher before the 500-marker cap.
+         * @summary Get filtered map markers for a public webpage
+         * @param {string} xCaraerSubdomain 
+         * @param {string} pageUuid 
+         * @param {string} componentUuid 
+         * @param {RecordPaginationRequest} recordPaginationRequest 
+         * @param {string} [xCaraerEnvironment] 
+         * @param {string} [xCaraerPrimaryEnvironment] 
+         * @param {string} [authorization] 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPublicMapLocations(xCaraerSubdomain: string, pageUuid: string, componentUuid: string, recordPaginationRequest: RecordPaginationRequest, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, authorization?: string, xCaraerWebpageAccess?: string, access?: string, token?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseWebpageMapLocationsDTO> {
+            return localVarFp.getPublicMapLocations(xCaraerSubdomain, pageUuid, componentUuid, recordPaginationRequest, xCaraerEnvironment, xCaraerPrimaryEnvironment, authorization, xCaraerWebpageAccess, access, token, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Hydrates the hover preview selected on a bound map location for a published record.
+         * @summary Get a hydrated preview for one public map marker
+         * @param {string} xCaraerSubdomain 
+         * @param {string} pageUuid 
+         * @param {string} componentUuid 
+         * @param {MapMarkerPreviewRequest} mapMarkerPreviewRequest 
+         * @param {string} [xCaraerEnvironment] 
+         * @param {string} [xCaraerPrimaryEnvironment] 
+         * @param {string} [authorization] 
+         * @param {string} [xCaraerWebpageAccess] 
+         * @param {string} [access] 
+         * @param {string} [token] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPublicMapMarkerPreview(xCaraerSubdomain: string, pageUuid: string, componentUuid: string, mapMarkerPreviewRequest: MapMarkerPreviewRequest, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, authorization?: string, xCaraerWebpageAccess?: string, access?: string, token?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponsePreviewDTO> {
+            return localVarFp.getPublicMapMarkerPreview(xCaraerSubdomain, pageUuid, componentUuid, mapMarkerPreviewRequest, xCaraerEnvironment, xCaraerPrimaryEnvironment, authorization, xCaraerWebpageAccess, access, token, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieves a list of previews for a public webpage identified by its UUID. Returns a PaginationResponse containing PreviewDTO objects.
          * @summary Get previews for a public webpage
          * @param {string} xCaraerSubdomain 
@@ -28816,6 +33580,46 @@ export class WebpagesApi extends BaseAPI {
      */
     public getMenus(xCaraerSubdomain: string, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, options?: RawAxiosRequestConfig) {
         return WebpagesApiFp(this.configuration).getMenus(xCaraerSubdomain, xCaraerEnvironment, xCaraerPrimaryEnvironment, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Resolves map markers for a public map component. Object-bound sources are filtered in Cypher before the 500-marker cap.
+     * @summary Get filtered map markers for a public webpage
+     * @param {string} xCaraerSubdomain 
+     * @param {string} pageUuid 
+     * @param {string} componentUuid 
+     * @param {RecordPaginationRequest} recordPaginationRequest 
+     * @param {string} [xCaraerEnvironment] 
+     * @param {string} [xCaraerPrimaryEnvironment] 
+     * @param {string} [authorization] 
+     * @param {string} [xCaraerWebpageAccess] 
+     * @param {string} [access] 
+     * @param {string} [token] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getPublicMapLocations(xCaraerSubdomain: string, pageUuid: string, componentUuid: string, recordPaginationRequest: RecordPaginationRequest, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, authorization?: string, xCaraerWebpageAccess?: string, access?: string, token?: string, options?: RawAxiosRequestConfig) {
+        return WebpagesApiFp(this.configuration).getPublicMapLocations(xCaraerSubdomain, pageUuid, componentUuid, recordPaginationRequest, xCaraerEnvironment, xCaraerPrimaryEnvironment, authorization, xCaraerWebpageAccess, access, token, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Hydrates the hover preview selected on a bound map location for a published record.
+     * @summary Get a hydrated preview for one public map marker
+     * @param {string} xCaraerSubdomain 
+     * @param {string} pageUuid 
+     * @param {string} componentUuid 
+     * @param {MapMarkerPreviewRequest} mapMarkerPreviewRequest 
+     * @param {string} [xCaraerEnvironment] 
+     * @param {string} [xCaraerPrimaryEnvironment] 
+     * @param {string} [authorization] 
+     * @param {string} [xCaraerWebpageAccess] 
+     * @param {string} [access] 
+     * @param {string} [token] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getPublicMapMarkerPreview(xCaraerSubdomain: string, pageUuid: string, componentUuid: string, mapMarkerPreviewRequest: MapMarkerPreviewRequest, xCaraerEnvironment?: string, xCaraerPrimaryEnvironment?: string, authorization?: string, xCaraerWebpageAccess?: string, access?: string, token?: string, options?: RawAxiosRequestConfig) {
+        return WebpagesApiFp(this.configuration).getPublicMapMarkerPreview(xCaraerSubdomain, pageUuid, componentUuid, mapMarkerPreviewRequest, xCaraerEnvironment, xCaraerPrimaryEnvironment, authorization, xCaraerWebpageAccess, access, token, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
