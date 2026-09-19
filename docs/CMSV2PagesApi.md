@@ -6,6 +6,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |------------- | ------------- | -------------|
 |[**aiRewrite**](#airewrite) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/ai/rewrite | Rewrite a page or a module from a prompt|
 |[**createTranslation**](#createtranslation) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/environments/{key}/translate | Create a translated sibling page for an environment|
+|[**discardModuleFork**](#discardmodulefork) | **DELETE** /api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions/{sessionId} | Discard a Modify-this-module playground session|
 |[**ensureNotFound**](#ensurenotfound) | **POST** /api/v2/webpages/v2/pages/not-found | Create or reuse the custom 404 page|
 |[**environmentCoverage**](#environmentcoverage) | **GET** /api/v2/webpages/v2/pages/{recordUuid}/environments | Environment coverage for the builder dropdown|
 |[**get**](#get) | **GET** /api/v2/webpages/v2/pages/{recordUuid} | Load a page for the builder|
@@ -15,11 +16,14 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**library**](#library) | **GET** /api/v2/webpages/v2/pages/library/modules | Modules available to this company|
 |[**patch**](#patch) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/patch | Apply patches to a page draft|
 |[**previewLink**](#previewlink) | **GET** /api/v2/webpages/v2/pages/{recordUuid}/preview-link | Signed preview URL for the builder iframe|
+|[**promptModuleFork**](#promptmodulefork) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions/{sessionId}/prompt | Rewrite forked module source from a prompt|
 |[**publish**](#publish) | **PUT** /api/v2/webpages/v2/pages/{recordUuid}/publish | Publish one locale, or all of them|
 |[**restoreHistory**](#restorehistory) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/history/{index}/restore | Restore a draft snapshot|
 |[**save**](#save) | **PUT** /api/v2/webpages/v2/pages/{recordUuid} | Replace a page draft|
 |[**saveMeta**](#savemeta) | **PUT** /api/v2/webpages/v2/pages/{recordUuid}/meta | Update slug, title, excerpt, SEO and page scripts|
+|[**saveModuleFork**](#savemodulefork) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions/{sessionId}/save | Publish the forked module into a private app|
 |[**saveTemplate**](#savetemplate) | **PUT** /api/v2/webpages/v2/pages/templates/{objectUuid} | Replace a CMS v2 object template|
+|[**startModuleFork**](#startmodulefork) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions | Start a Modify-this-module playground session|
 |[**unpublish**](#unpublish) | **PUT** /api/v2/webpages/v2/pages/{recordUuid}/unpublish | Take one locale offline|
 |[**unselectEnvironment**](#unselectenvironment) | **DELETE** /api/v2/webpages/v2/pages/{recordUuid}/environments/{key} | Remove an environment from this page only|
 
@@ -116,6 +120,63 @@ const { status, data } = await apiInstance.createTranslation(
 ### Return type
 
 **ShowResponseCmsPageDTO**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **discardModuleFork**
+> ShowResponseMapStringObject discardModuleFork()
+
+
+### Example
+
+```typescript
+import {
+    CMSV2PagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CMSV2PagesApi(configuration);
+
+let recordUuid: string; // (default to undefined)
+let sessionId: string; // (default to undefined)
+
+const { status, data } = await apiInstance.discardModuleFork(
+    recordUuid,
+    sessionId
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **recordUuid** | [**string**] |  | defaults to undefined|
+| **sessionId** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponseMapStringObject**
 
 ### Authorization
 
@@ -639,6 +700,66 @@ const { status, data } = await apiInstance.previewLink(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **promptModuleFork**
+> ShowResponseMapStringObject promptModuleFork(requestBody)
+
+
+### Example
+
+```typescript
+import {
+    CMSV2PagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CMSV2PagesApi(configuration);
+
+let recordUuid: string; // (default to undefined)
+let sessionId: string; // (default to undefined)
+let requestBody: { [key: string]: any | null; }; //
+
+const { status, data } = await apiInstance.promptModuleFork(
+    recordUuid,
+    sessionId,
+    requestBody
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **requestBody** | **{ [key: string]: any | null; }**|  | |
+| **recordUuid** | [**string**] |  | defaults to undefined|
+| **sessionId** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponseMapStringObject**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **publish**
 > ShowResponseListCmsPageDTO publish()
 
@@ -881,6 +1002,67 @@ const { status, data } = await apiInstance.saveMeta(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **saveModuleFork**
+> ShowResponseMapStringObject saveModuleFork(requestBody)
+
+Merges the new module into the whole npm package so sibling modules are not retired, then swaps this placement with set_module.
+
+### Example
+
+```typescript
+import {
+    CMSV2PagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CMSV2PagesApi(configuration);
+
+let recordUuid: string; // (default to undefined)
+let sessionId: string; // (default to undefined)
+let requestBody: { [key: string]: any | null; }; //
+
+const { status, data } = await apiInstance.saveModuleFork(
+    recordUuid,
+    sessionId,
+    requestBody
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **requestBody** | **{ [key: string]: any | null; }**|  | |
+| **recordUuid** | [**string**] |  | defaults to undefined|
+| **sessionId** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponseMapStringObject**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **saveTemplate**
 > ShowResponseCmsPageDocument saveTemplate(cmsPageDocument)
 
@@ -920,6 +1102,64 @@ const { status, data } = await apiInstance.saveTemplate(
 ### Return type
 
 **ShowResponseCmsPageDocument**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **startModuleFork**
+> ShowResponseMapStringObject startModuleFork(requestBody)
+
+CMS v2 companies and pages only. Copies the installed module\'s published source into a playground session. Live code edits stay off the company site until save publishes a platform v2 private-app package and a rebuild compiles it.
+
+### Example
+
+```typescript
+import {
+    CMSV2PagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CMSV2PagesApi(configuration);
+
+let recordUuid: string; // (default to undefined)
+let requestBody: { [key: string]: any | null; }; //
+
+const { status, data } = await apiInstance.startModuleFork(
+    recordUuid,
+    requestBody
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **requestBody** | **{ [key: string]: any | null; }**|  | |
+| **recordUuid** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponseMapStringObject**
 
 ### Authorization
 

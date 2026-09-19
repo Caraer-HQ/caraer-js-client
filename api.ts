@@ -1447,6 +1447,7 @@ export interface CmsPageModuleInstance {
 export interface CmsPagePatch {
     'op'?: string;
     'moduleId'?: string;
+    'ref'?: string;
     'field'?: string;
     'value'?: any;
     'fields'?: { [key: string]: any | null; };
@@ -2576,9 +2577,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
-    'ymetric'?: string;
     'yproperty'?: string;
+    'ymetric'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -5686,8 +5687,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -13363,6 +13364,48 @@ export const CMSV2PagesApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
+         * 
+         * @summary Discard a Modify-this-module playground session
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        discardModuleFork: async (recordUuid: string, sessionId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('discardModuleFork', 'recordUuid', recordUuid)
+            // verify required parameter 'sessionId' is not null or undefined
+            assertParamExists('discardModuleFork', 'sessionId', sessionId)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions/{sessionId}`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)))
+                .replace('{sessionId}', encodeURIComponent(String(sessionId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Finds the page at /404 on the root Webpage object, or creates an empty draft there, and stores it as the company custom 404 page.
          * @summary Create or reuse the custom 404 page
          * @param {*} [options] Override http request option.
@@ -13736,6 +13779,53 @@ export const CMSV2PagesApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
+         * 
+         * @summary Rewrite forked module source from a prompt
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        promptModuleFork: async (recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('promptModuleFork', 'recordUuid', recordUuid)
+            // verify required parameter 'sessionId' is not null or undefined
+            assertParamExists('promptModuleFork', 'sessionId', sessionId)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('promptModuleFork', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions/{sessionId}/prompt`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)))
+                .replace('{sessionId}', encodeURIComponent(String(sessionId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Copies the draft over the published document. Publishing is per locale so a translated page can ship without republishing the others.
          * @summary Publish one locale, or all of them
          * @param {string} recordUuid 
@@ -13927,6 +14017,53 @@ export const CMSV2PagesApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
+         * Merges the new module into the whole npm package so sibling modules are not retired, then swaps this placement with set_module.
+         * @summary Publish the forked module into a private app
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveModuleFork: async (recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('saveModuleFork', 'recordUuid', recordUuid)
+            // verify required parameter 'sessionId' is not null or undefined
+            assertParamExists('saveModuleFork', 'sessionId', sessionId)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('saveModuleFork', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions/{sessionId}/save`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)))
+                .replace('{sessionId}', encodeURIComponent(String(sessionId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Replace a CMS v2 object template
          * @param {string} objectUuid 
@@ -13968,6 +14105,49 @@ export const CMSV2PagesApiAxiosParamCreator = function (configuration?: Configur
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(cmsPageDocument, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * CMS v2 companies and pages only. Copies the installed module\'s published source into a playground session. Live code edits stay off the company site until save publishes a platform v2 private-app package and a rebuild compiles it.
+         * @summary Start a Modify-this-module playground session
+         * @param {string} recordUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startModuleFork: async (recordUuid: string, requestBody: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('startModuleFork', 'recordUuid', recordUuid)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('startModuleFork', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -14097,6 +14277,20 @@ export const CMSV2PagesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 
+         * @summary Discard a Modify-this-module playground session
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async discardModuleFork(recordUuid: string, sessionId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.discardModuleFork(recordUuid, sessionId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.discardModuleFork']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Finds the page at /404 on the root Webpage object, or creates an empty draft there, and stores it as the company custom 404 page.
          * @summary Create or reuse the custom 404 page
          * @param {*} [options] Override http request option.
@@ -14220,6 +14414,21 @@ export const CMSV2PagesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 
+         * @summary Rewrite forked module source from a prompt
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async promptModuleFork(recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.promptModuleFork(recordUuid, sessionId, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.promptModuleFork']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Copies the draft over the published document. Publishing is per locale so a translated page can ship without republishing the others.
          * @summary Publish one locale, or all of them
          * @param {string} recordUuid 
@@ -14280,6 +14489,21 @@ export const CMSV2PagesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Merges the new module into the whole npm package so sibling modules are not retired, then swaps this placement with set_module.
+         * @summary Publish the forked module into a private app
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async saveModuleFork(recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.saveModuleFork(recordUuid, sessionId, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.saveModuleFork']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
          * @summary Replace a CMS v2 object template
          * @param {string} objectUuid 
@@ -14292,6 +14516,20 @@ export const CMSV2PagesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.saveTemplate(objectUuid, cmsPageDocument, locale, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.saveTemplate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * CMS v2 companies and pages only. Copies the installed module\'s published source into a playground session. Live code edits stay off the company site until save publishes a platform v2 private-app package and a rebuild compiles it.
+         * @summary Start a Modify-this-module playground session
+         * @param {string} recordUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async startModuleFork(recordUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startModuleFork(recordUuid, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.startModuleFork']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -14352,6 +14590,17 @@ export const CMSV2PagesApiFactory = function (configuration?: Configuration, bas
          */
         createTranslation(recordUuid: string, key: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
             return localVarFp.createTranslation(recordUuid, key, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Discard a Modify-this-module playground session
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        discardModuleFork(recordUuid: string, sessionId: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.discardModuleFork(recordUuid, sessionId, options).then((request) => request(axios, basePath));
         },
         /**
          * Finds the page at /404 on the root Webpage object, or creates an empty draft there, and stores it as the company custom 404 page.
@@ -14450,6 +14699,18 @@ export const CMSV2PagesApiFactory = function (configuration?: Configuration, bas
             return localVarFp.previewLink(recordUuid, locale, state, options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @summary Rewrite forked module source from a prompt
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        promptModuleFork(recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.promptModuleFork(recordUuid, sessionId, requestBody, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Copies the draft over the published document. Publishing is per locale so a translated page can ship without republishing the others.
          * @summary Publish one locale, or all of them
          * @param {string} recordUuid 
@@ -14498,6 +14759,18 @@ export const CMSV2PagesApiFactory = function (configuration?: Configuration, bas
             return localVarFp.saveMeta(recordUuid, requestBody, locale, options).then((request) => request(axios, basePath));
         },
         /**
+         * Merges the new module into the whole npm package so sibling modules are not retired, then swaps this placement with set_module.
+         * @summary Publish the forked module into a private app
+         * @param {string} recordUuid 
+         * @param {string} sessionId 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveModuleFork(recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.saveModuleFork(recordUuid, sessionId, requestBody, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary Replace a CMS v2 object template
          * @param {string} objectUuid 
@@ -14508,6 +14781,17 @@ export const CMSV2PagesApiFactory = function (configuration?: Configuration, bas
          */
         saveTemplate(objectUuid: string, cmsPageDocument: CmsPageDocument, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDocument> {
             return localVarFp.saveTemplate(objectUuid, cmsPageDocument, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * CMS v2 companies and pages only. Copies the installed module\'s published source into a playground session. Live code edits stay off the company site until save publishes a platform v2 private-app package and a rebuild compiles it.
+         * @summary Start a Modify-this-module playground session
+         * @param {string} recordUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startModuleFork(recordUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.startModuleFork(recordUuid, requestBody, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14560,6 +14844,18 @@ export class CMSV2PagesApi extends BaseAPI {
      */
     public createTranslation(recordUuid: string, key: string, options?: RawAxiosRequestConfig) {
         return CMSV2PagesApiFp(this.configuration).createTranslation(recordUuid, key, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Discard a Modify-this-module playground session
+     * @param {string} recordUuid 
+     * @param {string} sessionId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public discardModuleFork(recordUuid: string, sessionId: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).discardModuleFork(recordUuid, sessionId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14668,6 +14964,19 @@ export class CMSV2PagesApi extends BaseAPI {
     }
 
     /**
+     * 
+     * @summary Rewrite forked module source from a prompt
+     * @param {string} recordUuid 
+     * @param {string} sessionId 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public promptModuleFork(recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).promptModuleFork(recordUuid, sessionId, requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Copies the draft over the published document. Publishing is per locale so a translated page can ship without republishing the others.
      * @summary Publish one locale, or all of them
      * @param {string} recordUuid 
@@ -14720,6 +15029,19 @@ export class CMSV2PagesApi extends BaseAPI {
     }
 
     /**
+     * Merges the new module into the whole npm package so sibling modules are not retired, then swaps this placement with set_module.
+     * @summary Publish the forked module into a private app
+     * @param {string} recordUuid 
+     * @param {string} sessionId 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public saveModuleFork(recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).saveModuleFork(recordUuid, sessionId, requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 
      * @summary Replace a CMS v2 object template
      * @param {string} objectUuid 
@@ -14730,6 +15052,18 @@ export class CMSV2PagesApi extends BaseAPI {
      */
     public saveTemplate(objectUuid: string, cmsPageDocument: CmsPageDocument, locale?: string, options?: RawAxiosRequestConfig) {
         return CMSV2PagesApiFp(this.configuration).saveTemplate(objectUuid, cmsPageDocument, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * CMS v2 companies and pages only. Copies the installed module\'s published source into a playground session. Live code edits stay off the company site until save publishes a platform v2 private-app package and a rebuild compiles it.
+     * @summary Start a Modify-this-module playground session
+     * @param {string} recordUuid 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public startModuleFork(recordUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).startModuleFork(recordUuid, requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

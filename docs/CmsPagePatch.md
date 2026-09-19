@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **op** | **string** |  | [optional] [default to undefined]
 **moduleId** | **string** |  | [optional] [default to undefined]
+**ref** | **string** |  | [optional] [default to undefined]
 **field** | **string** |  | [optional] [default to undefined]
 **value** | **any** |  | [optional] [default to undefined]
 **fields** | **{ [key: string]: any | null; }** |  | [optional] [default to undefined]
@@ -25,6 +26,7 @@ import { CmsPagePatch } from '@caraer/client';
 const instance: CmsPagePatch = {
     op,
     moduleId,
+    ref,
     field,
     value,
     fields,
