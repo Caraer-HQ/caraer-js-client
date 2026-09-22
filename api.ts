@@ -3488,8 +3488,8 @@ export interface ModelRecord {
     'updatedByUuid'?: string;
     'deletedByUuid'?: string;
     'index'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
@@ -7194,8 +7194,8 @@ export interface Team {
     'filtersString'?: string;
     'filters'?: { [key: string]: Filter; };
     'memberCount'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
 }
 export interface TeamDTO {
@@ -32405,6 +32405,92 @@ export const WebpagesApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
+         * Copies an existing company file into this webpage\'s public attachments folder and returns its public URL.
+         * @summary Publish a library file for a webpage
+         * @param {string} uuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publishFile: async (uuid: string, key: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('publishFile', 'uuid', uuid)
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('publishFile', 'key', key)
+            const localVarPath = `/api/v2/webpages/{uuid}/publishFile`
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (key !== undefined) {
+                localVarQueryParameter['key'] = key;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Copies an existing company file into the public webpage attachments folder and returns its public URL.
+         * @summary Publish a library file for a webpage
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publishFile1: async (key: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('publishFile1', 'key', key)
+            const localVarPath = `/api/v2/webpages/publishFile`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (key !== undefined) {
+                localVarQueryParameter['key'] = key;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Publishes a webpage by its UUID. Optionally, a publish_at timestamp (in seconds) may be provided. Returns an UpdateResponse containing the published webpage details.
          * @summary Publish a webpage
          * @param {string} uuid 
@@ -33245,6 +33331,33 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Copies an existing company file into this webpage\'s public attachments folder and returns its public URL.
+         * @summary Publish a library file for a webpage
+         * @param {string} uuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async publishFile(uuid: string, key: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.publishFile(uuid, key, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebpagesApi.publishFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Copies an existing company file into the public webpage attachments folder and returns its public URL.
+         * @summary Publish a library file for a webpage
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async publishFile1(key: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.publishFile1(key, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebpagesApi.publishFile1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Publishes a webpage by its UUID. Optionally, a publish_at timestamp (in seconds) may be provided. Returns an UpdateResponse containing the published webpage details.
          * @summary Publish a webpage
          * @param {string} uuid 
@@ -33724,6 +33837,27 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.listProtectionGrants(uuid, environment, options).then((request) => request(axios, basePath));
         },
         /**
+         * Copies an existing company file into this webpage\'s public attachments folder and returns its public URL.
+         * @summary Publish a library file for a webpage
+         * @param {string} uuid 
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publishFile(uuid: string, key: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
+            return localVarFp.publishFile(uuid, key, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Copies an existing company file into the public webpage attachments folder and returns its public URL.
+         * @summary Publish a library file for a webpage
+         * @param {string} key 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publishFile1(key: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
+            return localVarFp.publishFile1(key, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Publishes a webpage by its UUID. Optionally, a publish_at timestamp (in seconds) may be provided. Returns an UpdateResponse containing the published webpage details.
          * @summary Publish a webpage
          * @param {string} uuid 
@@ -34198,6 +34332,29 @@ export class WebpagesApi extends BaseAPI {
      */
     public listProtectionGrants(uuid: string, environment?: string, options?: RawAxiosRequestConfig) {
         return WebpagesApiFp(this.configuration).listProtectionGrants(uuid, environment, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Copies an existing company file into this webpage\'s public attachments folder and returns its public URL.
+     * @summary Publish a library file for a webpage
+     * @param {string} uuid 
+     * @param {string} key 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public publishFile(uuid: string, key: string, options?: RawAxiosRequestConfig) {
+        return WebpagesApiFp(this.configuration).publishFile(uuid, key, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Copies an existing company file into the public webpage attachments folder and returns its public URL.
+     * @summary Publish a library file for a webpage
+     * @param {string} key 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public publishFile1(key: string, options?: RawAxiosRequestConfig) {
+        return WebpagesApiFp(this.configuration).publishFile1(key, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

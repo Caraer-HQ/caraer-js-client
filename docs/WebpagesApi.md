@@ -31,6 +31,8 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**getWebpageEditingStatus**](#getwebpageeditingstatus) | **GET** /api/v2/webpages/{uuid}/editing-status | Check if a webpage is being edited|
 |[**getWebpagePickerPages**](#getwebpagepickerpages) | **GET** /api/v2/webpages/picker/pages | List webpages for picker dropdowns|
 |[**listProtectionGrants**](#listprotectiongrants) | **GET** /api/v2/webpages/{uuid}/protection/grants | List signed URL grants for a webpage|
+|[**publishFile**](#publishfile) | **POST** /api/v2/webpages/{uuid}/publishFile | Publish a library file for a webpage|
+|[**publishFile1**](#publishfile1) | **POST** /api/v2/webpages/publishFile | Publish a library file for a webpage|
 |[**publishWebpage**](#publishwebpage) | **PUT** /api/v2/webpages/{uuid}/publish | Publish a webpage|
 |[**releaseTemplateWebpageEditingSession**](#releasetemplatewebpageeditingsession) | **DELETE** /api/v2/webpages/template/{objectName}/{environment}/editing-session | Release a template webpage editing session|
 |[**releaseWebpageEditingSession**](#releasewebpageeditingsession) | **DELETE** /api/v2/webpages/{uuid}/editing-session | Release a webpage editing session|
@@ -1718,6 +1720,119 @@ const { status, data } = await apiInstance.listProtectionGrants(
 ### Return type
 
 **PaginationResponseWebpageAccessGrantDTO**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **publishFile**
+> SuccessResponseString publishFile()
+
+Copies an existing company file into this webpage\'s public attachments folder and returns its public URL.
+
+### Example
+
+```typescript
+import {
+    WebpagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new WebpagesApi(configuration);
+
+let uuid: string; // (default to undefined)
+let key: string; // (default to undefined)
+
+const { status, data } = await apiInstance.publishFile(
+    uuid,
+    key
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **uuid** | [**string**] |  | defaults to undefined|
+| **key** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**SuccessResponseString**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **publishFile1**
+> SuccessResponseString publishFile1()
+
+Copies an existing company file into the public webpage attachments folder and returns its public URL.
+
+### Example
+
+```typescript
+import {
+    WebpagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new WebpagesApi(configuration);
+
+let key: string; // (default to undefined)
+
+const { status, data } = await apiInstance.publishFile1(
+    key
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **key** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**SuccessResponseString**
 
 ### Authorization
 
