@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **css** | **string** |  | [optional] [default to undefined]
 **headJs** | **string** |  | [optional] [default to undefined]
 **bodyJs** | **string** |  | [optional] [default to undefined]
+**relatedToTemplate** | **boolean** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -32,6 +33,7 @@ const instance: CmsPageDocument = {
     css,
     headJs,
     bodyJs,
+    relatedToTemplate,
 };
 ```
 
