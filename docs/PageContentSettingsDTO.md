@@ -51,6 +51,9 @@ Name | Type | Description | Notes
 **ctaText** | **string** | The text of the CTA | [optional] [default to undefined]
 **ctaButtonText** | **string** | The button text of the CTA | [optional] [default to undefined]
 **ctaButtonLink** | **string** | The button link of the CTA | [optional] [default to undefined]
+**targetPagePath** | **string** | Public path of the page that owns the linked preview, for the search component | [optional] [default to undefined]
+**targetPageUuid** | **string** | Webpage uuid of the page that owns the linked preview | [optional] [default to undefined]
+**targetPreviewUuid** | **string** | Page content uuid of the preview component the search component links to | [optional] [default to undefined]
 **platforms** | **Array&lt;string&gt;** | The platforms shown in the share component | [optional] [default to undefined]
 **mapLatitude** | **number** | Latitude for the map component | [optional] [default to undefined]
 **mapLongitude** | **number** | Longitude for the map component | [optional] [default to undefined]
@@ -109,6 +112,9 @@ const instance: PageContentSettingsDTO = {
     ctaText,
     ctaButtonText,
     ctaButtonLink,
+    targetPagePath,
+    targetPageUuid,
+    targetPreviewUuid,
     platforms,
     mapLatitude,
     mapLongitude,

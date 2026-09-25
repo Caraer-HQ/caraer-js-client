@@ -2578,9 +2578,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'yproperty'?: string;
-    'ymetric'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3492,9 +3492,9 @@ export interface ModelRecord {
     'deleted'?: boolean;
     'complete'?: boolean;
     'uuid': string;
-    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
+    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }
@@ -3911,6 +3911,18 @@ export interface PageContentSettingsDTO {
      * The button link of the CTA
      */
     'ctaButtonLink'?: string;
+    /**
+     * Public path of the page that owns the linked preview, for the search component
+     */
+    'targetPagePath'?: string;
+    /**
+     * Webpage uuid of the page that owns the linked preview
+     */
+    'targetPageUuid'?: string;
+    /**
+     * Page content uuid of the preview component the search component links to
+     */
+    'targetPreviewUuid'?: string;
     /**
      * The platforms shown in the share component
      */
@@ -5688,8 +5700,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
