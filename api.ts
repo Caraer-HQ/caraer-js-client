@@ -967,6 +967,8 @@ export interface AppSettingFieldMappingStructureItem {
     'relationName'?: string;
     'objectName'?: string;
     'recordUuid'?: string;
+    'formatPattern'?: string;
+    'formatReplacement'?: string;
 }
 export interface AppSettingFieldSchema {
     'name'?: string;
@@ -2581,9 +2583,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2677,6 +2679,29 @@ export interface FeedDTO {
     'warnings'?: Array<string>;
     'availableEnvironments'?: Array<string>;
     'siblingImportFeeds'?: Array<string>;
+}
+export interface FeedFormatPreviewDTO {
+    'sample'?: string;
+    'formatPattern'?: string;
+    'formatReplacement'?: string;
+    'output'?: string;
+    'matches'?: boolean;
+    'storedValuePattern'?: string;
+    'storedValueHint'?: string;
+    'formatName'?: string;
+}
+export interface FeedFormatPreviewRequest {
+    'sample'?: string;
+    'formatPattern'?: string;
+    'formatReplacement'?: string;
+    'propertyName'?: string;
+    'objectName'?: string;
+}
+export interface FeedFormatSuggestionRequest {
+    'feed'?: FeedDTO;
+    'fieldName'?: string;
+    'propertyName'?: string;
+    'objectName'?: string;
 }
 export interface FeedImportRunDTO {
     'dryRun'?: boolean;
@@ -6954,6 +6979,19 @@ export interface SuccessResponseFeedDTO {
      * The data payload of the response, if any.
      */
     'data'?: FeedDTO;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseFeedFormatPreviewDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: FeedFormatPreviewDTO;
 }
 /**
  * Represents a standard successful response with a message and optional data.

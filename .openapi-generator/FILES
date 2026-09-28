@@ -129,6 +129,9 @@ docs/EventRsvpRequest.md
 docs/ExistingWidgetSummary.md
 docs/ExtendRecordRequest.md
 docs/FeedDTO.md
+docs/FeedFormatPreviewDTO.md
+docs/FeedFormatPreviewRequest.md
+docs/FeedFormatSuggestionRequest.md
 docs/FeedImportRunDTO.md
 docs/FeedsApi.md
 docs/File.md
@@ -328,6 +331,7 @@ docs/SuccessResponseCalendarBootstrapDTO.md
 docs/SuccessResponseCollectionRelation.md
 docs/SuccessResponseCompanyDTO.md
 docs/SuccessResponseFeedDTO.md
+docs/SuccessResponseFeedFormatPreviewDTO.md
 docs/SuccessResponseFeedImportRunDTO.md
 docs/SuccessResponseFlow.md
 docs/SuccessResponseListAggregateResponse.md

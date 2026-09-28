@@ -16,6 +16,8 @@ Name | Type | Description | Notes
 **relationName** | **string** |  | [optional] [default to undefined]
 **objectName** | **string** |  | [optional] [default to undefined]
 **recordUuid** | **string** |  | [optional] [default to undefined]
+**formatPattern** | **string** |  | [optional] [default to undefined]
+**formatReplacement** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -34,6 +36,8 @@ const instance: AppSettingFieldMappingStructureItem = {
     relationName,
     objectName,
     recordUuid,
+    formatPattern,
+    formatReplacement,
 };
 ```
 
