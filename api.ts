@@ -2583,9 +2583,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'ymetric'?: string;
     'xproperty'?: string;
     'yproperty'?: string;
-    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -16473,7 +16473,7 @@ export const CMSV2TransferApiAxiosParamCreator = function (configuration?: Confi
     return {
         /**
          * 
-         * @summary Attach a manually created caraer-web project
+         * @summary Attach a project, link Caraer-HQ/caraer-web, write its v2 environment, and deploy
          * @param {string} companyUuid 
          * @param {{ [key: string]: string; }} requestBody 
          * @param {*} [options] Override http request option.
@@ -16639,7 +16639,7 @@ export const CMSV2TransferApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Attach a manually created caraer-web project
+         * @summary Attach a project, link Caraer-HQ/caraer-web, write its v2 environment, and deploy
          * @param {string} companyUuid 
          * @param {{ [key: string]: string; }} requestBody 
          * @param {*} [options] Override http request option.
@@ -16701,7 +16701,7 @@ export const CMSV2TransferApiFactory = function (configuration?: Configuration, 
     return {
         /**
          * 
-         * @summary Attach a manually created caraer-web project
+         * @summary Attach a project, link Caraer-HQ/caraer-web, write its v2 environment, and deploy
          * @param {string} companyUuid 
          * @param {{ [key: string]: string; }} requestBody 
          * @param {*} [options] Override http request option.
@@ -16749,7 +16749,7 @@ export const CMSV2TransferApiFactory = function (configuration?: Configuration, 
 export class CMSV2TransferApi extends BaseAPI {
     /**
      * 
-     * @summary Attach a manually created caraer-web project
+     * @summary Attach a project, link Caraer-HQ/caraer-web, write its v2 environment, and deploy
      * @param {string} companyUuid 
      * @param {{ [key: string]: string; }} requestBody 
      * @param {*} [options] Override http request option.

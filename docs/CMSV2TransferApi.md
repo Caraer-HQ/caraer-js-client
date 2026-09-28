@@ -4,7 +4,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**attach**](#attach) | **POST** /api/v2/company/{companyUuid}/cms-transfer/attach | Attach a manually created caraer-web project|
+|[**attach**](#attach) | **POST** /api/v2/company/{companyUuid}/cms-transfer/attach | Attach a project, link Caraer-HQ/caraer-web, write its v2 environment, and deploy|
 |[**cutover**](#cutover) | **POST** /api/v2/company/{companyUuid}/cms-transfer/cutover | Switch the live site to CMS v2: schema, caraer-web repo, and hostname|
 |[**rollback**](#rollback) | **POST** /api/v2/company/{companyUuid}/cms-transfer/rollback | Restore the live hostname to the stored v1 project|
 |[**status**](#status) | **GET** /api/v2/company/{companyUuid}/cms-transfer | Transfer status for one company|
