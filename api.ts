@@ -963,6 +963,9 @@ export interface AppSettingFieldMappingStructureItem {
     'allowedPropertyTypes'?: Array<string>;
     'allowedPropertyFormats'?: Array<string>;
     'propertyName'?: string;
+    'literalValue'?: string;
+    'relationName'?: string;
+    'objectName'?: string;
     'recordUuid'?: string;
 }
 export interface AppSettingFieldSchema {
@@ -2578,9 +2581,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'yproperty'?: string;
     'ymetric'?: string;
     'xproperty'?: string;
-    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2649,8 +2652,47 @@ export interface FeedDTO {
     'parseRecord'?: boolean;
     'rootElement'?: string;
     'itemElement'?: string;
+    'itemPath'?: string;
     'cacheTtlSeconds'?: number;
     'active'?: boolean;
+    'direction'?: string;
+    'sourceUrl'?: string;
+    'sourceAuthType'?: string;
+    'sourceAuthKey'?: string;
+    'sourceAuthValue'?: string;
+    'sourceAuthUsername'?: string;
+    'importInterval'?: string;
+    'publishMode'?: string;
+    'publishEnvironment'?: string;
+    'publishFilter'?: any;
+    'publishFilterJson'?: string;
+    'unpublishFilter'?: any;
+    'unpublishFilterJson'?: string;
+    'lastImportAt'?: number;
+    'lastImportStatus'?: string;
+    'lastImportMessage'?: string;
+    'lastImportJson'?: string;
+    'importRunningAt'?: number;
+    'nextImportAt'?: number;
+    'warnings'?: Array<string>;
+    'availableEnvironments'?: Array<string>;
+    'siblingImportFeeds'?: Array<string>;
+}
+export interface FeedImportRunDTO {
+    'dryRun'?: boolean;
+    'status'?: string;
+    'message'?: string;
+    'itemCount'?: number;
+    'created'?: number;
+    'updated'?: number;
+    'failed'?: number;
+    'published'?: number;
+    'unpublished'?: number;
+    'skipped'?: number;
+    'sampleIncomplete'?: boolean;
+    'errors'?: Array<string>;
+    'items'?: Array<{ [key: string]: any | null; }>;
+    'keys'?: Array<string>;
 }
 export interface FileListItemDTO {
     'key'?: string;
@@ -6912,6 +6954,19 @@ export interface SuccessResponseFeedDTO {
      * The data payload of the response, if any.
      */
     'data'?: FeedDTO;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseFeedImportRunDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: FeedImportRunDTO;
 }
 /**
  * Success response (SuccessResponseFlow).
