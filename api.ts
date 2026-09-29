@@ -2583,9 +2583,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'xproperty'?: string;
     'yproperty'?: string;
     'ymetric'?: string;
-    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -9257,6 +9257,49 @@ export const AppInstallationRuntimeApiAxiosParamCreator = function (configuratio
         },
         /**
          * 
+         * @summary Run SQL in this installation\'s Postgres schema
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        runInstallationSql: async (appUuid: string, requestBody: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('runInstallationSql', 'appUuid', appUuid)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('runInstallationSql', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/db`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Save USER-scoped installation settings for the current user
          * @param {string} appUuid 
          * @param {Array<AppSettingFieldSchema>} appSettingFieldSchema 
@@ -9579,6 +9622,20 @@ export const AppInstallationRuntimeApiFp = function(configuration?: Configuratio
         },
         /**
          * 
+         * @summary Run SQL in this installation\'s Postgres schema
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async runInstallationSql(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.runInstallationSql(appUuid, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.runInstallationSql']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Save USER-scoped installation settings for the current user
          * @param {string} appUuid 
          * @param {Array<AppSettingFieldSchema>} appSettingFieldSchema 
@@ -9770,6 +9827,17 @@ export const AppInstallationRuntimeApiFactory = function (configuration?: Config
          */
         revokeConnection(appUuid: string, providerOrConnectionId: string, options?: RawAxiosRequestConfig): AxiosPromise<DeleteResponseVoid> {
             return localVarFp.revokeConnection(appUuid, providerOrConnectionId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Run SQL in this installation\'s Postgres schema
+         * @param {string} appUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        runInstallationSql(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.runInstallationSql(appUuid, requestBody, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9965,6 +10033,18 @@ export class AppInstallationRuntimeApi extends BaseAPI {
      */
     public revokeConnection(appUuid: string, providerOrConnectionId: string, options?: RawAxiosRequestConfig) {
         return AppInstallationRuntimeApiFp(this.configuration).revokeConnection(appUuid, providerOrConnectionId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Run SQL in this installation\'s Postgres schema
+     * @param {string} appUuid 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public runInstallationSql(appUuid: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).runInstallationSql(appUuid, requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

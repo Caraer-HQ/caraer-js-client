@@ -17,6 +17,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**putState**](#putstate) | **PUT** /api/v2/apps/{appUuid}/installation/state | Replace/merge installation state (shallow merge)|
 |[**putStateKey**](#putstatekey) | **PUT** /api/v2/apps/{appUuid}/installation/state/{key} | Put a single state key|
 |[**revokeConnection**](#revokeconnection) | **DELETE** /api/v2/apps/{appUuid}/installation/connections/{providerOrConnectionId} | Revoke external OAuth connection tokens by connection id or provider name|
+|[**runInstallationSql**](#runinstallationsql) | **POST** /api/v2/apps/{appUuid}/installation/db | Run SQL in this installation\&#39;s Postgres schema|
 |[**saveUserSettings**](#saveusersettings) | **PUT** /api/v2/apps/{appUuid}/installation/settings/user | Save USER-scoped installation settings for the current user|
 |[**startOAuth**](#startoauth) | **POST** /api/v2/apps/{appUuid}/installation/oauth/{provider}/start | Start external OAuth authorize (returns provider authorize URL)|
 |[**triggerSettingAction**](#triggersettingaction) | **POST** /api/v2/apps/{appUuid}/installation/settings/{fieldName}/trigger | Trigger an ACTION setting without saving settings|
@@ -745,6 +746,63 @@ const { status, data } = await apiInstance.revokeConnection(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **runInstallationSql**
+> ShowResponseMapStringObject runInstallationSql(requestBody)
+
+
+### Example
+
+```typescript
+import {
+    AppInstallationRuntimeApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new AppInstallationRuntimeApi(configuration);
+
+let appUuid: string; // (default to undefined)
+let requestBody: { [key: string]: any | null; }; //
+
+const { status, data } = await apiInstance.runInstallationSql(
+    appUuid,
+    requestBody
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **requestBody** | **{ [key: string]: any | null; }**|  | |
+| **appUuid** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponseMapStringObject**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 
