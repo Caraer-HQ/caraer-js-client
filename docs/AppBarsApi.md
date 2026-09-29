@@ -28,13 +28,15 @@ let object: string; //Object name in context (optional) (default to undefined)
 let recordUuid: string; //Record UUID in context (optional) (default to undefined)
 let viewId: string; //View ID in context (optional) (default to undefined)
 let trait: string; //Trait name in context (optional) (default to undefined)
+let suite: string; //Suite selected in the UI. A tool bar is included when this suite is saved on the bar. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.listAppBars(
     location,
     object,
     recordUuid,
     viewId,
-    trait
+    trait,
+    suite
 );
 ```
 
@@ -47,6 +49,7 @@ const { status, data } = await apiInstance.listAppBars(
 | **recordUuid** | [**string**] | Record UUID in context | (optional) defaults to undefined|
 | **viewId** | [**string**] | View ID in context | (optional) defaults to undefined|
 | **trait** | [**string**] | Trait name in context | (optional) defaults to undefined|
+| **suite** | [**string**] | Suite selected in the UI. A tool bar is included when this suite is saved on the bar. | (optional) defaults to undefined|
 
 
 ### Return type

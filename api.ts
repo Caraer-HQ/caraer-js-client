@@ -8496,10 +8496,11 @@ export const AppBarsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} [recordUuid] Record UUID in context
          * @param {string} [viewId] View ID in context
          * @param {string} [trait] Trait name in context
+         * @param {string} [suite] Suite selected in the UI. A tool bar is included when this suite is saved on the bar.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAppBars: async (location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listAppBars: async (location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'location' is not null or undefined
             assertParamExists('listAppBars', 'location', location)
             const localVarPath = `/api/v2/app-bars`;
@@ -8536,6 +8537,10 @@ export const AppBarsApiAxiosParamCreator = function (configuration?: Configurati
 
             if (trait !== undefined) {
                 localVarQueryParameter['trait'] = trait;
+            }
+
+            if (suite !== undefined) {
+                localVarQueryParameter['suite'] = suite;
             }
 
             localVarHeaderParameter['Accept'] = 'application/json';
@@ -8607,11 +8612,12 @@ export const AppBarsApiFp = function(configuration?: Configuration) {
          * @param {string} [recordUuid] Record UUID in context
          * @param {string} [viewId] View ID in context
          * @param {string} [trait] Trait name in context
+         * @param {string} [suite] Suite selected in the UI. A tool bar is included when this suite is saved on the bar.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListInstalledAppBarDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listAppBars(location, object, recordUuid, viewId, trait, options);
+        async listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListInstalledAppBarDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listAppBars(location, object, recordUuid, viewId, trait, suite, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AppBarsApi.listAppBars']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -8647,11 +8653,12 @@ export const AppBarsApiFactory = function (configuration?: Configuration, basePa
          * @param {string} [recordUuid] Record UUID in context
          * @param {string} [viewId] View ID in context
          * @param {string} [trait] Trait name in context
+         * @param {string} [suite] Suite selected in the UI. A tool bar is included when this suite is saved on the bar.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListInstalledAppBarDTO> {
-            return localVarFp.listAppBars(location, object, recordUuid, viewId, trait, options).then((request) => request(axios, basePath));
+        listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListInstalledAppBarDTO> {
+            return localVarFp.listAppBars(location, object, recordUuid, viewId, trait, suite, options).then((request) => request(axios, basePath));
         },
         /**
          * Fires the app bar webhook with optional settings values and record/view context.
@@ -8679,11 +8686,12 @@ export class AppBarsApi extends BaseAPI {
      * @param {string} [recordUuid] Record UUID in context
      * @param {string} [viewId] View ID in context
      * @param {string} [trait] Trait name in context
+     * @param {string} [suite] Suite selected in the UI. A tool bar is included when this suite is saved on the bar.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, options?: RawAxiosRequestConfig) {
-        return AppBarsApiFp(this.configuration).listAppBars(location, object, recordUuid, viewId, trait, options).then((request) => request(this.axios, this.basePath));
+    public listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, options?: RawAxiosRequestConfig) {
+        return AppBarsApiFp(this.configuration).listAppBars(location, object, recordUuid, viewId, trait, suite, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
