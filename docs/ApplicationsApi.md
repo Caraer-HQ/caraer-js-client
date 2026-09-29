@@ -10,6 +10,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**deleteAppWebhook**](#deleteappwebhook) | **DELETE** /api/v2/apps/{appUuid}/webhooks/{webhookUuid} | Delete a webhook for an app|
 |[**getApp**](#getapp) | **GET** /api/v2/apps/{uuid} | Retrieve application details by UUID|
 |[**getAppWebhook**](#getappwebhook) | **GET** /api/v2/apps/{appUuid}/webhooks/{webhookUuid} | Get a webhook for an app|
+|[**getAppWebhookDeliveries**](#getappwebhookdeliveries) | **GET** /api/v2/apps/{appUuid}/webhooks/{webhookUuid}/deliveries | Recent webhook delivery decisions|
 |[**getAppWebhooks**](#getappwebhooks) | **POST** /api/v2/apps/{appUuid}/webhooks/index | Retrieve a paginated list of webhooks for an app|
 |[**getApps**](#getapps) | **POST** /api/v2/apps/index | Retrieve a paginated list of applications|
 |[**getCompanyInformation**](#getcompanyinformation) | **GET** /api/v2/apps/{appUuid}/me | Get current user\&#39;s company information|
@@ -376,6 +377,64 @@ const { status, data } = await apiInstance.getAppWebhook(
 |**500** | Internal server error |  -  |
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getAppWebhookDeliveries**
+> ShowResponseListEntry getAppWebhookDeliveries()
+
+Returns the latest match, suppression, and delivery attempts for this webhook on this server. A selected-object topic records MATCHED. A different object records SUPPRESSED. A missing required setting records SKIPPED_MISSING_SETTING.
+
+### Example
+
+```typescript
+import {
+    ApplicationsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new ApplicationsApi(configuration);
+
+let appUuid: string; //UUID of the app that owns the webhook (default to undefined)
+let webhookUuid: string; //UUID of the webhook (default to undefined)
+
+const { status, data } = await apiInstance.getAppWebhookDeliveries(
+    appUuid,
+    webhookUuid
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **appUuid** | [**string**] | UUID of the app that owns the webhook | defaults to undefined|
+| **webhookUuid** | [**string**] | UUID of the webhook | defaults to undefined|
+
+
+### Return type
+
+**ShowResponseListEntry**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Delivery history |  -  |
+|**404** | Webhook not found for the specified app or company |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

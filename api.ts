@@ -2583,9 +2583,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'yproperty'?: string;
-    'xproperty'?: string;
     'ymetric'?: string;
+    'xproperty'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -5767,8 +5767,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -6086,6 +6086,13 @@ export interface ShowResponseListCmsPublicMenuDTO {
      * The data payload of the response, if any.
      */
     'data'?: Array<CmsPublicMenuDTO>;
+}
+/**
+ * Success response (ShowResponseListEntry).
+ */
+export interface ShowResponseListEntry {
+    'message'?: string;
+    'data'?: Array<object>;
 }
 /**
  * Success response (ShowResponseListEnvironmentDTO).
@@ -10336,6 +10343,48 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
+         * Returns the latest match, suppression, and delivery attempts for this webhook on this server. A selected-object topic records MATCHED. A different object records SUPPRESSED. A missing required setting records SKIPPED_MISSING_SETTING.
+         * @summary Recent webhook delivery decisions
+         * @param {string} appUuid UUID of the app that owns the webhook
+         * @param {string} webhookUuid UUID of the webhook
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAppWebhookDeliveries: async (appUuid: string, webhookUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('getAppWebhookDeliveries', 'appUuid', appUuid)
+            // verify required parameter 'webhookUuid' is not null or undefined
+            assertParamExists('getAppWebhookDeliveries', 'webhookUuid', webhookUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/webhooks/{webhookUuid}/deliveries`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{webhookUuid}', encodeURIComponent(String(webhookUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Fetches a paginated and optionally filtered list of webhooks associated with the specified app and the authenticated user\'s selected company.
          * @summary Retrieve a paginated list of webhooks for an app
          * @param {string} appUuid UUID of the application for which to retrieve webhooks
@@ -11391,6 +11440,20 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Returns the latest match, suppression, and delivery attempts for this webhook on this server. A selected-object topic records MATCHED. A different object records SUPPRESSED. A missing required setting records SKIPPED_MISSING_SETTING.
+         * @summary Recent webhook delivery decisions
+         * @param {string} appUuid UUID of the app that owns the webhook
+         * @param {string} webhookUuid UUID of the webhook
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAppWebhookDeliveries(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListEntry>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAppWebhookDeliveries(appUuid, webhookUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getAppWebhookDeliveries']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Fetches a paginated and optionally filtered list of webhooks associated with the specified app and the authenticated user\'s selected company.
          * @summary Retrieve a paginated list of webhooks for an app
          * @param {string} appUuid UUID of the application for which to retrieve webhooks
@@ -11781,6 +11844,17 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
             return localVarFp.getAppWebhook(appUuid, webhookUuid, options).then((request) => request(axios, basePath));
         },
         /**
+         * Returns the latest match, suppression, and delivery attempts for this webhook on this server. A selected-object topic records MATCHED. A different object records SUPPRESSED. A missing required setting records SKIPPED_MISSING_SETTING.
+         * @summary Recent webhook delivery decisions
+         * @param {string} appUuid UUID of the app that owns the webhook
+         * @param {string} webhookUuid UUID of the webhook
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAppWebhookDeliveries(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListEntry> {
+            return localVarFp.getAppWebhookDeliveries(appUuid, webhookUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Fetches a paginated and optionally filtered list of webhooks associated with the specified app and the authenticated user\'s selected company.
          * @summary Retrieve a paginated list of webhooks for an app
          * @param {string} appUuid UUID of the application for which to retrieve webhooks
@@ -12103,6 +12177,18 @@ export class ApplicationsApi extends BaseAPI {
      */
     public getAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).getAppWebhook(appUuid, webhookUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns the latest match, suppression, and delivery attempts for this webhook on this server. A selected-object topic records MATCHED. A different object records SUPPRESSED. A missing required setting records SKIPPED_MISSING_SETTING.
+     * @summary Recent webhook delivery decisions
+     * @param {string} appUuid UUID of the app that owns the webhook
+     * @param {string} webhookUuid UUID of the webhook
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getAppWebhookDeliveries(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).getAppWebhookDeliveries(appUuid, webhookUuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
