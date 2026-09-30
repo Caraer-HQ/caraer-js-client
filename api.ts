@@ -982,6 +982,8 @@ export interface AppSettingFieldSchema {
     'defaultValue'?: any;
     'hidden'?: boolean;
     'advanced'?: boolean;
+    'group'?: string;
+    'fields'?: Array<AppSettingFieldSchema>;
     'filterTraits'?: Array<string>;
     'visibleWhen'?: Array<AppSettingCondition>;
     'itemFields'?: Array<AppSettingFieldSchema>;
@@ -992,7 +994,10 @@ export interface AppSettingFieldSchema {
     'hasValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
+    'settingsGroup'?: boolean;
     'action'?: boolean;
+    'filterPropertyTypes'?: Array<string>;
+    'filterPropertyFormats'?: Array<string>;
 }
 export interface AppSettingOptionsSource {
     'type'?: string;
@@ -5773,8 +5778,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
