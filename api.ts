@@ -996,8 +996,8 @@ export interface AppSettingFieldSchema {
     'hasValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'action'?: boolean;
     'settingsGroup'?: boolean;
+    'action'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -2590,9 +2590,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -18448,6 +18448,44 @@ export const DeveloperProjectsApiAxiosParamCreator = function (configuration?: C
             };
         },
         /**
+         * Returns the zip of the build currently deployed for this project. That archive is the source of truth for functions and CMS modules.
+         * @summary Download the deployed project source
+         * @param {string} projectUuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deployedSource: async (projectUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'projectUuid' is not null or undefined
+            assertParamExists('deployedSource', 'projectUuid', projectUuid)
+            const localVarPath = `/api/v2/developer-projects/{projectUuid}/source`
+                .replace('{projectUuid}', encodeURIComponent(String(projectUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/zip,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Get a project build
          * @param {string} projectUuid UUID of the developer project
@@ -18655,6 +18693,19 @@ export const DeveloperProjectsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Returns the zip of the build currently deployed for this project. That archive is the source of truth for functions and CMS modules.
+         * @summary Download the deployed project source
+         * @param {string} projectUuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deployedSource(projectUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deployedSource(projectUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperProjectsApi.deployedSource']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
          * @summary Get a project build
          * @param {string} projectUuid UUID of the developer project
@@ -18750,6 +18801,16 @@ export const DeveloperProjectsApiFactory = function (configuration?: Configurati
             return localVarFp.deploy(projectUuid, buildUuid, deployBuildRequest, options).then((request) => request(axios, basePath));
         },
         /**
+         * Returns the zip of the build currently deployed for this project. That archive is the source of truth for functions and CMS modules.
+         * @summary Download the deployed project source
+         * @param {string} projectUuid UUID of the developer project
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deployedSource(projectUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<string> {
+            return localVarFp.deployedSource(projectUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary Get a project build
          * @param {string} projectUuid UUID of the developer project
@@ -18831,6 +18892,17 @@ export class DeveloperProjectsApi extends BaseAPI {
      */
     public deploy(projectUuid: string, buildUuid: string, deployBuildRequest?: DeployBuildRequest, options?: RawAxiosRequestConfig) {
         return DeveloperProjectsApiFp(this.configuration).deploy(projectUuid, buildUuid, deployBuildRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns the zip of the build currently deployed for this project. That archive is the source of truth for functions and CMS modules.
+     * @summary Download the deployed project source
+     * @param {string} projectUuid UUID of the developer project
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public deployedSource(projectUuid: string, options?: RawAxiosRequestConfig) {
+        return DeveloperProjectsApiFp(this.configuration).deployedSource(projectUuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

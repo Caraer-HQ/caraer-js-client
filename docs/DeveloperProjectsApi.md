@@ -7,6 +7,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**create2**](#create2) | **POST** /api/v2/developer-projects | Create or fetch a developer project|
 |[**createBuild**](#createbuild) | **POST** /api/v2/developer-projects/{projectUuid}/builds | Upload a project build|
 |[**deploy**](#deploy) | **POST** /api/v2/developer-projects/{projectUuid}/builds/{buildUuid}/deploy | Deploy a project build|
+|[**deployedSource**](#deployedsource) | **GET** /api/v2/developer-projects/{projectUuid}/source | Download the deployed project source|
 |[**getBuild**](#getbuild) | **GET** /api/v2/developer-projects/{projectUuid}/builds/{buildUuid} | Get a project build|
 |[**listBuilds**](#listbuilds) | **GET** /api/v2/developer-projects/{projectUuid}/builds | List project builds|
 |[**listDeploys**](#listdeploys) | **GET** /api/v2/developer-projects/{projectUuid}/deploys | List project deploys|
@@ -188,6 +189,61 @@ const { status, data } = await apiInstance.deploy(
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
 |**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deployedSource**
+> string deployedSource()
+
+Returns the zip of the build currently deployed for this project. That archive is the source of truth for functions and CMS modules.
+
+### Example
+
+```typescript
+import {
+    DeveloperProjectsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new DeveloperProjectsApi(configuration);
+
+let projectUuid: string; //UUID of the developer project (default to undefined)
+
+const { status, data } = await apiInstance.deployedSource(
+    projectUuid
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **projectUuid** | [**string**] | UUID of the developer project | defaults to undefined|
+
+
+### Return type
+
+**string**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/zip, application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Deployed source archive |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
 |**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
