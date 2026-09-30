@@ -21,6 +21,7 @@ Name | Type | Description | Notes
 **version** | **string** |  | [optional] [default to undefined]
 **retired** | **boolean** |  | [optional] [default to undefined]
 **fields** | [**Array&lt;AppSettingFieldSchema&gt;**](AppSettingFieldSchema.md) |  | [optional] [default to undefined]
+**components** | [**Array&lt;CmsModuleComponent&gt;**](CmsModuleComponent.md) |  | [optional] [default to undefined]
 **frameworks** | **{ [key: string]: string; }** |  | [optional] [default to undefined]
 
 ## Example
@@ -45,6 +46,7 @@ const instance: CmsModuleDTO = {
     version,
     retired,
     fields,
+    components,
     frameworks,
 };
 ```

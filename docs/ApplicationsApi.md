@@ -8,6 +8,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**createPrivateApp**](#createprivateapp) | **POST** /api/v2/apps/private | Create a private app|
 |[**createPublicApp**](#createpublicapp) | **POST** /api/v2/apps/public | Create a public app|
 |[**deleteAppWebhook**](#deleteappwebhook) | **DELETE** /api/v2/apps/{appUuid}/webhooks/{webhookUuid} | Delete a webhook for an app|
+|[**deletePrivateApp**](#deleteprivateapp) | **DELETE** /api/v2/apps/private/{uuid} | Delete a private app|
 |[**getApp**](#getapp) | **GET** /api/v2/apps/{uuid} | Retrieve application details by UUID|
 |[**getAppWebhook**](#getappwebhook) | **GET** /api/v2/apps/{appUuid}/webhooks/{webhookUuid} | Get a webhook for an app|
 |[**getAppWebhookDeliveries**](#getappwebhookdeliveries) | **GET** /api/v2/apps/{appUuid}/webhooks/{webhookUuid}/deliveries | Recent webhook delivery decisions|
@@ -264,6 +265,62 @@ const { status, data } = await apiInstance.deleteAppWebhook(
 |**500** | Internal server error |  -  |
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deletePrivateApp**
+> DeleteResponse deletePrivateApp()
+
+Deletes a private app owned by the current company. An active installation is uninstalled first. The app then disappears from the company.
+
+### Example
+
+```typescript
+import {
+    ApplicationsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new ApplicationsApi(configuration);
+
+let uuid: string; //UUID of the private app to delete (default to undefined)
+
+const { status, data } = await apiInstance.deletePrivateApp(
+    uuid
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **uuid** | [**string**] | UUID of the private app to delete | defaults to undefined|
+
+
+### Return type
+
+**DeleteResponse**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Private app deleted |  -  |
+|**400** | The app is not private |  -  |
+|**403** | Only the creator company can delete the app |  -  |
+|**404** | Application not found |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -1397,6 +1397,11 @@ export interface CmsEnvironmentDTO {
     'htmlLang'?: string;
     'default'?: boolean;
 }
+export interface CmsModuleComponent {
+    'name'?: string;
+    'label'?: string;
+    'fields'?: Array<string>;
+}
 export interface CmsModuleDTO {
     'uuid'?: string;
     'name'?: string;
@@ -1414,6 +1419,7 @@ export interface CmsModuleDTO {
     'version'?: string;
     'retired'?: boolean;
     'fields'?: Array<AppSettingFieldSchema>;
+    'components'?: Array<CmsModuleComponent>;
     'frameworks'?: { [key: string]: string; };
 }
 export interface CmsPageDTO {
@@ -2583,9 +2589,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'xproperty'?: string;
     'ymetric'?: string;
     'yproperty'?: string;
-    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -10271,6 +10277,44 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
+         * Deletes a private app owned by the current company. An active installation is uninstalled first. The app then disappears from the company.
+         * @summary Delete a private app
+         * @param {string} uuid UUID of the private app to delete
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePrivateApp: async (uuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('deletePrivateApp', 'uuid', uuid)
+            const localVarPath = `/api/v2/apps/private/{uuid}`
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Fetches details about an application specified by its UUID. Returns the application details as a ShowResponse wrapping an AppDetailDTO.
          * @summary Retrieve application details by UUID
          * @param {string} uuid UUID of the application to retrieve
@@ -11421,6 +11465,19 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Deletes a private app owned by the current company. An active installation is uninstalled first. The app then disappears from the company.
+         * @summary Delete a private app
+         * @param {string} uuid UUID of the private app to delete
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deletePrivateApp(uuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePrivateApp(uuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.deletePrivateApp']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Fetches details about an application specified by its UUID. Returns the application details as a ShowResponse wrapping an AppDetailDTO.
          * @summary Retrieve application details by UUID
          * @param {string} uuid UUID of the application to retrieve
@@ -11831,6 +11888,16 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
             return localVarFp.deleteAppWebhook(appUuid, webhookUuid, options).then((request) => request(axios, basePath));
         },
         /**
+         * Deletes a private app owned by the current company. An active installation is uninstalled first. The app then disappears from the company.
+         * @summary Delete a private app
+         * @param {string} uuid UUID of the private app to delete
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePrivateApp(uuid: string, options?: RawAxiosRequestConfig): AxiosPromise<DeleteResponse> {
+            return localVarFp.deletePrivateApp(uuid, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Fetches details about an application specified by its UUID. Returns the application details as a ShowResponse wrapping an AppDetailDTO.
          * @summary Retrieve application details by UUID
          * @param {string} uuid UUID of the application to retrieve
@@ -12162,6 +12229,17 @@ export class ApplicationsApi extends BaseAPI {
      */
     public deleteAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).deleteAppWebhook(appUuid, webhookUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Deletes a private app owned by the current company. An active installation is uninstalled first. The app then disappears from the company.
+     * @summary Delete a private app
+     * @param {string} uuid UUID of the private app to delete
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public deletePrivateApp(uuid: string, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).deletePrivateApp(uuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
