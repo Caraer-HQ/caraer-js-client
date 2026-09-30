@@ -976,6 +976,8 @@ export interface AppSettingFieldSchema {
     'type'?: string;
     'required'?: boolean;
     'helpText'?: string;
+    'text'?: string;
+    'paragraph'?: string;
     'options'?: Array<SettingOption>;
     'optionsSource'?: AppSettingOptionsSource;
     'actionSource'?: AppSettingActionSource;
@@ -2588,9 +2590,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
-    'ymetric'?: string;
     'yproperty'?: string;
+    'ymetric'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;

@@ -10,6 +10,8 @@ Name | Type | Description | Notes
 **type** | **string** |  | [optional] [default to undefined]
 **required** | **boolean** |  | [optional] [default to undefined]
 **helpText** | **string** |  | [optional] [default to undefined]
+**text** | **string** |  | [optional] [default to undefined]
+**paragraph** | **string** |  | [optional] [default to undefined]
 **_options** | [**Array&lt;SettingOption&gt;**](SettingOption.md) |  | [optional] [default to undefined]
 **optionsSource** | [**AppSettingOptionsSource**](AppSettingOptionsSource.md) |  | [optional] [default to undefined]
 **actionSource** | [**AppSettingActionSource**](AppSettingActionSource.md) |  | [optional] [default to undefined]
@@ -44,6 +46,8 @@ const instance: AppSettingFieldSchema = {
     type,
     required,
     helpText,
+    text,
+    paragraph,
     _options,
     optionsSource,
     actionSource,
