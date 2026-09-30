@@ -996,8 +996,8 @@ export interface AppSettingFieldSchema {
     'hasValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'settingsGroup'?: boolean;
     'action'?: boolean;
+    'settingsGroup'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
