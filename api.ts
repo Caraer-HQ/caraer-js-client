@@ -994,8 +994,8 @@ export interface AppSettingFieldSchema {
     'hasValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'settingsGroup'?: boolean;
     'action'?: boolean;
+    'settingsGroup'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -1402,11 +1402,6 @@ export interface CmsEnvironmentDTO {
     'htmlLang'?: string;
     'default'?: boolean;
 }
-export interface CmsModuleComponent {
-    'name'?: string;
-    'label'?: string;
-    'fields'?: Array<string>;
-}
 export interface CmsModuleDTO {
     'uuid'?: string;
     'name'?: string;
@@ -1424,7 +1419,6 @@ export interface CmsModuleDTO {
     'version'?: string;
     'retired'?: boolean;
     'fields'?: Array<AppSettingFieldSchema>;
-    'components'?: Array<CmsModuleComponent>;
     'frameworks'?: { [key: string]: string; };
 }
 export interface CmsPageDTO {
@@ -2594,9 +2588,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'yproperty'?: string;
-    'ymetric'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -5778,8 +5772,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {

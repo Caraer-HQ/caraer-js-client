@@ -28,8 +28,8 @@ Name | Type | Description | Notes
 **hasValue** | **boolean** |  | [optional] [default to undefined]
 **mappingValue** | [**AppSettingFieldMappingStructure**](AppSettingFieldMappingStructure.md) |  | [optional] [default to undefined]
 **valueScope** | **string** |  | [optional] [default to undefined]
-**settingsGroup** | **boolean** |  | [optional] [default to undefined]
 **action** | **boolean** |  | [optional] [default to undefined]
+**settingsGroup** | **boolean** |  | [optional] [default to undefined]
 **filterPropertyTypes** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **filterPropertyFormats** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 
@@ -62,8 +62,8 @@ const instance: AppSettingFieldSchema = {
     hasValue,
     mappingValue,
     valueScope,
-    settingsGroup,
     action,
+    settingsGroup,
     filterPropertyTypes,
     filterPropertyFormats,
 };
