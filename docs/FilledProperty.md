@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**icon** | **string** |  | [optional] [default to undefined]
 **name** | **string** |  | [optional] [default to undefined]
 **value** | **any** |  | [optional] [default to undefined]
 **type** | **string** |  | [optional] [default to undefined]
+**icon** | **string** |  | [optional] [default to undefined]
 **label** | **string** |  | [optional] [default to undefined]
 
 ## Example
@@ -17,10 +17,10 @@ Name | Type | Description | Notes
 import { FilledProperty } from '@caraer/client';
 
 const instance: FilledProperty = {
-    icon,
     name,
     value,
     type,
+    icon,
     label,
 };
 ```
