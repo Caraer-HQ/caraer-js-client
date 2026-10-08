@@ -1710,16 +1710,8 @@ export interface CreateCompanyRequest {
     /**
      * CMS version for the new company: 1 = CMS v1, 2 = CMS v2. When omitted, the server\'s configured default is used.
      */
-    'cmsVersion'?: CreateCompanyRequestCmsVersionEnum;
+    'cmsVersion'?: number;
 }
-
-export const CreateCompanyRequestCmsVersionEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-} as const;
-
-export type CreateCompanyRequestCmsVersionEnum = typeof CreateCompanyRequestCmsVersionEnum[keyof typeof CreateCompanyRequestCmsVersionEnum];
-
 /**
  * Request body for creating (or fetching an existing) developer project for an app.
  */
@@ -2604,9 +2596,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
     'yproperty'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -5789,8 +5781,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
