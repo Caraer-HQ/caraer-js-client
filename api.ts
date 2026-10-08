@@ -3563,11 +3563,11 @@ export interface ModelRecord {
     'updatedByUuid'?: string;
     'deletedByUuid'?: string;
     'index'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
-    'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
+    'properties'?: Array<FilledProperty>;
     'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
@@ -5095,6 +5095,7 @@ export interface PublicUserDTO {
     'scopes'?: Array<string>;
     'filters'?: { [key: string]: Filter; };
     'role'?: string;
+    'roles'?: Array<string>;
     'record'?: ModelRecord;
 }
 export interface QueryEvidence {
@@ -7314,8 +7315,8 @@ export interface Team {
     'filtersString'?: string;
     'filters'?: { [key: string]: Filter; };
     'memberCount'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
 }
 export interface TeamDTO {

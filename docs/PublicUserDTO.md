@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **scopes** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **filters** | [**{ [key: string]: Filter; }**](Filter.md) |  | [optional] [default to undefined]
 **role** | **string** |  | [optional] [default to undefined]
+**roles** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **record** | [**ModelRecord**](ModelRecord.md) |  | [optional] [default to undefined]
 
 ## Example
@@ -29,6 +30,7 @@ const instance: PublicUserDTO = {
     scopes,
     filters,
     role,
+    roles,
     record,
 };
 ```
