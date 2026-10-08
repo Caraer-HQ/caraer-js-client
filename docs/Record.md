@@ -17,8 +17,8 @@ Name | Type | Description | Notes
 **complete** | **boolean** |  | [optional] [default to undefined]
 **deleted** | **boolean** |  | [optional] [default to undefined]
 **uuid** | **string** |  | [default to undefined]
-**objects** | **{ [key: string]: any | null; }** |  | [optional] [default to undefined]
 **properties** | [**Array&lt;FilledProperty&gt;**](FilledProperty.md) |  | [optional] [default to undefined]
+**objects** | **{ [key: string]: any | null; }** |  | [optional] [default to undefined]
 **user** | [**PublicUserDTO**](PublicUserDTO.md) |  | [optional] [default to undefined]
 
 ## Example
@@ -39,8 +39,8 @@ const instance: ModelRecord = {
     complete,
     deleted,
     uuid,
-    objects,
     properties,
+    objects,
     user,
 };
 ```
