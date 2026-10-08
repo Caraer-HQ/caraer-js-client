@@ -539,7 +539,7 @@ export interface AppDTO {
      */
     'resolvedRequiredScopes'?: Array<string>;
     /**
-     * Authentication method for this app (API_KEY default, OAUTH2 for OAuth 2.0)
+     * App credentials: NONE for platform-managed installation tokens, API_KEY (legacy default), or OAUTH2
      */
     'authMethod'?: AppDTOAuthMethodEnum;
     /**
@@ -609,6 +609,7 @@ export interface AppDTO {
 }
 
 export const AppDTOAuthMethodEnum = {
+    None: 'NONE',
     ApiKey: 'API_KEY',
     Oauth2: 'OAUTH2',
 } as const;
@@ -1706,6 +1707,10 @@ export interface CreateCompanyRequest {
      * Whether to include records in the company.
      */
     'includeRecords'?: boolean;
+    /**
+     * CMS version for the new company: 1 = CMS v1, 2 = CMS v2. When omitted, the server\'s configured default is used.
+     */
+    'cmsVersion'?: number;
 }
 /**
  * Request body for creating (or fetching an existing) developer project for an app.
@@ -1772,6 +1777,7 @@ export interface CreatePrivateAppRequest {
 }
 
 export const CreatePrivateAppRequestAuthMethodEnum = {
+    None: 'NONE',
     ApiKey: 'API_KEY',
     Oauth2: 'OAUTH2',
 } as const;

@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **companyName** | **string** | The company name. | [optional] [default to undefined]
 **copyDatabaseId** | **string** | The copy database id. | [optional] [default to undefined]
 **includeRecords** | **boolean** | Whether to include records in the company. | [optional] [default to undefined]
+**cmsVersion** | **number** | CMS version for the new company: 1 &#x3D; CMS v1, 2 &#x3D; CMS v2. When omitted, the server\&#39;s configured default is used. | [optional] [default to undefined]
 
 ## Example
 
@@ -23,6 +24,7 @@ const instance: CreateCompanyRequest = {
     companyName,
     copyDatabaseId,
     includeRecords,
+    cmsVersion,
 };
 ```
 
