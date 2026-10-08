@@ -539,7 +539,7 @@ export interface AppDTO {
      */
     'resolvedRequiredScopes'?: Array<string>;
     /**
-     * Authentication method for this app (API_KEY default, OAUTH2 for OAuth 2.0)
+     * App credentials: NONE for platform-managed installation tokens, API_KEY (legacy default), or OAUTH2
      */
     'authMethod'?: AppDTOAuthMethodEnum;
     /**
@@ -609,6 +609,7 @@ export interface AppDTO {
 }
 
 export const AppDTOAuthMethodEnum = {
+    None: 'NONE',
     ApiKey: 'API_KEY',
     Oauth2: 'OAUTH2',
 } as const;
@@ -996,8 +997,8 @@ export interface AppSettingFieldSchema {
     'hasValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'action'?: boolean;
     'settingsGroup'?: boolean;
+    'action'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -1784,6 +1785,7 @@ export interface CreatePrivateAppRequest {
 }
 
 export const CreatePrivateAppRequestAuthMethodEnum = {
+    None: 'NONE',
     ApiKey: 'API_KEY',
     Oauth2: 'OAUTH2',
 } as const;
@@ -2603,8 +2605,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'ymetric'?: string;
-    'xproperty'?: string;
     'yproperty'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -5787,8 +5789,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
