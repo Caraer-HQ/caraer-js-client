@@ -996,8 +996,8 @@ export interface AppSettingFieldSchema {
     'hasValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'settingsGroup'?: boolean;
     'action'?: boolean;
+    'settingsGroup'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -1706,7 +1706,19 @@ export interface CreateCompanyRequest {
      * Whether to include records in the company.
      */
     'includeRecords'?: boolean;
+    /**
+     * CMS version for the new company: 1 = CMS v1, 2 = CMS v2. When omitted, the server\'s configured default is used.
+     */
+    'cmsVersion'?: CreateCompanyRequestCmsVersionEnum;
 }
+
+export const CreateCompanyRequestCmsVersionEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+} as const;
+
+export type CreateCompanyRequestCmsVersionEnum = typeof CreateCompanyRequestCmsVersionEnum[keyof typeof CreateCompanyRequestCmsVersionEnum];
+
 /**
  * Request body for creating (or fetching an existing) developer project for an app.
  */
@@ -2590,9 +2602,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'yproperty'?: string;
-    'xproperty'?: string;
     'ymetric'?: string;
+    'xproperty'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
