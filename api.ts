@@ -1747,33 +1747,205 @@ export interface CreateOrUpdateEnvironmentRequest {
     'webpageObjects'?: Array<CaraerObjectDTO>;
 }
 /**
- * Private app creation request with label and optional description
+ * Private app creator manifest; label is required and internal name is optional
  */
 export interface CreatePrivateAppRequest {
     /**
-     * The display label for the private app.
+     * Unique identifier for the entity
+     */
+    'uuid': string;
+    /**
+     * The name of the entity
+     */
+    'name': string;
+    /**
+     * Display label for the entity, can be different from name
      */
     'label': string;
     /**
-     * Optional description text for the app.
+     * Unix timestamp when the entity was created
      */
-    'description'?: string;
+    'createdAt'?: number;
     /**
-     * Authentication method (API_KEY default, OAUTH2 for OAuth 2.0)
+     * Identifier of the user who created the entity
+     */
+    'createdBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was last updated
+     */
+    'updatedAt'?: number;
+    /**
+     * Identifier of the user who last updated the entity
+     */
+    'updatedBy'?: ModelRecord;
+    /**
+     * Unix timestamp when the entity was deleted (null if not deleted)
+     */
+    'deletedAt'?: number;
+    /**
+     * Identifier of the user who deleted the entity
+     */
+    'deletedBy'?: ModelRecord;
+    /**
+     * Index number for ordering entities
+     */
+    'index'?: number;
+    /**
+     * Indicates whether this app is private (only available to the creator\'s company)
+     */
+    'privateApp'?: boolean;
+    /**
+     * Whether to hide the API token field in marketplace installer UI. Defaults to true when omitted. Private apps show the key regardless.
+     */
+    'hideApiKeyField'?: boolean;
+    /**
+     * Additional details and specifications about the application
+     */
+    'details'?: AppDetailsDTO;
+    /**
+     * App bars (location-specific configuration and actions)
+     */
+    'appBars'?: Array<AppBarDTO>;
+    /**
+     * Serverless functions owned by this app
+     */
+    'serverlessFunctions'?: Array<ServerlessFunctionDTO>;
+    /**
+     * Webhook triggered when the app is installed
+     */
+    'installWebhook'?: SubscribeWebhookDTO;
+    /**
+     * Webhook triggered when the app is uninstalled
+     */
+    'uninstallWebhook'?: SubscribeWebhookDTO;
+    /**
+     * Webhook triggered when the app installation token is rotated
+     */
+    'rotateWebhook'?: SubscribeWebhookDTO;
+    /**
+     * Webhook triggered when an already installed app is saved again
+     */
+    'updateWebhook'?: SubscribeWebhookDTO;
+    /**
+     * JSON array of AppSettingFieldSchema (app-level setting field definitions)
+     */
+    'settingsSchema'?: Array<AppSettingFieldSchema>;
+    /**
+     * Optional UI grouping of settingsSchema fields into installer cards
+     */
+    'settingsSections'?: Array<AppSettingsSection>;
+    /**
+     * External OAuth providers installers can Connect (name/logo only; no secrets)
+     */
+    'externalOAuthProviders'?: Array<AppExternalOAuthProviderSummaryDTO>;
+    /**
+     * Webhook rate limit per minute
+     */
+    'webhookRateLimitPerMinute'?: number;
+    /**
+     * App job enqueue rate limit per minute per installation
+     */
+    'jobRateLimitPerMinute'?: number;
+    /**
+     * Publish and review state for the app in the marketplace (creator view)
+     */
+    'appPublish'?: AppPublishDTO;
+    /**
+     * Installation link (company–app) with token, scopes, and per-installation settingsValues; present when includeSettings is true
+     */
+    'hasApp'?: HasAppDTO;
+    /**
+     * URL to the application\'s image or icon (derived from details.image)
+     */
+    'image'?: string;
+    /**
+     * URL where the application can be accessed (derived from details.url)
+     */
+    'url'?: string;
+    /**
+     * Category the application belongs to (derived from details.category)
+     */
+    'category'?: string;
+    /**
+     * Whether the app is installed for the current company
+     */
+    'installed'?: boolean;
+    /**
+     * Required scopes requested by the app (macro patterns or concrete scope strings).
+     */
+    'requiredScopes'?: Array<string>;
+    /**
+     * Resolved concrete required scopes derived from requiredScopes and dynamic availableScopes.
+     */
+    'resolvedRequiredScopes'?: Array<string>;
+    /**
+     * App credentials: NONE for platform-managed installation tokens, API_KEY (legacy default), or OAUTH2
      */
     'authMethod'?: CreatePrivateAppRequestAuthMethodEnum;
     /**
-     * Registered OAuth redirect URIs (required when authMethod is OAUTH2)
+     * OAuth 2.0 client identifier (OAuth apps only)
+     */
+    'oauthClientId'?: string;
+    /**
+     * OAuth 2.0 client secret; only returned once on create or secret rotation
+     */
+    'oauthClientSecret'?: string;
+    /**
+     * Whether an OAuth client secret is stored for this app (plain value is not re-readable)
+     */
+    'oauthClientSecretConfigured'?: boolean;
+    /**
+     * Registered OAuth redirect URIs (OAuth apps only)
      */
     'oauthRedirectUris'?: Array<string>;
     /**
-     * Ignored; new private apps are always platform version 2 (async container runtime).
+     * OAuth authorization endpoint URL
+     */
+    'oauthAuthorizeUrl'?: string;
+    /**
+     * OAuth token endpoint URL
+     */
+    'oauthTokenUrl'?: string;
+    /**
+     * External URL where end users install this app (e.g. ChatGPT connector page)
+     */
+    'installUrl'?: string;
+    /**
+     * Square brandmark URL used in compact app surfaces
+     */
+    'brandmark'?: string;
+    /**
+     * Internal app description used in Caraer admin views
+     */
+    'description'?: string;
+    /**
+     * App platform version: 1 = legacy per-function Cloud Functions; 2 = one container per app
      */
     'platformVersion'?: number;
     /**
-     * Serverless runtime for the app: nodejs22 or python312. Defaults to nodejs22.
+     * Serverless runtime for platform V2 apps (nodejs22 or python312)
      */
     'runtime'?: string;
+    /**
+     * Base HTTPS URL of the V2 app container runtime
+     */
+    'runtimeBaseUrl'?: string;
+    /**
+     * Last deployed runtime revision id
+     */
+    'runtimeRevision'?: string;
+    /**
+     * V2 runtime status: PENDING, PROVISIONING, READY, FAILED
+     */
+    'runtimeStatus'?: string;
+    /**
+     * Last V2 runtime error message when FAILED
+     */
+    'runtimeError'?: string;
+    /**
+     * Monotonic generation for async runtime jobs
+     */
+    'runtimeGeneration'?: number;
 }
 
 export const CreatePrivateAppRequestAuthMethodEnum = {
@@ -5781,8 +5953,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -10165,7 +10337,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
-         * Creates a new private app with the provided label and optional description. Private apps are automatically installed for the creating user\'s company. Returns the created app details as a CreateResponse wrapping an AppDTO.
+         * Creates a private app from its creator manifest, validating the supplied name, settings and app bars before saving. An omitted name is generated. Private apps are automatically installed for the creating user\'s company. Returns the created app details as a CreateResponse wrapping an AppDTO.
          * @summary Create a private app
          * @param {CreatePrivateAppRequest} createPrivateAppRequest 
          * @param {*} [options] Override http request option.
@@ -11433,7 +11605,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Creates a new private app with the provided label and optional description. Private apps are automatically installed for the creating user\'s company. Returns the created app details as a CreateResponse wrapping an AppDTO.
+         * Creates a private app from its creator manifest, validating the supplied name, settings and app bars before saving. An omitted name is generated. Private apps are automatically installed for the creating user\'s company. Returns the created app details as a CreateResponse wrapping an AppDTO.
          * @summary Create a private app
          * @param {CreatePrivateAppRequest} createPrivateAppRequest 
          * @param {*} [options] Override http request option.
@@ -11865,7 +12037,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
             return localVarFp.createAppWebhookForApp(appUuid, subscribeWebhookDTO, options).then((request) => request(axios, basePath));
         },
         /**
-         * Creates a new private app with the provided label and optional description. Private apps are automatically installed for the creating user\'s company. Returns the created app details as a CreateResponse wrapping an AppDTO.
+         * Creates a private app from its creator manifest, validating the supplied name, settings and app bars before saving. An omitted name is generated. Private apps are automatically installed for the creating user\'s company. Returns the created app details as a CreateResponse wrapping an AppDTO.
          * @summary Create a private app
          * @param {CreatePrivateAppRequest} createPrivateAppRequest 
          * @param {*} [options] Override http request option.
@@ -12206,7 +12378,7 @@ export class ApplicationsApi extends BaseAPI {
     }
 
     /**
-     * Creates a new private app with the provided label and optional description. Private apps are automatically installed for the creating user\'s company. Returns the created app details as a CreateResponse wrapping an AppDTO.
+     * Creates a private app from its creator manifest, validating the supplied name, settings and app bars before saving. An omitted name is generated. Private apps are automatically installed for the creating user\'s company. Returns the created app details as a CreateResponse wrapping an AppDTO.
      * @summary Create a private app
      * @param {CreatePrivateAppRequest} createPrivateAppRequest 
      * @param {*} [options] Override http request option.
