@@ -1527,6 +1527,10 @@ export interface CompanyDTO {
      */
     'index'?: number;
     /**
+     * The company\'s canonical subdomain, independent of website settings.
+     */
+    'subdomain'?: string;
+    /**
      * The details of the company.
      */
     'details'?: CompanyDetailsDTO;
@@ -2769,8 +2773,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'yproperty'?: string;
-    'ymetric'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
