@@ -3,3 +3,5 @@ LICENSE
 .gitignore
 .openapi-generator-ignore
 .github/
+# Hand-written serverless payload helpers (re-injected by backend sync too).
+apps.ts
