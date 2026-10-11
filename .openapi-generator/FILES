@@ -65,6 +65,7 @@ docs/CMSV2EnvironmentsApi.md
 docs/CMSV2PagesApi.md
 docs/CMSV2PublicApi.md
 docs/CMSV2TransferApi.md
+docs/CMSWebsiteUpdatesApi.md
 docs/CRUD.md
 docs/CalendarBootstrapDTO.md
 docs/CalendarCreateRequest.md

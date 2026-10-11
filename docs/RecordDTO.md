@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 **deletedAt** | **number** | Unix timestamp when the entity was deleted (null if not deleted) | [optional] [default to undefined]
 **deletedBy** | [**ModelRecord**](ModelRecord.md) | Identifier of the user who deleted the entity | [optional] [default to undefined]
 **index** | **number** | Index number for ordering entities | [optional] [default to undefined]
-**properties** | **{ [key: string]: any | null; }** | Property values as a name→value map, or a LEGACY array of {name,type,value} objects (same shape as LEGACY GET responses). | [optional] [default to undefined]
+**properties** | **{ [key: string]: any | null; }** | Property values as a name→value map, or a LEGACY array of {name,type,value} objects (same shape as LEGACY GET responses). File properties accept existing company file keys/URLs, an inline upload object {fileName,contentBase64,contentType?}, or a base64 data URL. Bare base64 bytes require the object form with fileName. Multi-file properties also accept an ordered array mixing existing keys/URLs and inline uploads; semicolon-separated keys and null remain supported. Uploads are stored as ordinary file keys after authorization and property validation. File type and configured upload size limits apply; base64 text counts toward the request limit. | [optional] [default to undefined]
 **user** | [**PublicUserDTO**](PublicUserDTO.md) | The user of the record if the user trait is enabled. | [optional] [default to undefined]
 **relations** | [**Array&lt;RecordRelationRequestDTO&gt;**](RecordRelationRequestDTO.md) | Relations to create or merge after the record is saved. Each item links to an existing record (uuid) or creates a nested record first. | [optional] [default to undefined]
 

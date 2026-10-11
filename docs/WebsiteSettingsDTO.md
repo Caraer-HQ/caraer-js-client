@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **subdomain** | **string** |  | [optional] [default to undefined]
 **customDomain** | **string** |  | [optional] [default to undefined]
+**primaryEnvironment** | **string** |  | [optional] [default to undefined]
 **recordType** | **string** |  | [optional] [default to undefined]
 **recordValue** | **string** |  | [optional] [default to undefined]
 **favicon** | **string** |  | [optional] [default to undefined]
@@ -173,6 +174,7 @@ import { WebsiteSettingsDTO } from '@caraer/client';
 const instance: WebsiteSettingsDTO = {
     subdomain,
     customDomain,
+    primaryEnvironment,
     recordType,
     recordValue,
     favicon,

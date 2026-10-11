@@ -18,7 +18,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**indexFlow**](#indexflow) | **POST** /api/v2/records/index/flow | Fetch records for flow view|
 |[**indexPage**](#indexpage) | **POST** /api/v2/records/index/page | Fetch records for page view|
 |[**indexTable**](#indextable) | **POST** /api/v2/records/index/table | Fetch records for table view|
-|[**preview**](#preview) | **GET** /api/v2/records/{uuid}/previews/{name} | Get record preview|
+|[**preview1**](#preview1) | **GET** /api/v2/records/{uuid}/previews/{name} | Get record preview|
 |[**query**](#query) | **POST** /api/v2/records/query | Advanced graph-aware record query|
 |[**restore**](#restore) | **POST** /api/v2/records/{uuid}/restore | Restore a deleted record|
 |[**search**](#search) | **POST** /api/v2/records/search | Search records|
@@ -923,8 +923,8 @@ const { status, data } = await apiInstance.indexTable(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **preview**
-> ShowResponsePreviewDTO preview()
+# **preview1**
+> ShowResponsePreviewDTO preview1()
 
 Retrieves a preview for a record specified by its UUID and preview name. Returns a ShowResponse containing the preview data.
 
@@ -944,7 +944,7 @@ let name: string; // (default to undefined)
 let object: string; //Optional object name used to resolve the record before building the preview. (optional) (default to undefined)
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 
-const { status, data } = await apiInstance.preview(
+const { status, data } = await apiInstance.preview1(
     uuid,
     name,
     object,

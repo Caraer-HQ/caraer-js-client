@@ -486,7 +486,7 @@ const { status, data } = await apiInstance.getPropertyCalculationTypes(
 # **permanentlyDeleteArchivedProperty**
 > DeleteResponse permanentlyDeleteArchivedProperty()
 
-Deletes the soft-deleted HAS_PROPERTY link to this object. If the property is not linked to any other object, the property node is hard-deleted.
+Deletes only the soft-deleted HAS_PROPERTY link to this object. Other object links and their stored values are preserved. If no object links remain, the property node and this object\'s stored field values are permanently deleted.
 
 ### Example
 

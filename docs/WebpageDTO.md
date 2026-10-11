@@ -6,6 +6,8 @@ Data transfer object representing a webpage with its various states, properties,
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**canonicalUrl** | **string** |  | [optional] [default to undefined]
+**lastModified** | **string** |  | [optional] [default to undefined]
 **environment** | **string** | The environment of the webpage. | [optional] [default to undefined]
 **uuid** | **string** | The UUID of the webpage. | [optional] [default to undefined]
 **title** | **string** | The title of the webpage. | [optional] [default to undefined]
@@ -40,6 +42,8 @@ Name | Type | Description | Notes
 import { WebpageDTO } from '@caraer/client';
 
 const instance: WebpageDTO = {
+    canonicalUrl,
+    lastModified,
     environment,
     uuid,
     title,

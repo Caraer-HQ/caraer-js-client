@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**ymetric** | **string** |  | [optional] [default to undefined]
 **yproperty** | **string** |  | [optional] [default to undefined]
 **xproperty** | **string** |  | [optional] [default to undefined]
-**ymetric** | **string** |  | [optional] [default to undefined]
 **title** | **string** |  | [optional] [default to undefined]
 **chartType** | **string** |  | [optional] [default to undefined]
 **xProperty** | **string** |  | [optional] [default to undefined]
@@ -20,9 +20,9 @@ Name | Type | Description | Notes
 import { ExistingWidgetSummary } from '@caraer/client';
 
 const instance: ExistingWidgetSummary = {
+    ymetric,
     yproperty,
     xproperty,
-    ymetric,
     title,
     chartType,
     xProperty,

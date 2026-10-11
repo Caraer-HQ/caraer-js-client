@@ -28,10 +28,11 @@ Name | Type | Description | Notes
 **itemLabel** | **string** |  | [optional] [default to undefined]
 **value** | **any** |  | [optional] [default to undefined]
 **hasValue** | **boolean** |  | [optional] [default to undefined]
+**clearValue** | **boolean** |  | [optional] [default to undefined]
 **mappingValue** | [**AppSettingFieldMappingStructure**](AppSettingFieldMappingStructure.md) |  | [optional] [default to undefined]
 **valueScope** | **string** |  | [optional] [default to undefined]
-**settingsGroup** | **boolean** |  | [optional] [default to undefined]
 **action** | **boolean** |  | [optional] [default to undefined]
+**settingsGroup** | **boolean** |  | [optional] [default to undefined]
 **filterPropertyTypes** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **filterPropertyFormats** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 
@@ -64,10 +65,11 @@ const instance: AppSettingFieldSchema = {
     itemLabel,
     value,
     hasValue,
+    clearValue,
     mappingValue,
     valueScope,
-    settingsGroup,
     action,
+    settingsGroup,
     filterPropertyTypes,
     filterPropertyFormats,
 };

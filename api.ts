@@ -995,10 +995,11 @@ export interface AppSettingFieldSchema {
     'itemLabel'?: string;
     'value'?: any;
     'hasValue'?: boolean;
+    'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'settingsGroup'?: boolean;
     'action'?: boolean;
+    'settingsGroup'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -2772,9 +2773,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'ymetric'?: string;
     'yproperty'?: string;
     'xproperty'?: string;
-    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -5338,7 +5339,7 @@ export interface RecordDTO {
      */
     'index'?: number;
     /**
-     * Property values as a name→value map, or a LEGACY array of {name,type,value} objects (same shape as LEGACY GET responses).
+     * Property values as a name→value map, or a LEGACY array of {name,type,value} objects (same shape as LEGACY GET responses). File properties accept existing company file keys/URLs, an inline upload object {fileName,contentBase64,contentType?}, or a base64 data URL. Bare base64 bytes require the object form with fileName. Multi-file properties also accept an ordered array mixing existing keys/URLs and inline uploads; semicolon-separated keys and null remain supported. Uploads are stored as ordinary file keys after authorization and property validation. File type and configured upload size limits apply; base64 text counts toward the request limit.
      */
     'properties'?: { [key: string]: any | null; };
     /**
@@ -8082,6 +8083,8 @@ export interface WebpageAccessGrantDTO {
  * Data transfer object representing a webpage with its various states, properties, and associated form/versions
  */
 export interface WebpageDTO {
+    'canonicalUrl'?: string;
+    'lastModified'?: string;
     /**
      * The environment of the webpage.
      */
@@ -8301,6 +8304,7 @@ export interface WebpageUnlockRequest {
 export interface WebsiteSettingsDTO {
     'subdomain'?: string;
     'customDomain'?: string;
+    'primaryEnvironment'?: string;
     'recordType'?: string;
     'recordValue'?: string;
     'favicon'?: string;
@@ -15865,10 +15869,11 @@ export const CMSV2PublicApiAxiosParamCreator = function (configuration?: Configu
          * 
          * @summary Installed apps and modules for a company\'s website build
          * @param {string} xCaraerSubdomain 
+         * @param {string} [channel] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        buildManifest: async (xCaraerSubdomain: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        buildManifest: async (xCaraerSubdomain: string, channel?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'xCaraerSubdomain' is not null or undefined
             assertParamExists('buildManifest', 'xCaraerSubdomain', xCaraerSubdomain)
             const localVarPath = `/api/v2/webpages/v2/build/manifest`;
@@ -15886,6 +15891,10 @@ export const CMSV2PublicApiAxiosParamCreator = function (configuration?: Configu
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (channel !== undefined) {
+                localVarQueryParameter['channel'] = channel;
+            }
 
             localVarHeaderParameter['Accept'] = 'application/json';
 
@@ -16424,11 +16433,12 @@ export const CMSV2PublicApiFp = function(configuration?: Configuration) {
          * 
          * @summary Installed apps and modules for a company\'s website build
          * @param {string} xCaraerSubdomain 
+         * @param {string} [channel] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async buildManifest(xCaraerSubdomain: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.buildManifest(xCaraerSubdomain, options);
+        async buildManifest(xCaraerSubdomain: string, channel?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.buildManifest(xCaraerSubdomain, channel, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CMSV2PublicApi.buildManifest']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -16612,11 +16622,12 @@ export const CMSV2PublicApiFactory = function (configuration?: Configuration, ba
          * 
          * @summary Installed apps and modules for a company\'s website build
          * @param {string} xCaraerSubdomain 
+         * @param {string} [channel] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        buildManifest(xCaraerSubdomain: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
-            return localVarFp.buildManifest(xCaraerSubdomain, options).then((request) => request(axios, basePath));
+        buildManifest(xCaraerSubdomain: string, channel?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.buildManifest(xCaraerSubdomain, channel, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -16773,11 +16784,12 @@ export class CMSV2PublicApi extends BaseAPI {
      * 
      * @summary Installed apps and modules for a company\'s website build
      * @param {string} xCaraerSubdomain 
+     * @param {string} [channel] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public buildManifest(xCaraerSubdomain: string, options?: RawAxiosRequestConfig) {
-        return CMSV2PublicApiFp(this.configuration).buildManifest(xCaraerSubdomain, options).then((request) => request(this.axios, this.basePath));
+    public buildManifest(xCaraerSubdomain: string, channel?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PublicApiFp(this.configuration).buildManifest(xCaraerSubdomain, channel, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -17226,6 +17238,240 @@ export class CMSV2TransferApi extends BaseAPI {
      */
     public status(companyUuid: string, options?: RawAxiosRequestConfig) {
         return CMSV2TransferApiFp(this.configuration).status(companyUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * CMSWebsiteUpdatesApi - axios parameter creator
+ */
+export const CMSWebsiteUpdatesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Pending module updates for this website
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pending: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/webpages/v2/updates`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Build a preview site with every pending module update
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        preview: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/webpages/v2/updates/preview`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Rejected with 409 when the preview revision is no longer the current pending set.
+         * @summary Promote a previewed module set to production
+         * @param {{ [key: string]: any | null; }} [requestBody] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        promote: async (requestBody?: { [key: string]: any | null; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/webpages/v2/updates/promote`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CMSWebsiteUpdatesApi - functional programming interface
+ */
+export const CMSWebsiteUpdatesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CMSWebsiteUpdatesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Pending module updates for this website
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pending(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pending(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSWebsiteUpdatesApi.pending']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Build a preview site with every pending module update
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async preview(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.preview(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSWebsiteUpdatesApi.preview']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Rejected with 409 when the preview revision is no longer the current pending set.
+         * @summary Promote a previewed module set to production
+         * @param {{ [key: string]: any | null; }} [requestBody] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async promote(requestBody?: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.promote(requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSWebsiteUpdatesApi.promote']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * CMSWebsiteUpdatesApi - factory interface
+ */
+export const CMSWebsiteUpdatesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CMSWebsiteUpdatesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Pending module updates for this website
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pending(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.pending(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Build a preview site with every pending module update
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        preview(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.preview(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Rejected with 409 when the preview revision is no longer the current pending set.
+         * @summary Promote a previewed module set to production
+         * @param {{ [key: string]: any | null; }} [requestBody] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        promote(requestBody?: { [key: string]: any | null; }, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.promote(requestBody, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CMSWebsiteUpdatesApi - object-oriented interface
+ */
+export class CMSWebsiteUpdatesApi extends BaseAPI {
+    /**
+     * 
+     * @summary Pending module updates for this website
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public pending(options?: RawAxiosRequestConfig) {
+        return CMSWebsiteUpdatesApiFp(this.configuration).pending(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Build a preview site with every pending module update
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public preview(options?: RawAxiosRequestConfig) {
+        return CMSWebsiteUpdatesApiFp(this.configuration).preview(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Rejected with 409 when the preview revision is no longer the current pending set.
+     * @summary Promote a previewed module set to production
+     * @param {{ [key: string]: any | null; }} [requestBody] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public promote(requestBody?: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
+        return CMSWebsiteUpdatesApiFp(this.configuration).promote(requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -24398,7 +24644,7 @@ export const PropertyApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Deletes the soft-deleted HAS_PROPERTY link to this object. If the property is not linked to any other object, the property node is hard-deleted.
+         * Deletes only the soft-deleted HAS_PROPERTY link to this object. Other object links and their stored values are preserved. If no object links remain, the property node and this object\'s stored field values are permanently deleted.
          * @summary Permanently remove archived property
          * @param {string} objectUuid 
          * @param {string} propertyUuid 
@@ -24775,7 +25021,7 @@ export const PropertyApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Deletes the soft-deleted HAS_PROPERTY link to this object. If the property is not linked to any other object, the property node is hard-deleted.
+         * Deletes only the soft-deleted HAS_PROPERTY link to this object. Other object links and their stored values are preserved. If no object links remain, the property node and this object\'s stored field values are permanently deleted.
          * @summary Permanently remove archived property
          * @param {string} objectUuid 
          * @param {string} propertyUuid 
@@ -24955,7 +25201,7 @@ export const PropertyApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.getPropertyCalculationTypes(objectUuid, propertyUuid, options).then((request) => request(axios, basePath));
         },
         /**
-         * Deletes the soft-deleted HAS_PROPERTY link to this object. If the property is not linked to any other object, the property node is hard-deleted.
+         * Deletes only the soft-deleted HAS_PROPERTY link to this object. Other object links and their stored values are preserved. If no object links remain, the property node and this object\'s stored field values are permanently deleted.
          * @summary Permanently remove archived property
          * @param {string} objectUuid 
          * @param {string} propertyUuid 
@@ -25123,7 +25369,7 @@ export class PropertyApi extends BaseAPI {
     }
 
     /**
-     * Deletes the soft-deleted HAS_PROPERTY link to this object. If the property is not linked to any other object, the property node is hard-deleted.
+     * Deletes only the soft-deleted HAS_PROPERTY link to this object. Other object links and their stored values are preserved. If no object links remain, the property node and this object\'s stored field values are permanently deleted.
      * @summary Permanently remove archived property
      * @param {string} objectUuid 
      * @param {string} propertyUuid 
@@ -25908,15 +26154,15 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} uuid 
          * @param {string} name 
          * @param {string} [object] Optional object name used to resolve the record before building the preview.
-         * @param {PreviewParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {Preview1ParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        preview: async (uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        preview1: async (uuid: string, name: string, object?: string, parse?: Preview1ParseEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uuid' is not null or undefined
-            assertParamExists('preview', 'uuid', uuid)
+            assertParamExists('preview1', 'uuid', uuid)
             // verify required parameter 'name' is not null or undefined
-            assertParamExists('preview', 'name', name)
+            assertParamExists('preview1', 'name', name)
             const localVarPath = `/api/v2/records/{uuid}/previews/{name}`
                 .replace('{uuid}', encodeURIComponent(String(uuid)))
                 .replace('{name}', encodeURIComponent(String(name)));
@@ -26689,14 +26935,14 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {string} uuid 
          * @param {string} name 
          * @param {string} [object] Optional object name used to resolve the record before building the preview.
-         * @param {PreviewParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {Preview1ParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async preview(uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponsePreviewDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.preview(uuid, name, object, parse, options);
+        async preview1(uuid: string, name: string, object?: string, parse?: Preview1ParseEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponsePreviewDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.preview1(uuid, name, object, parse, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['RecordsApi.preview']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.preview1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -27042,12 +27288,12 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {string} uuid 
          * @param {string} name 
          * @param {string} [object] Optional object name used to resolve the record before building the preview.
-         * @param {PreviewParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+         * @param {Preview1ParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        preview(uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponsePreviewDTO> {
-            return localVarFp.preview(uuid, name, object, parse, options).then((request) => request(axios, basePath));
+        preview1(uuid: string, name: string, object?: string, parse?: Preview1ParseEnum, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponsePreviewDTO> {
+            return localVarFp.preview1(uuid, name, object, parse, options).then((request) => request(axios, basePath));
         },
         /**
          * Executes a two-pass GraphRAG query using natural language or a declarative plan. Returns records with scores and graph evidence.
@@ -27374,12 +27620,12 @@ export class RecordsApi extends BaseAPI {
      * @param {string} uuid 
      * @param {string} name 
      * @param {string} [object] Optional object name used to resolve the record before building the preview.
-     * @param {PreviewParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
+     * @param {Preview1ParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public preview(uuid: string, name: string, object?: string, parse?: PreviewParseEnum, options?: RawAxiosRequestConfig) {
-        return RecordsApiFp(this.configuration).preview(uuid, name, object, parse, options).then((request) => request(this.axios, this.basePath));
+    public preview1(uuid: string, name: string, object?: string, parse?: Preview1ParseEnum, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).preview1(uuid, name, object, parse, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -27572,12 +27818,12 @@ export const IndexFlowParseEnum = {
     Structured: 'STRUCTURED',
 } as const;
 export type IndexFlowParseEnum = typeof IndexFlowParseEnum[keyof typeof IndexFlowParseEnum];
-export const PreviewParseEnum = {
+export const Preview1ParseEnum = {
     Db: 'DB',
     HumanReadable: 'HUMAN_READABLE',
     Structured: 'STRUCTURED',
 } as const;
-export type PreviewParseEnum = typeof PreviewParseEnum[keyof typeof PreviewParseEnum];
+export type Preview1ParseEnum = typeof Preview1ParseEnum[keyof typeof Preview1ParseEnum];
 export const SearchParseEnum = {
     Db: 'DB',
     HumanReadable: 'HUMAN_READABLE',

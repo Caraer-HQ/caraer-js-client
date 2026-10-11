@@ -173,9 +173,11 @@ const configuration = new Configuration();
 const apiInstance = new CMSV2PublicApi(configuration);
 
 let xCaraerSubdomain: string; // (default to undefined)
+let channel: string; // (optional) (default to undefined)
 
 const { status, data } = await apiInstance.buildManifest(
-    xCaraerSubdomain
+    xCaraerSubdomain,
+    channel
 );
 ```
 
@@ -184,6 +186,7 @@ const { status, data } = await apiInstance.buildManifest(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **xCaraerSubdomain** | [**string**] |  | defaults to undefined|
+| **channel** | [**string**] |  | (optional) defaults to undefined|
 
 
 ### Return type
