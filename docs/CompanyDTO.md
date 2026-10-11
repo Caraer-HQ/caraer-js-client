@@ -16,6 +16,7 @@ Name | Type | Description | Notes
 **deletedAt** | **number** | Unix timestamp when the entity was deleted (null if not deleted) | [optional] [default to undefined]
 **deletedBy** | [**ModelRecord**](ModelRecord.md) | Identifier of the user who deleted the entity | [optional] [default to undefined]
 **index** | **number** | Index number for ordering entities | [optional] [default to undefined]
+**subdomain** | **string** | The company\&#39;s canonical subdomain, independent of website settings. | [optional] [readonly] [default to undefined]
 **details** | [**CompanyDetailsDTO**](CompanyDetailsDTO.md) | The details of the company. | [optional] [default to undefined]
 **digitalIdentity** | [**DigitalIdentityDTO**](DigitalIdentityDTO.md) | The digital identity of the company. | [optional] [default to undefined]
 **websiteSettings** | [**WebsiteSettingsDTO**](WebsiteSettingsDTO.md) | The website settings of the company. | [optional] [default to undefined]
@@ -41,6 +42,7 @@ const instance: CompanyDTO = {
     deletedAt,
     deletedBy,
     index,
+    subdomain,
     details,
     digitalIdentity,
     websiteSettings,
