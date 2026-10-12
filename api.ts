@@ -998,8 +998,8 @@ export interface AppSettingFieldSchema {
     'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'action'?: boolean;
     'settingsGroup'?: boolean;
+    'action'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -2773,9 +2773,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
     'yproperty'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2917,10 +2917,10 @@ export interface FileListItemDTO {
     'contentType'?: string;
 }
 export interface FilledProperty {
-    'icon'?: string;
     'name'?: string;
     'value'?: any;
     'type'?: string;
+    'icon'?: string;
     'label'?: string;
 }
 /**
@@ -10668,7 +10668,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
-         * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. On success, returns a PaginationResponse containing AppSummaryDTO objects.
+         * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. Unpublished public apps are visible only when the selected company is their creator. The native tools list includes only published apps. On success, returns a PaginationResponse containing AppSummaryDTO objects.
          * @summary Retrieve a paginated list of applications
          * @param {PaginationRequest} paginationRequest 
          * @param {string} [type] 
@@ -11721,7 +11721,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. On success, returns a PaginationResponse containing AppSummaryDTO objects.
+         * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. Unpublished public apps are visible only when the selected company is their creator. The native tools list includes only published apps. On success, returns a PaginationResponse containing AppSummaryDTO objects.
          * @summary Retrieve a paginated list of applications
          * @param {PaginationRequest} paginationRequest 
          * @param {string} [type] 
@@ -12129,7 +12129,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
             return localVarFp.getAppWebhooks(appUuid, paginationRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. On success, returns a PaginationResponse containing AppSummaryDTO objects.
+         * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. Unpublished public apps are visible only when the selected company is their creator. The native tools list includes only published apps. On success, returns a PaginationResponse containing AppSummaryDTO objects.
          * @summary Retrieve a paginated list of applications
          * @param {PaginationRequest} paginationRequest 
          * @param {string} [type] 
@@ -12478,7 +12478,7 @@ export class ApplicationsApi extends BaseAPI {
     }
 
     /**
-     * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. On success, returns a PaginationResponse containing AppSummaryDTO objects.
+     * Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. Unpublished public apps are visible only when the selected company is their creator. The native tools list includes only published apps. On success, returns a PaginationResponse containing AppSummaryDTO objects.
      * @summary Retrieve a paginated list of applications
      * @param {PaginationRequest} paginationRequest 
      * @param {string} [type] 

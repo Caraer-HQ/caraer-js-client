@@ -558,7 +558,7 @@ const { status, data } = await apiInstance.getAppWebhooks(
 # **getApps**
 > PaginationResponseAppDTO getApps(paginationRequest)
 
-Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. On success, returns a PaginationResponse containing AppSummaryDTO objects.
+Fetches a paginated and optionally filtered list of applications. The list is sorted alphabetically by category and name. Unpublished public apps are visible only when the selected company is their creator. The native tools list includes only published apps. On success, returns a PaginationResponse containing AppSummaryDTO objects.
 
 ### Example
 
