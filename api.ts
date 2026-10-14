@@ -1219,18 +1219,9 @@ export interface BulkEditRecordsResponse {
     'errors'?: Array<BulkEditRecordErrorItem>;
 }
 export interface CRUD {
-    'sessionType'?: CRUDSessionTypeEnum;
     'httpSessionId'?: string;
     'turnOffMetaRelationships'?: boolean;
 }
-
-export const CRUDSessionTypeEnum = {
-    Main: 'MAIN',
-    User: 'USER',
-} as const;
-
-export type CRUDSessionTypeEnum = typeof CRUDSessionTypeEnum[keyof typeof CRUDSessionTypeEnum];
-
 export interface CalendarBootstrapDTO {
     'defaultCalendar'?: CalendarRecordDTO;
     'calendars'?: Array<CalendarRecordDTO>;
@@ -2773,8 +2764,8 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
     'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
@@ -3749,9 +3740,9 @@ export interface ModelRecord {
     'complete'?: boolean;
     'deleted'?: boolean;
     'uuid': string;
-    'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
     'user'?: PublicUserDTO;
+    'properties'?: Array<FilledProperty>;
 }
 export interface MultiFile extends PropertyFormat {
 }
@@ -5958,8 +5949,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {

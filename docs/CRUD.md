@@ -5,7 +5,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**sessionType** | **string** |  | [optional] [default to undefined]
 **httpSessionId** | **string** |  | [optional] [default to undefined]
 **turnOffMetaRelationships** | **boolean** |  | [optional] [default to undefined]
 
@@ -15,7 +14,6 @@ Name | Type | Description | Notes
 import { CRUD } from '@caraer/client';
 
 const instance: CRUD = {
-    sessionType,
     httpSessionId,
     turnOffMetaRelationships,
 };
