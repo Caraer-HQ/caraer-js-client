@@ -1385,6 +1385,14 @@ export interface CaraerObjectDTO {
      * When false, the object schema cannot be updated or deleted via the API
      */
     'editable'?: boolean;
+    /**
+     * Permanently enable company-wide Number ID generation for this object and its descendants
+     */
+    'numberIdEnabled'?: boolean;
+    /**
+     * Existing-record numbering status: PENDING, COMPLETE, or FAILED
+     */
+    'numberIdBackfillStatus'?: string;
 }
 export interface CmsEnvironmentDTO {
     'uuid'?: string;
@@ -3680,9 +3688,9 @@ export interface ModelRecord {
     'complete'?: boolean;
     'deleted'?: boolean;
     'uuid': string;
+    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
-    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }

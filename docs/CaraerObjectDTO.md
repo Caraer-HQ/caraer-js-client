@@ -28,6 +28,8 @@ Name | Type | Description | Notes
 **suites** | **Array&lt;string&gt;** | List of suite names this object belongs to | [optional] [default to undefined]
 **extendsTo** | [**Array&lt;CaraerObjectDTO&gt;**](CaraerObjectDTO.md) | List of objects this object extends to | [optional] [default to undefined]
 **editable** | **boolean** | When false, the object schema cannot be updated or deleted via the API | [optional] [default to undefined]
+**numberIdEnabled** | **boolean** | Permanently enable company-wide Number ID generation for this object and its descendants | [optional] [default to undefined]
+**numberIdBackfillStatus** | **string** | Existing-record numbering status: PENDING, COMPLETE, or FAILED | [optional] [readonly] [default to undefined]
 
 ## Example
 
@@ -57,6 +59,8 @@ const instance: CaraerObjectDTO = {
     suites,
     extendsTo,
     editable,
+    numberIdEnabled,
+    numberIdBackfillStatus,
 };
 ```
 
