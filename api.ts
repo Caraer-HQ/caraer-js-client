@@ -2772,9 +2772,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'ymetric'?: string;
     'xproperty'?: string;
     'yproperty'?: string;
-    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2856,10 +2856,10 @@ export interface FileListItemDTO {
     'contentType'?: string;
 }
 export interface FilledProperty {
+    'icon'?: string;
     'name'?: string;
     'value'?: any;
     'type'?: string;
-    'icon'?: string;
     'label'?: string;
 }
 /**
@@ -3688,9 +3688,9 @@ export interface ModelRecord {
     'complete'?: boolean;
     'deleted'?: boolean;
     'uuid': string;
+    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
-    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }
