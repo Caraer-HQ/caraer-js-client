@@ -2765,8 +2765,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'ymetric'?: string;
-    'xproperty'?: string;
     'yproperty'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2839,66 +2839,6 @@ export interface FeedDTO {
     'cacheTtlSeconds'?: number;
     'active'?: boolean;
     'direction'?: string;
-    'sourceUrl'?: string;
-    'sourceAuthType'?: string;
-    'sourceAuthKey'?: string;
-    'sourceAuthValue'?: string;
-    'sourceAuthUsername'?: string;
-    'importInterval'?: string;
-    'publishMode'?: string;
-    'publishEnvironment'?: string;
-    'publishFilter'?: any;
-    'publishFilterJson'?: string;
-    'unpublishFilter'?: any;
-    'unpublishFilterJson'?: string;
-    'lastImportAt'?: number;
-    'lastImportStatus'?: string;
-    'lastImportMessage'?: string;
-    'lastImportJson'?: string;
-    'importRunningAt'?: number;
-    'nextImportAt'?: number;
-    'warnings'?: Array<string>;
-    'availableEnvironments'?: Array<string>;
-    'siblingImportFeeds'?: Array<string>;
-}
-export interface FeedFormatPreviewDTO {
-    'sample'?: string;
-    'formatPattern'?: string;
-    'formatReplacement'?: string;
-    'output'?: string;
-    'matches'?: boolean;
-    'storedValuePattern'?: string;
-    'storedValueHint'?: string;
-    'formatName'?: string;
-}
-export interface FeedFormatPreviewRequest {
-    'sample'?: string;
-    'formatPattern'?: string;
-    'formatReplacement'?: string;
-    'propertyName'?: string;
-    'objectName'?: string;
-}
-export interface FeedFormatSuggestionRequest {
-    'feed'?: FeedDTO;
-    'fieldName'?: string;
-    'propertyName'?: string;
-    'objectName'?: string;
-}
-export interface FeedImportRunDTO {
-    'dryRun'?: boolean;
-    'status'?: string;
-    'message'?: string;
-    'itemCount'?: number;
-    'created'?: number;
-    'updated'?: number;
-    'failed'?: number;
-    'published'?: number;
-    'unpublished'?: number;
-    'skipped'?: number;
-    'sampleIncomplete'?: boolean;
-    'errors'?: Array<string>;
-    'items'?: Array<{ [key: string]: any | null; }>;
-    'keys'?: Array<string>;
 }
 export interface FileListItemDTO {
     'key'?: string;
@@ -3740,9 +3680,9 @@ export interface ModelRecord {
     'complete'?: boolean;
     'deleted'?: boolean;
     'uuid': string;
-    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
+    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }
@@ -7168,32 +7108,6 @@ export interface SuccessResponseFeedDTO {
      * The data payload of the response, if any.
      */
     'data'?: FeedDTO;
-}
-/**
- * Represents a standard successful response with a message and optional data.
- */
-export interface SuccessResponseFeedFormatPreviewDTO {
-    /**
-     * A message detailing the result of the operation.
-     */
-    'message'?: string;
-    /**
-     * The data payload of the response, if any.
-     */
-    'data'?: FeedFormatPreviewDTO;
-}
-/**
- * Represents a standard successful response with a message and optional data.
- */
-export interface SuccessResponseFeedImportRunDTO {
-    /**
-     * A message detailing the result of the operation.
-     */
-    'message'?: string;
-    /**
-     * The data payload of the response, if any.
-     */
-    'data'?: FeedImportRunDTO;
 }
 /**
  * Success response (SuccessResponseFlow).

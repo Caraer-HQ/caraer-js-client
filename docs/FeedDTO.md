@@ -31,27 +31,6 @@ Name | Type | Description | Notes
 **cacheTtlSeconds** | **number** |  | [optional] [default to undefined]
 **active** | **boolean** |  | [optional] [default to undefined]
 **direction** | **string** |  | [optional] [default to undefined]
-**sourceUrl** | **string** |  | [optional] [default to undefined]
-**sourceAuthType** | **string** |  | [optional] [default to undefined]
-**sourceAuthKey** | **string** |  | [optional] [default to undefined]
-**sourceAuthValue** | **string** |  | [optional] [default to undefined]
-**sourceAuthUsername** | **string** |  | [optional] [default to undefined]
-**importInterval** | **string** |  | [optional] [default to undefined]
-**publishMode** | **string** |  | [optional] [default to undefined]
-**publishEnvironment** | **string** |  | [optional] [default to undefined]
-**publishFilter** | **any** |  | [optional] [default to undefined]
-**publishFilterJson** | **string** |  | [optional] [default to undefined]
-**unpublishFilter** | **any** |  | [optional] [default to undefined]
-**unpublishFilterJson** | **string** |  | [optional] [default to undefined]
-**lastImportAt** | **number** |  | [optional] [default to undefined]
-**lastImportStatus** | **string** |  | [optional] [default to undefined]
-**lastImportMessage** | **string** |  | [optional] [default to undefined]
-**lastImportJson** | **string** |  | [optional] [default to undefined]
-**importRunningAt** | **number** |  | [optional] [default to undefined]
-**nextImportAt** | **number** |  | [optional] [default to undefined]
-**warnings** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
-**availableEnvironments** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
-**siblingImportFeeds** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -85,27 +64,6 @@ const instance: FeedDTO = {
     cacheTtlSeconds,
     active,
     direction,
-    sourceUrl,
-    sourceAuthType,
-    sourceAuthKey,
-    sourceAuthValue,
-    sourceAuthUsername,
-    importInterval,
-    publishMode,
-    publishEnvironment,
-    publishFilter,
-    publishFilterJson,
-    unpublishFilter,
-    unpublishFilterJson,
-    lastImportAt,
-    lastImportStatus,
-    lastImportMessage,
-    lastImportJson,
-    importRunningAt,
-    nextImportAt,
-    warnings,
-    availableEnvironments,
-    siblingImportFeeds,
 };
 ```
 
