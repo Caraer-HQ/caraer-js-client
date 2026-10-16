@@ -21,6 +21,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**saveUserSettings**](#saveusersettings) | **PUT** /api/v2/apps/{appUuid}/installation/settings/user | Save USER-scoped installation settings for the current user|
 |[**startOAuth**](#startoauth) | **POST** /api/v2/apps/{appUuid}/installation/oauth/{provider}/start | Start external OAuth authorize (returns provider authorize URL)|
 |[**triggerSettingAction**](#triggersettingaction) | **POST** /api/v2/apps/{appUuid}/installation/settings/{fieldName}/trigger | Trigger an ACTION setting without saving settings|
+|[**updateConnectionLabel**](#updateconnectionlabel) | **PATCH** /api/v2/apps/{appUuid}/installation/connections/{connectionId} | Update an external OAuth connection display label|
 
 # **deleteSecret**
 > DeleteResponseVoid deleteSecret()
@@ -892,11 +893,13 @@ const apiInstance = new AppInstallationRuntimeApi(configuration);
 let appUuid: string; // (default to undefined)
 let provider: string; // (default to undefined)
 let redirectUri: string; // (optional) (default to undefined)
+let connectionId: string; // (optional) (default to undefined)
 
 const { status, data } = await apiInstance.startOAuth(
     appUuid,
     provider,
-    redirectUri
+    redirectUri,
+    connectionId
 );
 ```
 
@@ -907,6 +910,7 @@ const { status, data } = await apiInstance.startOAuth(
 | **appUuid** | [**string**] |  | defaults to undefined|
 | **provider** | [**string**] |  | defaults to undefined|
 | **redirectUri** | [**string**] |  | (optional) defaults to undefined|
+| **connectionId** | [**string**] |  | (optional) defaults to undefined|
 
 
 ### Return type
@@ -983,11 +987,72 @@ const { status, data } = await apiInstance.triggerSettingAction(
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**202** | Action started |  -  |
+|**200** | Action completed; data.result contains the function response |  -  |
+|**202** | Action queued |  -  |
 |**400** | Bad Request |  -  |
 |**404** | Not Found |  -  |
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **updateConnectionLabel**
+> SuccessResponseVoid updateConnectionLabel(requestBody)
+
+
+### Example
+
+```typescript
+import {
+    AppInstallationRuntimeApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new AppInstallationRuntimeApi(configuration);
+
+let appUuid: string; // (default to undefined)
+let connectionId: string; // (default to undefined)
+let requestBody: { [key: string]: string; }; //
+
+const { status, data } = await apiInstance.updateConnectionLabel(
+    appUuid,
+    connectionId,
+    requestBody
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **requestBody** | **{ [key: string]: string; }**|  | |
+| **appUuid** | [**string**] |  | defaults to undefined|
+| **connectionId** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**SuccessResponseVoid**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 |**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

@@ -2773,8 +2773,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'ymetric'?: string;
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -5897,8 +5897,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -9469,10 +9469,11 @@ export const AppInstallationRuntimeApiAxiosParamCreator = function (configuratio
          * @param {string} appUuid 
          * @param {string} provider 
          * @param {string} [redirectUri] 
+         * @param {string} [connectionId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startOAuth: async (appUuid: string, provider: string, redirectUri?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        startOAuth: async (appUuid: string, provider: string, redirectUri?: string, connectionId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'appUuid' is not null or undefined
             assertParamExists('startOAuth', 'appUuid', appUuid)
             // verify required parameter 'provider' is not null or undefined
@@ -9497,6 +9498,10 @@ export const AppInstallationRuntimeApiAxiosParamCreator = function (configuratio
 
             if (redirectUri !== undefined) {
                 localVarQueryParameter['redirectUri'] = redirectUri;
+            }
+
+            if (connectionId !== undefined) {
+                localVarQueryParameter['connectionId'] = connectionId;
             }
 
             localVarHeaderParameter['Accept'] = 'application/json';
@@ -9546,6 +9551,53 @@ export const AppInstallationRuntimeApiAxiosParamCreator = function (configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update an external OAuth connection display label
+         * @param {string} appUuid 
+         * @param {string} connectionId 
+         * @param {{ [key: string]: string; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateConnectionLabel: async (appUuid: string, connectionId: string, requestBody: { [key: string]: string; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('updateConnectionLabel', 'appUuid', appUuid)
+            // verify required parameter 'connectionId' is not null or undefined
+            assertParamExists('updateConnectionLabel', 'connectionId', connectionId)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('updateConnectionLabel', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/connections/{connectionId}`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{connectionId}', encodeURIComponent(String(connectionId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -9776,11 +9828,12 @@ export const AppInstallationRuntimeApiFp = function(configuration?: Configuratio
          * @param {string} appUuid 
          * @param {string} provider 
          * @param {string} [redirectUri] 
+         * @param {string} [connectionId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async startOAuth(appUuid: string, provider: string, redirectUri?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppOAuthStartResponseDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.startOAuth(appUuid, provider, redirectUri, options);
+        async startOAuth(appUuid: string, provider: string, redirectUri?: string, connectionId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseAppOAuthStartResponseDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startOAuth(appUuid, provider, redirectUri, connectionId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.startOAuth']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -9797,6 +9850,21 @@ export const AppInstallationRuntimeApiFp = function(configuration?: Configuratio
             const localVarAxiosArgs = await localVarAxiosParamCreator.triggerSettingAction(appUuid, fieldName, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.triggerSettingAction']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Update an external OAuth connection display label
+         * @param {string} appUuid 
+         * @param {string} connectionId 
+         * @param {{ [key: string]: string; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateConnectionLabel(appUuid: string, connectionId: string, requestBody: { [key: string]: string; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseVoid>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateConnectionLabel(appUuid, connectionId, requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.updateConnectionLabel']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -9978,11 +10046,12 @@ export const AppInstallationRuntimeApiFactory = function (configuration?: Config
          * @param {string} appUuid 
          * @param {string} provider 
          * @param {string} [redirectUri] 
+         * @param {string} [connectionId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startOAuth(appUuid: string, provider: string, redirectUri?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppOAuthStartResponseDTO> {
-            return localVarFp.startOAuth(appUuid, provider, redirectUri, options).then((request) => request(axios, basePath));
+        startOAuth(appUuid: string, provider: string, redirectUri?: string, connectionId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseAppOAuthStartResponseDTO> {
+            return localVarFp.startOAuth(appUuid, provider, redirectUri, connectionId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9994,6 +10063,18 @@ export const AppInstallationRuntimeApiFactory = function (configuration?: Config
          */
         triggerSettingAction(appUuid: string, fieldName: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
             return localVarFp.triggerSettingAction(appUuid, fieldName, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update an external OAuth connection display label
+         * @param {string} appUuid 
+         * @param {string} connectionId 
+         * @param {{ [key: string]: string; }} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateConnectionLabel(appUuid: string, connectionId: string, requestBody: { [key: string]: string; }, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseVoid> {
+            return localVarFp.updateConnectionLabel(appUuid, connectionId, requestBody, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -10187,11 +10268,12 @@ export class AppInstallationRuntimeApi extends BaseAPI {
      * @param {string} appUuid 
      * @param {string} provider 
      * @param {string} [redirectUri] 
+     * @param {string} [connectionId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public startOAuth(appUuid: string, provider: string, redirectUri?: string, options?: RawAxiosRequestConfig) {
-        return AppInstallationRuntimeApiFp(this.configuration).startOAuth(appUuid, provider, redirectUri, options).then((request) => request(this.axios, this.basePath));
+    public startOAuth(appUuid: string, provider: string, redirectUri?: string, connectionId?: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).startOAuth(appUuid, provider, redirectUri, connectionId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -10204,6 +10286,19 @@ export class AppInstallationRuntimeApi extends BaseAPI {
      */
     public triggerSettingAction(appUuid: string, fieldName: string, options?: RawAxiosRequestConfig) {
         return AppInstallationRuntimeApiFp(this.configuration).triggerSettingAction(appUuid, fieldName, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update an external OAuth connection display label
+     * @param {string} appUuid 
+     * @param {string} connectionId 
+     * @param {{ [key: string]: string; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public updateConnectionLabel(appUuid: string, connectionId: string, requestBody: { [key: string]: string; }, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).updateConnectionLabel(appUuid, connectionId, requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
