@@ -15,6 +15,8 @@ Name | Type | Description | Notes
 **_options** | [**Array&lt;SettingOption&gt;**](SettingOption.md) |  | [optional] [default to undefined]
 **optionsSource** | [**AppSettingOptionsSource**](AppSettingOptionsSource.md) |  | [optional] [default to undefined]
 **actionSource** | [**AppSettingActionSource**](AppSettingActionSource.md) |  | [optional] [default to undefined]
+**contentSource** | [**AppSettingContentSource**](AppSettingContentSource.md) |  | [optional] [default to undefined]
+**refreshIntervalSeconds** | **number** |  | [optional] [default to undefined]
 **defaultValue** | **any** |  | [optional] [default to undefined]
 **hidden** | **boolean** |  | [optional] [default to undefined]
 **advanced** | **boolean** |  | [optional] [default to undefined]
@@ -31,8 +33,8 @@ Name | Type | Description | Notes
 **clearValue** | **boolean** |  | [optional] [default to undefined]
 **mappingValue** | [**AppSettingFieldMappingStructure**](AppSettingFieldMappingStructure.md) |  | [optional] [default to undefined]
 **valueScope** | **string** |  | [optional] [default to undefined]
-**action** | **boolean** |  | [optional] [default to undefined]
 **settingsGroup** | **boolean** |  | [optional] [default to undefined]
+**action** | **boolean** |  | [optional] [default to undefined]
 **filterPropertyTypes** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **filterPropertyFormats** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 
@@ -52,6 +54,8 @@ const instance: AppSettingFieldSchema = {
     _options,
     optionsSource,
     actionSource,
+    contentSource,
+    refreshIntervalSeconds,
     defaultValue,
     hidden,
     advanced,
@@ -68,8 +72,8 @@ const instance: AppSettingFieldSchema = {
     clearValue,
     mappingValue,
     valueScope,
-    action,
     settingsGroup,
+    action,
     filterPropertyTypes,
     filterPropertyFormats,
 };

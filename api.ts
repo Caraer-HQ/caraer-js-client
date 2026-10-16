@@ -950,6 +950,11 @@ export interface AppSettingCondition {
     'operator'?: string;
     'value'?: any;
 }
+export interface AppSettingContentSource {
+    'type'?: string;
+    'serverlessFunctionUuid'?: string;
+    'serverlessFunctionName'?: string;
+}
 export interface AppSettingFieldMappingStructure {
     'objectName'?: string;
     'targetKind'?: string;
@@ -982,6 +987,8 @@ export interface AppSettingFieldSchema {
     'options'?: Array<SettingOption>;
     'optionsSource'?: AppSettingOptionsSource;
     'actionSource'?: AppSettingActionSource;
+    'contentSource'?: AppSettingContentSource;
+    'refreshIntervalSeconds'?: number;
     'defaultValue'?: any;
     'hidden'?: boolean;
     'advanced'?: boolean;
@@ -998,8 +1005,8 @@ export interface AppSettingFieldSchema {
     'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'action'?: boolean;
     'settingsGroup'?: boolean;
+    'action'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -2772,9 +2779,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
     'xproperty'?: string;
     'yproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -9001,6 +9008,48 @@ export const AppInstallationRuntimeApiAxiosParamCreator = function (configuratio
         },
         /**
          * 
+         * @summary Load read-only Markdown content for a setting
+         * @param {string} appUuid 
+         * @param {string} fieldName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSettingContent: async (appUuid: string, fieldName: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('getSettingContent', 'appUuid', appUuid)
+            // verify required parameter 'fieldName' is not null or undefined
+            assertParamExists('getSettingContent', 'fieldName', fieldName)
+            const localVarPath = `/api/v2/apps/{appUuid}/installation/settings/{fieldName}/content`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{fieldName}', encodeURIComponent(String(fieldName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get installation state map
          * @param {string} appUuid 
          * @param {*} [options] Override http request option.
@@ -9671,6 +9720,20 @@ export const AppInstallationRuntimeApiFp = function(configuration?: Configuratio
         },
         /**
          * 
+         * @summary Load read-only Markdown content for a setting
+         * @param {string} appUuid 
+         * @param {string} fieldName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSettingContent(appUuid: string, fieldName: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSettingContent(appUuid, fieldName, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AppInstallationRuntimeApi.getSettingContent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Get installation state map
          * @param {string} appUuid 
          * @param {*} [options] Override http request option.
@@ -9922,6 +9985,17 @@ export const AppInstallationRuntimeApiFactory = function (configuration?: Config
         },
         /**
          * 
+         * @summary Load read-only Markdown content for a setting
+         * @param {string} appUuid 
+         * @param {string} fieldName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSettingContent(appUuid: string, fieldName: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringString> {
+            return localVarFp.getSettingContent(appUuid, fieldName, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get installation state map
          * @param {string} appUuid 
          * @param {*} [options] Override http request option.
@@ -10129,6 +10203,18 @@ export class AppInstallationRuntimeApi extends BaseAPI {
      */
     public getJob(appUuid: string, jobId: string, options?: RawAxiosRequestConfig) {
         return AppInstallationRuntimeApiFp(this.configuration).getJob(appUuid, jobId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Load read-only Markdown content for a setting
+     * @param {string} appUuid 
+     * @param {string} fieldName 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getSettingContent(appUuid: string, fieldName: string, options?: RawAxiosRequestConfig) {
+        return AppInstallationRuntimeApiFp(this.configuration).getSettingContent(appUuid, fieldName, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -8,6 +8,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**deleteStateKey**](#deletestatekey) | **DELETE** /api/v2/apps/{appUuid}/installation/state/{key} | Delete a state key|
 |[**enqueueJob**](#enqueuejob) | **POST** /api/v2/apps/{appUuid}/installation/jobs | Enqueue an async serverless function job|
 |[**getJob**](#getjob) | **GET** /api/v2/apps/{appUuid}/installation/jobs/{jobId} | Get async job status|
+|[**getSettingContent**](#getsettingcontent) | **GET** /api/v2/apps/{appUuid}/installation/settings/{fieldName}/content | Load read-only Markdown content for a setting|
 |[**getState**](#getstate) | **GET** /api/v2/apps/{appUuid}/installation/state | Get installation state map|
 |[**getStateKey**](#getstatekey) | **GET** /api/v2/apps/{appUuid}/installation/state/{key} | Get a single state key|
 |[**listConnections**](#listconnections) | **GET** /api/v2/apps/{appUuid}/installation/connections | List external OAuth connection status|
@@ -229,6 +230,63 @@ const { status, data } = await apiInstance.getJob(
 ### Return type
 
 **ShowResponseMapStringObject**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getSettingContent**
+> ShowResponseMapStringString getSettingContent()
+
+
+### Example
+
+```typescript
+import {
+    AppInstallationRuntimeApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new AppInstallationRuntimeApi(configuration);
+
+let appUuid: string; // (default to undefined)
+let fieldName: string; // (default to undefined)
+
+const { status, data } = await apiInstance.getSettingContent(
+    appUuid,
+    fieldName
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **appUuid** | [**string**] |  | defaults to undefined|
+| **fieldName** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponseMapStringString**
 
 ### Authorization
 

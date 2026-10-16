@@ -42,6 +42,7 @@ docs/AppRequest.md
 docs/AppScheduleDTO.md
 docs/AppSettingActionSource.md
 docs/AppSettingCondition.md
+docs/AppSettingContentSource.md
 docs/AppSettingFieldMappingStructure.md
 docs/AppSettingFieldMappingStructureItem.md
 docs/AppSettingFieldSchema.md
