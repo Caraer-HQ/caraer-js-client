@@ -29,6 +29,7 @@ docs/AppBarIframeSessionsApi.md
 docs/AppBarTriggerRequest.md
 docs/AppBarVisibilityEntry.md
 docs/AppBarsApi.md
+docs/AppCategoryDTO.md
 docs/AppConnectionStatusDTO.md
 docs/AppDTO.md
 docs/AppDetailsDTO.md
@@ -48,6 +49,7 @@ docs/AppSettingFieldMappingStructureItem.md
 docs/AppSettingFieldSchema.md
 docs/AppSettingOptionsSource.md
 docs/AppSettingsSection.md
+docs/AppSubcategoryDTO.md
 docs/ApplicationsApi.md
 docs/AutomationsApi.md
 docs/BillingApi.md

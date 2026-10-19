@@ -23,6 +23,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**getWebhookPropertyTopics**](#getwebhookpropertytopics) | **GET** /api/v2/apps/{appUuid}/webhooks/property-topics | Get webhook property topic options|
 |[**installApp**](#installapp) | **POST** /api/v2/apps/{uuid}/install | Install an application|
 |[**listAppCategories**](#listappcategories) | **GET** /api/v2/apps/categories | List predefined marketplace app categories|
+|[**listAvailableAppCategories**](#listavailableappcategories) | **GET** /api/v2/apps/categories/available | List available app categories|
 |[**loadSettingOptions**](#loadsettingoptions) | **POST** /api/v2/apps/{uuid}/settings-schema/options | Load dynamic options for a setting select field|
 |[**migrateToV2**](#migratetov2) | **POST** /api/v2/apps/{uuid}/migrate-v2 | Migrate an app from platform V1 to V2|
 |[**reviewPublicApp**](#reviewpublicapp) | **POST** /api/v2/apps/public/{uuid}/review | Review a public app|
@@ -575,11 +576,15 @@ const apiInstance = new ApplicationsApi(configuration);
 let paginationRequest: PaginationRequest; //
 let type: string; // (optional) (default to '')
 let installedOnly: boolean; // (optional) (default to false)
+let category: string; // (optional) (default to undefined)
+let subcategory: string; // (optional) (default to undefined)
 
 const { status, data } = await apiInstance.getApps(
     paginationRequest,
     type,
-    installedOnly
+    installedOnly,
+    category,
+    subcategory
 );
 ```
 
@@ -590,6 +595,8 @@ const { status, data } = await apiInstance.getApps(
 | **paginationRequest** | **PaginationRequest**|  | |
 | **type** | [**string**] |  | (optional) defaults to ''|
 | **installedOnly** | [**boolean**] |  | (optional) defaults to false|
+| **category** | [**string**] |  | (optional) defaults to undefined|
+| **subcategory** | [**string**] |  | (optional) defaults to undefined|
 
 
 ### Return type
@@ -1074,7 +1081,7 @@ const { status, data } = await apiInstance.installApp(
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **listAppCategories**
-> Array<{ [key: string]: any; }> listAppCategories()
+> Array<AppCategoryDTO> listAppCategories()
 
 Returns the allowed category keys and labels for public app marketplace listings.
 
@@ -1098,7 +1105,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-**Array<{ [key: string]: any; }>**
+**Array<AppCategoryDTO>**
 
 ### Authorization
 
@@ -1114,6 +1121,64 @@ This endpoint does not have any parameters.
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Successfully retrieved app categories |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **listAvailableAppCategories**
+> Array<AppCategoryDTO> listAvailableAppCategories()
+
+Returns only categories and subcategories containing apps visible to the selected company. Uses the same type, installedOnly, publication and creator visibility rules as the app index. Independent of search and pagination.
+
+### Example
+
+```typescript
+import {
+    ApplicationsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new ApplicationsApi(configuration);
+
+let type: string; // (optional) (default to '')
+let installedOnly: boolean; // (optional) (default to false)
+
+const { status, data } = await apiInstance.listAvailableAppCategories(
+    type,
+    installedOnly
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **type** | [**string**] |  | (optional) defaults to ''|
+| **installedOnly** | [**boolean**] |  | (optional) defaults to false|
+
+
+### Return type
+
+**Array<AppCategoryDTO>**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
 |**404** | The requested resource was not found. |  -  |

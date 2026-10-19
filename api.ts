@@ -394,6 +394,23 @@ export interface AppBarVisibilityEntry {
     'suites'?: Array<string>;
     'traits'?: Array<string>;
 }
+/**
+ * Predefined marketplace main category with subcategories
+ */
+export interface AppCategoryDTO {
+    /**
+     * Stable main category key stored on AppDetails.category
+     */
+    'key'?: string;
+    /**
+     * Human-readable main category label
+     */
+    'label'?: string;
+    /**
+     * Subcategories available under this main category
+     */
+    'subcategories'?: Array<AppSubcategoryDTO>;
+}
 export interface AppConnectionStatusDTO {
     'id'?: string;
     'name'?: string;
@@ -1022,6 +1039,19 @@ export interface AppSettingsSection {
     'title'?: string;
     'subtitle'?: string;
     'settings'?: Array<string>;
+}
+/**
+ * Predefined marketplace subcategory
+ */
+export interface AppSubcategoryDTO {
+    /**
+     * Stable subcategory key stored on AppDetails.subcategories
+     */
+    'key'?: string;
+    /**
+     * Human-readable subcategory label
+     */
+    'label'?: string;
 }
 /**
  * The billing settings of the company.
@@ -2779,9 +2809,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
-    'xproperty'?: string;
     'yproperty'?: string;
+    'xproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -5904,8 +5934,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -10767,10 +10797,12 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
          * @param {PaginationRequest} paginationRequest 
          * @param {string} [type] 
          * @param {boolean} [installedOnly] 
+         * @param {string} [category] 
+         * @param {string} [subcategory] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApps: async (paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getApps: async (paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, category?: string, subcategory?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'paginationRequest' is not null or undefined
             assertParamExists('getApps', 'paginationRequest', paginationRequest)
             const localVarPath = `/api/v2/apps/index`;
@@ -10795,6 +10827,14 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
 
             if (installedOnly !== undefined) {
                 localVarQueryParameter['installedOnly'] = installedOnly;
+            }
+
+            if (category !== undefined) {
+                localVarQueryParameter['category'] = category;
+            }
+
+            if (subcategory !== undefined) {
+                localVarQueryParameter['subcategory'] = subcategory;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -11157,6 +11197,50 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns only categories and subcategories containing apps visible to the selected company. Uses the same type, installedOnly, publication and creator visibility rules as the app index. Independent of search and pagination.
+         * @summary List available app categories
+         * @param {string} [type] 
+         * @param {boolean} [installedOnly] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listAvailableAppCategories: async (type?: string, installedOnly?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/apps/categories/available`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+
+            if (installedOnly !== undefined) {
+                localVarQueryParameter['installedOnly'] = installedOnly;
+            }
 
             localVarHeaderParameter['Accept'] = 'application/json';
 
@@ -11820,11 +11904,13 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {PaginationRequest} paginationRequest 
          * @param {string} [type] 
          * @param {boolean} [installedOnly] 
+         * @param {string} [category] 
+         * @param {string} [subcategory] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getApps(paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseAppDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getApps(paginationRequest, type, installedOnly, options);
+        async getApps(paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, category?: string, subcategory?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginationResponseAppDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getApps(paginationRequest, type, installedOnly, category, subcategory, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getApps']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -11943,10 +12029,24 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listAppCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<{ [key: string]: any; }>>> {
+        async listAppCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AppCategoryDTO>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listAppCategories(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.listAppCategories']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Returns only categories and subcategories containing apps visible to the selected company. Uses the same type, installedOnly, publication and creator visibility rules as the app index. Independent of search and pagination.
+         * @summary List available app categories
+         * @param {string} [type] 
+         * @param {boolean} [installedOnly] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listAvailableAppCategories(type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AppCategoryDTO>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listAvailableAppCategories(type, installedOnly, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.listAvailableAppCategories']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -12228,11 +12328,13 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {PaginationRequest} paginationRequest 
          * @param {string} [type] 
          * @param {boolean} [installedOnly] 
+         * @param {string} [category] 
+         * @param {string} [subcategory] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApps(paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseAppDTO> {
-            return localVarFp.getApps(paginationRequest, type, installedOnly, options).then((request) => request(axios, basePath));
+        getApps(paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, category?: string, subcategory?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginationResponseAppDTO> {
+            return localVarFp.getApps(paginationRequest, type, installedOnly, category, subcategory, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves the company information of the authenticated user. The response includes public details of the user\'s selected company.
@@ -12324,8 +12426,19 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAppCategories(options?: RawAxiosRequestConfig): AxiosPromise<Array<{ [key: string]: any; }>> {
+        listAppCategories(options?: RawAxiosRequestConfig): AxiosPromise<Array<AppCategoryDTO>> {
             return localVarFp.listAppCategories(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Returns only categories and subcategories containing apps visible to the selected company. Uses the same type, installedOnly, publication and creator visibility rules as the app index. Independent of search and pagination.
+         * @summary List available app categories
+         * @param {string} [type] 
+         * @param {boolean} [installedOnly] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listAvailableAppCategories(type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<Array<AppCategoryDTO>> {
+            return localVarFp.listAvailableAppCategories(type, installedOnly, options).then((request) => request(axios, basePath));
         },
         /**
          * Invokes the app serverless function configured on the field\'s optionsSource and returns options for SINGLE_SELECT / MULTI_SELECT fields. Uses the draft settingsSchema from the installer UI so credentials entered in other fields are available to the loader.
@@ -12577,11 +12690,13 @@ export class ApplicationsApi extends BaseAPI {
      * @param {PaginationRequest} paginationRequest 
      * @param {string} [type] 
      * @param {boolean} [installedOnly] 
+     * @param {string} [category] 
+     * @param {string} [subcategory] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getApps(paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).getApps(paginationRequest, type, installedOnly, options).then((request) => request(this.axios, this.basePath));
+    public getApps(paginationRequest: PaginationRequest, type?: string, installedOnly?: boolean, category?: string, subcategory?: string, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).getApps(paginationRequest, type, installedOnly, category, subcategory, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -12684,6 +12799,18 @@ export class ApplicationsApi extends BaseAPI {
      */
     public listAppCategories(options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).listAppCategories(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns only categories and subcategories containing apps visible to the selected company. Uses the same type, installedOnly, publication and creator visibility rules as the app index. Independent of search and pagination.
+     * @summary List available app categories
+     * @param {string} [type] 
+     * @param {boolean} [installedOnly] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listAvailableAppCategories(type?: string, installedOnly?: boolean, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).listAvailableAppCategories(type, installedOnly, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
