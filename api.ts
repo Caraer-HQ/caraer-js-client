@@ -410,6 +410,10 @@ export interface AppCategoryDTO {
      * Subcategories available under this main category
      */
     'subcategories'?: Array<AppSubcategoryDTO>;
+    /**
+     * Distinct visible apps in this category; provided by the available-category endpoint, independent of search and pagination
+     */
+    'appCount'?: number;
 }
 export interface AppConnectionStatusDTO {
     'id'?: string;
@@ -2810,8 +2814,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'yproperty'?: string;
-    'xproperty'?: string;
     'ymetric'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3725,9 +3729,9 @@ export interface ModelRecord {
     'complete'?: boolean;
     'deleted'?: boolean;
     'uuid': string;
-    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
+    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }

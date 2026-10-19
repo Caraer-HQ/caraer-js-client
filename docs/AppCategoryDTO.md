@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **key** | **string** | Stable main category key stored on AppDetails.category | [optional] [default to undefined]
 **label** | **string** | Human-readable main category label | [optional] [default to undefined]
 **subcategories** | [**Array&lt;AppSubcategoryDTO&gt;**](AppSubcategoryDTO.md) | Subcategories available under this main category | [optional] [default to undefined]
+**appCount** | **number** | Distinct visible apps in this category; provided by the available-category endpoint, independent of search and pagination | [optional] [default to undefined]
 
 ## Example
 
@@ -19,6 +20,7 @@ const instance: AppCategoryDTO = {
     key,
     label,
     subcategories,
+    appCount,
 };
 ```
 
