@@ -2813,9 +2813,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'yproperty'?: string;
     'xproperty'?: string;
     'ymetric'?: string;
-    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
