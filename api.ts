@@ -2814,8 +2814,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'yproperty'?: string;
-    'xproperty'?: string;
     'ymetric'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
