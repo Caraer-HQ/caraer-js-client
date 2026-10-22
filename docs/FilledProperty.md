@@ -8,8 +8,8 @@ Name | Type | Description | Notes
 **name** | **string** |  | [optional] [default to undefined]
 **value** | **any** |  | [optional] [default to undefined]
 **type** | **string** |  | [optional] [default to undefined]
-**icon** | **string** |  | [optional] [default to undefined]
 **label** | **string** |  | [optional] [default to undefined]
+**icon** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -20,8 +20,8 @@ const instance: FilledProperty = {
     name,
     value,
     type,
-    icon,
     label,
+    icon,
 };
 ```
 
