@@ -13,6 +13,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**pageGate**](#pagegate) | **GET** /api/v2/webpages/v2/public/page/gate | Protection info for a path, without the page document|
 |[**paths**](#paths) | **GET** /api/v2/webpages/v2/public/paths | Published paths per environment, for sitemaps and cache warming|
 |[**records**](#records) | **POST** /api/v2/webpages/v2/public/records | Public records visible in an environment|
+|[**redirect**](#redirect) | **GET** /api/v2/webpages/v2/public/redirect | Resolve a historical CMS v2 path to its latest published route|
 |[**settings**](#settings) | **GET** /api/v2/webpages/v2/public/settings | Company settings, branding and locales|
 |[**unlock**](#unlock) | **POST** /api/v2/webpages/v2/public/page/{uuid}/unlock | Unlock a password-protected CMS v2 page|
 
@@ -606,6 +607,67 @@ const { status, data } = await apiInstance.records(
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **redirect**
+> ShowResponseMapStringString redirect()
+
+Tenant and environment scoped. Returns 404 for current paths, unknown aliases or ambiguous aliases. No page content or access grant is returned.
+
+### Example
+
+```typescript
+import {
+    CMSV2PublicApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CMSV2PublicApi(configuration);
+
+let xCaraerSubdomain: string; // (default to undefined)
+let path: string; // (default to undefined)
+let environment: string; // (optional) (default to 'main')
+
+const { status, data } = await apiInstance.redirect(
+    xCaraerSubdomain,
+    path,
+    environment
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **xCaraerSubdomain** | [**string**] |  | defaults to undefined|
+| **path** | [**string**] |  | defaults to undefined|
+| **environment** | [**string**] |  | (optional) defaults to 'main'|
+
+
+### Return type
+
+**ShowResponseMapStringString**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 
