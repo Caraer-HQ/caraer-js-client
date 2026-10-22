@@ -2813,9 +2813,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2897,10 +2897,10 @@ export interface FileListItemDTO {
     'contentType'?: string;
 }
 export interface FilledProperty {
-    'icon'?: string;
     'name'?: string;
     'value'?: any;
     'type'?: string;
+    'icon'?: string;
     'label'?: string;
 }
 /**
@@ -7009,7 +7009,7 @@ export interface SubscribeWebhookDTO {
      */
     'description'?: string;
     /**
-     * Webhook payload format (LEGACY, USER_FRIENDLY)
+     * Webhook payload format (LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL)
      */
     'webhookFormat'?: string;
     /**
@@ -7020,6 +7020,10 @@ export interface SubscribeWebhookDTO {
      * Filter criteria for webhook triggers
      */
     'filter'?: Filter;
+    /**
+     * Comma-separated property names to include on the main record. Omitted or blank returns all readable properties; record identity is always included.
+     */
+    'fields'?: string;
     /**
      * Records to include in webhook payload
      */
@@ -25893,7 +25897,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {RecordDTO} recordDTO Record data to create
          * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -25951,7 +25955,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
          * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
-         * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -26109,7 +26113,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Extend a record
          * @param {string} uuid 
          * @param {ExtendRecordRequest} extendRecordRequest 
-         * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {ExtendParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -26164,7 +26168,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-         * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -26508,7 +26512,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {SearchRequest} searchRequest Search criteria
          * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
          * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
-         * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -26610,7 +26614,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Get record details
          * @param {string} uuid 
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
-         * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {ShowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
          * @param {*} [options] Override http request option.
@@ -26668,7 +26672,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Get record details by object
          * @param {string} objectName 
          * @param {string} uuid 
-         * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {ShowByObjectParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -26762,7 +26766,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {RecordDTO} recordDTO Record data to update
          * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -26824,7 +26828,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
          * @param {UpdateByUuidParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27015,7 +27019,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {RecordDTO} recordDTO Record data to create
          * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27032,7 +27036,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
          * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
-         * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27079,7 +27083,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @summary Extend a record
          * @param {string} uuid 
          * @param {ExtendRecordRequest} extendRecordRequest 
-         * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {ExtendParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -27097,7 +27101,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-         * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27202,7 +27206,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {SearchRequest} searchRequest Search criteria
          * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
          * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
-         * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27232,7 +27236,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @summary Get record details
          * @param {string} uuid 
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
-         * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {ShowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
          * @param {*} [options] Override http request option.
@@ -27249,7 +27253,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @summary Get record details by object
          * @param {string} objectName 
          * @param {string} uuid 
-         * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {ShowByObjectParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -27281,7 +27285,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {RecordDTO} recordDTO Record data to update
          * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27299,7 +27303,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
          * @param {UpdateByUuidParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27395,7 +27399,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {RecordDTO} recordDTO Record data to create
          * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27409,7 +27413,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
          * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
-         * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27447,7 +27451,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @summary Extend a record
          * @param {string} uuid 
          * @param {ExtendRecordRequest} extendRecordRequest 
-         * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {ExtendParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -27462,7 +27466,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
          * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-         * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27546,7 +27550,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {SearchRequest} searchRequest Search criteria
          * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
          * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
-         * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27570,7 +27574,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @summary Get record details
          * @param {string} uuid 
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
-         * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {ShowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
          * @param {*} [options] Override http request option.
@@ -27584,7 +27588,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @summary Get record details by object
          * @param {string} objectName 
          * @param {string} uuid 
-         * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {ShowByObjectParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -27610,7 +27614,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {RecordDTO} recordDTO Record data to update
          * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27625,7 +27629,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @param {string} [object] Optional object name to resolve the record in a specific object context.
          * @param {UpdateByUuidParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-         * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+         * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -27718,7 +27722,7 @@ export class RecordsApi extends BaseAPI {
      * @param {RecordDTO} recordDTO Record data to create
      * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
-     * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -27733,7 +27737,7 @@ export class RecordsApi extends BaseAPI {
      * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
      * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [ignoreErrors] 
-     * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -27774,7 +27778,7 @@ export class RecordsApi extends BaseAPI {
      * @summary Extend a record
      * @param {string} uuid 
      * @param {ExtendRecordRequest} extendRecordRequest 
-     * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {ExtendRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
      * @param {ExtendParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -27790,7 +27794,7 @@ export class RecordsApi extends BaseAPI {
      * @param {IndexParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [archived] When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;.
      * @param {string} [relatedRecordUuid] UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record.
-     * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {IndexRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -27881,7 +27885,7 @@ export class RecordsApi extends BaseAPI {
      * @param {SearchRequest} searchRequest Search criteria
      * @param {boolean} [archived] When set to \&#39;true\&#39;, includes soft-deleted records in the search results.
      * @param {SearchParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
-     * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {SearchRecordReturnFormatEnum} [recordReturnFormat] Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -27907,7 +27911,7 @@ export class RecordsApi extends BaseAPI {
      * @summary Get record details
      * @param {string} uuid 
      * @param {string} [object] Optional object name to resolve the record in a specific object context.
-     * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {ShowRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
      * @param {ShowParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {string} [fields] Comma-separated property names to include (for example: name,status). When omitted, all properties are returned.
      * @param {*} [options] Override http request option.
@@ -27922,7 +27926,7 @@ export class RecordsApi extends BaseAPI {
      * @summary Get record details by object
      * @param {string} objectName 
      * @param {string} uuid 
-     * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {ShowByObjectRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
      * @param {ShowByObjectParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -27950,7 +27954,7 @@ export class RecordsApi extends BaseAPI {
      * @param {RecordDTO} recordDTO Record data to update
      * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-     * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -27966,7 +27970,7 @@ export class RecordsApi extends BaseAPI {
      * @param {string} [object] Optional object name to resolve the record in a specific object context.
      * @param {UpdateByUuidParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
-     * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED.
+     * @param {UpdateByUuidRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -27999,6 +28003,7 @@ export const CreateRecordReturnFormatEnum = {
     Legacy: 'LEGACY',
     UserFriendly: 'USER_FRIENDLY',
     Expanded: 'EXPANDED',
+    Minimal: 'MINIMAL',
 } as const;
 export type CreateRecordReturnFormatEnum = typeof CreateRecordReturnFormatEnum[keyof typeof CreateRecordReturnFormatEnum];
 export const CreateOrUpdateParseEnum = {
@@ -28011,12 +28016,14 @@ export const CreateOrUpdateRecordReturnFormatEnum = {
     Legacy: 'LEGACY',
     UserFriendly: 'USER_FRIENDLY',
     Expanded: 'EXPANDED',
+    Minimal: 'MINIMAL',
 } as const;
 export type CreateOrUpdateRecordReturnFormatEnum = typeof CreateOrUpdateRecordReturnFormatEnum[keyof typeof CreateOrUpdateRecordReturnFormatEnum];
 export const ExtendRecordReturnFormatEnum = {
     Legacy: 'LEGACY',
     UserFriendly: 'USER_FRIENDLY',
     Expanded: 'EXPANDED',
+    Minimal: 'MINIMAL',
 } as const;
 export type ExtendRecordReturnFormatEnum = typeof ExtendRecordReturnFormatEnum[keyof typeof ExtendRecordReturnFormatEnum];
 export const ExtendParseEnum = {
@@ -28035,6 +28042,7 @@ export const IndexRecordReturnFormatEnum = {
     Legacy: 'LEGACY',
     UserFriendly: 'USER_FRIENDLY',
     Expanded: 'EXPANDED',
+    Minimal: 'MINIMAL',
 } as const;
 export type IndexRecordReturnFormatEnum = typeof IndexRecordReturnFormatEnum[keyof typeof IndexRecordReturnFormatEnum];
 export const IndexFlowParseEnum = {
@@ -28059,6 +28067,7 @@ export const SearchRecordReturnFormatEnum = {
     Legacy: 'LEGACY',
     UserFriendly: 'USER_FRIENDLY',
     Expanded: 'EXPANDED',
+    Minimal: 'MINIMAL',
 } as const;
 export type SearchRecordReturnFormatEnum = typeof SearchRecordReturnFormatEnum[keyof typeof SearchRecordReturnFormatEnum];
 export const SearchCrossObjectParseEnum = {
@@ -28071,6 +28080,7 @@ export const ShowRecordReturnFormatEnum = {
     Legacy: 'LEGACY',
     UserFriendly: 'USER_FRIENDLY',
     Expanded: 'EXPANDED',
+    Minimal: 'MINIMAL',
 } as const;
 export type ShowRecordReturnFormatEnum = typeof ShowRecordReturnFormatEnum[keyof typeof ShowRecordReturnFormatEnum];
 export const ShowParseEnum = {
@@ -28083,6 +28093,7 @@ export const ShowByObjectRecordReturnFormatEnum = {
     Legacy: 'LEGACY',
     UserFriendly: 'USER_FRIENDLY',
     Expanded: 'EXPANDED',
+    Minimal: 'MINIMAL',
 } as const;
 export type ShowByObjectRecordReturnFormatEnum = typeof ShowByObjectRecordReturnFormatEnum[keyof typeof ShowByObjectRecordReturnFormatEnum];
 export const ShowByObjectParseEnum = {
@@ -28101,6 +28112,7 @@ export const UpdateRecordReturnFormatEnum = {
     Legacy: 'LEGACY',
     UserFriendly: 'USER_FRIENDLY',
     Expanded: 'EXPANDED',
+    Minimal: 'MINIMAL',
 } as const;
 export type UpdateRecordReturnFormatEnum = typeof UpdateRecordReturnFormatEnum[keyof typeof UpdateRecordReturnFormatEnum];
 export const UpdateByUuidParseEnum = {
@@ -28113,6 +28125,7 @@ export const UpdateByUuidRecordReturnFormatEnum = {
     Legacy: 'LEGACY',
     UserFriendly: 'USER_FRIENDLY',
     Expanded: 'EXPANDED',
+    Minimal: 'MINIMAL',
 } as const;
 export type UpdateByUuidRecordReturnFormatEnum = typeof UpdateByUuidRecordReturnFormatEnum[keyof typeof UpdateByUuidRecordReturnFormatEnum];
 

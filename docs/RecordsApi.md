@@ -347,7 +347,7 @@ let objectName: string; // (default to undefined)
 let recordDTO: RecordDTO; //Record data to create
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let ignoreErrors: boolean; //If \'true\', allows the creation to proceed while ignoring certain non-critical validation errors, when supported. (optional) (default to false)
-let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
+let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
 
 const { status, data } = await apiInstance.create(
     objectName,
@@ -366,7 +366,7 @@ const { status, data } = await apiInstance.create(
 | **objectName** | [**string**] |  | defaults to undefined|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 | **ignoreErrors** | [**boolean**] | If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported. | (optional) defaults to false|
-| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. | (optional) defaults to 'LEGACY'|
+| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39; | &#39;MINIMAL&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39; &#124; &#39;MINIMAL&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. | (optional) defaults to 'LEGACY'|
 
 
 ### Return type
@@ -416,7 +416,7 @@ let objectName: string; // (default to undefined)
 let recordDTO: RecordDTO; //Record data to create or update. Top-level uuid updates that record when it already exists.
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let ignoreErrors: boolean; // (optional) (default to false)
-let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
+let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
 
 const { status, data } = await apiInstance.createOrUpdate(
     objectName,
@@ -435,7 +435,7 @@ const { status, data } = await apiInstance.createOrUpdate(
 | **objectName** | [**string**] |  | defaults to undefined|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 | **ignoreErrors** | [**boolean**] |  | (optional) defaults to false|
-| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. | (optional) defaults to 'LEGACY'|
+| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39; | &#39;MINIMAL&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39; &#124; &#39;MINIMAL&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. | (optional) defaults to 'LEGACY'|
 
 
 ### Return type
@@ -613,7 +613,7 @@ const apiInstance = new RecordsApi(configuration);
 
 let uuid: string; // (default to undefined)
 let extendRecordRequest: ExtendRecordRequest; //
-let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
+let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 
 const { status, data } = await apiInstance.extend(
@@ -630,7 +630,7 @@ const { status, data } = await apiInstance.extend(
 |------------- | ------------- | ------------- | -------------|
 | **extendRecordRequest** | **ExtendRecordRequest**|  | |
 | **uuid** | [**string**] |  | defaults to undefined|
-| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. | (optional) defaults to 'LEGACY'|
+| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39; | &#39;MINIMAL&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39; &#124; &#39;MINIMAL&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. | (optional) defaults to 'LEGACY'|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 
 
@@ -680,7 +680,7 @@ let recordPaginationRequest: RecordPaginationRequest; //Pagination request for r
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let archived: boolean; //When \'true\', archived records are returned instead of active records. Defaults to \'false\'. (optional) (default to false)
 let relatedRecordUuid: string; //UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record. (optional) (default to undefined)
-let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
+let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
 
 const { status, data } = await apiInstance.index(
     recordPaginationRequest,
@@ -699,7 +699,7 @@ const { status, data } = await apiInstance.index(
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 | **archived** | [**boolean**] | When \&#39;true\&#39;, archived records are returned instead of active records. Defaults to \&#39;false\&#39;. | (optional) defaults to false|
 | **relatedRecordUuid** | [**string**] | UUID of a record used for relation-aware filtering. If supplied and the request body contains a filter, that filter will be smartened based on this related record. If no filter is supplied, a default filter will be applied that returns all records related in any way (any relation) to this record. | (optional) defaults to undefined|
-| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39;>** | Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED. | (optional) defaults to 'LEGACY'|
+| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39; | &#39;MINIMAL&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39; &#124; &#39;MINIMAL&#39;>** | Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. | (optional) defaults to 'LEGACY'|
 
 
 ### Return type
@@ -1119,7 +1119,7 @@ const apiInstance = new RecordsApi(configuration);
 let searchRequest: SearchRequest; //Search criteria
 let archived: boolean; //When set to \'true\', includes soft-deleted records in the search results. (optional) (default to false)
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
-let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
+let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
 
 const { status, data } = await apiInstance.search(
     searchRequest,
@@ -1136,7 +1136,7 @@ const { status, data } = await apiInstance.search(
 | **searchRequest** | **SearchRequest**| Search criteria | |
 | **archived** | [**boolean**] | When set to \&#39;true\&#39;, includes soft-deleted records in the search results. | (optional) defaults to false|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
-| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39;>** | Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED. | (optional) defaults to 'LEGACY'|
+| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39; | &#39;MINIMAL&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39; &#124; &#39;MINIMAL&#39;>** | Format of the records to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. | (optional) defaults to 'LEGACY'|
 
 
 ### Return type
@@ -1246,7 +1246,7 @@ const apiInstance = new RecordsApi(configuration);
 
 let uuid: string; // (default to undefined)
 let object: string; //Optional object name to resolve the record in a specific object context. (optional) (default to undefined)
-let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
+let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let fields: string; //Comma-separated property names to include (for example: name,status). When omitted, all properties are returned. (optional) (default to undefined)
 
@@ -1265,7 +1265,7 @@ const { status, data } = await apiInstance.show(
 |------------- | ------------- | ------------- | -------------|
 | **uuid** | [**string**] |  | defaults to undefined|
 | **object** | [**string**] | Optional object name to resolve the record in a specific object context. | (optional) defaults to undefined|
-| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. | (optional) defaults to 'LEGACY'|
+| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39; | &#39;MINIMAL&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39; &#124; &#39;MINIMAL&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. | (optional) defaults to 'LEGACY'|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 | **fields** | [**string**] | Comma-separated property names to include (for example: name,status). When omitted, all properties are returned. | (optional) defaults to undefined|
 
@@ -1313,7 +1313,7 @@ const apiInstance = new RecordsApi(configuration);
 
 let objectName: string; // (default to undefined)
 let uuid: string; // (default to undefined)
-let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
+let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 
 const { status, data } = await apiInstance.showByObject(
@@ -1330,7 +1330,7 @@ const { status, data } = await apiInstance.showByObject(
 |------------- | ------------- | ------------- | -------------|
 | **objectName** | [**string**] |  | defaults to undefined|
 | **uuid** | [**string**] |  | defaults to undefined|
-| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. | (optional) defaults to 'LEGACY'|
+| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39; | &#39;MINIMAL&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39; &#124; &#39;MINIMAL&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. | (optional) defaults to 'LEGACY'|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 
 
@@ -1438,7 +1438,7 @@ let objectName: string; // (default to undefined)
 let recordDTO: RecordDTO; //Record data to update
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let ignoreErrors: boolean; //If \'true\', allows the update to proceed while ignoring certain non-critical validation errors, when supported. (optional) (default to false)
-let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
+let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
 
 const { status, data } = await apiInstance.update(
     uuid,
@@ -1459,7 +1459,7 @@ const { status, data } = await apiInstance.update(
 | **objectName** | [**string**] |  | defaults to undefined|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 | **ignoreErrors** | [**boolean**] | If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported. | (optional) defaults to false|
-| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. | (optional) defaults to 'LEGACY'|
+| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39; | &#39;MINIMAL&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39; &#124; &#39;MINIMAL&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. | (optional) defaults to 'LEGACY'|
 
 
 ### Return type
@@ -1510,7 +1510,7 @@ let recordDTO: RecordDTO; //
 let object: string; //Optional object name to resolve the record in a specific object context. (optional) (default to undefined)
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let ignoreErrors: boolean; //If \'true\', allows the update to proceed while ignoring certain non-critical validation errors, when supported. (optional) (default to false)
-let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. (optional) (default to 'LEGACY')
+let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
 
 const { status, data } = await apiInstance.updateByUuid(
     uuid,
@@ -1531,7 +1531,7 @@ const { status, data } = await apiInstance.updateByUuid(
 | **object** | [**string**] | Optional object name to resolve the record in a specific object context. | (optional) defaults to undefined|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 | **ignoreErrors** | [**boolean**] | If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported. | (optional) defaults to false|
-| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED. | (optional) defaults to 'LEGACY'|
+| **recordReturnFormat** | [**&#39;LEGACY&#39; | &#39;USER_FRIENDLY&#39; | &#39;EXPANDED&#39; | &#39;MINIMAL&#39;**]**Array<&#39;LEGACY&#39; &#124; &#39;USER_FRIENDLY&#39; &#124; &#39;EXPANDED&#39; &#124; &#39;MINIMAL&#39;>** | Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. | (optional) defaults to 'LEGACY'|
 
 
 ### Return type

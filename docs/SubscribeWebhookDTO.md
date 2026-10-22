@@ -13,9 +13,10 @@ Name | Type | Description | Notes
 **secret** | **string** | The secret used for webhook validation. | [optional] [default to undefined]
 **topic** | **string** | The topic for which the webhook is subscribed. | [optional] [default to undefined]
 **description** | **string** | Optional human-readable description for this webhook | [optional] [default to undefined]
-**webhookFormat** | **string** | Webhook payload format (LEGACY, USER_FRIENDLY) | [optional] [default to undefined]
+**webhookFormat** | **string** | Webhook payload format (LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL) | [optional] [default to undefined]
 **parseRecord** | **boolean** | Whether to parse the record before returning it | [optional] [default to undefined]
 **filter** | [**Filter**](Filter.md) | Filter criteria for webhook triggers | [optional] [default to undefined]
+**fields** | **string** | Comma-separated property names to include on the main record. Omitted or blank returns all readable properties; record identity is always included. | [optional] [default to undefined]
 **includeRelations** | **Array&lt;string&gt;** | Records to include in webhook payload | [optional] [default to undefined]
 **relationFilters** | [**{ [key: string]: Filter; }**](Filter.md) | Filter criteria for relations | [optional] [default to undefined]
 **relationLimit** | **number** | Maximum number of relations to include | [optional] [default to undefined]
@@ -54,6 +55,7 @@ const instance: SubscribeWebhookDTO = {
     webhookFormat,
     parseRecord,
     filter,
+    fields,
     includeRelations,
     relationFilters,
     relationLimit,
