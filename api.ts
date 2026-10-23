@@ -2813,9 +2813,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'yproperty'?: string;
     'xproperty'?: string;
     'ymetric'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3729,9 +3729,9 @@ export interface ModelRecord {
     'complete'?: boolean;
     'deleted'?: boolean;
     'uuid': string;
+    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
-    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }
@@ -6501,11 +6501,17 @@ export interface ShowResponseString {
     'data'?: string;
 }
 /**
- * Success response (ShowResponseSubscribeWebhookDTO).
+ * Represents the response for viewing or showing a specific resource.
  */
 export interface ShowResponseSubscribeWebhookDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
     'message'?: string;
-    'data'?: { [key: string]: any; };
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: SubscribeWebhookDTO;
 }
 /**
  * Success response (ShowResponseTemplateWebpageDTO).
@@ -7068,6 +7074,30 @@ export interface SubscribeWebhookDTO {
      * Internal schedule version incremented when schedule config changes
      */
     'scheduleVersion'?: number;
+    /**
+     * Company subscription runtime state
+     */
+    'deactivated'?: boolean;
+    /**
+     * Company subscription runtime state
+     */
+    'failureCount'?: number;
+    /**
+     * Company subscription runtime state
+     */
+    'lastFailureStatus'?: number;
+    /**
+     * Company subscription runtime state
+     */
+    'lastFailureAt'?: number;
+    /**
+     * Company subscription runtime state
+     */
+    'deactivatedAt'?: number;
+    /**
+     * Company subscription runtime state
+     */
+    'deactivationReason'?: string;
     /**
      * Unique identifier for the entity
      */
@@ -11346,6 +11376,48 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
+         * Resumes future events for only the selected company and resets its failure counter.
+         * @summary Reactivate a company webhook
+         * @param {string} appUuid 
+         * @param {string} webhookUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        reactivateAppWebhook: async (appUuid: string, webhookUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appUuid' is not null or undefined
+            assertParamExists('reactivateAppWebhook', 'appUuid', appUuid)
+            // verify required parameter 'webhookUuid' is not null or undefined
+            assertParamExists('reactivateAppWebhook', 'webhookUuid', webhookUuid)
+            const localVarPath = `/api/v2/apps/{appUuid}/webhooks/{webhookUuid}/reactivate`
+                .replace('{appUuid}', encodeURIComponent(String(appUuid)))
+                .replace('{webhookUuid}', encodeURIComponent(String(webhookUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Sets review outcome (approve/reject/changes requested), feedback, and optional reviewer notes. Returns the updated app details as a ShowResponse wrapping an AppDTO.
          * @summary Review a public app
          * @param {string} uuid UUID of the public app to review
@@ -12086,6 +12158,20 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Resumes future events for only the selected company and resets its failure counter.
+         * @summary Reactivate a company webhook
+         * @param {string} appUuid 
+         * @param {string} webhookUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async reactivateAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseSubscribeWebhookDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.reactivateAppWebhook(appUuid, webhookUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.reactivateAppWebhook']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Sets review outcome (approve/reject/changes requested), feedback, and optional reviewer notes. Returns the updated app details as a ShowResponse wrapping an AppDTO.
          * @summary Review a public app
          * @param {string} uuid UUID of the public app to review
@@ -12471,6 +12557,17 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
             return localVarFp.migrateToV2(uuid, migrateAppToV2Request, options).then((request) => request(axios, basePath));
         },
         /**
+         * Resumes future events for only the selected company and resets its failure counter.
+         * @summary Reactivate a company webhook
+         * @param {string} appUuid 
+         * @param {string} webhookUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        reactivateAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseSubscribeWebhookDTO> {
+            return localVarFp.reactivateAppWebhook(appUuid, webhookUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Sets review outcome (approve/reject/changes requested), feedback, and optional reviewer notes. Returns the updated app details as a ShowResponse wrapping an AppDTO.
          * @summary Review a public app
          * @param {string} uuid UUID of the public app to review
@@ -12843,6 +12940,18 @@ export class ApplicationsApi extends BaseAPI {
      */
     public migrateToV2(uuid: string, migrateAppToV2Request?: MigrateAppToV2Request, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).migrateToV2(uuid, migrateAppToV2Request, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Resumes future events for only the selected company and resets its failure counter.
+     * @summary Reactivate a company webhook
+     * @param {string} appUuid 
+     * @param {string} webhookUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public reactivateAppWebhook(appUuid: string, webhookUuid: string, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).reactivateAppWebhook(appUuid, webhookUuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

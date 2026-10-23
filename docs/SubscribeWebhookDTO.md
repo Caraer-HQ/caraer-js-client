@@ -28,6 +28,12 @@ Name | Type | Description | Notes
 **scheduleRecurring** | **string** | Recurrence for date_due webhooks: NONE, DAILY, WEEKLY, MONTHLY, QUARTERLY, HALF_YEARLY, YEARLY, or CRON | [optional] [default to undefined]
 **scheduleCronExpression** | **string** | Spring cron expression used when scheduleRecurring is CRON | [optional] [default to undefined]
 **scheduleVersion** | **number** | Internal schedule version incremented when schedule config changes | [optional] [default to undefined]
+**deactivated** | **boolean** | Company subscription runtime state | [optional] [readonly] [default to undefined]
+**failureCount** | **number** | Company subscription runtime state | [optional] [readonly] [default to undefined]
+**lastFailureStatus** | **number** | Company subscription runtime state | [optional] [readonly] [default to undefined]
+**lastFailureAt** | **number** | Company subscription runtime state | [optional] [readonly] [default to undefined]
+**deactivatedAt** | **number** | Company subscription runtime state | [optional] [readonly] [default to undefined]
+**deactivationReason** | **string** | Company subscription runtime state | [optional] [readonly] [default to undefined]
 **uuid** | **string** | Unique identifier for the entity | [default to undefined]
 **name** | **string** | The name of the entity | [default to undefined]
 **label** | **string** | Display label for the entity, can be different from name | [optional] [default to undefined]
@@ -67,6 +73,12 @@ const instance: SubscribeWebhookDTO = {
     scheduleRecurring,
     scheduleCronExpression,
     scheduleVersion,
+    deactivated,
+    failureCount,
+    lastFailureStatus,
+    lastFailureAt,
+    deactivatedAt,
+    deactivationReason,
     uuid,
     name,
     label,

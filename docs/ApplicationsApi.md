@@ -26,6 +26,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**listAvailableAppCategories**](#listavailableappcategories) | **GET** /api/v2/apps/categories/available | List available app categories|
 |[**loadSettingOptions**](#loadsettingoptions) | **POST** /api/v2/apps/{uuid}/settings-schema/options | Load dynamic options for a setting select field|
 |[**migrateToV2**](#migratetov2) | **POST** /api/v2/apps/{uuid}/migrate-v2 | Migrate an app from platform V1 to V2|
+|[**reactivateAppWebhook**](#reactivateappwebhook) | **POST** /api/v2/apps/{appUuid}/webhooks/{webhookUuid}/reactivate | Reactivate a company webhook|
 |[**reviewPublicApp**](#reviewpublicapp) | **POST** /api/v2/apps/public/{uuid}/review | Review a public app|
 |[**rotateApp**](#rotateapp) | **POST** /api/v2/apps/{uuid}/rotate | Rotate application configurations|
 |[**streamRuntimeLogs**](#streamruntimelogs) | **GET** /api/v2/apps/{appUuid}/runtime/logs/stream | Stream app runtime logs (SSE)|
@@ -1303,6 +1304,64 @@ const { status, data } = await apiInstance.migrateToV2(
 |**403** | Not allowed to migrate this app |  -  |
 |**404** | App not found |  -  |
 |**401** | Authentication is required or the token is invalid. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **reactivateAppWebhook**
+> ShowResponseSubscribeWebhookDTO reactivateAppWebhook()
+
+Resumes future events for only the selected company and resets its failure counter.
+
+### Example
+
+```typescript
+import {
+    ApplicationsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new ApplicationsApi(configuration);
+
+let appUuid: string; // (default to undefined)
+let webhookUuid: string; // (default to undefined)
+
+const { status, data } = await apiInstance.reactivateAppWebhook(
+    appUuid,
+    webhookUuid
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **appUuid** | [**string**] |  | defaults to undefined|
+| **webhookUuid** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponseSubscribeWebhookDTO**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
 |**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
