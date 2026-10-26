@@ -29,6 +29,7 @@ Name | Type | Description | Notes
 **orderBy** | [**PropertyDTO**](PropertyDTO.md) | The order by property associated with the settings | [optional] [default to undefined]
 **orderByDirection** | **string** | The order by direction associated with the settings. ASC or DESC, default is ASC | [optional] [default to undefined]
 **asWebpages** | **boolean** | Whether the previews should be shown as webpages | [optional] [default to undefined]
+**publishedOnly** | **boolean** | In record mode (asWebpages&#x3D;false), require published pages. Defaults to true; false includes unpublished records while retaining protection checks. | [optional] [default to undefined]
 **loop** | **boolean** | Whether the previews should loop | [optional] [default to undefined]
 **limit** | **number** | The limit associated with the settings | [optional] [default to undefined]
 **groupBy** | [**PropertyDTO**](PropertyDTO.md) | The group by property associated with the settings | [optional] [default to undefined]
@@ -90,6 +91,7 @@ const instance: PageContentSettingsDTO = {
     orderBy,
     orderByDirection,
     asWebpages,
+    publishedOnly,
     loop,
     limit,
     groupBy,
