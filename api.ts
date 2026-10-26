@@ -1026,8 +1026,8 @@ export interface AppSettingFieldSchema {
     'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'settingsGroup'?: boolean;
     'action'?: boolean;
+    'settingsGroup'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -2813,8 +2813,8 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
     'ymetric'?: string;
+    'xproperty'?: string;
     'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
@@ -2897,10 +2897,10 @@ export interface FileListItemDTO {
     'contentType'?: string;
 }
 export interface FilledProperty {
-    'icon'?: string;
     'name'?: string;
     'value'?: any;
     'type'?: string;
+    'icon'?: string;
     'label'?: string;
 }
 /**
