@@ -7,6 +7,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**_delete**](#_delete) | **DELETE** /api/v2/records/{uuid} | Delete a record|
 |[**aggregate**](#aggregate) | **POST** /api/v2/records/aggregate | Aggregate records for analytics charts|
 |[**aggregateBatch**](#aggregatebatch) | **POST** /api/v2/records/aggregate/batch | Batch aggregate records for analytics dashboards|
+|[**archivedObjects**](#archivedobjects) | **GET** /api/v2/records/archived/objects | List objects with visible archived records|
 |[**bulkDelete**](#bulkdelete) | **POST** /api/v2/records/{objectName}/bulk-delete | Bulk delete records|
 |[**bulkEdit**](#bulkedit) | **PUT** /api/v2/records/{objectName}/bulk | Bulk create or update records|
 |[**create**](#create) | **POST** /api/v2/records/{objectName} | Create a new record|
@@ -195,6 +196,54 @@ const { status, data } = await apiInstance.aggregateBatch(
 |-------------|-------------|------------------|
 |**200** | Batch aggregation completed |  -  |
 |**400** | Invalid request |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **archivedObjects**
+> SuccessResponseListArchivedRecordObjectDTO archivedObjects()
+
+Returns lightweight object metadata in display order. Includes primary and extended object contexts only when they contain an archived record visible under the current user\'s record permissions and access filters. Uses the selected company\'s database.
+
+### Example
+
+```typescript
+import {
+    RecordsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new RecordsApi(configuration);
+
+const { status, data } = await apiInstance.archivedObjects();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**SuccessResponseListArchivedRecordObjectDTO**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
 |**404** | The requested resource was not found. |  -  |

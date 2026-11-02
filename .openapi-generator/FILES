@@ -51,6 +51,7 @@ docs/AppSettingOptionsSource.md
 docs/AppSettingsSection.md
 docs/AppSubcategoryDTO.md
 docs/ApplicationsApi.md
+docs/ArchivedRecordObjectDTO.md
 docs/AutomationsApi.md
 docs/BillingApi.md
 docs/BillingSettingsDTO.md
@@ -337,6 +338,7 @@ docs/SuccessResponseListAggregateResponse.md
 docs/SuccessResponseListAppExternalOAuthProviderDTO.md
 docs/SuccessResponseListAppInboundRouteDTO.md
 docs/SuccessResponseListAppScheduleDTO.md
+docs/SuccessResponseListArchivedRecordObjectDTO.md
 docs/SuccessResponseListCalendarRecordDTO.md
 docs/SuccessResponseListCalendarTeamOptionDTO.md
 docs/SuccessResponseListCaraerObjectDTO.md

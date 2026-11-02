@@ -1057,6 +1057,13 @@ export interface AppSubcategoryDTO {
      */
     'label'?: string;
 }
+export interface ArchivedRecordObjectDTO {
+    'uuid'?: string;
+    'name'?: string;
+    'label'?: string;
+    'icon'?: string;
+    'index'?: number;
+}
 /**
  * The billing settings of the company.
  */
@@ -2813,9 +2820,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
+    'yproperty'?: string;
     'ymetric'?: string;
     'xproperty'?: string;
-    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -5942,8 +5949,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -7248,6 +7255,19 @@ export interface SuccessResponseListAppScheduleDTO {
      * The data payload of the response, if any.
      */
     'data'?: Array<AppScheduleDTO>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseListArchivedRecordObjectDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<ArchivedRecordObjectDTO>;
 }
 /**
  * Represents a standard successful response with a message and optional data.
@@ -26005,6 +26025,40 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Returns lightweight object metadata in display order. Includes primary and extended object contexts only when they contain an archived record visible under the current user\'s record permissions and access filters. Uses the selected company\'s database.
+         * @summary List objects with visible archived records
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        archivedObjects: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/records/archived/objects`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Archives, anonymizes, or permanently deletes multiple records in one request. Returns HTTP 200 when every item succeeds. Returns HTTP 200 with per-record errors when one or more items fail; successful items are still applied and listed in data.uuids.
          * @summary Bulk delete records
          * @param {string} objectName 
@@ -27189,6 +27243,18 @@ export const RecordsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Returns lightweight object metadata in display order. Includes primary and extended object contexts only when they contain an archived record visible under the current user\'s record permissions and access filters. Uses the selected company\'s database.
+         * @summary List objects with visible archived records
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async archivedObjects(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListArchivedRecordObjectDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.archivedObjects(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.archivedObjects']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Archives, anonymizes, or permanently deletes multiple records in one request. Returns HTTP 200 when every item succeeds. Returns HTTP 200 with per-record errors when one or more items fail; successful items are still applied and listed in data.uuids.
          * @summary Bulk delete records
          * @param {string} objectName 
@@ -27575,6 +27641,15 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.aggregateBatch(aggregateBatchRequest, options).then((request) => request(axios, basePath));
         },
         /**
+         * Returns lightweight object metadata in display order. Includes primary and extended object contexts only when they contain an archived record visible under the current user\'s record permissions and access filters. Uses the selected company\'s database.
+         * @summary List objects with visible archived records
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        archivedObjects(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListArchivedRecordObjectDTO> {
+            return localVarFp.archivedObjects(options).then((request) => request(axios, basePath));
+        },
+        /**
          * Archives, anonymizes, or permanently deletes multiple records in one request. Returns HTTP 200 when every item succeeds. Returns HTTP 200 with per-record errors when one or more items fail; successful items are still applied and listed in data.uuids.
          * @summary Bulk delete records
          * @param {string} objectName 
@@ -27893,6 +27968,16 @@ export class RecordsApi extends BaseAPI {
      */
     public aggregateBatch(aggregateBatchRequest: AggregateBatchRequest, options?: RawAxiosRequestConfig) {
         return RecordsApiFp(this.configuration).aggregateBatch(aggregateBatchRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns lightweight object metadata in display order. Includes primary and extended object contexts only when they contain an archived record visible under the current user\'s record permissions and access filters. Uses the selected company\'s database.
+     * @summary List objects with visible archived records
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public archivedObjects(options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).archivedObjects(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
