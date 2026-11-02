@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **relationName** | **string** | Name of the relation type | [default to undefined]
 **uuid** | **string** | UUID of an existing record to link to | [optional] [default to undefined]
-**properties** | **{ [key: string]: any | null; }** | Properties to update on the existing record referenced by uuid before linking | [optional] [default to undefined]
+**properties** | **{ [key: string]: any | null; }** | With uuid: patch the existing target before linking. Without uuid or record: create-or-update the target using its unique properties, then link. Use objectName when ambiguous. | [optional] [default to undefined]
 **edgeProperties** | **{ [key: string]: any | null; }** | Values for properties declared on the relation schema, stored on the relation edge itself (not on either record). Omit to leave existing edge values untouched; a null value clears a key. | [optional] [default to undefined]
 **record** | [**RecordDTO**](RecordDTO.md) | Nested record to create or update (by uuid or unique properties) before linking | [optional] [default to undefined]
 **objectName** | **string** | Object name for nested record create when relation allows multiple target types | [optional] [default to undefined]

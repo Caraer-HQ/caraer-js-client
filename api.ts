@@ -2813,8 +2813,8 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
     'ymetric'?: string;
+    'xproperty'?: string;
     'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
@@ -5389,7 +5389,7 @@ export interface RecordRelationRequestDTO {
      */
     'uuid'?: string;
     /**
-     * Properties to update on the existing record referenced by uuid before linking
+     * With uuid: patch the existing target before linking. Without uuid or record: create-or-update the target using its unique properties, then link. Use objectName when ambiguous.
      */
     'properties'?: { [key: string]: any | null; };
     /**
@@ -5942,8 +5942,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
