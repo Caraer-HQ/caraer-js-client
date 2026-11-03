@@ -1026,8 +1026,8 @@ export interface AppSettingFieldSchema {
     'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'settingsGroup'?: boolean;
     'action'?: boolean;
+    'settingsGroup'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -2821,8 +2821,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'xproperty'?: string;
-    'yproperty'?: string;
     'ymetric'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
