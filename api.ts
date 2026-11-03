@@ -2820,9 +2820,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
     'ymetric'?: string;
     'yproperty'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2904,10 +2904,10 @@ export interface FileListItemDTO {
     'contentType'?: string;
 }
 export interface FilledProperty {
+    'icon'?: string;
     'name'?: string;
     'value'?: any;
     'type'?: string;
-    'icon'?: string;
     'label'?: string;
 }
 /**
@@ -3736,9 +3736,9 @@ export interface ModelRecord {
     'complete'?: boolean;
     'deleted'?: boolean;
     'uuid': string;
+    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
-    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }
@@ -5523,6 +5523,21 @@ export interface RelationEdgeRequestDTO {
      */
     'primary'?: boolean;
 }
+export interface RelationPillSort {
+    /**
+     * Property of the related object used to order its pills.
+     */
+    'property'?: string;
+    'direction'?: RelationPillSortDirectionEnum;
+}
+
+export const RelationPillSortDirectionEnum = {
+    Asc: 'ASC',
+    Desc: 'DESC',
+} as const;
+
+export type RelationPillSortDirectionEnum = typeof RelationPillSortDirectionEnum[keyof typeof RelationPillSortDirectionEnum];
+
 export interface ResetPasswordRequest {
     'email'?: string;
     'token'?: string;
@@ -5974,6 +5989,10 @@ export interface SettingOption {
  * DTO representing an item with properties defined for displaying and handling in UI related operations.
  */
 export interface ShowItem {
+    /**
+     * Ordering of related-record pills within this column; does not sort the result rows.
+     */
+    'relationSort'?: RelationPillSort;
     /**
      * The name of the object to which this pagination item belongs.
      */

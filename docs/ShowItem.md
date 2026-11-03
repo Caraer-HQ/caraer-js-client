@@ -6,6 +6,7 @@ DTO representing an item with properties defined for displaying and handling in 
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**relationSort** | [**RelationPillSort**](RelationPillSort.md) | Ordering of related-record pills within this column; does not sort the result rows. | [optional] [default to undefined]
 **object** | **string** | The name of the object to which this pagination item belongs. | [optional] [default to undefined]
 **relation** | **string** | The relationship between objects. | [optional] [default to undefined]
 **relationDirection** | **string** | Optional relation direction: outgoing (related→main), incoming (main→related), or omit for undirected. | [optional] [default to undefined]
@@ -22,6 +23,7 @@ Name | Type | Description | Notes
 import { ShowItem } from '@caraer/client';
 
 const instance: ShowItem = {
+    relationSort,
     object,
     relation,
     relationDirection,
