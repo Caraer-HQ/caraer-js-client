@@ -2821,8 +2821,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'xproperty'?: string;
-    'ymetric'?: string;
     'yproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3736,9 +3736,9 @@ export interface ModelRecord {
     'complete'?: boolean;
     'deleted'?: boolean;
     'uuid': string;
+    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
-    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }
@@ -5426,6 +5426,24 @@ export interface RecordSummary {
     'properties'?: { [key: string]: any | null; };
     'parsedProperties'?: { [key: string]: any | null; };
 }
+/**
+ * Optional record-write envelope. objectName must match the URL\'s object context. Query parameters still control parse, ignoreErrors and recordReturnFormat.
+ */
+export interface RecordWriteEnvelope {
+    /**
+     * Optional object name; when provided it must match the URL.
+     */
+    'objectName'?: string;
+    /**
+     * The record to create or update.
+     */
+    'record': RecordDTO;
+}
+/**
+ * @type RecordWriteRequest
+ */
+export type RecordWriteRequest = RecordDTO | RecordWriteEnvelope;
+
 export interface Recurrence extends PropertyFormat {
 }
 export interface Reference {
@@ -26172,7 +26190,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create a new record
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to create
+         * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope to create
          * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
          * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
@@ -26230,7 +26248,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * Creates a new record or updates an existing one. Match order: body/path uuid already in the graph, then unique property values. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create or update a record
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
+         * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope. uuid belongs to the record and updates that record when it already exists.
          * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
          * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
@@ -27041,7 +27059,7 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Update a record
          * @param {string} uuid 
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to update
+         * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope to update
          * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
          * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
@@ -27306,7 +27324,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create a new record
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to create
+         * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope to create
          * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
          * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
@@ -27323,7 +27341,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * Creates a new record or updates an existing one. Match order: body/path uuid already in the graph, then unique property values. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create or update a record
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
+         * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope. uuid belongs to the record and updates that record when it already exists.
          * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
          * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
@@ -27572,7 +27590,7 @@ export const RecordsApiFp = function(configuration?: Configuration) {
          * @summary Update a record
          * @param {string} uuid 
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to update
+         * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope to update
          * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
          * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
@@ -27695,7 +27713,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create a new record
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to create
+         * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope to create
          * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
          * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
@@ -27709,7 +27727,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * Creates a new record or updates an existing one. Match order: body/path uuid already in the graph, then unique property values. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create or update a record
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
+         * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope. uuid belongs to the record and updates that record when it already exists.
          * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] 
          * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
@@ -27910,7 +27928,7 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          * @summary Update a record
          * @param {string} uuid 
          * @param {string} objectName 
-         * @param {RecordDTO} recordDTO Record data to update
+         * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope to update
          * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
          * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
          * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
@@ -28028,7 +28046,7 @@ export class RecordsApi extends BaseAPI {
      * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
      * @summary Create a new record
      * @param {string} objectName 
-     * @param {RecordDTO} recordDTO Record data to create
+     * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope to create
      * @param {CreateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported.
      * @param {CreateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
@@ -28043,7 +28061,7 @@ export class RecordsApi extends BaseAPI {
      * Creates a new record or updates an existing one. Match order: body/path uuid already in the graph, then unique property values. If a matching record exists, it is updated; otherwise, a new record is created. Returns a CreateResponse or UpdateResponse with the record details. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
      * @summary Create or update a record
      * @param {string} objectName 
-     * @param {RecordDTO} recordDTO Record data to create or update. Top-level uuid updates that record when it already exists.
+     * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope. uuid belongs to the record and updates that record when it already exists.
      * @param {CreateOrUpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [ignoreErrors] 
      * @param {CreateOrUpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.
@@ -28260,7 +28278,7 @@ export class RecordsApi extends BaseAPI {
      * @summary Update a record
      * @param {string} uuid 
      * @param {string} objectName 
-     * @param {RecordDTO} recordDTO Record data to update
+     * @param {RecordDTO} recordDTO Direct record body or {objectName, record} envelope to update
      * @param {UpdateParseEnum} [parse] Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records).
      * @param {boolean} [ignoreErrors] If \&#39;true\&#39;, allows the update to proceed while ignoring certain non-critical validation errors, when supported.
      * @param {UpdateRecordReturnFormatEnum} [recordReturnFormat] Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL.

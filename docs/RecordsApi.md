@@ -393,7 +393,7 @@ const configuration = new Configuration();
 const apiInstance = new RecordsApi(configuration);
 
 let objectName: string; // (default to undefined)
-let recordDTO: RecordDTO; //Record data to create
+let recordDTO: RecordDTO; //Direct record body or {objectName, record} envelope to create
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let ignoreErrors: boolean; //If \'true\', allows the creation to proceed while ignoring certain non-critical validation errors, when supported. (optional) (default to false)
 let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
@@ -411,7 +411,7 @@ const { status, data } = await apiInstance.create(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **recordDTO** | **RecordDTO**| Record data to create | |
+| **recordDTO** | **RecordDTO**| Direct record body or {objectName, record} envelope to create | |
 | **objectName** | [**string**] |  | defaults to undefined|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 | **ignoreErrors** | [**boolean**] | If \&#39;true\&#39;, allows the creation to proceed while ignoring certain non-critical validation errors, when supported. | (optional) defaults to false|
@@ -462,7 +462,7 @@ const configuration = new Configuration();
 const apiInstance = new RecordsApi(configuration);
 
 let objectName: string; // (default to undefined)
-let recordDTO: RecordDTO; //Record data to create or update. Top-level uuid updates that record when it already exists.
+let recordDTO: RecordDTO; //Direct record body or {objectName, record} envelope. uuid belongs to the record and updates that record when it already exists.
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let ignoreErrors: boolean; // (optional) (default to false)
 let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
@@ -480,7 +480,7 @@ const { status, data } = await apiInstance.createOrUpdate(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **recordDTO** | **RecordDTO**| Record data to create or update. Top-level uuid updates that record when it already exists. | |
+| **recordDTO** | **RecordDTO**| Direct record body or {objectName, record} envelope. uuid belongs to the record and updates that record when it already exists. | |
 | **objectName** | [**string**] |  | defaults to undefined|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|
 | **ignoreErrors** | [**boolean**] |  | (optional) defaults to false|
@@ -1484,7 +1484,7 @@ const apiInstance = new RecordsApi(configuration);
 
 let uuid: string; // (default to undefined)
 let objectName: string; // (default to undefined)
-let recordDTO: RecordDTO; //Record data to update
+let recordDTO: RecordDTO; //Direct record body or {objectName, record} envelope to update
 let parse: 'DB' | 'HUMAN_READABLE' | 'STRUCTURED'; //Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). (optional) (default to undefined)
 let ignoreErrors: boolean; //If \'true\', allows the update to proceed while ignoring certain non-critical validation errors, when supported. (optional) (default to false)
 let recordReturnFormat: 'LEGACY' | 'USER_FRIENDLY' | 'EXPANDED' | 'MINIMAL'; //Format of the record to return. LEGACY, USER_FRIENDLY, EXPANDED, MINIMAL. (optional) (default to 'LEGACY')
@@ -1503,7 +1503,7 @@ const { status, data } = await apiInstance.update(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **recordDTO** | **RecordDTO**| Record data to update | |
+| **recordDTO** | **RecordDTO**| Direct record body or {objectName, record} envelope to update | |
 | **uuid** | [**string**] |  | defaults to undefined|
 | **objectName** | [**string**] |  | defaults to undefined|
 | **parse** | [**&#39;DB&#39; | &#39;HUMAN_READABLE&#39; | &#39;STRUCTURED&#39;**]**Array<&#39;DB&#39; &#124; &#39;HUMAN_READABLE&#39; &#124; &#39;STRUCTURED&#39;>** | Value presentation mode: omit/false/db for raw stored values; true/human_readable for display strings; structured for rich JSON (e.g. PropertyOption arrays, related records). | (optional) defaults to undefined|

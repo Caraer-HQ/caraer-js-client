@@ -233,6 +233,8 @@ docs/RecordDTO.md
 docs/RecordPaginationRequest.md
 docs/RecordRelationRequestDTO.md
 docs/RecordSummary.md
+docs/RecordWriteEnvelope.md
+docs/RecordWriteRequest.md
 docs/RecordsApi.md
 docs/Recurrence.md
 docs/Reference.md
