@@ -2820,9 +2820,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
     'yproperty'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2957,7 +2957,7 @@ export interface FilterItem {
      */
     'operator'?: string;
     /**
-     * Represents the value to filter against. Date values accept epoch seconds or milliseconds, or numeric from;to bounds for range filters. Symbolic date values are unsupported.
+     * Represents the value to filter against. Date values accept epoch seconds or milliseconds, or numeric from;to bounds for range filters. Symbolic date values are unsupported. Numeric JSON scalars used with string properties are compared as plain decimal text; existing strings retain their spelling and leading zeros.
      */
     'value'?: any;
     /**
@@ -3462,7 +3462,7 @@ export interface Leadscore {
      */
     'operator'?: string;
     /**
-     * Represents the value to filter against. Date values accept epoch seconds or milliseconds, or numeric from;to bounds for range filters. Symbolic date values are unsupported.
+     * Represents the value to filter against. Date values accept epoch seconds or milliseconds, or numeric from;to bounds for range filters. Symbolic date values are unsupported. Numeric JSON scalars used with string properties are compared as plain decimal text; existing strings retain their spelling and leading zeros.
      */
     'value'?: any;
     /**
