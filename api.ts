@@ -1525,6 +1525,10 @@ export interface CmsPagePatchRequest {
     'patches'?: Array<CmsPagePatch>;
     'expectedRevision'?: number;
 }
+export interface CmsPageSeoRequest {
+    'seo'?: { [key: string]: any | null; };
+    'expectedRevision'?: number;
+}
 export interface CmsPublicMenuDTO {
     'location'?: string;
     'title'?: string;
@@ -2820,9 +2824,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3736,9 +3740,9 @@ export interface ModelRecord {
     'deleted'?: boolean;
     'complete'?: boolean;
     'uuid': string;
-    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
+    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }
@@ -15009,6 +15013,59 @@ export const CMSV2PagesApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
+         * Requires page-write, and publish permission for published SEO. The body contains seo and expectedRevision from the selected state\'s document.
+         * @summary Merge page SEO without publishing draft content
+         * @param {string} recordUuid 
+         * @param {CmsPageSeoRequest} cmsPageSeoRequest 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveSeo: async (recordUuid: string, cmsPageSeoRequest: CmsPageSeoRequest, locale?: string, state?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('saveSeo', 'recordUuid', recordUuid)
+            // verify required parameter 'cmsPageSeoRequest' is not null or undefined
+            assertParamExists('saveSeo', 'cmsPageSeoRequest', cmsPageSeoRequest)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/seo`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            if (state !== undefined) {
+                localVarQueryParameter['state'] = state;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(cmsPageSeoRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Replace a CMS v2 object template
          * @param {string} objectUuid 
@@ -15496,6 +15553,22 @@ export const CMSV2PagesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Requires page-write, and publish permission for published SEO. The body contains seo and expectedRevision from the selected state\'s document.
+         * @summary Merge page SEO without publishing draft content
+         * @param {string} recordUuid 
+         * @param {CmsPageSeoRequest} cmsPageSeoRequest 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async saveSeo(recordUuid: string, cmsPageSeoRequest: CmsPageSeoRequest, locale?: string, state?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.saveSeo(recordUuid, cmsPageSeoRequest, locale, state, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.saveSeo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
          * @summary Replace a CMS v2 object template
          * @param {string} objectUuid 
@@ -15778,6 +15851,19 @@ export const CMSV2PagesApiFactory = function (configuration?: Configuration, bas
             return localVarFp.saveModuleFork(recordUuid, sessionId, requestBody, options).then((request) => request(axios, basePath));
         },
         /**
+         * Requires page-write, and publish permission for published SEO. The body contains seo and expectedRevision from the selected state\'s document.
+         * @summary Merge page SEO without publishing draft content
+         * @param {string} recordUuid 
+         * @param {CmsPageSeoRequest} cmsPageSeoRequest 
+         * @param {string} [locale] 
+         * @param {string} [state] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveSeo(recordUuid: string, cmsPageSeoRequest: CmsPageSeoRequest, locale?: string, state?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.saveSeo(recordUuid, cmsPageSeoRequest, locale, state, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary Replace a CMS v2 object template
          * @param {string} objectUuid 
@@ -16058,6 +16144,20 @@ export class CMSV2PagesApi extends BaseAPI {
      */
     public saveModuleFork(recordUuid: string, sessionId: string, requestBody: { [key: string]: any | null; }, options?: RawAxiosRequestConfig) {
         return CMSV2PagesApiFp(this.configuration).saveModuleFork(recordUuid, sessionId, requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Requires page-write, and publish permission for published SEO. The body contains seo and expectedRevision from the selected state\'s document.
+     * @summary Merge page SEO without publishing draft content
+     * @param {string} recordUuid 
+     * @param {CmsPageSeoRequest} cmsPageSeoRequest 
+     * @param {string} [locale] 
+     * @param {string} [state] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public saveSeo(recordUuid: string, cmsPageSeoRequest: CmsPageSeoRequest, locale?: string, state?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).saveSeo(recordUuid, cmsPageSeoRequest, locale, state, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

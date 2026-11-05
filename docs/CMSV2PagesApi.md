@@ -22,6 +22,7 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**save**](#save) | **PUT** /api/v2/webpages/v2/pages/{recordUuid} | Replace a page draft|
 |[**saveMeta**](#savemeta) | **PUT** /api/v2/webpages/v2/pages/{recordUuid}/meta | Update slug, title, excerpt, SEO and page scripts|
 |[**saveModuleFork**](#savemodulefork) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions/{sessionId}/save | Publish the forked module into a private app|
+|[**saveSeo**](#saveseo) | **PUT** /api/v2/webpages/v2/pages/{recordUuid}/seo | Merge page SEO without publishing draft content|
 |[**saveTemplate**](#savetemplate) | **PUT** /api/v2/webpages/v2/pages/templates/{objectUuid} | Replace a CMS v2 object template|
 |[**startModuleFork**](#startmodulefork) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions | Start a Modify-this-module playground session|
 |[**unpublish**](#unpublish) | **PUT** /api/v2/webpages/v2/pages/{recordUuid}/unpublish | Take one locale offline|
@@ -1042,6 +1043,71 @@ const { status, data } = await apiInstance.saveModuleFork(
 ### Return type
 
 **ShowResponseMapStringObject**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **saveSeo**
+> ShowResponseCmsPageDTO saveSeo(cmsPageSeoRequest)
+
+Requires page-write, and publish permission for published SEO. The body contains seo and expectedRevision from the selected state\'s document.
+
+### Example
+
+```typescript
+import {
+    CMSV2PagesApi,
+    Configuration,
+    CmsPageSeoRequest
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CMSV2PagesApi(configuration);
+
+let recordUuid: string; // (default to undefined)
+let cmsPageSeoRequest: CmsPageSeoRequest; //
+let locale: string; // (optional) (default to undefined)
+let state: string; // (optional) (default to 'draft')
+
+const { status, data } = await apiInstance.saveSeo(
+    recordUuid,
+    cmsPageSeoRequest,
+    locale,
+    state
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **cmsPageSeoRequest** | **CmsPageSeoRequest**|  | |
+| **recordUuid** | [**string**] |  | defaults to undefined|
+| **locale** | [**string**] |  | (optional) defaults to undefined|
+| **state** | [**string**] |  | (optional) defaults to 'draft'|
+
+
+### Return type
+
+**ShowResponseCmsPageDTO**
 
 ### Authorization
 
