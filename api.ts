@@ -1026,8 +1026,8 @@ export interface AppSettingFieldSchema {
     'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'settingsGroup'?: boolean;
     'action'?: boolean;
+    'settingsGroup'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -1063,6 +1063,17 @@ export interface ArchivedRecordObjectDTO {
     'label'?: string;
     'icon'?: string;
     'index'?: number;
+}
+export interface Audience {
+    'authentication'?: any;
+    'principal'?: any;
+    'authenticated'?: boolean;
+    'database'?: string;
+    'principalDatabase'?: string;
+    'companyUuid'?: string;
+    'principalUuid'?: string;
+    'authorities'?: Array<string>;
+    'roles'?: Array<string>;
 }
 /**
  * The billing settings of the company.
@@ -1269,6 +1280,7 @@ export interface BulkEditRecordsResponse {
 export interface CRUD {
     'httpSessionId'?: string;
     'turnOffMetaRelationships'?: boolean;
+    'httpAccessContext'?: CrudAccessContext;
 }
 export interface CalendarBootstrapDTO {
     'defaultCalendar'?: CalendarRecordDTO;
@@ -2186,6 +2198,10 @@ export interface CrossObjectRecordSearchRequest {
      * Optional record UUID to exclude from results.
      */
     'excludeRecordUuid'?: string;
+}
+export interface CrudAccessContext {
+    'audience'?: Audience;
+    'permissions'?: Permissions;
 }
 export interface Currency extends PropertyFormat {
 }
@@ -3740,9 +3756,9 @@ export interface ModelRecord {
     'complete'?: boolean;
     'deleted'?: boolean;
     'uuid': string;
+    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
-    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }
@@ -4636,6 +4652,10 @@ export interface PaginationResponseWebpageAccessGrantDTO {
      * The last page number available for the pagination.
      */
     'lastPage'?: number;
+}
+export interface Permissions {
+    'scopes'?: Array<string>;
+    'filters'?: any;
 }
 export interface Phone extends PropertyFormat {
 }
@@ -5986,8 +6006,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {

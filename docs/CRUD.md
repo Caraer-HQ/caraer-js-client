@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **httpSessionId** | **string** |  | [optional] [default to undefined]
 **turnOffMetaRelationships** | **boolean** |  | [optional] [default to undefined]
+**httpAccessContext** | [**CrudAccessContext**](CrudAccessContext.md) |  | [optional] [default to undefined]
 
 ## Example
 
@@ -16,6 +17,7 @@ import { CRUD } from '@caraer/client';
 const instance: CRUD = {
     httpSessionId,
     turnOffMetaRelationships,
+    httpAccessContext,
 };
 ```
 

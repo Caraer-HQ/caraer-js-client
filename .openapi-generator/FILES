@@ -52,6 +52,7 @@ docs/AppSettingsSection.md
 docs/AppSubcategoryDTO.md
 docs/ApplicationsApi.md
 docs/ArchivedRecordObjectDTO.md
+docs/Audience.md
 docs/AutomationsApi.md
 docs/BillingApi.md
 docs/BillingSettingsDTO.md
@@ -110,6 +111,7 @@ docs/CreateResponseSignedUrlResultDTO.md
 docs/CreateSignedUrlRequest.md
 docs/CriterionScore.md
 docs/CrossObjectRecordSearchRequest.md
+docs/CrudAccessContext.md
 docs/Currency.md
 docs/CurrencyRange.md
 docs/CursorLocation.md
@@ -213,6 +215,7 @@ docs/PaginationResponseTraitDTO.md
 docs/PaginationResponseViewDTO.md
 docs/PaginationResponseWebMenuDTO.md
 docs/PaginationResponseWebpageAccessGrantDTO.md
+docs/Permissions.md
 docs/Phone.md
 docs/PreviewDTO.md
 docs/PreviewItemDTO.md
