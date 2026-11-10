@@ -1076,8 +1076,8 @@ export interface AppSettingFieldSchema {
     'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'settingsGroup'?: boolean;
     'action'?: boolean;
+    'settingsGroup'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -1605,6 +1605,7 @@ export interface CmsPageModuleInstance {
 export interface CmsPagePatch {
     'op'?: string;
     'moduleId'?: string;
+    'expectedModule'?: string;
     'ref'?: string;
     'field'?: string;
     'value'?: any;
@@ -2958,9 +2959,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
     'ymetric'?: string;
     'yproperty'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3875,8 +3876,8 @@ export interface ModelRecord {
     'updatedByUuid'?: string;
     'deletedByUuid'?: string;
     'index'?: number;
-    'complete'?: boolean;
     'deleted'?: boolean;
+    'complete'?: boolean;
     'uuid': string;
     'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
@@ -6263,8 +6264,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -7962,8 +7963,8 @@ export interface Team {
     'filtersString'?: string;
     'filters'?: { [key: string]: Filter; };
     'memberCount'?: number;
-    'complete'?: boolean;
     'deleted'?: boolean;
+    'complete'?: boolean;
     'uuid': string;
 }
 export interface TeamDTO {
@@ -15346,6 +15347,95 @@ export const CMSV2PagesApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
+         * 
+         * @summary Cancel or retry a module replacement
+         * @param {string} recordUuid 
+         * @param {string} replacementId 
+         * @param {string} action 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        moduleReplacementAction: async (recordUuid: string, replacementId: string, action: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('moduleReplacementAction', 'recordUuid', recordUuid)
+            // verify required parameter 'replacementId' is not null or undefined
+            assertParamExists('moduleReplacementAction', 'replacementId', replacementId)
+            // verify required parameter 'action' is not null or undefined
+            assertParamExists('moduleReplacementAction', 'action', action)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/module-replacements/{replacementId}/{action}`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)))
+                .replace('{replacementId}', encodeURIComponent(String(replacementId)))
+                .replace('{action}', encodeURIComponent(String(action)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Check durable module replacements and apply ready builds to the draft
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        moduleReplacements: async (recordUuid: string, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordUuid' is not null or undefined
+            assertParamExists('moduleReplacements', 'recordUuid', recordUuid)
+            const localVarPath = `/api/v2/webpages/v2/pages/{recordUuid}/module-replacements`
+                .replace('{recordUuid}', encodeURIComponent(String(recordUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Rejected with 409 when expectedRevision does not match, so a stale client cannot overwrite another editor\'s work.
          * @summary Apply patches to a page draft
          * @param {string} recordUuid 
@@ -15525,6 +15615,54 @@ export const CMSV2PagesApiAxiosParamCreator = function (configuration?: Configur
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Publish a template draft and update linked live pages
+         * @param {string} objectUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publishTemplate: async (objectUuid: string, requestBody: { [key: string]: any | null; }, locale?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'objectUuid' is not null or undefined
+            assertParamExists('publishTemplate', 'objectUuid', objectUuid)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('publishTemplate', 'requestBody', requestBody)
+            const localVarPath = `/api/v2/webpages/v2/pages/templates/{objectUuid}/publish`
+                .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (locale !== undefined) {
+                localVarQueryParameter['locale'] = locale;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -16143,6 +16281,35 @@ export const CMSV2PagesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 
+         * @summary Cancel or retry a module replacement
+         * @param {string} recordUuid 
+         * @param {string} replacementId 
+         * @param {string} action 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async moduleReplacementAction(recordUuid: string, replacementId: string, action: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.moduleReplacementAction(recordUuid, replacementId, action, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.moduleReplacementAction']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Check durable module replacements and apply ready builds to the draft
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async moduleReplacements(recordUuid: string, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.moduleReplacements(recordUuid, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.moduleReplacements']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Rejected with 409 when expectedRevision does not match, so a stale client cannot overwrite another editor\'s work.
          * @summary Apply patches to a page draft
          * @param {string} recordUuid 
@@ -16199,6 +16366,21 @@ export const CMSV2PagesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.publish(recordUuid, locale, allLocales, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.publish']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Publish a template draft and update linked live pages
+         * @param {string} objectUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async publishTemplate(objectUuid: string, requestBody: { [key: string]: any | null; }, locale?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCmsPageDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.publishTemplate(objectUuid, requestBody, locale, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CMSV2PagesApi.publishTemplate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -16465,6 +16647,29 @@ export const CMSV2PagesApiFactory = function (configuration?: Configuration, bas
             return localVarFp.library(options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @summary Cancel or retry a module replacement
+         * @param {string} recordUuid 
+         * @param {string} replacementId 
+         * @param {string} action 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        moduleReplacementAction(recordUuid: string, replacementId: string, action: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.moduleReplacementAction(recordUuid, replacementId, action, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Check durable module replacements and apply ready builds to the draft
+         * @param {string} recordUuid 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        moduleReplacements(recordUuid: string, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringObject> {
+            return localVarFp.moduleReplacements(recordUuid, locale, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Rejected with 409 when expectedRevision does not match, so a stale client cannot overwrite another editor\'s work.
          * @summary Apply patches to a page draft
          * @param {string} recordUuid 
@@ -16510,6 +16715,18 @@ export const CMSV2PagesApiFactory = function (configuration?: Configuration, bas
          */
         publish(recordUuid: string, locale?: string, allLocales?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListCmsPageDTO> {
             return localVarFp.publish(recordUuid, locale, allLocales, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Publish a template draft and update linked live pages
+         * @param {string} objectUuid 
+         * @param {{ [key: string]: any | null; }} requestBody 
+         * @param {string} [locale] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publishTemplate(objectUuid: string, requestBody: { [key: string]: any | null; }, locale?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCmsPageDTO> {
+            return localVarFp.publishTemplate(objectUuid, requestBody, locale, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -16753,6 +16970,31 @@ export class CMSV2PagesApi extends BaseAPI {
     }
 
     /**
+     * 
+     * @summary Cancel or retry a module replacement
+     * @param {string} recordUuid 
+     * @param {string} replacementId 
+     * @param {string} action 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public moduleReplacementAction(recordUuid: string, replacementId: string, action: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).moduleReplacementAction(recordUuid, replacementId, action, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Check durable module replacements and apply ready builds to the draft
+     * @param {string} recordUuid 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public moduleReplacements(recordUuid: string, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).moduleReplacements(recordUuid, locale, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Rejected with 409 when expectedRevision does not match, so a stale client cannot overwrite another editor\'s work.
      * @summary Apply patches to a page draft
      * @param {string} recordUuid 
@@ -16801,6 +17043,19 @@ export class CMSV2PagesApi extends BaseAPI {
      */
     public publish(recordUuid: string, locale?: string, allLocales?: boolean, options?: RawAxiosRequestConfig) {
         return CMSV2PagesApiFp(this.configuration).publish(recordUuid, locale, allLocales, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Publish a template draft and update linked live pages
+     * @param {string} objectUuid 
+     * @param {{ [key: string]: any | null; }} requestBody 
+     * @param {string} [locale] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public publishTemplate(objectUuid: string, requestBody: { [key: string]: any | null; }, locale?: string, options?: RawAxiosRequestConfig) {
+        return CMSV2PagesApiFp(this.configuration).publishTemplate(objectUuid, requestBody, locale, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

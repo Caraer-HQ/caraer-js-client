@@ -14,10 +14,13 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**history**](#history) | **GET** /api/v2/webpages/v2/pages/{recordUuid}/history | Draft snapshots for one locale|
 |[**hostOnEnvironment**](#hostonenvironment) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/environments/{key}/host | Host this page on another environment|
 |[**library**](#library) | **GET** /api/v2/webpages/v2/pages/library/modules | Modules available to this company|
+|[**moduleReplacementAction**](#modulereplacementaction) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/module-replacements/{replacementId}/{action} | Cancel or retry a module replacement|
+|[**moduleReplacements**](#modulereplacements) | **GET** /api/v2/webpages/v2/pages/{recordUuid}/module-replacements | Check durable module replacements and apply ready builds to the draft|
 |[**patch**](#patch) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/patch | Apply patches to a page draft|
 |[**previewLink**](#previewlink) | **GET** /api/v2/webpages/v2/pages/{recordUuid}/preview-link | Signed preview URL for the builder iframe|
 |[**promptModuleFork**](#promptmodulefork) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/ai/module-fork/sessions/{sessionId}/prompt | Rewrite forked module source from a prompt|
 |[**publish**](#publish) | **PUT** /api/v2/webpages/v2/pages/{recordUuid}/publish | Publish one locale, or all of them|
+|[**publishTemplate**](#publishtemplate) | **PUT** /api/v2/webpages/v2/pages/templates/{objectUuid}/publish | Publish a template draft and update linked live pages|
 |[**restoreHistory**](#restorehistory) | **POST** /api/v2/webpages/v2/pages/{recordUuid}/history/{index}/restore | Restore a draft snapshot|
 |[**save**](#save) | **PUT** /api/v2/webpages/v2/pages/{recordUuid} | Replace a page draft|
 |[**saveMeta**](#savemeta) | **PUT** /api/v2/webpages/v2/pages/{recordUuid}/meta | Update slug, title, excerpt, SEO and page scripts|
@@ -582,6 +585,123 @@ This endpoint does not have any parameters.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **moduleReplacementAction**
+> ShowResponseMapStringObject moduleReplacementAction()
+
+
+### Example
+
+```typescript
+import {
+    CMSV2PagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CMSV2PagesApi(configuration);
+
+let recordUuid: string; // (default to undefined)
+let replacementId: string; // (default to undefined)
+let action: string; // (default to undefined)
+
+const { status, data } = await apiInstance.moduleReplacementAction(
+    recordUuid,
+    replacementId,
+    action
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **recordUuid** | [**string**] |  | defaults to undefined|
+| **replacementId** | [**string**] |  | defaults to undefined|
+| **action** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponseMapStringObject**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **moduleReplacements**
+> ShowResponseMapStringObject moduleReplacements()
+
+
+### Example
+
+```typescript
+import {
+    CMSV2PagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CMSV2PagesApi(configuration);
+
+let recordUuid: string; // (default to undefined)
+let locale: string; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.moduleReplacements(
+    recordUuid,
+    locale
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **recordUuid** | [**string**] |  | defaults to undefined|
+| **locale** | [**string**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+**ShowResponseMapStringObject**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **patch**
 > ShowResponseCmsPageDTO patch(cmsPagePatchRequest)
 
@@ -809,6 +929,66 @@ const { status, data } = await apiInstance.publish(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **publishTemplate**
+> ShowResponseCmsPageDTO publishTemplate(requestBody)
+
+
+### Example
+
+```typescript
+import {
+    CMSV2PagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new CMSV2PagesApi(configuration);
+
+let objectUuid: string; // (default to undefined)
+let requestBody: { [key: string]: any | null; }; //
+let locale: string; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.publishTemplate(
+    objectUuid,
+    requestBody,
+    locale
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **requestBody** | **{ [key: string]: any | null; }**|  | |
+| **objectUuid** | [**string**] |  | defaults to undefined|
+| **locale** | [**string**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+**ShowResponseCmsPageDTO**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 
