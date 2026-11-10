@@ -237,10 +237,26 @@ export interface AnalyticsWidgetStyle {
     'colors'?: { [key: string]: string; };
     'referenceLines'?: Array<AnalyticsReferenceLine>;
 }
+export interface ApiTokenDTO {
+    'token'?: string;
+    'expiresAt'?: number;
+}
 /**
  * Data transfer object for an app bar (location-specific settings and action config)
  */
 export interface AppBarDTO {
+    /**
+     * TOOL_BAR navigation: SUITE (legacy default) or suite-independent SETTINGS. Omission preserves an existing value.
+     */
+    'navigationPlacement'?: AppBarDTONavigationPlacementEnum;
+    /**
+     * Literal human caller scopes required for TOOL_BAR discovery and iframe access. Omission preserves; [] clears.
+     */
+    'requiredUserScopes'?: Array<string>;
+    /**
+     * Unique unreserved settings-relative route slugs for a SETTINGS tool. Omission preserves; [] clears.
+     */
+    'routeAliases'?: Array<string>;
     /**
      * Unique identifier for the entity
      */
@@ -315,6 +331,12 @@ export interface AppBarDTO {
     'webhook'?: SubscribeWebhookDTO;
 }
 
+export const AppBarDTONavigationPlacementEnum = {
+    Suite: 'SUITE',
+    Settings: 'SETTINGS',
+} as const;
+
+export type AppBarDTONavigationPlacementEnum = typeof AppBarDTONavigationPlacementEnum[keyof typeof AppBarDTONavigationPlacementEnum];
 export const AppBarDTOLocationEnum = {
     RecordPreview: 'RECORD_PREVIEW',
     RecordOverview: 'RECORD_OVERVIEW',
@@ -330,6 +352,14 @@ export type AppBarDTOLocationEnum = typeof AppBarDTOLocationEnum[keyof typeof Ap
  * Request body for creating an iframe session token
  */
 export interface AppBarIframeSessionRequest {
+    /**
+     * Selected suite for explicit SUITE tool requests; omitted legacy requests retain configured-suite behavior
+     */
+    'suite'?: string;
+    /**
+     * Explicit TOOL_BAR placement; must match the stored descriptor
+     */
+    'navigationPlacement'?: AppBarIframeSessionRequestNavigationPlacementEnum;
     /**
      * Object name in context
      */
@@ -351,6 +381,14 @@ export interface AppBarIframeSessionRequest {
      */
     'viewData'?: { [key: string]: any | null; };
 }
+
+export const AppBarIframeSessionRequestNavigationPlacementEnum = {
+    Suite: 'SUITE',
+    Settings: 'SETTINGS',
+} as const;
+
+export type AppBarIframeSessionRequestNavigationPlacementEnum = typeof AppBarIframeSessionRequestNavigationPlacementEnum[keyof typeof AppBarIframeSessionRequestNavigationPlacementEnum];
+
 /**
  * Request body for validating an iframe session token
  */
@@ -431,6 +469,14 @@ export interface AppConnectionStatusDTO {
  * Full app payload (AppCreatorDTO) to apply
  */
 export interface AppDTO {
+    /**
+     * Stable creator input for brandmark; display uses brandmark URL
+     */
+    'brandmarkReference'?: string;
+    /**
+     * Stable creator input for details.image; display uses image URL
+     */
+    'imageReference'?: string;
     /**
      * Unique identifier for the entity
      */
@@ -647,6 +693,10 @@ export interface AppDetailsDTO {
      */
     'description'?: string;
     'image'?: string;
+    /**
+     * Stable creator input for image; never persist a signed display URL
+     */
+    'imageReference'?: string;
     /**
      * Hex accent color (#RRGGBB) for installed app-bar action buttons and toolbar icons
      */
@@ -1026,8 +1076,8 @@ export interface AppSettingFieldSchema {
     'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'action'?: boolean;
     'settingsGroup'?: boolean;
+    'action'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -1144,6 +1194,29 @@ export interface BillingSettingsDTO {
      */
     'country'?: string;
 }
+export interface BrowserAuthExchangeRequest {
+    'code'?: string;
+    'codeVerifier'?: string;
+    'redirectUri'?: string;
+}
+export interface BrowserAuthSessionResponse {
+    'accessToken'?: string;
+    'refreshToken'?: string;
+    'tokenType'?: string;
+    'user'?: UserDTO;
+    'companyUuid'?: string;
+}
+export interface BrowserAuthStartRequest {
+    'provider'?: string;
+    'redirectUri'?: string;
+    'codeChallenge'?: string;
+    'codeChallengeMethod'?: string;
+    'state'?: string;
+}
+export interface BrowserAuthStartResponse {
+    'authorizationUrl'?: string;
+    'expiresIn'?: number;
+}
 /**
  * Payload of a bulk delete records response.
  */
@@ -1203,7 +1276,18 @@ export interface BulkEditRecordErrorItem {
      * Field-level validation errors.
      */
     'errors'?: Array<CaraerErrorType>;
+    /**
+     * Proof for this item only that its owning record command did not start record/relationship persistence. Other bulk items may have persisted; ancillary file ingestion is not covered.
+     */
+    'recordWriteOutcome'?: BulkEditRecordErrorItemRecordWriteOutcomeEnum;
 }
+
+export const BulkEditRecordErrorItemRecordWriteOutcomeEnum = {
+    NotStarted: 'NOT_STARTED',
+} as const;
+
+export type BulkEditRecordErrorItemRecordWriteOutcomeEnum = typeof BulkEditRecordErrorItemRecordWriteOutcomeEnum[keyof typeof BulkEditRecordErrorItemRecordWriteOutcomeEnum];
+
 /**
  * A single record to create or update in a bulk edit request.
  */
@@ -1818,6 +1902,14 @@ export interface CreateOrUpdateEnvironmentRequest {
  * Private app creator manifest; label is required and internal name is optional
  */
 export interface CreatePrivateAppRequest {
+    /**
+     * Stable creator input for brandmark; display uses brandmark URL
+     */
+    'brandmarkReference'?: string;
+    /**
+     * Stable creator input for details.image; display uses image URL
+     */
+    'imageReference'?: string;
     /**
      * Unique identifier for the entity
      */
@@ -2772,6 +2864,23 @@ export interface EngagementBatchRequest {
     'events'?: Array<TrackingEventRequest>;
 }
 /**
+ * Atomic ensure-link receipt. UNCHANGED leaves every existing edge property untouched.
+ */
+export interface EnsureRelationDTO {
+    'fromUuid'?: string;
+    'toUuid'?: string;
+    'relationName'?: string;
+    'outcome'?: EnsureRelationDTOOutcomeEnum;
+}
+
+export const EnsureRelationDTOOutcomeEnum = {
+    Created: 'CREATED',
+    Unchanged: 'UNCHANGED',
+} as const;
+
+export type EnsureRelationDTOOutcomeEnum = typeof EnsureRelationDTOOutcomeEnum[keyof typeof EnsureRelationDTOOutcomeEnum];
+
+/**
  * Defines the structure of error responses returned by the API.
  */
 export interface ErrorResponse {
@@ -2787,6 +2896,10 @@ export interface ErrorResponse {
      * The HTTP status code associated with the error.
      */
     'status'?: number;
+    /**
+     * Present only when the owning direct-record command proves record/relationship persistence did not start. Does not imply no file-ingestion side effects or whole-request idempotency.
+     */
+    'recordWriteOutcome'?: ErrorResponseRecordWriteOutcomeEnum;
     'stackTrace'?: string;
     /**
      * Roles the caller is missing when the failure is an authorization error.
@@ -2802,6 +2915,11 @@ export interface ErrorResponse {
     'requestId'?: string;
 }
 
+export const ErrorResponseRecordWriteOutcomeEnum = {
+    NotStarted: 'NOT_STARTED',
+} as const;
+
+export type ErrorResponseRecordWriteOutcomeEnum = typeof ErrorResponseRecordWriteOutcomeEnum[keyof typeof ErrorResponseRecordWriteOutcomeEnum];
 export const ErrorResponseRolesEnum = {
     User: 'USER',
     Admin: 'ADMIN',
@@ -2840,9 +2958,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
     'ymetric'?: string;
     'yproperty'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -2857,6 +2975,10 @@ export interface ExtendRecordRequest {
      * The objects to extend the record into
      */
     'objects'?: Set<CaraerObjectDTO>;
+}
+export interface FavoriteViewDTO {
+    'object'?: ObjectReferenceDTO;
+    'view'?: NavigationViewDTO;
 }
 export interface FeedDTO {
     /**
@@ -3756,9 +3878,9 @@ export interface ModelRecord {
     'complete'?: boolean;
     'deleted'?: boolean;
     'uuid': string;
-    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
+    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }
@@ -3771,6 +3893,42 @@ export interface MultiValueMapStringString {
 
     'all'?: { [key: string]: string; };
     'empty'?: boolean;
+}
+/**
+ * Authorized application navigation for the currently selected company. Contains no record schema or user configuration.
+ */
+export interface NavigationDTO {
+    'objects'?: Array<NavigationObjectDTO>;
+    'suites'?: Array<string>;
+    'tools'?: WebMenuDTO;
+    'settings'?: WebMenuDTO;
+}
+export interface NavigationObjectDTO {
+    'uuid'?: string;
+    'name'?: string;
+    'label'?: string;
+    'plural'?: string;
+    'icon'?: string;
+    'defaultTrait'?: string;
+    'index'?: number;
+    'suites'?: Array<string>;
+    'views'?: Array<NavigationViewDTO>;
+    'traits'?: Array<string>;
+}
+export interface NavigationViewDTO {
+    'uuid'?: string;
+    'name'?: string;
+    'label'?: string;
+    'icon'?: string;
+    'trait'?: string;
+    'defaultView'?: boolean;
+    'index'?: number;
+    'favorite'?: boolean;
+    'personal'?: boolean;
+    'shared'?: boolean;
+    'team'?: boolean;
+    'isInternallyPublic'?: boolean;
+    'deletedAt'?: number;
 }
 export interface NotFoundError {
     'cause'?: NotFoundErrorCause;
@@ -3812,6 +3970,19 @@ export interface NotFoundErrorCauseStackTraceInner {
     'lineNumber'?: number;
     'className'?: string;
     'nativeMethod'?: boolean;
+}
+export interface NotificationDeviceReceipt {
+    'installationId'?: string;
+    'platform'?: string;
+    'applicationId'?: string;
+    'permission'?: string;
+}
+export interface NotificationDeviceRegistration {
+    'platform'?: string;
+    'applicationId'?: string;
+    'registrationKind'?: string;
+    'registration'?: string;
+    'permission'?: string;
 }
 export interface NotificationInboxDTO {
     'notifications'?: Array<Item>;
@@ -3877,6 +4048,15 @@ export interface ObjectAccessGrantSectionDTO {
      * Per-UUID scope overrides merged with globalScopes
      */
     'overrides'?: { [key: string]: Array<string>; };
+}
+export interface ObjectReferenceDTO {
+    'uuid'?: string;
+    'name'?: string;
+    'label'?: string;
+    'plural'?: string;
+    'icon'?: string;
+    'defaultTrait'?: string;
+    'traits'?: Array<string>;
 }
 /**
  * Data transfer object representing a webpage content
@@ -4652,6 +4832,10 @@ export interface PaginationResponseWebpageAccessGrantDTO {
      * The last page number available for the pagination.
      */
     'lastPage'?: number;
+}
+export interface Palette {
+    'light'?: { [key: string]: string; };
+    'dark'?: { [key: string]: string; };
 }
 export interface Permissions {
     'scopes'?: Array<string>;
@@ -5491,6 +5675,79 @@ export interface RegisterRequest {
     'firstname': string;
     'lastname': string;
 }
+export interface RelationCapabilities {
+    'unlinkMatch'?: string;
+    'primaryReset'?: string;
+    'pairs'?: Array<RelationCapabilityPairCapability>;
+    'ensureLink'?: boolean;
+}
+export interface RelationCapabilityEdge {
+    'exists'?: boolean;
+    'primary'?: RelationCapabilityEdgePrimaryEnum;
+}
+
+export const RelationCapabilityEdgePrimaryEnum = {
+    Absent: 'ABSENT',
+    False: 'FALSE',
+    True: 'TRUE',
+    Mixed: 'MIXED',
+} as const;
+
+export type RelationCapabilityEdgePrimaryEnum = typeof RelationCapabilityEdgePrimaryEnum[keyof typeof RelationCapabilityEdgePrimaryEnum];
+
+export interface RelationCapabilityEdges {
+    'sourceToTarget'?: RelationCapabilityEdge;
+    'targetToSource'?: RelationCapabilityEdge;
+}
+export interface RelationCapabilityOperation {
+    'allowed'?: boolean;
+    'from'?: RelationCapabilityOperationFromEnum;
+}
+
+export const RelationCapabilityOperationFromEnum = {
+    Source: 'SOURCE',
+    Target: 'TARGET',
+} as const;
+
+export type RelationCapabilityOperationFromEnum = typeof RelationCapabilityOperationFromEnum[keyof typeof RelationCapabilityOperationFromEnum];
+
+export interface RelationCapabilityPair {
+    'targetUuid'?: string;
+    'relationName'?: string;
+}
+export interface RelationCapabilityPairCapability {
+    'index'?: number;
+    'status'?: RelationCapabilityPairCapabilityStatusEnum;
+    'link'?: RelationCapabilityOperation;
+    'unlink'?: RelationCapabilityOperation;
+    'primary'?: RelationCapabilityPrimary;
+    'edges'?: RelationCapabilityEdges;
+    'reason'?: RelationCapabilityPairCapabilityReasonEnum;
+    'linkAttemptPermitted'?: boolean;
+}
+
+export const RelationCapabilityPairCapabilityStatusEnum = {
+    Available: 'AVAILABLE',
+    Unavailable: 'UNAVAILABLE',
+    Unresolved: 'UNRESOLVED',
+} as const;
+
+export type RelationCapabilityPairCapabilityStatusEnum = typeof RelationCapabilityPairCapabilityStatusEnum[keyof typeof RelationCapabilityPairCapabilityStatusEnum];
+export const RelationCapabilityPairCapabilityReasonEnum = {
+    OrientationAmbiguous: 'ORIENTATION_AMBIGUOUS',
+    UnsupportedRelationName: 'UNSUPPORTED_RELATION_NAME',
+} as const;
+
+export type RelationCapabilityPairCapabilityReasonEnum = typeof RelationCapabilityPairCapabilityReasonEnum[keyof typeof RelationCapabilityPairCapabilityReasonEnum];
+
+export interface RelationCapabilityPrimary {
+    'canSet'?: boolean;
+    'canClear'?: boolean;
+}
+export interface RelationCapabilityRequest {
+    'sourceUuid'?: string;
+    'pairs'?: Array<RelationCapabilityPair>;
+}
 /**
  * Data transfer object representing a relation between Caraer objects
  */
@@ -6006,8 +6263,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -6173,6 +6430,32 @@ export interface ShowResponseBillingStatusDTO {
     'data'?: { [key: string]: any; };
 }
 /**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseBrowserAuthSessionResponse {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: BrowserAuthSessionResponse;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseBrowserAuthStartResponse {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: BrowserAuthStartResponse;
+}
+/**
  * Success response (ShowResponseCaraerObjectDTO).
  */
 export interface ShowResponseCaraerObjectDTO {
@@ -6264,6 +6547,19 @@ export interface ShowResponseFeedDTO {
 export interface ShowResponseFormDTO {
     'message'?: string;
     'data'?: { [key: string]: any; };
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseItem {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Item;
 }
 /**
  * Represents the response for viewing or showing a specific resource.
@@ -6461,6 +6757,19 @@ export interface ShowResponseMapStringString {
 /**
  * Represents the response for viewing or showing a specific resource.
  */
+export interface ShowResponseNotificationDeviceReceipt {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: NotificationDeviceReceipt;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
 export interface ShowResponseNotificationInboxDTO {
     /**
      * A message detailing the result of the operation.
@@ -6530,6 +6839,19 @@ export interface ShowResponsePropertyDTO {
 export interface ShowResponsePublicFormDTO {
     'message'?: string;
     'data'?: { [key: string]: any; };
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseRelationCapabilities {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: RelationCapabilities;
 }
 /**
  * Success response (ShowResponseRelationDTO).
@@ -6622,6 +6944,19 @@ export interface ShowResponseWebMenuDTO {
 /**
  * Represents the response for viewing or showing a specific resource.
  */
+export interface ShowResponseWebpageEditorDefaultsDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: WebpageEditorDefaultsDTO;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
 export interface ShowResponseWebpageMapLocationsDTO {
     /**
      * A message detailing the result of the operation.
@@ -6660,6 +6995,10 @@ export interface SignedUrlResultDTO {
     'token'?: string;
     'expiresAt'?: number;
     'queryParams'?: string;
+}
+export interface SimpleCompanyDTO {
+    'uuid'?: string;
+    'name'?: string;
 }
 /**
  * Data Transfer Object representing a public-facing view of a company
@@ -7254,6 +7593,19 @@ export interface SuccessResponseCompanyDTO {
 /**
  * Represents a standard successful response with a message and optional data.
  */
+export interface SuccessResponseEnsureRelationDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: EnsureRelationDTO;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
 export interface SuccessResponseFeedDTO {
     /**
      * A message detailing the result of the operation.
@@ -7379,6 +7731,19 @@ export interface SuccessResponseListDeveloperSandboxDTO {
 /**
  * Represents a standard successful response with a message and optional data.
  */
+export interface SuccessResponseListFavoriteViewDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<FavoriteViewDTO>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
 export interface SuccessResponseListFileListItemDTO {
     /**
      * A message detailing the result of the operation.
@@ -7401,6 +7766,19 @@ export interface SuccessResponseListMapStringObject {
      * The data payload of the response, if any.
      */
     'data'?: Array<{ [key: string]: any | null; }>;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseListNavigationViewDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: Array<NavigationViewDTO>;
 }
 /**
  * Represents a standard successful response with a message and optional data.
@@ -7461,6 +7839,19 @@ export interface SuccessResponseMapStringInteger {
 export interface SuccessResponseMapStringObject {
     'message'?: string;
     'data'?: { [key: string]: any; };
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponseNavigationDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: NavigationDTO;
 }
 /**
  * Success response (SuccessResponseObject).
@@ -7847,6 +8238,22 @@ export interface UsedInResult {
     'recordUuids'?: Array<string>;
     'count'?: number;
 }
+export interface UserDTO {
+    'uuid'?: string;
+    'email'?: string;
+    'firstname'?: string;
+    'lastname'?: string;
+    'initials'?: string;
+    'selectedCompany'?: CompanyDTO;
+    'companies'?: Array<SimpleCompanyDTO>;
+    'scopes'?: Array<string>;
+    'filters'?: { [key: string]: Filter; };
+    'role'?: string;
+    'roles'?: Array<string>;
+    'token'?: ApiTokenDTO;
+    'record'?: ModelRecord;
+    'easterEggs'?: Array<string>;
+}
 /**
  * Record response for user API endpoints, including linked user data.
  */
@@ -8022,6 +8429,13 @@ export interface ViewDTO {
     'defaultView'?: boolean;
     'isInternallyPublic'?: boolean;
     'analytics'?: AnalyticsDashboardConfig;
+}
+/**
+ * Personal view navigation overrides. Omitted entries preserve their values; a null entry clears that override and restores the legacy sharing default. Does not change sharing or record access.
+ */
+export interface ViewNavigationPreferencesRequest {
+    'indices'?: { [key: string]: number; };
+    'favorites'?: { [key: string]: boolean; };
 }
 export interface ViewShareRequest {
     'users'?: Array<ModelRecord>;
@@ -8283,6 +8697,14 @@ export interface WebpageEditingStatusDTO {
      * Human-readable message for the client UI
      */
     'message'?: string;
+}
+/**
+ * Read-only style, color and font defaults for an authorized webpage editor. Contains no company administration or executable script configuration.
+ */
+export interface WebpageEditorDefaultsDTO {
+    'componentStyles'?: { [key: string]: PageContentStylingDTO; };
+    'palette'?: Palette;
+    'fonts'?: Array<CustomFontDTO>;
 }
 /**
  * Resolved public map markers for a webpage map block
@@ -8764,10 +9186,11 @@ export const AppBarsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} [viewId] View ID in context
          * @param {string} [trait] Trait name in context
          * @param {string} [suite] Suite selected in the UI. A tool bar is included when this suite is saved on the bar.
+         * @param {ListAppBarsNavigationPlacementEnum} [navigationPlacement] TOOL_BAR placement. Omitted means legacy SUITE; SETTINGS is suite-independent.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAppBars: async (location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listAppBars: async (location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, navigationPlacement?: ListAppBarsNavigationPlacementEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'location' is not null or undefined
             assertParamExists('listAppBars', 'location', location)
             const localVarPath = `/api/v2/app-bars`;
@@ -8808,6 +9231,10 @@ export const AppBarsApiAxiosParamCreator = function (configuration?: Configurati
 
             if (suite !== undefined) {
                 localVarQueryParameter['suite'] = suite;
+            }
+
+            if (navigationPlacement !== undefined) {
+                localVarQueryParameter['navigationPlacement'] = navigationPlacement;
             }
 
             localVarHeaderParameter['Accept'] = 'application/json';
@@ -8880,11 +9307,12 @@ export const AppBarsApiFp = function(configuration?: Configuration) {
          * @param {string} [viewId] View ID in context
          * @param {string} [trait] Trait name in context
          * @param {string} [suite] Suite selected in the UI. A tool bar is included when this suite is saved on the bar.
+         * @param {ListAppBarsNavigationPlacementEnum} [navigationPlacement] TOOL_BAR placement. Omitted means legacy SUITE; SETTINGS is suite-independent.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListInstalledAppBarDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listAppBars(location, object, recordUuid, viewId, trait, suite, options);
+        async listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, navigationPlacement?: ListAppBarsNavigationPlacementEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseListInstalledAppBarDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listAppBars(location, object, recordUuid, viewId, trait, suite, navigationPlacement, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AppBarsApi.listAppBars']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -8921,11 +9349,12 @@ export const AppBarsApiFactory = function (configuration?: Configuration, basePa
          * @param {string} [viewId] View ID in context
          * @param {string} [trait] Trait name in context
          * @param {string} [suite] Suite selected in the UI. A tool bar is included when this suite is saved on the bar.
+         * @param {ListAppBarsNavigationPlacementEnum} [navigationPlacement] TOOL_BAR placement. Omitted means legacy SUITE; SETTINGS is suite-independent.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListInstalledAppBarDTO> {
-            return localVarFp.listAppBars(location, object, recordUuid, viewId, trait, suite, options).then((request) => request(axios, basePath));
+        listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, navigationPlacement?: ListAppBarsNavigationPlacementEnum, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseListInstalledAppBarDTO> {
+            return localVarFp.listAppBars(location, object, recordUuid, viewId, trait, suite, navigationPlacement, options).then((request) => request(axios, basePath));
         },
         /**
          * Fires the app bar webhook with optional settings values and record/view context.
@@ -8954,11 +9383,12 @@ export class AppBarsApi extends BaseAPI {
      * @param {string} [viewId] View ID in context
      * @param {string} [trait] Trait name in context
      * @param {string} [suite] Suite selected in the UI. A tool bar is included when this suite is saved on the bar.
+     * @param {ListAppBarsNavigationPlacementEnum} [navigationPlacement] TOOL_BAR placement. Omitted means legacy SUITE; SETTINGS is suite-independent.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, options?: RawAxiosRequestConfig) {
-        return AppBarsApiFp(this.configuration).listAppBars(location, object, recordUuid, viewId, trait, suite, options).then((request) => request(this.axios, this.basePath));
+    public listAppBars(location: ListAppBarsLocationEnum, object?: string, recordUuid?: string, viewId?: string, trait?: string, suite?: string, navigationPlacement?: ListAppBarsNavigationPlacementEnum, options?: RawAxiosRequestConfig) {
+        return AppBarsApiFp(this.configuration).listAppBars(location, object, recordUuid, viewId, trait, suite, navigationPlacement, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -8983,6 +9413,11 @@ export const ListAppBarsLocationEnum = {
     RecordTrait: 'RECORD_TRAIT',
 } as const;
 export type ListAppBarsLocationEnum = typeof ListAppBarsLocationEnum[keyof typeof ListAppBarsLocationEnum];
+export const ListAppBarsNavigationPlacementEnum = {
+    Suite: 'SUITE',
+    Settings: 'SETTINGS',
+} as const;
+export type ListAppBarsNavigationPlacementEnum = typeof ListAppBarsNavigationPlacementEnum[keyof typeof ListAppBarsNavigationPlacementEnum];
 
 
 /**
@@ -13419,6 +13854,260 @@ export class BillingApi extends BaseAPI {
      */
     public sendSetupEmail(options?: RawAxiosRequestConfig) {
         return BillingApiFp(this.configuration).sendSetupEmail(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * BrowserAuthenticationApi - axios parameter creator
+ */
+export const BrowserAuthenticationApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Open the browser-owned provider session
+         * @param {string} flow 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authorize: async (flow: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'flow' is not null or undefined
+            assertParamExists('authorize', 'flow', flow)
+            const localVarPath = `/api/v2/auth/browser/authorize`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (flow !== undefined) {
+                localVarQueryParameter['flow'] = flow;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Exchanges an unexpired single-use code only after exact redirect and PKCE verifier checks. Access/refresh tokens are returned in JSON and never in callback URLs.
+         * @summary Exchange a native callback code
+         * @param {BrowserAuthExchangeRequest} browserAuthExchangeRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        exchange: async (browserAuthExchangeRequest: BrowserAuthExchangeRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'browserAuthExchangeRequest' is not null or undefined
+            assertParamExists('exchange', 'browserAuthExchangeRequest', browserAuthExchangeRequest)
+            const localVarPath = `/api/v2/auth/browser/exchange`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(browserAuthExchangeRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Requires an exact configured redirect URI, random client state and S256 PKCE challenge. Open the returned URL in the system browser.
+         * @summary Start browser sign-in
+         * @param {BrowserAuthStartRequest} browserAuthStartRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        start: async (browserAuthStartRequest: BrowserAuthStartRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'browserAuthStartRequest' is not null or undefined
+            assertParamExists('start', 'browserAuthStartRequest', browserAuthStartRequest)
+            const localVarPath = `/api/v2/auth/browser/start`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(browserAuthStartRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BrowserAuthenticationApi - functional programming interface
+ */
+export const BrowserAuthenticationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BrowserAuthenticationApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Open the browser-owned provider session
+         * @param {string} flow 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authorize(flow: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authorize(flow, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BrowserAuthenticationApi.authorize']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Exchanges an unexpired single-use code only after exact redirect and PKCE verifier checks. Access/refresh tokens are returned in JSON and never in callback URLs.
+         * @summary Exchange a native callback code
+         * @param {BrowserAuthExchangeRequest} browserAuthExchangeRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async exchange(browserAuthExchangeRequest: BrowserAuthExchangeRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseBrowserAuthSessionResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.exchange(browserAuthExchangeRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BrowserAuthenticationApi.exchange']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Requires an exact configured redirect URI, random client state and S256 PKCE challenge. Open the returned URL in the system browser.
+         * @summary Start browser sign-in
+         * @param {BrowserAuthStartRequest} browserAuthStartRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async start(browserAuthStartRequest: BrowserAuthStartRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseBrowserAuthStartResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.start(browserAuthStartRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BrowserAuthenticationApi.start']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * BrowserAuthenticationApi - factory interface
+ */
+export const BrowserAuthenticationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BrowserAuthenticationApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Open the browser-owned provider session
+         * @param {string} flow 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authorize(flow: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.authorize(flow, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Exchanges an unexpired single-use code only after exact redirect and PKCE verifier checks. Access/refresh tokens are returned in JSON and never in callback URLs.
+         * @summary Exchange a native callback code
+         * @param {BrowserAuthExchangeRequest} browserAuthExchangeRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        exchange(browserAuthExchangeRequest: BrowserAuthExchangeRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseBrowserAuthSessionResponse> {
+            return localVarFp.exchange(browserAuthExchangeRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Requires an exact configured redirect URI, random client state and S256 PKCE challenge. Open the returned URL in the system browser.
+         * @summary Start browser sign-in
+         * @param {BrowserAuthStartRequest} browserAuthStartRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        start(browserAuthStartRequest: BrowserAuthStartRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseBrowserAuthStartResponse> {
+            return localVarFp.start(browserAuthStartRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * BrowserAuthenticationApi - object-oriented interface
+ */
+export class BrowserAuthenticationApi extends BaseAPI {
+    /**
+     * 
+     * @summary Open the browser-owned provider session
+     * @param {string} flow 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public authorize(flow: string, options?: RawAxiosRequestConfig) {
+        return BrowserAuthenticationApiFp(this.configuration).authorize(flow, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Exchanges an unexpired single-use code only after exact redirect and PKCE verifier checks. Access/refresh tokens are returned in JSON and never in callback URLs.
+     * @summary Exchange a native callback code
+     * @param {BrowserAuthExchangeRequest} browserAuthExchangeRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public exchange(browserAuthExchangeRequest: BrowserAuthExchangeRequest, options?: RawAxiosRequestConfig) {
+        return BrowserAuthenticationApiFp(this.configuration).exchange(browserAuthExchangeRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Requires an exact configured redirect URI, random client state and S256 PKCE challenge. Open the returned URL in the system browser.
+     * @summary Start browser sign-in
+     * @param {BrowserAuthStartRequest} browserAuthStartRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public start(browserAuthStartRequest: BrowserAuthStartRequest, options?: RawAxiosRequestConfig) {
+        return BrowserAuthenticationApiFp(this.configuration).start(browserAuthStartRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -23174,6 +23863,402 @@ export class ModuleApi extends BaseAPI {
 
 
 /**
+ * NavigationApi - axios parameter creator
+ */
+export const NavigationApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Selected-company favorites across objects. Archived readable favorites require includeArchived=true. Each result carries only object identity/capability names and view navigation metadata.
+         * @summary Read authorized favorite views
+         * @param {boolean} [includeArchived] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        favorites: async (includeArchived?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/navigation/favorites`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (includeArchived !== undefined) {
+                localVarQueryParameter['includeArchived'] = includeArchived;
+            }
+
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Selected-company object and view summaries with permission-gated menus. Does not load schemas, users, scopes, branding or dashboards.
+         * @summary Read authorized navigation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        navigation: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/navigation`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Atomic user/company-scoped index and favorite overrides for readable views of this object. Omission preserves; null clears to the legacy default. Does not create sharing edges or change authorization. Requires an actual selected-company user record.
+         * @summary Set personal view navigation preferences
+         * @param {string} objectUuid 
+         * @param {ViewNavigationPreferencesRequest} viewNavigationPreferencesRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        preferences: async (objectUuid: string, viewNavigationPreferencesRequest: ViewNavigationPreferencesRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'objectUuid' is not null or undefined
+            assertParamExists('preferences', 'objectUuid', objectUuid)
+            // verify required parameter 'viewNavigationPreferencesRequest' is not null or undefined
+            assertParamExists('preferences', 'viewNavigationPreferencesRequest', viewNavigationPreferencesRequest)
+            const localVarPath = `/api/v2/navigation/objects/{objectUuid}/view-preferences`
+                .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(viewNavigationPreferencesRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Scope catalog for managing selected-company user and team permissions. Requires user-management read or app-management write access. App-only callers discover record scopes only for readable objects. This is not a list of the caller\'s granted scopes.
+         * @summary Read available access scopes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        scopes: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/access/scopes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Intent-loaded selected-company metadata. Archived readable views are included only with includeArchived=true; no filters, schemas or sharing grants are returned.
+         * @summary Read authorized view navigation summaries
+         * @param {string} objectUuid 
+         * @param {boolean} [includeArchived] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        views: async (objectUuid: string, includeArchived?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'objectUuid' is not null or undefined
+            assertParamExists('views', 'objectUuid', objectUuid)
+            const localVarPath = `/api/v2/navigation/objects/{objectUuid}/views`
+                .replace('{objectUuid}', encodeURIComponent(String(objectUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (includeArchived !== undefined) {
+                localVarQueryParameter['includeArchived'] = includeArchived;
+            }
+
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * NavigationApi - functional programming interface
+ */
+export const NavigationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = NavigationApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Selected-company favorites across objects. Archived readable favorites require includeArchived=true. Each result carries only object identity/capability names and view navigation metadata.
+         * @summary Read authorized favorite views
+         * @param {boolean} [includeArchived] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async favorites(includeArchived?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListFavoriteViewDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.favorites(includeArchived, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NavigationApi.favorites']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Selected-company object and view summaries with permission-gated menus. Does not load schemas, users, scopes, branding or dashboards.
+         * @summary Read authorized navigation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async navigation(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseNavigationDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.navigation(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NavigationApi.navigation']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Atomic user/company-scoped index and favorite overrides for readable views of this object. Omission preserves; null clears to the legacy default. Does not create sharing edges or change authorization. Requires an actual selected-company user record.
+         * @summary Set personal view navigation preferences
+         * @param {string} objectUuid 
+         * @param {ViewNavigationPreferencesRequest} viewNavigationPreferencesRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async preferences(objectUuid: string, viewNavigationPreferencesRequest: ViewNavigationPreferencesRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListNavigationViewDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.preferences(objectUuid, viewNavigationPreferencesRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NavigationApi.preferences']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Scope catalog for managing selected-company user and team permissions. Requires user-management read or app-management write access. App-only callers discover record scopes only for readable objects. This is not a list of the caller\'s granted scopes.
+         * @summary Read available access scopes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async scopes(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.scopes(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NavigationApi.scopes']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Intent-loaded selected-company metadata. Archived readable views are included only with includeArchived=true; no filters, schemas or sharing grants are returned.
+         * @summary Read authorized view navigation summaries
+         * @param {string} objectUuid 
+         * @param {boolean} [includeArchived] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async views(objectUuid: string, includeArchived?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListNavigationViewDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.views(objectUuid, includeArchived, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NavigationApi.views']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * NavigationApi - factory interface
+ */
+export const NavigationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = NavigationApiFp(configuration)
+    return {
+        /**
+         * Selected-company favorites across objects. Archived readable favorites require includeArchived=true. Each result carries only object identity/capability names and view navigation metadata.
+         * @summary Read authorized favorite views
+         * @param {boolean} [includeArchived] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        favorites(includeArchived?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListFavoriteViewDTO> {
+            return localVarFp.favorites(includeArchived, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Selected-company object and view summaries with permission-gated menus. Does not load schemas, users, scopes, branding or dashboards.
+         * @summary Read authorized navigation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        navigation(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseNavigationDTO> {
+            return localVarFp.navigation(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Atomic user/company-scoped index and favorite overrides for readable views of this object. Omission preserves; null clears to the legacy default. Does not create sharing edges or change authorization. Requires an actual selected-company user record.
+         * @summary Set personal view navigation preferences
+         * @param {string} objectUuid 
+         * @param {ViewNavigationPreferencesRequest} viewNavigationPreferencesRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        preferences(objectUuid: string, viewNavigationPreferencesRequest: ViewNavigationPreferencesRequest, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListNavigationViewDTO> {
+            return localVarFp.preferences(objectUuid, viewNavigationPreferencesRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Scope catalog for managing selected-company user and team permissions. Requires user-management read or app-management write access. App-only callers discover record scopes only for readable objects. This is not a list of the caller\'s granted scopes.
+         * @summary Read available access scopes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        scopes(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListString> {
+            return localVarFp.scopes(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Intent-loaded selected-company metadata. Archived readable views are included only with includeArchived=true; no filters, schemas or sharing grants are returned.
+         * @summary Read authorized view navigation summaries
+         * @param {string} objectUuid 
+         * @param {boolean} [includeArchived] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        views(objectUuid: string, includeArchived?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListNavigationViewDTO> {
+            return localVarFp.views(objectUuid, includeArchived, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * NavigationApi - object-oriented interface
+ */
+export class NavigationApi extends BaseAPI {
+    /**
+     * Selected-company favorites across objects. Archived readable favorites require includeArchived=true. Each result carries only object identity/capability names and view navigation metadata.
+     * @summary Read authorized favorite views
+     * @param {boolean} [includeArchived] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public favorites(includeArchived?: boolean, options?: RawAxiosRequestConfig) {
+        return NavigationApiFp(this.configuration).favorites(includeArchived, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Selected-company object and view summaries with permission-gated menus. Does not load schemas, users, scopes, branding or dashboards.
+     * @summary Read authorized navigation
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public navigation(options?: RawAxiosRequestConfig) {
+        return NavigationApiFp(this.configuration).navigation(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Atomic user/company-scoped index and favorite overrides for readable views of this object. Omission preserves; null clears to the legacy default. Does not create sharing edges or change authorization. Requires an actual selected-company user record.
+     * @summary Set personal view navigation preferences
+     * @param {string} objectUuid 
+     * @param {ViewNavigationPreferencesRequest} viewNavigationPreferencesRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public preferences(objectUuid: string, viewNavigationPreferencesRequest: ViewNavigationPreferencesRequest, options?: RawAxiosRequestConfig) {
+        return NavigationApiFp(this.configuration).preferences(objectUuid, viewNavigationPreferencesRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Scope catalog for managing selected-company user and team permissions. Requires user-management read or app-management write access. App-only callers discover record scopes only for readable objects. This is not a list of the caller\'s granted scopes.
+     * @summary Read available access scopes
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public scopes(options?: RawAxiosRequestConfig) {
+        return NavigationApiFp(this.configuration).scopes(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Intent-loaded selected-company metadata. Archived readable views are included only with includeArchived=true; no filters, schemas or sharing grants are returned.
+     * @summary Read authorized view navigation summaries
+     * @param {string} objectUuid 
+     * @param {boolean} [includeArchived] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public views(objectUuid: string, includeArchived?: boolean, options?: RawAxiosRequestConfig) {
+        return NavigationApiFp(this.configuration).views(objectUuid, includeArchived, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * NotificationsApi - axios parameter creator
  */
 export const NotificationsApiAxiosParamCreator = function (configuration?: Configuration) {
@@ -23224,6 +24309,44 @@ export const NotificationsApiAxiosParamCreator = function (configuration?: Confi
          */
         firebaseToken: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v2/notifications/firebase-token`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns an inbox entry only for its human recipient in the authorized selected company, including entries outside the inbox page.
+         * @summary Get an authoritative notification by ID
+         * @param {string} notificationId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getNotification: async (notificationId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'notificationId' is not null or undefined
+            assertParamExists('getNotification', 'notificationId', notificationId)
+            const localVarPath = `/api/v2/notifications/{notificationId}`
+                .replace('{notificationId}', encodeURIComponent(String(notificationId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -23367,6 +24490,49 @@ export const NotificationsApiAxiosParamCreator = function (configuration?: Confi
             };
         },
         /**
+         * Idempotently registers an allowed native application. Human authentication required. Does not accept a target user or company. Rotate the registration when moving between accounts.
+         * @summary Register this user\'s native notification device
+         * @param {string} deviceInstallationId 
+         * @param {NotificationDeviceRegistration} notificationDeviceRegistration 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerDevice: async (deviceInstallationId: string, notificationDeviceRegistration: NotificationDeviceRegistration, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'deviceInstallationId' is not null or undefined
+            assertParamExists('registerDevice', 'deviceInstallationId', deviceInstallationId)
+            // verify required parameter 'notificationDeviceRegistration' is not null or undefined
+            assertParamExists('registerDevice', 'notificationDeviceRegistration', notificationDeviceRegistration)
+            const localVarPath = `/api/v2/notifications/devices/{deviceInstallationId}`
+                .replace('{deviceInstallationId}', encodeURIComponent(String(deviceInstallationId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(notificationDeviceRegistration, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). Every notification is scoped to the app\'s company. Omit targetUserUuid to notify every user in that company, or set it to aim the notification at one member.
          * @summary Send a notification (app token)
          * @param {SendNotificationRequest} sendNotificationRequest 
@@ -23405,6 +24571,44 @@ export const NotificationsApiAxiosParamCreator = function (configuration?: Confi
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Idempotent. Call before logout; other users\' device registrations are inaccessible.
+         * @summary Unregister this user\'s native notification device
+         * @param {string} deviceInstallationId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unregisterDevice: async (deviceInstallationId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'deviceInstallationId' is not null or undefined
+            assertParamExists('unregisterDevice', 'deviceInstallationId', deviceInstallationId)
+            const localVarPath = `/api/v2/notifications/devices/{deviceInstallationId}`
+                .replace('{deviceInstallationId}', encodeURIComponent(String(deviceInstallationId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -23437,6 +24641,19 @@ export const NotificationsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.firebaseToken(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['NotificationsApi.firebaseToken']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Returns an inbox entry only for its human recipient in the authorized selected company, including entries outside the inbox page.
+         * @summary Get an authoritative notification by ID
+         * @param {string} notificationId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getNotification(notificationId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseItem>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getNotification(notificationId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationsApi.getNotification']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -23479,6 +24696,20 @@ export const NotificationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Idempotently registers an allowed native application. Human authentication required. Does not accept a target user or company. Rotate the registration when moving between accounts.
+         * @summary Register this user\'s native notification device
+         * @param {string} deviceInstallationId 
+         * @param {NotificationDeviceRegistration} notificationDeviceRegistration 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registerDevice(deviceInstallationId: string, notificationDeviceRegistration: NotificationDeviceRegistration, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseNotificationDeviceReceipt>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registerDevice(deviceInstallationId, notificationDeviceRegistration, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationsApi.registerDevice']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). Every notification is scoped to the app\'s company. Omit targetUserUuid to notify every user in that company, or set it to aim the notification at one member.
          * @summary Send a notification (app token)
          * @param {SendNotificationRequest} sendNotificationRequest 
@@ -23489,6 +24720,19 @@ export const NotificationsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.sendNotification(sendNotificationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['NotificationsApi.sendNotification']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Idempotent. Call before logout; other users\' device registrations are inaccessible.
+         * @summary Unregister this user\'s native notification device
+         * @param {string} deviceInstallationId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async unregisterDevice(deviceInstallationId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseString>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.unregisterDevice(deviceInstallationId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationsApi.unregisterDevice']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -23518,6 +24762,16 @@ export const NotificationsApiFactory = function (configuration?: Configuration, 
          */
         firebaseToken(options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseMapStringString> {
             return localVarFp.firebaseToken(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Returns an inbox entry only for its human recipient in the authorized selected company, including entries outside the inbox page.
+         * @summary Get an authoritative notification by ID
+         * @param {string} notificationId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getNotification(notificationId: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseItem> {
+            return localVarFp.getNotification(notificationId, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns notifications for the selected company plus user-general notifications that have no company. Other companies are never included.
@@ -23550,6 +24804,17 @@ export const NotificationsApiFactory = function (configuration?: Configuration, 
             return localVarFp.markAsRead(notificationId, options).then((request) => request(axios, basePath));
         },
         /**
+         * Idempotently registers an allowed native application. Human authentication required. Does not accept a target user or company. Rotate the registration when moving between accounts.
+         * @summary Register this user\'s native notification device
+         * @param {string} deviceInstallationId 
+         * @param {NotificationDeviceRegistration} notificationDeviceRegistration 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerDevice(deviceInstallationId: string, notificationDeviceRegistration: NotificationDeviceRegistration, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseNotificationDeviceReceipt> {
+            return localVarFp.registerDevice(deviceInstallationId, notificationDeviceRegistration, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). Every notification is scoped to the app\'s company. Omit targetUserUuid to notify every user in that company, or set it to aim the notification at one member.
          * @summary Send a notification (app token)
          * @param {SendNotificationRequest} sendNotificationRequest 
@@ -23558,6 +24823,16 @@ export const NotificationsApiFactory = function (configuration?: Configuration, 
          */
         sendNotification(sendNotificationRequest: SendNotificationRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateResponseMapStringString> {
             return localVarFp.sendNotification(sendNotificationRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Idempotent. Call before logout; other users\' device registrations are inaccessible.
+         * @summary Unregister this user\'s native notification device
+         * @param {string} deviceInstallationId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unregisterDevice(deviceInstallationId: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
+            return localVarFp.unregisterDevice(deviceInstallationId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -23585,6 +24860,17 @@ export class NotificationsApi extends BaseAPI {
      */
     public firebaseToken(options?: RawAxiosRequestConfig) {
         return NotificationsApiFp(this.configuration).firebaseToken(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns an inbox entry only for its human recipient in the authorized selected company, including entries outside the inbox page.
+     * @summary Get an authoritative notification by ID
+     * @param {string} notificationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getNotification(notificationId: string, options?: RawAxiosRequestConfig) {
+        return NotificationsApiFp(this.configuration).getNotification(notificationId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -23621,6 +24907,18 @@ export class NotificationsApi extends BaseAPI {
     }
 
     /**
+     * Idempotently registers an allowed native application. Human authentication required. Does not accept a target user or company. Rotate the registration when moving between accounts.
+     * @summary Register this user\'s native notification device
+     * @param {string} deviceInstallationId 
+     * @param {NotificationDeviceRegistration} notificationDeviceRegistration 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public registerDevice(deviceInstallationId: string, notificationDeviceRegistration: NotificationDeviceRegistration, options?: RawAxiosRequestConfig) {
+        return NotificationsApiFp(this.configuration).registerDevice(deviceInstallationId, notificationDeviceRegistration, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Installed apps call this endpoint after async work completes. Authenticate with the installation token (Authorization: Bearer or X-CARAER-TOKEN). Every notification is scoped to the app\'s company. Omit targetUserUuid to notify every user in that company, or set it to aim the notification at one member.
      * @summary Send a notification (app token)
      * @param {SendNotificationRequest} sendNotificationRequest 
@@ -23629,6 +24927,17 @@ export class NotificationsApi extends BaseAPI {
      */
     public sendNotification(sendNotificationRequest: SendNotificationRequest, options?: RawAxiosRequestConfig) {
         return NotificationsApiFp(this.configuration).sendNotification(sendNotificationRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Idempotent. Call before logout; other users\' device registrations are inaccessible.
+     * @summary Unregister this user\'s native notification device
+     * @param {string} deviceInstallationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public unregisterDevice(deviceInstallationId: string, options?: RawAxiosRequestConfig) {
+        return NotificationsApiFp(this.configuration).unregisterDevice(deviceInstallationId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -23766,16 +25075,17 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Fetches a single object by its UUID. Optional parameters determine whether to include views, properties, and relations in the response.
+         * Fetches a single object by its UUID. Optional parameters determine whether to include views, properties, and relations in the response. Hidden property definitions require includeHiddenProperties=true together with properties=true; property read authorization still applies and archived definitions remain excluded.
          * @summary Get object by UUID
          * @param {string} uuid 
          * @param {string} [views] 
          * @param {string} [properties] 
          * @param {string} [relations] 
+         * @param {boolean} [includeHiddenProperties] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getObject: async (uuid: string, views?: string, properties?: string, relations?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getObject: async (uuid: string, views?: string, properties?: string, relations?: string, includeHiddenProperties?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uuid' is not null or undefined
             assertParamExists('getObject', 'uuid', uuid)
             const localVarPath = `/api/v2/objects/{uuid}`
@@ -23805,6 +25115,10 @@ export const ObjectsApiAxiosParamCreator = function (configuration?: Configurati
 
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
+            }
+
+            if (includeHiddenProperties !== undefined) {
+                localVarQueryParameter['includeHiddenProperties'] = includeHiddenProperties;
             }
 
             localVarHeaderParameter['Accept'] = 'application/json';
@@ -24368,17 +25682,18 @@ export const ObjectsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Fetches a single object by its UUID. Optional parameters determine whether to include views, properties, and relations in the response.
+         * Fetches a single object by its UUID. Optional parameters determine whether to include views, properties, and relations in the response. Hidden property definitions require includeHiddenProperties=true together with properties=true; property read authorization still applies and archived definitions remain excluded.
          * @summary Get object by UUID
          * @param {string} uuid 
          * @param {string} [views] 
          * @param {string} [properties] 
          * @param {string} [relations] 
+         * @param {boolean} [includeHiddenProperties] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getObject(uuid: string, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCaraerObjectDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getObject(uuid, views, properties, relations, options);
+        async getObject(uuid: string, views?: string, properties?: string, relations?: string, includeHiddenProperties?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseCaraerObjectDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getObject(uuid, views, properties, relations, includeHiddenProperties, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ObjectsApi.getObject']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -24584,17 +25899,18 @@ export const ObjectsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getAccessGrantCandidates(options).then((request) => request(axios, basePath));
         },
         /**
-         * Fetches a single object by its UUID. Optional parameters determine whether to include views, properties, and relations in the response.
+         * Fetches a single object by its UUID. Optional parameters determine whether to include views, properties, and relations in the response. Hidden property definitions require includeHiddenProperties=true together with properties=true; property read authorization still applies and archived definitions remain excluded.
          * @summary Get object by UUID
          * @param {string} uuid 
          * @param {string} [views] 
          * @param {string} [properties] 
          * @param {string} [relations] 
+         * @param {boolean} [includeHiddenProperties] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getObject(uuid: string, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCaraerObjectDTO> {
-            return localVarFp.getObject(uuid, views, properties, relations, options).then((request) => request(axios, basePath));
+        getObject(uuid: string, views?: string, properties?: string, relations?: string, includeHiddenProperties?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseCaraerObjectDTO> {
+            return localVarFp.getObject(uuid, views, properties, relations, includeHiddenProperties, options).then((request) => request(axios, basePath));
         },
         /**
          * Fetches a paginated list of objects, optionally including views, properties, and/or relations. The request body should contain pagination details such as limit, page, filters, sort, and query.
@@ -24765,17 +26081,18 @@ export class ObjectsApi extends BaseAPI {
     }
 
     /**
-     * Fetches a single object by its UUID. Optional parameters determine whether to include views, properties, and relations in the response.
+     * Fetches a single object by its UUID. Optional parameters determine whether to include views, properties, and relations in the response. Hidden property definitions require includeHiddenProperties=true together with properties=true; property read authorization still applies and archived definitions remain excluded.
      * @summary Get object by UUID
      * @param {string} uuid 
      * @param {string} [views] 
      * @param {string} [properties] 
      * @param {string} [relations] 
+     * @param {boolean} [includeHiddenProperties] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getObject(uuid: string, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig) {
-        return ObjectsApiFp(this.configuration).getObject(uuid, views, properties, relations, options).then((request) => request(this.axios, this.basePath));
+    public getObject(uuid: string, views?: string, properties?: string, relations?: string, includeHiddenProperties?: boolean, options?: RawAxiosRequestConfig) {
+        return ObjectsApiFp(this.configuration).getObject(uuid, views, properties, relations, includeHiddenProperties, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -26307,6 +27624,45 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Read-only current eligibility for up to 50 explicit pairs. Uses ordinary record visibility and named-relation scopes; never a mutation grant. Unavailable items disclose no edge state.
+         * @summary Inspect bounded record relation operations
+         * @param {RelationCapabilityRequest} relationCapabilityRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        capabilities: async (relationCapabilityRequest: RelationCapabilityRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'relationCapabilityRequest' is not null or undefined
+            assertParamExists('capabilities', 'relationCapabilityRequest', relationCapabilityRequest)
+            const localVarPath = `/api/v2/records/relations/capabilities`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(relationCapabilityRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create a new record
          * @param {string} objectName 
@@ -26506,6 +27862,52 @@ export const RecordsApiAxiosParamCreator = function (configuration?: Configurati
             }
 
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Bodyless atomic ensure-link using ordinary record reads, relation normalization, immutability and exact relation-write scopes. Existing edges retain all properties and primary flags. New edges are non-primary. No edge-property/primary settings are accepted by this operation; use the existing POST/PATCH operations to change edge values. Receipt identities echo request endpoints.
+         * @summary Ensure a relation without changing an existing edge
+         * @param {string} fromUuid 
+         * @param {string} relationName 
+         * @param {string} toUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        ensure: async (fromUuid: string, relationName: string, toUuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'fromUuid' is not null or undefined
+            assertParamExists('ensure', 'fromUuid', fromUuid)
+            // verify required parameter 'relationName' is not null or undefined
+            assertParamExists('ensure', 'relationName', relationName)
+            // verify required parameter 'toUuid' is not null or undefined
+            assertParamExists('ensure', 'toUuid', toUuid)
+            const localVarPath = `/api/v2/records/relations/{fromUuid}/{relationName}/{toUuid}`
+                .replace('{fromUuid}', encodeURIComponent(String(fromUuid)))
+                .replace('{relationName}', encodeURIComponent(String(relationName)))
+                .replace('{toUuid}', encodeURIComponent(String(toUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -27441,6 +28843,19 @@ export const RecordsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Read-only current eligibility for up to 50 explicit pairs. Uses ordinary record visibility and named-relation scopes; never a mutation grant. Unavailable items disclose no edge state.
+         * @summary Inspect bounded record relation operations
+         * @param {RelationCapabilityRequest} relationCapabilityRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async capabilities(relationCapabilityRequest: RelationCapabilityRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseRelationCapabilities>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.capabilities(relationCapabilityRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.capabilities']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create a new record
          * @param {string} objectName 
@@ -27504,6 +28919,21 @@ export const RecordsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteRelation(fromUuid, relationName, toUuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RecordsApi.deleteRelation']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Bodyless atomic ensure-link using ordinary record reads, relation normalization, immutability and exact relation-write scopes. Existing edges retain all properties and primary flags. New edges are non-primary. No edge-property/primary settings are accepted by this operation; use the existing POST/PATCH operations to change edge values. Receipt identities echo request endpoints.
+         * @summary Ensure a relation without changing an existing edge
+         * @param {string} fromUuid 
+         * @param {string} relationName 
+         * @param {string} toUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async ensure(fromUuid: string, relationName: string, toUuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseEnsureRelationDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.ensure(fromUuid, relationName, toUuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RecordsApi.ensure']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -27830,6 +29260,16 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.bulkEdit(objectName, bulkEditRecordsRequest, ignoreErrors, options).then((request) => request(axios, basePath));
         },
         /**
+         * Read-only current eligibility for up to 50 explicit pairs. Uses ordinary record visibility and named-relation scopes; never a mutation grant. Unavailable items disclose no edge state.
+         * @summary Inspect bounded record relation operations
+         * @param {RelationCapabilityRequest} relationCapabilityRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        capabilities(relationCapabilityRequest: RelationCapabilityRequest, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseRelationCapabilities> {
+            return localVarFp.capabilities(relationCapabilityRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
          * @summary Create a new record
          * @param {string} objectName 
@@ -27882,6 +29322,18 @@ export const RecordsApiFactory = function (configuration?: Configuration, basePa
          */
         deleteRelation(fromUuid: string, relationName: string, toUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.deleteRelation(fromUuid, relationName, toUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Bodyless atomic ensure-link using ordinary record reads, relation normalization, immutability and exact relation-write scopes. Existing edges retain all properties and primary flags. New edges are non-primary. No edge-property/primary settings are accepted by this operation; use the existing POST/PATCH operations to change edge values. Receipt identities echo request endpoints.
+         * @summary Ensure a relation without changing an existing edge
+         * @param {string} fromUuid 
+         * @param {string} relationName 
+         * @param {string} toUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        ensure(fromUuid: string, relationName: string, toUuid: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseEnsureRelationDTO> {
+            return localVarFp.ensure(fromUuid, relationName, toUuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Extends a record identified by its UUID to one or more objects. You can use this to move a record or add it to another object so it\'ll be visible in the new object.Returns a SuccessResponse confirming that the record has been extended.
@@ -28163,6 +29615,17 @@ export class RecordsApi extends BaseAPI {
     }
 
     /**
+     * Read-only current eligibility for up to 50 explicit pairs. Uses ordinary record visibility and named-relation scopes; never a mutation grant. Unavailable items disclose no edge state.
+     * @summary Inspect bounded record relation operations
+     * @param {RelationCapabilityRequest} relationCapabilityRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public capabilities(relationCapabilityRequest: RelationCapabilityRequest, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).capabilities(relationCapabilityRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Creates a new record for the specified object using the provided RecordDTO data. Returns a CreateResponse with the newly created record. Validation: Record properties are validated according to the property rules defined for the object. Each property may have validation rules such as required, type constraints, character limits, uniqueness, etc.
      * @summary Create a new record
      * @param {string} objectName 
@@ -28218,6 +29681,19 @@ export class RecordsApi extends BaseAPI {
      */
     public deleteRelation(fromUuid: string, relationName: string, toUuid: string, options?: RawAxiosRequestConfig) {
         return RecordsApiFp(this.configuration).deleteRelation(fromUuid, relationName, toUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Bodyless atomic ensure-link using ordinary record reads, relation normalization, immutability and exact relation-write scopes. Existing edges retain all properties and primary flags. New edges are non-primary. No edge-property/primary settings are accepted by this operation; use the existing POST/PATCH operations to change edge values. Receipt identities echo request endpoints.
+     * @summary Ensure a relation without changing an existing edge
+     * @param {string} fromUuid 
+     * @param {string} relationName 
+     * @param {string} toUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public ensure(fromUuid: string, relationName: string, toUuid: string, options?: RawAxiosRequestConfig) {
+        return RecordsApiFp(this.configuration).ensure(fromUuid, relationName, toUuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -33950,6 +35426,49 @@ export const WebpagesApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
+         * Returns only public component styling, color tokens and custom fonts for the selected company. Uses the same page, record and environment-property read checks as reading this webpage; company administration access is not required.
+         * @summary Get authorized webpage editor defaults
+         * @param {string} uuid 
+         * @param {string} [environment] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        page: async (uuid: string, environment?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('page', 'uuid', uuid)
+            const localVarPath = `/api/v2/webpages/{uuid}/editor-defaults`
+                .replace('{uuid}', encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (environment !== undefined) {
+                localVarQueryParameter['environment'] = environment;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Makes an existing company file public and returns its stable public URL. The file is not copied and is not tied to a webpage.
          * @summary Public URL for a library file
          * @param {string} key 
@@ -34153,6 +35672,48 @@ export const WebpagesApiAxiosParamCreator = function (configuration?: Configurat
             if (environment !== undefined) {
                 localVarQueryParameter['environment'] = environment;
             }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns only public component styling, color tokens and custom fonts for the selected company after its ordinary template-read and tenant object/template resolution checks. No template, lease, company setting or publication is changed.
+         * @summary Get authorized template editor defaults
+         * @param {string} objectName 
+         * @param {string} environment 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        template: async (objectName: string, environment: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'objectName' is not null or undefined
+            assertParamExists('template', 'objectName', objectName)
+            // verify required parameter 'environment' is not null or undefined
+            assertParamExists('template', 'environment', environment)
+            const localVarPath = `/api/v2/webpages/template/{objectName}/{environment}/editor-defaults`
+                .replace('{objectName}', encodeURIComponent(String(objectName)))
+                .replace('{environment}', encodeURIComponent(String(environment)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             localVarHeaderParameter['Accept'] = 'application/json';
 
@@ -34831,6 +36392,20 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Returns only public component styling, color tokens and custom fonts for the selected company. Uses the same page, record and environment-property read checks as reading this webpage; company administration access is not required.
+         * @summary Get authorized webpage editor defaults
+         * @param {string} uuid 
+         * @param {string} [environment] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async page(uuid: string, environment?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseWebpageEditorDefaultsDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.page(uuid, environment, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebpagesApi.page']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Makes an existing company file public and returns its stable public URL. The file is not copied and is not tied to a webpage.
          * @summary Public URL for a library file
          * @param {string} key 
@@ -34898,6 +36473,20 @@ export const WebpagesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.revokeProtectionGrant(uuid, grantUuid, environment, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebpagesApi.revokeProtectionGrant']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Returns only public component styling, color tokens and custom fonts for the selected company after its ordinary template-read and tenant object/template resolution checks. No template, lease, company setting or publication is changed.
+         * @summary Get authorized template editor defaults
+         * @param {string} objectName 
+         * @param {string} environment 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async template(objectName: string, environment: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShowResponseWebpageEditorDefaultsDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.template(objectName, environment, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebpagesApi.template']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -35323,6 +36912,17 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.listProtectionGrants(uuid, environment, options).then((request) => request(axios, basePath));
         },
         /**
+         * Returns only public component styling, color tokens and custom fonts for the selected company. Uses the same page, record and environment-property read checks as reading this webpage; company administration access is not required.
+         * @summary Get authorized webpage editor defaults
+         * @param {string} uuid 
+         * @param {string} [environment] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        page(uuid: string, environment?: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseWebpageEditorDefaultsDTO> {
+            return localVarFp.page(uuid, environment, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Makes an existing company file public and returns its stable public URL. The file is not copied and is not tied to a webpage.
          * @summary Public URL for a library file
          * @param {string} key 
@@ -35376,6 +36976,17 @@ export const WebpagesApiFactory = function (configuration?: Configuration, baseP
          */
         revokeProtectionGrant(uuid: string, grantUuid: string, environment?: string, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseString> {
             return localVarFp.revokeProtectionGrant(uuid, grantUuid, environment, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Returns only public component styling, color tokens and custom fonts for the selected company after its ordinary template-read and tenant object/template resolution checks. No template, lease, company setting or publication is changed.
+         * @summary Get authorized template editor defaults
+         * @param {string} objectName 
+         * @param {string} environment 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        template(objectName: string, environment: string, options?: RawAxiosRequestConfig): AxiosPromise<ShowResponseWebpageEditorDefaultsDTO> {
+            return localVarFp.template(objectName, environment, options).then((request) => request(axios, basePath));
         },
         /**
          * Validates password and returns a short-lived access token.
@@ -35810,6 +37421,18 @@ export class WebpagesApi extends BaseAPI {
     }
 
     /**
+     * Returns only public component styling, color tokens and custom fonts for the selected company. Uses the same page, record and environment-property read checks as reading this webpage; company administration access is not required.
+     * @summary Get authorized webpage editor defaults
+     * @param {string} uuid 
+     * @param {string} [environment] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public page(uuid: string, environment?: string, options?: RawAxiosRequestConfig) {
+        return WebpagesApiFp(this.configuration).page(uuid, environment, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Makes an existing company file public and returns its stable public URL. The file is not copied and is not tied to a webpage.
      * @summary Public URL for a library file
      * @param {string} key 
@@ -35867,6 +37490,18 @@ export class WebpagesApi extends BaseAPI {
      */
     public revokeProtectionGrant(uuid: string, grantUuid: string, environment?: string, options?: RawAxiosRequestConfig) {
         return WebpagesApiFp(this.configuration).revokeProtectionGrant(uuid, grantUuid, environment, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns only public component styling, color tokens and custom fonts for the selected company after its ordinary template-read and tenant object/template resolution checks. No template, lease, company setting or publication is changed.
+     * @summary Get authorized template editor defaults
+     * @param {string} objectName 
+     * @param {string} environment 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public template(objectName: string, environment: string, options?: RawAxiosRequestConfig) {
+        return WebpagesApiFp(this.configuration).template(objectName, environment, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

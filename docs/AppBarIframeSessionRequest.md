@@ -6,6 +6,8 @@ Request body for creating an iframe session token
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**suite** | **string** | Selected suite for explicit SUITE tool requests; omitted legacy requests retain configured-suite behavior | [optional] [default to undefined]
+**navigationPlacement** | **string** | Explicit TOOL_BAR placement; must match the stored descriptor | [optional] [default to undefined]
 **object** | **string** | Object name in context | [optional] [default to undefined]
 **recordUuid** | **string** | UUID of the record in context | [optional] [default to undefined]
 **viewId** | **string** | View ID in context | [optional] [default to undefined]
@@ -18,6 +20,8 @@ Name | Type | Description | Notes
 import { AppBarIframeSessionRequest } from '@caraer/client';
 
 const instance: AppBarIframeSessionRequest = {
+    suite,
+    navigationPlacement,
     object,
     recordUuid,
     viewId,

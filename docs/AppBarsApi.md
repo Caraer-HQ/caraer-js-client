@@ -29,6 +29,7 @@ let recordUuid: string; //Record UUID in context (optional) (default to undefine
 let viewId: string; //View ID in context (optional) (default to undefined)
 let trait: string; //Trait name in context (optional) (default to undefined)
 let suite: string; //Suite selected in the UI. A tool bar is included when this suite is saved on the bar. (optional) (default to undefined)
+let navigationPlacement: 'SUITE' | 'SETTINGS'; //TOOL_BAR placement. Omitted means legacy SUITE; SETTINGS is suite-independent. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.listAppBars(
     location,
@@ -36,7 +37,8 @@ const { status, data } = await apiInstance.listAppBars(
     recordUuid,
     viewId,
     trait,
-    suite
+    suite,
+    navigationPlacement
 );
 ```
 
@@ -50,6 +52,7 @@ const { status, data } = await apiInstance.listAppBars(
 | **viewId** | [**string**] | View ID in context | (optional) defaults to undefined|
 | **trait** | [**string**] | Trait name in context | (optional) defaults to undefined|
 | **suite** | [**string**] | Suite selected in the UI. A tool bar is included when this suite is saved on the bar. | (optional) defaults to undefined|
+| **navigationPlacement** | [**&#39;SUITE&#39; | &#39;SETTINGS&#39;**]**Array<&#39;SUITE&#39; &#124; &#39;SETTINGS&#39;>** | TOOL_BAR placement. Omitted means legacy SUITE; SETTINGS is suite-independent. | (optional) defaults to undefined|
 
 
 ### Return type

@@ -6,6 +6,9 @@ Data transfer object for an app bar (location-specific settings and action confi
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**navigationPlacement** | **string** | TOOL_BAR navigation: SUITE (legacy default) or suite-independent SETTINGS. Omission preserves an existing value. | [optional] [default to undefined]
+**requiredUserScopes** | **Array&lt;string&gt;** | Literal human caller scopes required for TOOL_BAR discovery and iframe access. Omission preserves; [] clears. | [optional] [default to undefined]
+**routeAliases** | **Array&lt;string&gt;** | Unique unreserved settings-relative route slugs for a SETTINGS tool. Omission preserves; [] clears. | [optional] [default to undefined]
 **uuid** | **string** | Unique identifier for the entity | [default to undefined]
 **name** | **string** | The name of the entity | [default to undefined]
 **label** | **string** | Display label for the entity, can be different from name | [optional] [default to undefined]
@@ -31,6 +34,9 @@ Name | Type | Description | Notes
 import { AppBarDTO } from '@caraer/client';
 
 const instance: AppBarDTO = {
+    navigationPlacement,
+    requiredUserScopes,
+    routeAliases,
     uuid,
     name,
     label,

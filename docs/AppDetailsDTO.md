@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **title** | **string** |  | [optional] [default to undefined]
 **description** | **string** | Short marketplace description shown on app cards and detail pages | [optional] [default to undefined]
 **image** | **string** |  | [optional] [default to undefined]
+**imageReference** | **string** | Stable creator input for image; never persist a signed display URL | [optional] [readonly] [default to undefined]
 **brandColor** | **string** | Hex accent color (#RRGGBB) for installed app-bar action buttons and toolbar icons | [optional] [default to undefined]
 **textColor** | **string** | Hex text color (#RRGGBB) for text on brand-colored marketplace UI elements | [optional] [default to undefined]
 **url** | **string** |  | [optional] [default to undefined]
@@ -38,6 +39,7 @@ const instance: AppDetailsDTO = {
     title,
     description,
     image,
+    imageReference,
     brandColor,
     textColor,
     url,

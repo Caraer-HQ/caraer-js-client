@@ -31,11 +31,13 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**getWebpageEditingStatus**](#getwebpageeditingstatus) | **GET** /api/v2/webpages/{uuid}/editing-status | Check if a webpage is being edited|
 |[**getWebpagePickerPages**](#getwebpagepickerpages) | **GET** /api/v2/webpages/picker/pages | List webpages for picker dropdowns|
 |[**listProtectionGrants**](#listprotectiongrants) | **GET** /api/v2/webpages/{uuid}/protection/grants | List signed URL grants for a webpage|
+|[**page**](#page) | **GET** /api/v2/webpages/{uuid}/editor-defaults | Get authorized webpage editor defaults|
 |[**publishFile**](#publishfile) | **POST** /api/v2/webpages/publishFile | Public URL for a library file|
 |[**publishWebpage**](#publishwebpage) | **PUT** /api/v2/webpages/{uuid}/publish | Publish a webpage|
 |[**releaseTemplateWebpageEditingSession**](#releasetemplatewebpageeditingsession) | **DELETE** /api/v2/webpages/template/{objectName}/{environment}/editing-session | Release a template webpage editing session|
 |[**releaseWebpageEditingSession**](#releasewebpageeditingsession) | **DELETE** /api/v2/webpages/{uuid}/editing-session | Release a webpage editing session|
 |[**revokeProtectionGrant**](#revokeprotectiongrant) | **DELETE** /api/v2/webpages/{uuid}/protection/grants/{grantUuid} | Revoke a signed URL grant|
+|[**template**](#template) | **GET** /api/v2/webpages/template/{objectName}/{environment}/editor-defaults | Get authorized template editor defaults|
 |[**unlockPublicWebpage**](#unlockpublicwebpage) | **POST** /api/v2/webpages/public/uuid/{uuid}/unlock | Unlock password-protected webpage|
 |[**unpublishWebpage**](#unpublishwebpage) | **PUT** /api/v2/webpages/{uuid}/unpublish | Unpublish a webpage|
 |[**updateWebpage**](#updatewebpage) | **PUT** /api/v2/webpages/{uuid} | Update a webpage|
@@ -1741,6 +1743,64 @@ const { status, data } = await apiInstance.listProtectionGrants(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **page**
+> ShowResponseWebpageEditorDefaultsDTO page()
+
+Returns only public component styling, color tokens and custom fonts for the selected company. Uses the same page, record and environment-property read checks as reading this webpage; company administration access is not required.
+
+### Example
+
+```typescript
+import {
+    WebpagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new WebpagesApi(configuration);
+
+let uuid: string; // (default to undefined)
+let environment: string; // (optional) (default to 'staging')
+
+const { status, data } = await apiInstance.page(
+    uuid,
+    environment
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **uuid** | [**string**] |  | defaults to undefined|
+| **environment** | [**string**] |  | (optional) defaults to 'staging'|
+
+
+### Return type
+
+**ShowResponseWebpageEditorDefaultsDTO**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **publishFile**
 > SuccessResponseString publishFile()
 
@@ -2009,6 +2069,64 @@ const { status, data } = await apiInstance.revokeProtectionGrant(
 ### Return type
 
 **SuccessResponseString**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **template**
+> ShowResponseWebpageEditorDefaultsDTO template()
+
+Returns only public component styling, color tokens and custom fonts for the selected company after its ordinary template-read and tenant object/template resolution checks. No template, lease, company setting or publication is changed.
+
+### Example
+
+```typescript
+import {
+    WebpagesApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new WebpagesApi(configuration);
+
+let objectName: string; // (default to undefined)
+let environment: string; // (default to undefined)
+
+const { status, data } = await apiInstance.template(
+    objectName,
+    environment
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **objectName** | [**string**] |  | defaults to undefined|
+| **environment** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**ShowResponseWebpageEditorDefaultsDTO**
 
 ### Authorization
 

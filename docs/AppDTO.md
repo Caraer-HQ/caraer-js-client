@@ -6,6 +6,8 @@ Full app payload (AppCreatorDTO) to apply
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**brandmarkReference** | **string** | Stable creator input for brandmark; display uses brandmark URL | [optional] [readonly] [default to undefined]
+**imageReference** | **string** | Stable creator input for details.image; display uses image URL | [optional] [readonly] [default to undefined]
 **uuid** | **string** | Unique identifier for the entity | [default to undefined]
 **name** | **string** | The name of the entity | [default to undefined]
 **label** | **string** | Display label for the entity, can be different from name | [optional] [default to undefined]
@@ -62,6 +64,8 @@ Name | Type | Description | Notes
 import { AppDTO } from '@caraer/client';
 
 const instance: AppDTO = {
+    brandmarkReference,
+    imageReference,
     uuid,
     name,
     label,

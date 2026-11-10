@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **message** | **string** | The error message providing details about the failure. | [optional] [default to undefined]
 **errors** | [**Array&lt;CaraerErrorType&gt;**](CaraerErrorType.md) | A list of error types providing further details about the error. | [optional] [default to undefined]
 **status** | **number** | The HTTP status code associated with the error. | [optional] [default to undefined]
+**recordWriteOutcome** | **string** | Present only when the owning direct-record command proves record/relationship persistence did not start. Does not imply no file-ingestion side effects or whole-request idempotency. | [optional] [default to undefined]
 **stackTrace** | **string** |  | [optional] [default to undefined]
 **roles** | **Array&lt;string&gt;** | Roles the caller is missing when the failure is an authorization error. | [optional] [default to undefined]
 **scopes** | **Array&lt;string&gt;** | Scopes the caller is missing when the failure is an authorization error. | [optional] [default to undefined]
@@ -23,6 +24,7 @@ const instance: ErrorResponse = {
     message,
     errors,
     status,
+    recordWriteOutcome,
     stackTrace,
     roles,
     scopes,

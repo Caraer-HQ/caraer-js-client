@@ -192,7 +192,7 @@ This endpoint does not have any parameters.
 # **getObject**
 > ShowResponseCaraerObjectDTO getObject()
 
-Fetches a single object by its UUID. Optional parameters determine whether to include views, properties, and relations in the response.
+Fetches a single object by its UUID. Optional parameters determine whether to include views, properties, and relations in the response. Hidden property definitions require includeHiddenProperties=true together with properties=true; property read authorization still applies and archived definitions remain excluded.
 
 ### Example
 
@@ -209,12 +209,14 @@ let uuid: string; // (default to undefined)
 let views: string; // (optional) (default to 'false')
 let properties: string; // (optional) (default to 'false')
 let relations: string; // (optional) (default to 'false')
+let includeHiddenProperties: boolean; // (optional) (default to false)
 
 const { status, data } = await apiInstance.getObject(
     uuid,
     views,
     properties,
-    relations
+    relations,
+    includeHiddenProperties
 );
 ```
 
@@ -226,6 +228,7 @@ const { status, data } = await apiInstance.getObject(
 | **views** | [**string**] |  | (optional) defaults to 'false'|
 | **properties** | [**string**] |  | (optional) defaults to 'false'|
 | **relations** | [**string**] |  | (optional) defaults to 'false'|
+| **includeHiddenProperties** | [**boolean**] |  | (optional) defaults to false|
 
 
 ### Return type

@@ -10,10 +10,12 @@ All URIs are relative to *https://v2.api.caraer.com*
 |[**archivedObjects**](#archivedobjects) | **GET** /api/v2/records/archived/objects | List objects with visible archived records|
 |[**bulkDelete**](#bulkdelete) | **POST** /api/v2/records/{objectName}/bulk-delete | Bulk delete records|
 |[**bulkEdit**](#bulkedit) | **PUT** /api/v2/records/{objectName}/bulk | Bulk create or update records|
+|[**capabilities**](#capabilities) | **POST** /api/v2/records/relations/capabilities | Inspect bounded record relation operations|
 |[**create**](#create) | **POST** /api/v2/records/{objectName} | Create a new record|
 |[**createOrUpdate**](#createorupdate) | **POST** /api/v2/records/{objectName}/createOrUpdate | Create or update a record|
 |[**createRelation**](#createrelation) | **POST** /api/v2/records/relations/{fromUuid}/{relationName}/{toUuid} | Create a relation between records|
 |[**deleteRelation**](#deleterelation) | **DELETE** /api/v2/records/relations/{fromUuid}/{relationName}/{toUuid} | Delete a relation between records|
+|[**ensure**](#ensure) | **PUT** /api/v2/records/relations/{fromUuid}/{relationName}/{toUuid} | Ensure a relation without changing an existing edge|
 |[**extend**](#extend) | **POST** /api/v2/records/{uuid}/extend | Extend a record|
 |[**index**](#index) | **POST** /api/v2/records/index | Fetch paginated records|
 |[**indexFlow**](#indexflow) | **POST** /api/v2/records/index/flow | Fetch records for flow view|
@@ -375,6 +377,62 @@ const { status, data } = await apiInstance.bulkEdit(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **capabilities**
+> ShowResponseRelationCapabilities capabilities(relationCapabilityRequest)
+
+Read-only current eligibility for up to 50 explicit pairs. Uses ordinary record visibility and named-relation scopes; never a mutation grant. Unavailable items disclose no edge state.
+
+### Example
+
+```typescript
+import {
+    RecordsApi,
+    Configuration,
+    RelationCapabilityRequest
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new RecordsApi(configuration);
+
+let relationCapabilityRequest: RelationCapabilityRequest; //
+
+const { status, data } = await apiInstance.capabilities(
+    relationCapabilityRequest
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **relationCapabilityRequest** | **RelationCapabilityRequest**|  | |
+
+
+### Return type
+
+**ShowResponseRelationCapabilities**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **create**
 > CreateResponse create(recordDTO)
 
@@ -640,6 +698,67 @@ const { status, data } = await apiInstance.deleteRelation(
 |**500** | Internal server error |  -  |
 |**401** | Authentication is required or the token is invalid. |  -  |
 |**403** | The caller is missing a required role or scope. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **ensure**
+> SuccessResponseEnsureRelationDTO ensure()
+
+Bodyless atomic ensure-link using ordinary record reads, relation normalization, immutability and exact relation-write scopes. Existing edges retain all properties and primary flags. New edges are non-primary. No edge-property/primary settings are accepted by this operation; use the existing POST/PATCH operations to change edge values. Receipt identities echo request endpoints.
+
+### Example
+
+```typescript
+import {
+    RecordsApi,
+    Configuration
+} from '@caraer/client';
+
+const configuration = new Configuration();
+const apiInstance = new RecordsApi(configuration);
+
+let fromUuid: string; // (default to undefined)
+let relationName: string; // (default to undefined)
+let toUuid: string; // (default to undefined)
+
+const { status, data } = await apiInstance.ensure(
+    fromUuid,
+    relationName,
+    toUuid
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **fromUuid** | [**string**] |  | defaults to undefined|
+| **relationName** | [**string**] |  | defaults to undefined|
+| **toUuid** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**SuccessResponseEnsureRelationDTO**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**401** | Authentication is required or the token is invalid. |  -  |
+|**403** | The caller is missing a required role or scope. |  -  |
+|**404** | The requested resource was not found. |  -  |
+|**500** | An internal server error occurred. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

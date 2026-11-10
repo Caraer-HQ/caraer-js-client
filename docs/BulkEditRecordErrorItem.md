@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **clientRef** | **string** | Client reference echoed from the request, if provided. | [optional] [default to undefined]
 **message** | **string** | Summary message for this record\&#39;s failure. | [optional] [default to undefined]
 **errors** | [**Array&lt;CaraerErrorType&gt;**](CaraerErrorType.md) | Field-level validation errors. | [optional] [default to undefined]
+**recordWriteOutcome** | **string** | Proof for this item only that its owning record command did not start record/relationship persistence. Other bulk items may have persisted; ancillary file ingestion is not covered. | [optional] [default to undefined]
 
 ## Example
 
@@ -21,6 +22,7 @@ const instance: BulkEditRecordErrorItem = {
     clientRef,
     message,
     errors,
+    recordWriteOutcome,
 };
 ```
 

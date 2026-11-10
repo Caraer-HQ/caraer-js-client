@@ -6,6 +6,8 @@ Private app creator manifest; label is required and internal name is optional
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**brandmarkReference** | **string** | Stable creator input for brandmark; display uses brandmark URL | [optional] [readonly] [default to undefined]
+**imageReference** | **string** | Stable creator input for details.image; display uses image URL | [optional] [readonly] [default to undefined]
 **uuid** | **string** | Unique identifier for the entity | [default to undefined]
 **name** | **string** | The name of the entity | [default to undefined]
 **label** | **string** | Display label for the entity, can be different from name | [default to undefined]
@@ -62,6 +64,8 @@ Name | Type | Description | Notes
 import { CreatePrivateAppRequest } from '@caraer/client';
 
 const instance: CreatePrivateAppRequest = {
+    brandmarkReference,
+    imageReference,
     uuid,
     name,
     label,
