@@ -1076,8 +1076,8 @@ export interface AppSettingFieldSchema {
     'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'action'?: boolean;
     'settingsGroup'?: boolean;
+    'action'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -1389,6 +1389,8 @@ export interface CalendarRecordDTO {
     'ownerUuid'?: string;
     'ownerName'?: string;
     'ownedByCurrentUser'?: boolean;
+    'canEdit'?: boolean;
+    'shared'?: boolean;
     'teamUuid'?: string;
     'teamName'?: string;
     'companyCalendar'?: boolean;
@@ -1400,11 +1402,6 @@ export interface CalendarTeamMemberDTO {
     'label'?: string;
     'objectName'?: string;
     'hasUserTrait'?: boolean;
-}
-export interface CalendarTeamOptionDTO {
-    'uuid'?: string;
-    'name'?: string;
-    'members'?: Array<CalendarTeamMemberDTO>;
 }
 export interface CaraerErrorType {
     /**
@@ -1822,6 +1819,9 @@ export interface CompanyDetailsDTO {
      * The disclaimer of the company.
      */
     'disclaimer'?: string;
+}
+export interface ConnectionState {
+    'connected'?: boolean;
 }
 export interface CopyPropertiesToObjectRequest {
     'propertyUuids'?: Array<string>;
@@ -2940,6 +2940,7 @@ export interface EventRsvpRequest {
      * Series scope for recurring events. Defaults to this.
      */
     'scope'?: EventRsvpRequestScopeEnum;
+    'invitationToken'?: string;
 }
 
 export const EventRsvpRequestPartstatEnum = {
@@ -2959,9 +2960,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
-    'yproperty'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3047,10 +3048,10 @@ export interface FileListItemDTO {
     'contentType'?: string;
 }
 export interface FilledProperty {
-    'icon'?: string;
     'name'?: string;
     'value'?: any;
     'type'?: string;
+    'icon'?: string;
     'label'?: string;
 }
 /**
@@ -3061,6 +3062,10 @@ export interface Filter {
      * A collection of filter groups.
      */
     'groups'?: Set<FilterGroup>;
+    /**
+     * Optional participant UUIDs for event records, intersected with the ordinary filter before paging. Omit for all; an empty list matches none. Uses organiser plus the effective Event trait attendee relations.
+     */
+    'eventParticipantUuids'?: Array<string>;
 }
 /**
  * A DTO that defines a group of filter items used for record filtering.
@@ -3876,12 +3881,12 @@ export interface ModelRecord {
     'updatedByUuid'?: string;
     'deletedByUuid'?: string;
     'index'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
-    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
+    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }
@@ -4058,6 +4063,11 @@ export interface ObjectReferenceDTO {
     'icon'?: string;
     'defaultTrait'?: string;
     'traits'?: Array<string>;
+}
+export interface Outcome {
+    'claimToken'?: string;
+    'status'?: string;
+    'message'?: string;
 }
 /**
  * Data transfer object representing a webpage content
@@ -5597,6 +5607,10 @@ export interface RecordPaginationRequest {
  */
 export interface RecordRelationRequestDTO {
     /**
+     * When true, remove this existing UUID relation atomically with the record mutation. Nested records and property writes are not allowed.
+     */
+    'remove'?: boolean;
+    /**
      * Name of the relation type
      */
     'relationName': string;
@@ -5842,6 +5856,9 @@ export interface ResetPasswordRequest {
     'email'?: string;
     'token'?: string;
     'password'?: string;
+}
+export interface ResolveRequest {
+    'email'?: string;
 }
 /**
  * Represents the response returned when a restore operation is performed successfully.
@@ -6184,6 +6201,10 @@ export interface SendNotificationRequest {
      * Optional action payload
      */
     'data'?: { [key: string]: any | null; };
+}
+export interface SendRequest {
+    'requestId'?: string;
+    'scope'?: string;
 }
 /**
  * Data transfer object for a serverless function (runtime and code) owned by an app
@@ -6921,6 +6942,19 @@ export interface ShowResponseTemplateWebpageDTO {
 export interface ShowResponseTraitDTO {
     'message'?: string;
     'data'?: { [key: string]: any; };
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
+export interface ShowResponseUserRecordResponseDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: UserRecordResponseDTO;
 }
 /**
  * Represents the response for viewing or showing a specific resource.
@@ -7697,19 +7731,6 @@ export interface SuccessResponseListCalendarRecordDTO {
     'data'?: Array<CalendarRecordDTO>;
 }
 /**
- * Represents a standard successful response with a message and optional data.
- */
-export interface SuccessResponseListCalendarTeamOptionDTO {
-    /**
-     * A message detailing the result of the operation.
-     */
-    'message'?: string;
-    /**
-     * The data payload of the response, if any.
-     */
-    'data'?: Array<CalendarTeamOptionDTO>;
-}
-/**
  * Success response (SuccessResponseListCaraerObjectDTO).
  */
 export interface SuccessResponseListCaraerObjectDTO {
@@ -7855,11 +7876,17 @@ export interface SuccessResponseNavigationDTO {
     'data'?: NavigationDTO;
 }
 /**
- * Success response (SuccessResponseObject).
+ * Represents a standard successful response with a message and optional data.
  */
 export interface SuccessResponseObject {
+    /**
+     * A message detailing the result of the operation.
+     */
     'message'?: string;
-    'data'?: { [key: string]: any; };
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: any;
 }
 /**
  * Represents a standard successful response with a message and optional data.
@@ -7963,8 +7990,8 @@ export interface Team {
     'filtersString'?: string;
     'filters'?: { [key: string]: Filter; };
     'memberCount'?: number;
-    'deleted'?: boolean;
     'complete'?: boolean;
+    'deleted'?: boolean;
     'uuid': string;
 }
 export interface TeamDTO {
@@ -8424,6 +8451,7 @@ export interface ViewDTO {
     'taskCollapsedGroupKeys'?: Array<string>;
     'taskExpandedTaskUuids'?: Array<string>;
     'calendarOverlay'?: string;
+    'eventUserUuids'?: Array<string>;
     'visibleCalendarUuids'?: Array<string>;
     'selectedCalendarUuid'?: string;
     'calendarColorBy'?: string;
@@ -19039,7 +19067,7 @@ export const CalendarsApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
-         * @summary Ensure calendar schema, default calendar, and event backfill
+         * @summary Ensure calendar schema and personal default; never assigns existing events
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19144,40 +19172,6 @@ export const CalendarsApiAxiosParamCreator = function (configuration?: Configura
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @summary List teams that can be linked to a calendar
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listTeams: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v2/calendars/teams`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -19189,7 +19183,7 @@ export const CalendarsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Ensure calendar schema, default calendar, and event backfill
+         * @summary Ensure calendar schema and personal default; never assigns existing events
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19224,18 +19218,6 @@ export const CalendarsApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['CalendarsApi.list3']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
-        /**
-         * 
-         * @summary List teams that can be linked to a calendar
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async listTeams(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseListCalendarTeamOptionDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listTeams(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CalendarsApi.listTeams']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
     }
 };
 
@@ -19247,7 +19229,7 @@ export const CalendarsApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
-         * @summary Ensure calendar schema, default calendar, and event backfill
+         * @summary Ensure calendar schema and personal default; never assigns existing events
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19273,15 +19255,6 @@ export const CalendarsApiFactory = function (configuration?: Configuration, base
         list3(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListCalendarRecordDTO> {
             return localVarFp.list3(options).then((request) => request(axios, basePath));
         },
-        /**
-         * 
-         * @summary List teams that can be linked to a calendar
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listTeams(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseListCalendarTeamOptionDTO> {
-            return localVarFp.listTeams(options).then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -19291,7 +19264,7 @@ export const CalendarsApiFactory = function (configuration?: Configuration, base
 export class CalendarsApi extends BaseAPI {
     /**
      * 
-     * @summary Ensure calendar schema, default calendar, and event backfill
+     * @summary Ensure calendar schema and personal default; never assigns existing events
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -19318,16 +19291,6 @@ export class CalendarsApi extends BaseAPI {
      */
     public list3(options?: RawAxiosRequestConfig) {
         return CalendarsApiFp(this.configuration).list3(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary List teams that can be linked to a calendar
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public listTeams(options?: RawAxiosRequestConfig) {
-        return CalendarsApiFp(this.configuration).listTeams(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -32647,10 +32610,11 @@ export const TraitsApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {string} [partstat] 
          * @param {string} [scope] 
          * @param {string} [switchAccount] 
+         * @param {string} [token] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        rsvpBrowserGet: async (companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        rsvpBrowserGet: async (companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, token?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'companyUuid' is not null or undefined
             assertParamExists('rsvpBrowserGet', 'companyUuid', companyUuid)
             // verify required parameter 'eventUuid' is not null or undefined
@@ -32686,6 +32650,10 @@ export const TraitsApiAxiosParamCreator = function (configuration?: Configuratio
 
             if (switchAccount !== undefined) {
                 localVarQueryParameter['switchAccount'] = switchAccount;
+            }
+
+            if (token !== undefined) {
+                localVarQueryParameter['token'] = token;
             }
 
             localVarHeaderParameter['Accept'] = 'text/html,application/json';
@@ -32957,11 +32925,12 @@ export const TraitsApiFp = function(configuration?: Configuration) {
          * @param {string} [partstat] 
          * @param {string} [scope] 
          * @param {string} [switchAccount] 
+         * @param {string} [token] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async rsvpBrowserGet(companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.rsvpBrowserGet(companyUuid, eventUuid, attendeeUuid, partstat, scope, switchAccount, options);
+        async rsvpBrowserGet(companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, token?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.rsvpBrowserGet(companyUuid, eventUuid, attendeeUuid, partstat, scope, switchAccount, token, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TraitsApi.rsvpBrowserGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -33081,11 +33050,12 @@ export const TraitsApiFactory = function (configuration?: Configuration, basePat
          * @param {string} [partstat] 
          * @param {string} [scope] 
          * @param {string} [switchAccount] 
+         * @param {string} [token] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        rsvpBrowserGet(companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.rsvpBrowserGet(companyUuid, eventUuid, attendeeUuid, partstat, scope, switchAccount, options).then((request) => request(axios, basePath));
+        rsvpBrowserGet(companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, token?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.rsvpBrowserGet(companyUuid, eventUuid, attendeeUuid, partstat, scope, switchAccount, token, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -33195,11 +33165,12 @@ export class TraitsApi extends BaseAPI {
      * @param {string} [partstat] 
      * @param {string} [scope] 
      * @param {string} [switchAccount] 
+     * @param {string} [token] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public rsvpBrowserGet(companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, options?: RawAxiosRequestConfig) {
-        return TraitsApiFp(this.configuration).rsvpBrowserGet(companyUuid, eventUuid, attendeeUuid, partstat, scope, switchAccount, options).then((request) => request(this.axios, this.basePath));
+    public rsvpBrowserGet(companyUuid: string, eventUuid: string, attendeeUuid: string, partstat?: string, scope?: string, switchAccount?: string, token?: string, options?: RawAxiosRequestConfig) {
+        return TraitsApiFp(this.configuration).rsvpBrowserGet(companyUuid, eventUuid, attendeeUuid, partstat, scope, switchAccount, token, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -1,20 +1,20 @@
-# SuccessResponseListCalendarTeamOptionDTO
+# ShowResponseUserRecordResponseDTO
 
-Represents a standard successful response with a message and optional data.
+Represents the response for viewing or showing a specific resource.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **message** | **string** | A message detailing the result of the operation. | [optional] [default to undefined]
-**data** | [**Array&lt;CalendarTeamOptionDTO&gt;**](CalendarTeamOptionDTO.md) | The data payload of the response, if any. | [optional] [default to undefined]
+**data** | [**UserRecordResponseDTO**](UserRecordResponseDTO.md) | The data payload of the response, if any. | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { SuccessResponseListCalendarTeamOptionDTO } from '@caraer/client';
+import { ShowResponseUserRecordResponseDTO } from '@caraer/client';
 
-const instance: SuccessResponseListCalendarTeamOptionDTO = {
+const instance: ShowResponseUserRecordResponseDTO = {
     message,
     data,
 };

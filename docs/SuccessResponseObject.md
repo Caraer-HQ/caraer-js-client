@@ -1,13 +1,13 @@
 # SuccessResponseObject
 
-Success response (SuccessResponseObject).
+Represents a standard successful response with a message and optional data.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**message** | **string** |  | [optional] [default to undefined]
-**data** | **{ [key: string]: any; }** |  | [optional] [default to undefined]
+**message** | **string** | A message detailing the result of the operation. | [optional] [default to undefined]
+**data** | **any** | The data payload of the response, if any. | [optional] [default to undefined]
 
 ## Example
 

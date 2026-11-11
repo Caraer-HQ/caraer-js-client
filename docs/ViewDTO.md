@@ -36,6 +36,7 @@ Name | Type | Description | Notes
 **taskCollapsedGroupKeys** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **taskExpandedTaskUuids** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **calendarOverlay** | **string** |  | [optional] [default to undefined]
+**eventUserUuids** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **visibleCalendarUuids** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **selectedCalendarUuid** | **string** |  | [optional] [default to undefined]
 **calendarColorBy** | **string** |  | [optional] [default to undefined]
@@ -80,6 +81,7 @@ const instance: ViewDTO = {
     taskCollapsedGroupKeys,
     taskExpandedTaskUuids,
     calendarOverlay,
+    eventUserUuids,
     visibleCalendarUuids,
     selectedCalendarUuid,
     calendarColorBy,

@@ -6,6 +6,7 @@ Relation to create when saving a record
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**remove** | **boolean** | When true, remove this existing UUID relation atomically with the record mutation. Nested records and property writes are not allowed. | [optional] [default to undefined]
 **relationName** | **string** | Name of the relation type | [default to undefined]
 **uuid** | **string** | UUID of an existing record to link to | [optional] [default to undefined]
 **properties** | **{ [key: string]: any | null; }** | With uuid: patch the existing target before linking. Without uuid or record: create-or-update the target using its unique properties, then link. Use objectName when ambiguous. | [optional] [default to undefined]
@@ -21,6 +22,7 @@ Name | Type | Description | Notes
 import { RecordRelationRequestDTO } from '@caraer/client';
 
 const instance: RecordRelationRequestDTO = {
+    remove,
     relationName,
     uuid,
     properties,

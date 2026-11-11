@@ -14,6 +14,8 @@ Name | Type | Description | Notes
 **ownerUuid** | **string** |  | [optional] [default to undefined]
 **ownerName** | **string** |  | [optional] [default to undefined]
 **ownedByCurrentUser** | **boolean** |  | [optional] [default to undefined]
+**canEdit** | **boolean** |  | [optional] [default to undefined]
+**shared** | **boolean** |  | [optional] [default to undefined]
 **teamUuid** | **string** |  | [optional] [default to undefined]
 **teamName** | **string** |  | [optional] [default to undefined]
 **companyCalendar** | **boolean** |  | [optional] [default to undefined]
@@ -35,6 +37,8 @@ const instance: CalendarRecordDTO = {
     ownerUuid,
     ownerName,
     ownedByCurrentUser,
+    canEdit,
+    shared,
     teamUuid,
     teamName,
     companyCalendar,

@@ -7,6 +7,7 @@ DTO representing a filter composed of filter groups for querying records. The fi
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **groups** | [**Set&lt;FilterGroup&gt;**](FilterGroup.md) | A collection of filter groups. | [optional] [default to undefined]
+**eventParticipantUuids** | **Array&lt;string&gt;** | Optional participant UUIDs for event records, intersected with the ordinary filter before paging. Omit for all; an empty list matches none. Uses organiser plus the effective Event trait attendee relations. | [optional] [default to undefined]
 
 ## Example
 
@@ -15,6 +16,7 @@ import { Filter } from '@caraer/client';
 
 const instance: Filter = {
     groups,
+    eventParticipantUuids,
 };
 ```
 

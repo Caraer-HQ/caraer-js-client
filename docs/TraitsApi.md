@@ -268,6 +268,7 @@ let attendeeUuid: string; // (default to undefined)
 let partstat: string; // (optional) (default to undefined)
 let scope: string; // (optional) (default to undefined)
 let switchAccount: string; // (optional) (default to undefined)
+let token: string; // (optional) (default to undefined)
 
 const { status, data } = await apiInstance.rsvpBrowserGet(
     companyUuid,
@@ -275,7 +276,8 @@ const { status, data } = await apiInstance.rsvpBrowserGet(
     attendeeUuid,
     partstat,
     scope,
-    switchAccount
+    switchAccount,
+    token
 );
 ```
 
@@ -289,6 +291,7 @@ const { status, data } = await apiInstance.rsvpBrowserGet(
 | **partstat** | [**string**] |  | (optional) defaults to undefined|
 | **scope** | [**string**] |  | (optional) defaults to undefined|
 | **switchAccount** | [**string**] |  | (optional) defaults to undefined|
+| **token** | [**string**] |  | (optional) defaults to undefined|
 
 
 ### Return type

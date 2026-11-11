@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **partstat** | **string** | Participation status on the attendees edge | [default to undefined]
 **scope** | **string** | Series scope for recurring events. Defaults to this. | [optional] [default to undefined]
+**invitationToken** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -16,6 +17,7 @@ import { EventRsvpRequest } from '@caraer/client';
 const instance: EventRsvpRequest = {
     partstat,
     scope,
+    invitationToken,
 };
 ```
 
