@@ -1076,8 +1076,8 @@ export interface AppSettingFieldSchema {
     'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'settingsGroup'?: boolean;
     'action'?: boolean;
+    'settingsGroup'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -2961,8 +2961,8 @@ export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof t
 
 export interface ExistingWidgetSummary {
     'xproperty'?: string;
-    'yproperty'?: string;
     'ymetric'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3048,10 +3048,10 @@ export interface FileListItemDTO {
     'contentType'?: string;
 }
 export interface FilledProperty {
+    'icon'?: string;
     'name'?: string;
     'value'?: any;
     'type'?: string;
-    'icon'?: string;
     'label'?: string;
 }
 /**
@@ -3884,9 +3884,9 @@ export interface ModelRecord {
     'complete'?: boolean;
     'deleted'?: boolean;
     'uuid': string;
+    'user'?: PublicUserDTO;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
-    'user'?: PublicUserDTO;
 }
 export interface MultiFile extends PropertyFormat {
 }
@@ -6285,8 +6285,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
