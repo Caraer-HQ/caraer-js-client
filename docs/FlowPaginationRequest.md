@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 **show** | [**Array&lt;ShowItem&gt;**](ShowItem.md) | Specifies what data to show in the response. | [optional] [default to undefined]
 **query** | **string** | A free-text search query applied to the records. | [optional] [default to undefined]
 **preview** | **string** | Preview information for the records, if supported. | [optional] [default to undefined]
-**mainObject** | **string** | The main object for categorization or context. | [optional] [default to undefined]
+**mainObject** | **string** | Required concrete object name or pipe-separated object names. Smart-content placeholders are not supported. | [default to undefined]
 **column** | **string** | Column name for sorting or filtering data | [optional] [default to undefined]
 **property** | **string** | UUID of the property used in the request | [optional] [default to undefined]
 
