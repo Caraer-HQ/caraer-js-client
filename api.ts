@@ -1519,7 +1519,7 @@ export interface CaraerObjectDTO {
      */
     'suites'?: Array<string>;
     /**
-     * List of objects this object extends to
+     * Parent objects identified by UUID or name in this workspace. Omit to preserve existing extensions; send an empty list to clear them.
      */
     'extendsTo'?: Array<CaraerObjectDTO>;
     /**
@@ -2960,9 +2960,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'yproperty'?: string;
-    'ymetric'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
