@@ -1076,8 +1076,8 @@ export interface AppSettingFieldSchema {
     'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'action'?: boolean;
     'settingsGroup'?: boolean;
+    'action'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -2960,8 +2960,8 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
     'xproperty'?: string;
+    'ymetric'?: string;
     'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
@@ -3214,7 +3214,7 @@ export interface FormDTO {
      */
     'index'?: number;
     /**
-     * The associated Caraer object that this form belongs to
+     * The associated Caraer object that this form belongs to. Immutable after creation; create a new form to use a different object.
      */
     'object'?: CaraerObjectDTO;
     /**
@@ -3354,7 +3354,7 @@ export interface FormWithAiPromptDTO {
      */
     'index'?: number;
     /**
-     * The associated Caraer object that this form belongs to
+     * The associated Caraer object that this form belongs to. Immutable after creation; create a new form to use a different object.
      */
     'object'?: CaraerObjectDTO;
     /**
@@ -3881,8 +3881,8 @@ export interface ModelRecord {
     'updatedByUuid'?: string;
     'deletedByUuid'?: string;
     'index'?: number;
-    'complete'?: boolean;
     'deleted'?: boolean;
+    'complete'?: boolean;
     'uuid': string;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
@@ -6285,8 +6285,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'defaultValue'?: any;
     'value'?: any;
+    'defaultValue'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -7990,8 +7990,8 @@ export interface Team {
     'filtersString'?: string;
     'filters'?: { [key: string]: Filter; };
     'memberCount'?: number;
-    'complete'?: boolean;
     'deleted'?: boolean;
+    'complete'?: boolean;
     'uuid': string;
 }
 export interface TeamDTO {
