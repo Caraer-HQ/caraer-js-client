@@ -136,6 +136,7 @@ docs/DeviceApproveRequest.md
 docs/DevicePollRequest.md
 docs/DigitalIdentityDTO.md
 docs/Duration.md
+docs/EffectiveAppearanceDTO.md
 docs/Email.md
 docs/EngagementBatchRequest.md
 docs/EnsureRelationDTO.md
@@ -234,6 +235,8 @@ docs/PaginationResponseWebpageAccessGrantDTO.md
 docs/Palette.md
 docs/Permissions.md
 docs/Phone.md
+docs/PortalAppearanceApi.md
+docs/PortalAppearanceDTO.md
 docs/PreviewDTO.md
 docs/PreviewItemDTO.md
 docs/PreviewItemSettingsDTO.md
@@ -374,6 +377,7 @@ docs/SuccessResponseAggregateResponse.md
 docs/SuccessResponseCalendarBootstrapDTO.md
 docs/SuccessResponseCollectionRelation.md
 docs/SuccessResponseCompanyDTO.md
+docs/SuccessResponseEffectiveAppearanceDTO.md
 docs/SuccessResponseEnsureRelationDTO.md
 docs/SuccessResponseFeedDTO.md
 docs/SuccessResponseFlow.md
@@ -397,6 +401,7 @@ docs/SuccessResponseMapStringInteger.md
 docs/SuccessResponseMapStringObject.md
 docs/SuccessResponseNavigationDTO.md
 docs/SuccessResponseObject.md
+docs/SuccessResponsePortalAppearanceDTO.md
 docs/SuccessResponseString.md
 docs/SuccessResponseSuggestAnalyticsWidgetsResponse.md
 docs/SuccessResponseTable.md

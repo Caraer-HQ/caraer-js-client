@@ -2857,6 +2857,10 @@ export interface DigitalIdentityDTO {
 }
 export interface Duration extends PropertyFormat {
 }
+export interface EffectiveAppearanceDTO {
+    'appearance'?: PortalAppearanceDTO;
+    'canManage'?: boolean;
+}
 export interface Email extends PropertyFormat {
 }
 export interface EngagementBatchRequest {
@@ -2960,9 +2964,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'yproperty'?: string;
     'ymetric'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -4853,6 +4857,10 @@ export interface Permissions {
     'filters'?: any;
 }
 export interface Phone extends PropertyFormat {
+}
+export interface PortalAppearanceDTO {
+    'primaryColor'?: string;
+    'logoUrl'?: string;
 }
 /**
  * Data transfer object representing a preview entity
@@ -7628,6 +7636,19 @@ export interface SuccessResponseCompanyDTO {
 /**
  * Represents a standard successful response with a message and optional data.
  */
+export interface SuccessResponseEffectiveAppearanceDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: EffectiveAppearanceDTO;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
 export interface SuccessResponseEnsureRelationDTO {
     /**
      * A message detailing the result of the operation.
@@ -7887,6 +7908,19 @@ export interface SuccessResponseObject {
      * The data payload of the response, if any.
      */
     'data'?: any;
+}
+/**
+ * Represents a standard successful response with a message and optional data.
+ */
+export interface SuccessResponsePortalAppearanceDTO {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: PortalAppearanceDTO;
 }
 /**
  * Represents a standard successful response with a message and optional data.
@@ -26452,6 +26486,242 @@ export class ObjectsApi extends BaseAPI {
      */
     public updateObject(uuid: string, caraerObjectDTO: CaraerObjectDTO, views?: string, properties?: string, relations?: string, options?: RawAxiosRequestConfig) {
         return ObjectsApiFp(this.configuration).updateObject(uuid, caraerObjectDTO, views, properties, relations, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * PortalAppearanceApi - axios parameter creator
+ */
+export const PortalAppearanceApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Authenticated selected-company branding inherited from its nearest whitelabel partner, with server-derived management capability. No partner identities are disclosed.
+         * @summary Read effective portal appearance
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        effective: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/appearance`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Requires a whitelabel selected-company entitlement, selected membership and company-settings write permission.
+         * @summary Read selected partner appearance
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        own: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/partner/appearance`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Writes only the selected whitelabel partner. Requires company-settings write permission. Null values restore Caraer defaults. No target company identifier is accepted.
+         * @summary Save selected partner appearance
+         * @param {PortalAppearanceDTO} portalAppearanceDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        save1: async (portalAppearanceDTO: PortalAppearanceDTO, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'portalAppearanceDTO' is not null or undefined
+            assertParamExists('save1', 'portalAppearanceDTO', portalAppearanceDTO)
+            const localVarPath = `/api/v2/partner/appearance`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = '*/*,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(portalAppearanceDTO, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * PortalAppearanceApi - functional programming interface
+ */
+export const PortalAppearanceApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PortalAppearanceApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Authenticated selected-company branding inherited from its nearest whitelabel partner, with server-derived management capability. No partner identities are disclosed.
+         * @summary Read effective portal appearance
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async effective(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponseEffectiveAppearanceDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.effective(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PortalAppearanceApi.effective']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Requires a whitelabel selected-company entitlement, selected membership and company-settings write permission.
+         * @summary Read selected partner appearance
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async own(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponsePortalAppearanceDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.own(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PortalAppearanceApi.own']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Writes only the selected whitelabel partner. Requires company-settings write permission. Null values restore Caraer defaults. No target company identifier is accepted.
+         * @summary Save selected partner appearance
+         * @param {PortalAppearanceDTO} portalAppearanceDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async save1(portalAppearanceDTO: PortalAppearanceDTO, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessResponsePortalAppearanceDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.save1(portalAppearanceDTO, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PortalAppearanceApi.save1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * PortalAppearanceApi - factory interface
+ */
+export const PortalAppearanceApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PortalAppearanceApiFp(configuration)
+    return {
+        /**
+         * Authenticated selected-company branding inherited from its nearest whitelabel partner, with server-derived management capability. No partner identities are disclosed.
+         * @summary Read effective portal appearance
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        effective(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponseEffectiveAppearanceDTO> {
+            return localVarFp.effective(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Requires a whitelabel selected-company entitlement, selected membership and company-settings write permission.
+         * @summary Read selected partner appearance
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        own(options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponsePortalAppearanceDTO> {
+            return localVarFp.own(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Writes only the selected whitelabel partner. Requires company-settings write permission. Null values restore Caraer defaults. No target company identifier is accepted.
+         * @summary Save selected partner appearance
+         * @param {PortalAppearanceDTO} portalAppearanceDTO 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        save1(portalAppearanceDTO: PortalAppearanceDTO, options?: RawAxiosRequestConfig): AxiosPromise<SuccessResponsePortalAppearanceDTO> {
+            return localVarFp.save1(portalAppearanceDTO, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * PortalAppearanceApi - object-oriented interface
+ */
+export class PortalAppearanceApi extends BaseAPI {
+    /**
+     * Authenticated selected-company branding inherited from its nearest whitelabel partner, with server-derived management capability. No partner identities are disclosed.
+     * @summary Read effective portal appearance
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public effective(options?: RawAxiosRequestConfig) {
+        return PortalAppearanceApiFp(this.configuration).effective(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Requires a whitelabel selected-company entitlement, selected membership and company-settings write permission.
+     * @summary Read selected partner appearance
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public own(options?: RawAxiosRequestConfig) {
+        return PortalAppearanceApiFp(this.configuration).own(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Writes only the selected whitelabel partner. Requires company-settings write permission. Null values restore Caraer defaults. No target company identifier is accepted.
+     * @summary Save selected partner appearance
+     * @param {PortalAppearanceDTO} portalAppearanceDTO 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public save1(portalAppearanceDTO: PortalAppearanceDTO, options?: RawAxiosRequestConfig) {
+        return PortalAppearanceApiFp(this.configuration).save1(portalAppearanceDTO, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
