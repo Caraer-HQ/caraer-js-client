@@ -1076,8 +1076,8 @@ export interface AppSettingFieldSchema {
     'clearValue'?: boolean;
     'mappingValue'?: AppSettingFieldMappingStructure;
     'valueScope'?: string;
-    'settingsGroup'?: boolean;
     'action'?: boolean;
+    'settingsGroup'?: boolean;
     'filterPropertyTypes'?: Array<string>;
     'filterPropertyFormats'?: Array<string>;
 }
@@ -2960,9 +2960,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'xproperty'?: string;
     'yproperty'?: string;
     'ymetric'?: string;
+    'xproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3048,11 +3048,11 @@ export interface FileListItemDTO {
     'contentType'?: string;
 }
 export interface FilledProperty {
+    'icon'?: string;
     'name'?: string;
     'value'?: any;
     'type'?: string;
     'label'?: string;
-    'icon'?: string;
 }
 /**
  * DTO representing a filter composed of filter groups for querying records. The filter groups are combined using a logical OR operation. The filter items within each group are combined using a logical AND operation.
