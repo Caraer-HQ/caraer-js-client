@@ -3048,11 +3048,11 @@ export interface FileListItemDTO {
     'contentType'?: string;
 }
 export interface FilledProperty {
-    'icon'?: string;
     'name'?: string;
     'value'?: any;
     'type'?: string;
     'label'?: string;
+    'icon'?: string;
 }
 /**
  * DTO representing a filter composed of filter groups for querying records. The filter groups are combined using a logical OR operation. The filter items within each group are combined using a logical AND operation.
