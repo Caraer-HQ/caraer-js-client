@@ -1556,6 +1556,7 @@ export interface CmsModuleDTO {
     'category'?: string;
     'icon'?: string;
     'preview'?: string;
+    'recordPreview'?: CmsRecordPreviewPresentation;
     'appUuid'?: string;
     'appName'?: string;
     'appLabel'?: string;
@@ -1623,10 +1624,39 @@ export interface CmsPageSeoRequest {
     'seo'?: { [key: string]: any | null; };
     'expectedRevision'?: number;
 }
+export interface CmsPreviewConfiguration {
+    'module'?: string;
+    'fields'?: { [key: string]: any | null; };
+    'environment'?: string;
+}
+export interface CmsPreviewPresentationDTO {
+    'title'?: string;
+    'subtitle'?: string;
+    'image'?: string;
+}
 export interface CmsPublicMenuDTO {
     'location'?: string;
     'title'?: string;
     'items'?: Array<WebMenuItem>;
+}
+export interface CmsRecordModuleRenderContext {
+    'companyUuid'?: string;
+    'module'?: string;
+    'version'?: string;
+    'config'?: CmsPreviewConfiguration;
+    'record'?: RecordSummary;
+    'parentOrigin'?: string;
+}
+export interface CmsRecordModuleSessionRequest {
+    'object'?: string;
+    'recordUuid'?: string;
+    'config'?: CmsPreviewConfiguration;
+    'parentOrigin'?: string;
+}
+export interface CmsRecordPreviewPresentation {
+    'titleField'?: string;
+    'subtitleField'?: string;
+    'imageField'?: string;
 }
 /**
  * A DTO representing a company with its various settings and details.
@@ -2964,9 +2994,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'ymetric'?: string;
-    'xproperty'?: string;
     'yproperty'?: string;
+    'xproperty'?: string;
+    'ymetric'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -3885,8 +3915,8 @@ export interface ModelRecord {
     'updatedByUuid'?: string;
     'deletedByUuid'?: string;
     'index'?: number;
-    'complete'?: boolean;
     'deleted'?: boolean;
+    'complete'?: boolean;
     'uuid': string;
     'properties'?: Array<FilledProperty>;
     'objects'?: { [key: string]: any | null; };
@@ -4895,6 +4925,12 @@ export interface PreviewDTO {
      */
     'previewType'?: string;
     /**
+     * Rendering mode. Omitted means the original grid renderer.
+     */
+    'renderer'?: PreviewDTORendererEnum;
+    'cmsModule'?: CmsPreviewConfiguration;
+    'cmsPresentation'?: CmsPreviewPresentationDTO;
+    /**
      * Profile image property
      */
     'profileImage'?: PropertyDTO;
@@ -4987,6 +5023,14 @@ export interface PreviewDTO {
      */
     'index'?: number;
 }
+
+export const PreviewDTORendererEnum = {
+    Legacy: 'legacy',
+    CmsV2: 'cms-v2',
+} as const;
+
+export type PreviewDTORendererEnum = typeof PreviewDTORendererEnum[keyof typeof PreviewDTORendererEnum];
+
 /**
  * Data Transfer Object for PreviewItem, used for transferring preview details.
  */
@@ -6534,6 +6578,19 @@ export interface ShowResponseCmsPageDocument {
 /**
  * Represents the response for viewing or showing a specific resource.
  */
+export interface ShowResponseCmsRecordModuleRenderContext {
+    /**
+     * A message detailing the result of the operation.
+     */
+    'message'?: string;
+    /**
+     * The data payload of the response, if any.
+     */
+    'data'?: CmsRecordModuleRenderContext;
+}
+/**
+ * Represents the response for viewing or showing a specific resource.
+ */
 export interface ShowResponseCompanyDTO {
     /**
      * A message detailing the result of the operation.
@@ -8024,8 +8081,8 @@ export interface Team {
     'filtersString'?: string;
     'filters'?: { [key: string]: Filter; };
     'memberCount'?: number;
-    'complete'?: boolean;
     'deleted'?: boolean;
+    'complete'?: boolean;
     'uuid': string;
 }
 export interface TeamDTO {

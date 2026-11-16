@@ -13,6 +13,9 @@ Name | Type | Description | Notes
 **edgeProperties** | **{ [key: string]: any | null; }** | Values stored on the relation edge for properties declared on the relation schema. Only present when the preview was loaded through such a relation. | [optional] [default to undefined]
 **grid** | **Array&lt;Array&lt;PreviewItemDTO&gt;&gt;** | Rows of the preview grid | [optional] [default to undefined]
 **previewType** | **string** | Preview type | [optional] [default to undefined]
+**renderer** | **string** | Rendering mode. Omitted means the original grid renderer. | [optional] [default to undefined]
+**cmsModule** | [**CmsPreviewConfiguration**](CmsPreviewConfiguration.md) |  | [optional] [default to undefined]
+**cmsPresentation** | [**CmsPreviewPresentationDTO**](CmsPreviewPresentationDTO.md) |  | [optional] [default to undefined]
 **profileImage** | [**PropertyDTO**](PropertyDTO.md) | Profile image property | [optional] [default to undefined]
 **profileImagePosition** | **string** | Profile image position (top, left, right, bottom, background) | [optional] [default to undefined]
 **profileImageStyling** | [**PageContentStylingDTO**](PageContentStylingDTO.md) | Style set for the profile image | [optional] [default to undefined]
@@ -50,6 +53,9 @@ const instance: PreviewDTO = {
     edgeProperties,
     grid,
     previewType,
+    renderer,
+    cmsModule,
+    cmsPresentation,
     profileImage,
     profileImagePosition,
     profileImageStyling,

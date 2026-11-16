@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **category** | **string** |  | [optional] [default to undefined]
 **icon** | **string** |  | [optional] [default to undefined]
 **preview** | **string** |  | [optional] [default to undefined]
+**recordPreview** | [**CmsRecordPreviewPresentation**](CmsRecordPreviewPresentation.md) |  | [optional] [default to undefined]
 **appUuid** | **string** |  | [optional] [default to undefined]
 **appName** | **string** |  | [optional] [default to undefined]
 **appLabel** | **string** |  | [optional] [default to undefined]
@@ -38,6 +39,7 @@ const instance: CmsModuleDTO = {
     category,
     icon,
     preview,
+    recordPreview,
     appUuid,
     appName,
     appLabel,

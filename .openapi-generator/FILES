@@ -93,7 +93,12 @@ docs/CmsPageModuleInstance.md
 docs/CmsPagePatch.md
 docs/CmsPagePatchRequest.md
 docs/CmsPageSeoRequest.md
+docs/CmsPreviewConfiguration.md
+docs/CmsPreviewPresentationDTO.md
 docs/CmsPublicMenuDTO.md
+docs/CmsRecordModuleRenderContext.md
+docs/CmsRecordModuleSessionRequest.md
+docs/CmsRecordPreviewPresentation.md
 docs/CompanyApi.md
 docs/CompanyDTO.md
 docs/CompanyDetailsDTO.md
@@ -313,6 +318,7 @@ docs/ShowResponseCaraerObjectDTO.md
 docs/ShowResponseCmsEnvironmentDTO.md
 docs/ShowResponseCmsPageDTO.md
 docs/ShowResponseCmsPageDocument.md
+docs/ShowResponseCmsRecordModuleRenderContext.md
 docs/ShowResponseCompanyDTO.md
 docs/ShowResponseDeveloperProjectDTO.md
 docs/ShowResponseDigitalIdentityDTO.md
