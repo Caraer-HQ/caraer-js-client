@@ -30,6 +30,7 @@ Name | Type | Description | Notes
 **icon** | **string** |  | [optional] [default to undefined]
 **flowProperty** | **string** |  | [optional] [default to undefined]
 **flowPreview** | **string** |  | [optional] [default to undefined]
+**flowShowUnassigned** | **boolean** | Show the Unassigned column for records without a Flow grouping value. Defaults to false. | [optional] [default to false]
 **taskProgressProperty** | **string** |  | [optional] [default to undefined]
 **taskGroupProperty** | **string** |  | [optional] [default to undefined]
 **taskExpandSubtasks** | **boolean** |  | [optional] [default to undefined]
@@ -75,6 +76,7 @@ const instance: ViewDTO = {
     icon,
     flowProperty,
     flowPreview,
+    flowShowUnassigned,
     taskProgressProperty,
     taskGroupProperty,
     taskExpandSubtasks,

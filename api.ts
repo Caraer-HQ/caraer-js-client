@@ -2960,9 +2960,9 @@ export const EventRsvpRequestScopeEnum = {
 export type EventRsvpRequestScopeEnum = typeof EventRsvpRequestScopeEnum[keyof typeof EventRsvpRequestScopeEnum];
 
 export interface ExistingWidgetSummary {
-    'yproperty'?: string;
     'ymetric'?: string;
     'xproperty'?: string;
+    'yproperty'?: string;
     'title'?: string;
     'chartType'?: string;
     'xProperty'?: string;
@@ -6285,8 +6285,8 @@ export interface SettingField {
     'hidden'?: boolean;
     'disabled'?: boolean;
     'options'?: Array<SettingOption>;
-    'value'?: any;
     'defaultValue'?: any;
+    'value'?: any;
 }
 
 export const SettingFieldTypeEnum = {
@@ -8445,6 +8445,10 @@ export interface ViewDTO {
     'icon'?: string;
     'flowProperty'?: string;
     'flowPreview'?: string;
+    /**
+     * Show the Unassigned column for records without a Flow grouping value. Defaults to false.
+     */
+    'flowShowUnassigned'?: boolean;
     'taskProgressProperty'?: string;
     'taskGroupProperty'?: string;
     'taskExpandSubtasks'?: boolean;
